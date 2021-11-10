@@ -1,9 +1,8 @@
 <template>
     <VBinder>
         <TriggerRenderVNode />
-        <teleport to="body">
-            <ContentRenderVNode />
-        </teleport>
+
+        <ContentRenderVNode />
     </VBinder>
 </template>
 
@@ -15,7 +14,7 @@ export default {
 
 <script lang="ts" setup>
 import { useSlots, useAttrs, ref, createVNode, cloneVNode, computed, renderSlot, withDirectives, vShow, watch, toRefs, nextTick, Transition, mergeProps } from 'vue';
-import { getSlotFirstVNode } from '../../_utils_';
+import { getSlotFirstVNode } from '../_utils_';
 import { VBinder, VTarget, VFollower } from 'vueuc';
 import { useElementBounding, useMouseInElement } from '@vueuse/core';
 
@@ -234,7 +233,6 @@ const ContentRenderVNode = () => {
             show: showRef.value,
             enabled: showRef.value,
             placement: props.placement,
-            teleportDisabled: true,
             width: props.matchTrigger ? 'target' : undefined
         },
         {
