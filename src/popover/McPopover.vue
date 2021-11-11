@@ -1,7 +1,6 @@
 <template>
     <VBinder>
         <TriggerRenderVNode />
-
         <ContentRenderVNode />
     </VBinder>
 </template>
