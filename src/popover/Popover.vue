@@ -109,11 +109,11 @@ const handleClickInside = (e: MouseEvent) => {
         handleContentHide();
     }
 };
-// const syncPosition = () => {
-//     var _a;
-//     // @ts-ignore
-//     (_a = followerRef.value) === null || _a === void 0 ? void 0 : _a.syncPosition();
-// };
+const syncPosition = () => {
+    var _a;
+    // @ts-ignore
+    (_a = followerRef.value) === null || _a === void 0 ? void 0 : _a.syncPosition();
+};
 
 // 悬浮控制
 const contentHoverControl = computed(() => {
@@ -253,7 +253,7 @@ void nextTick(() => {
     if (props.autoSync) {
         const { top, right, bottom, left } = useElementBounding(triggerEl.value);
         watch([top, right, bottom, left], () => {
-            // syncPosition();
+            syncPosition();
         });
     }
 
@@ -324,7 +324,7 @@ void nextTick(() => {
 });
 
 defineExpose({
-    // syncPosition,
+    syncPosition,
     show: handleContentShow,
     hide: handleContentHide,
     el: contentEl

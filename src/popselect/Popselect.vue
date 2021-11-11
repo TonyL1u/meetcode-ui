@@ -1,14 +1,10 @@
-<template>
-    <Render />
-</template>
-
 <script lang="ts" setup>
-import { ref, toRefs, createVNode, nextTick, useSlots, renderSlot } from 'vue';
+import { ref, useAttrs, toRefs, createVNode, nextTick, useSlots, renderSlot, mergeProps } from 'vue';
 import { NIcon } from 'naive-ui';
-import { McPopover } from '../popover';
 import { CheckmarkSharp as IconCheck } from '@vicons/ionicons5';
 import { useVModels } from '@vueuse/core';
 import { UseVirtualList } from '@vueuse/components';
+import { McPopover } from '..';
 
 type PopselectValue = string | number | Array<string | number>;
 interface PopselectOption {
@@ -32,6 +28,7 @@ const emit = defineEmits<{
 }>();
 
 const slots = useSlots();
+const attrs = useAttrs();
 const { options, multiple, maxHeight } = toRefs(props);
 const { value: valueRef } = useVModels(props, emit);
 const popoverRef = ref();
@@ -87,38 +84,42 @@ const getOptionVNode = (data: PopselectOption) => {
 const Render = () => {
     const listHeigth = Math.min(options.value.length * 38 + (options.value.length - 1) * 4, maxHeight.value);
     const itemHeight = 38 + ((options.value.length - 1) / options.value.length) * 4;
-
-    return createVNode(
-        McPopover,
+    const popoverMergedProps = mergeProps(
         {
             ref: popoverRef,
             class: 'mc-popselect',
             placement: 'bottom',
             onShow: handleShow
         },
-        {
-            default: () => renderSlot(slots, 'default'),
-            content: () => {
-                return createVNode(
-                    UseVirtualList,
-                    {
-                        ref: virtualListRef,
-                        class: 'mc-popselect__content mc-virtual-list',
-                        list: options.value,
-                        options: { itemHeight },
-                        height: `${listHeigth}px`
-                    },
-                    {
-                        default: (item: { data: PopselectOption; index: number }) => {
-                            return getOptionVNode(item.data);
-                        }
-                    }
-                );
-            }
-        }
+        attrs
     );
+
+    return createVNode(McPopover, popoverMergedProps, {
+        default: () => renderSlot(slots, 'default'),
+        content: () => {
+            return createVNode(
+                UseVirtualList,
+                {
+                    ref: virtualListRef,
+                    class: 'mc-popselect__content mc-virtual-list',
+                    list: options.value,
+                    options: { itemHeight },
+                    height: `${listHeigth}px`
+                },
+                {
+                    default: (item: { data: PopselectOption; index: number }) => {
+                        return getOptionVNode(item.data);
+                    }
+                }
+            );
+        }
+    });
 };
 </script>
+
+<template>
+    <Render />
+</template>
 
 <style lang="scss">
 .mc-popselect {

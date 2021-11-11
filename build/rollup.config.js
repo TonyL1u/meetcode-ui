@@ -2,10 +2,12 @@ import vue from 'rollup-plugin-vue';
 import typescript from 'rollup-plugin-typescript2';
 import css from 'rollup-plugin-css-only';
 import scss from 'rollup-plugin-scss';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
+import resolve from 'rollup-plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
 import dartSass from 'sass';
 import { name } from '../package.json';
 
+const extensions = ['.js', '.ts', '.tsx'];
 // 输出打包后的文件名称type 1.esm 2.umd
 const file = type => `dist/${name}.${type}.js`;
 const overrides = {
@@ -21,10 +23,14 @@ export default {
         format: 'es'
     },
     plugins: [
+        vue({
+            css: true,
+            compileTemplate: true
+        }),
+        resolve(extensions),
+        commonjs(),
         scss({ include: /\.scss$/, sass: dartSass }),
-        nodeResolve(),
         typescript({ tsconfigOverride: overrides }),
-        vue(),
         css({ output: 'bundle.css' }) // 可自行修改output文件名
     ],
     external: ['vue', 'lodash-es'] // 规定哪些是外部引用的模块
