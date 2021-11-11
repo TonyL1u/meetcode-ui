@@ -1,10 +1,3 @@
-<template>
-    <VBinder>
-        <TriggerRenderVNode />
-        <ContentRenderVNode />
-    </VBinder>
-</template>
-
 <script lang="ts">
 export default {
     inheritAttrs: false
@@ -116,11 +109,11 @@ const handleClickInside = (e: MouseEvent) => {
         handleContentHide();
     }
 };
-const syncPosition = () => {
-    var _a;
-    // @ts-ignore
-    (_a = followerRef.value) === null || _a === void 0 ? void 0 : _a.syncPosition();
-};
+// const syncPosition = () => {
+//     var _a;
+//     // @ts-ignore
+//     (_a = followerRef.value) === null || _a === void 0 ? void 0 : _a.syncPosition();
+// };
 
 // 悬浮控制
 const contentHoverControl = computed(() => {
@@ -216,39 +209,41 @@ const contentEl = computed(() => {
 });
 
 // 渲染
-const TriggerRenderVNode = () => {
-    return createVNode(VTarget, null, {
-        default: () => triggerVNode.value
-    });
-};
-const ContentRenderVNode = () => {
-    return createVNode(
-        VFollower,
-        {
-            ref: followerRef,
-            x: props.trigger === 'follow' ? followX.value : undefined,
-            y: props.trigger === 'follow' ? followY.value : undefined,
-            zIndex: props.zIndex,
-            show: showRef.value,
-            enabled: showRef.value,
-            placement: props.placement,
-            width: props.matchTrigger ? 'target' : undefined
-        },
-        {
-            default: () => {
-                return createVNode(
-                    Transition,
+const Render = () => {
+    return createVNode(VBinder, null, {
+        default: () => {
+            return [
+                createVNode(VTarget, null, { default: () => triggerVNode.value }),
+                createVNode(
+                    VFollower,
                     {
-                        name: 'mc-popover-fade',
-                        appear: true
+                        ref: followerRef,
+                        x: props.trigger === 'follow' ? followX.value : undefined,
+                        y: props.trigger === 'follow' ? followY.value : undefined,
+                        zIndex: props.zIndex,
+                        show: showRef.value,
+                        enabled: showRef.value,
+                        placement: props.placement,
+                        width: props.matchTrigger ? 'target' : undefined
                     },
                     {
-                        default: () => contentVNode.value
+                        default: () => {
+                            return createVNode(
+                                Transition,
+                                {
+                                    name: 'mc-popover-fade',
+                                    appear: true
+                                },
+                                {
+                                    default: () => contentVNode.value
+                                }
+                            );
+                        }
                     }
-                );
-            }
+                )
+            ];
         }
-    );
+    });
 };
 
 void nextTick(() => {
@@ -258,7 +253,7 @@ void nextTick(() => {
     if (props.autoSync) {
         const { top, right, bottom, left } = useElementBounding(triggerEl.value);
         watch([top, right, bottom, left], () => {
-            syncPosition();
+            // syncPosition();
         });
     }
 
@@ -329,12 +324,16 @@ void nextTick(() => {
 });
 
 defineExpose({
-    syncPosition,
+    // syncPosition,
     show: handleContentShow,
     hide: handleContentHide,
     el: contentEl
 });
 </script>
+
+<template>
+    <Render />
+</template>
 
 <style lang="scss">
 [v-placement^='top'] > .mc-popover {
