@@ -1,10 +1,10 @@
 import vue from 'rollup-plugin-vue';
 import typescript from 'rollup-plugin-typescript2';
-import css from 'rollup-plugin-css-only';
-import scss from 'rollup-plugin-scss';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
-import dartSass from 'sass';
+import postcss from 'rollup-plugin-postcss';
+import postcssImport from 'postcss-import';
+import tailwindcss from 'tailwindcss';
 import { name } from '../package.json';
 
 const extensions = ['.js', '.ts', '.tsx'];
@@ -28,10 +28,16 @@ export default {
             compileTemplate: true
         }),
         resolve(extensions),
-        commonjs(),
-        scss({ include: /\.scss$/, sass: dartSass }),
+        commonjs({
+            include: ['node_modules/**', 'node_modules/**/*']
+        }),
+        // scss({ include: /\.scss$/, sass: dartSass }),
         typescript({ tsconfigOverride: overrides }),
-        css({ output: 'bundle.css' }) // 可自行修改output文件名
+        postcss({
+            extensions: ['.css'],
+            extract: true,
+            plugins: [postcssImport(), tailwindcss()]
+        })
     ],
     external: ['vue', 'lodash-es'] // 规定哪些是外部引用的模块
 };

@@ -1,11 +1,18 @@
+<script lang="ts">
+export default {
+    name: 'Popconfirm'
+};
+</script>
+
 <script lang="ts" setup>
-import { ref, toRefs, useSlots, renderSlot, createVNode, createTextVNode, Fragment, useAttrs, mergeProps } from 'vue';
+import { Ref, ref, toRefs, useSlots, renderSlot, createVNode, createTextVNode, Fragment, useAttrs, mergeProps } from 'vue';
 import { NButton, NIcon } from 'naive-ui';
-import { McPopover } from '..';
 import { getSlotFirstVNode } from '../_utils_';
 import { AlertCircle as IconAlert } from '@vicons/ionicons5';
+import { McPopover } from '..';
+import type { PopoverBaseProps, PopoverExposeInstance } from '../popover';
 
-interface Props {
+interface Props extends PopoverBaseProps {
     content?: string;
     cancelText?: any;
     confirmText?: any;
@@ -25,7 +32,7 @@ const emit = defineEmits<{
 const slots = useSlots();
 const attrs = useAttrs();
 const { content, cancelText, confirmText, hideIcon } = toRefs(props);
-const popoverRef = ref();
+const popoverRef = <Ref<PopoverExposeInstance>>ref();
 
 const handleCancel = () => {
     let callback!: boolean;

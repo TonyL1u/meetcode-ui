@@ -1,5 +1,6 @@
 <script lang="ts">
 export default {
+    name: 'Popover',
     inheritAttrs: false
 };
 </script>

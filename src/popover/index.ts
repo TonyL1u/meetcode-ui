@@ -7,3 +7,4 @@ McPopover.install = (app: App) => {
 };
 
 export default McPopover;
+export type { PopoverExposeInstance, PopoverBaseProps } from './interface';
