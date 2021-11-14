@@ -70,7 +70,7 @@ const getActionVNode = () => {
                       ? renderSlot(slots, 'action')
                       : createVNode(Fragment, null, [
                             showCancel ? createVNode(NButton, { size: 'small', onClick: handleCancel }, { default: () => cancelText.value }) : null,
-                            showConfirm ? createVNode(NButton, { class: 'mc-ml-2', size: 'small', type: 'primary', onClick: handleConfirm }, { default: () => confirmText.value }) : null
+                            showConfirm ? createVNode(NButton, { size: 'small', type: 'primary', style: { 'margin-left': '8px' }, onClick: handleConfirm }, { default: () => confirmText.value }) : null
                         ])
               ]
           )
@@ -78,7 +78,7 @@ const getActionVNode = () => {
 };
 
 const Render = () => {
-    const iconVNode = hideIcon.value ? null : getSlotFirstVNode(slots.icon) || createVNode(NIcon, { size: 22, class: 'mc-mr-2 mc-text-yellow-500' }, { default: () => createVNode(IconAlert) });
+    const iconVNode = hideIcon.value ? null : getSlotFirstVNode(slots.icon) || createVNode(NIcon, { size: 22, color: '#f59e0b', style: { 'margin-right': '8px' } }, { default: () => createVNode(IconAlert) });
     const popoverMergedProps = mergeProps(
         {
             ref: popoverRef,
