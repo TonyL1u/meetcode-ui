@@ -1,15 +1,16 @@
 import { App } from 'vue';
-import McPopconfirm from './popconfirm';
-import McPopover from './popover';
-import McPopselect from './popselect';
+import { McGrid, McGridItem } from './grid';
+import { McPopconfirm } from './popconfirm';
+import { McPopover } from './popover';
+import { McPopselect } from './popselect';
 
 // 组件列表
-const components = [McPopconfirm, McPopover, McPopselect];
+const components = [McGrid, McGridItem, McPopconfirm, McPopover, McPopselect];
 // 使用所有组件
 const McUI = (app: App) => {
     components.forEach(component => {
-        app.component(component.name || '', component);
+        app.component('Mc' + component.name, component);
     });
 };
-export { McPopconfirm, McPopover, McPopselect, McUI };
+export { McGrid, McGridItem, McPopconfirm, McPopover, McPopselect, McUI };
 export default { McUI };

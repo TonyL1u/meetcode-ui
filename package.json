@@ -20,6 +20,7 @@
         "@vueuse/components": "^6.7.4",
         "@vueuse/core": "^6.7.4",
         "@vueuse/integrations": "^6.7.5",
+        "csstype": "^3.0.9",
         "naive-ui": "^2.20.2",
         "node-sass": "^6.0.1",
         "postcss": "^8.3.8",
