@@ -9,7 +9,13 @@ import { nextTick, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { NAnchor } from 'naive-ui';
 import RecursionAnchorLink from './RecursionAnchorLink.vue';
-import type { AnchorLink } from '../../types';
+// import type { AnchorLink } from '../../types';
+
+interface AnchorLink {
+    title: string;
+    href: string;
+    sub?: Array<AnchorLink>;
+}
 
 // 初始化路由
 const route = useRoute();

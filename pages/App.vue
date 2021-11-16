@@ -16,7 +16,7 @@
                             </NNotificationProvider>
                         </NLayoutContent>
                         <NLayoutSider class="sider-navigator" :width="164" content-style="padding-right: 24px">
-                            <!-- <Navigator /> -->
+                            <Navigator />
                         </NLayoutSider>
                     </NLayout>
                 </NLayoutContent>
@@ -30,7 +30,7 @@ import { computed } from 'vue';
 import { NLayout, NLayoutHeader, NLayoutContent, NLayoutSider, NNotificationProvider, NConfigProvider, darkTheme } from 'naive-ui';
 import Header from './home/Header.vue';
 import Menu from './home/Menu.vue';
-// import Navigator from './home/Navigator.vue';
+import Navigator from './home/Navigator.vue';
 import { siteTheme } from './site.config';
 
 // 初始跟随系统主题
@@ -78,7 +78,7 @@ body {
 
         @include custom-markdown-style;
 
-        a:not(.mc-text-link-a) {
+        a.header-anchor {
             text-decoration: none;
             color: var(--text-color);
         }

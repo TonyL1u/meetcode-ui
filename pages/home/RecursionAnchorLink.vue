@@ -6,7 +6,12 @@
 
 <script lang="ts" setup>
 import { NAnchorLink } from 'naive-ui';
-import type { AnchorLink } from '../../types';
+
+interface AnchorLink {
+    title: string;
+    href: string;
+    sub?: Array<AnchorLink>;
+}
 
 const props = defineProps<{ anchorLinks: Array<AnchorLink> | undefined }>();
 const { anchorLinks } = props;

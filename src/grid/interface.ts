@@ -14,8 +14,6 @@ declare module 'csstype' {
         '--row-end'?: number | string;
         '--justify-content'?: string;
         '--align-items'?: string;
-
-        [index: string]: any;
     }
 }
 const GridIKey = Symbol('Grid');

@@ -3,7 +3,7 @@ import Basic from '@/popconfirm/demos/DemoBasic.vue'
 import Event from '@/popconfirm/demos/DemoEvent.vue'
 import Icon from '@/popconfirm/demos/DemoIcon.vue'
 import Action from '@/popconfirm/demos/DemoAction.vue'
-// import { McTextLink } from '../../McUI'
+import { McTextLink } from 'meetcode-ui'
 </script>
 
 # Popconfirm 弹出确认
@@ -53,7 +53,7 @@ import Action from '@/popconfirm/demos/DemoAction.vue'
 | confirm-text | `string \| null` | `'确认'` | 确认按钮文字，设置为 `null` 隐藏按钮 |
 |  hide-icon   |    `boolean`     | `false`  |             是否隐藏图标             |
 
-<!-- 更多 Props 请参考 <McTextLink to="Popover#props">Popover Props</McTextLink> 。 -->
+更多 Props 请参考 <McTextLink to="Popover#props">Popover Props</McTextLink> 。
 
 ## Event
 
@@ -62,7 +62,7 @@ import Action from '@/popconfirm/demos/DemoAction.vue'
 | on-cancel  | `(cb?: (flag?: boolean) => void) => void` | 点击取消按钮的回调 |
 | on-confirm | `(cb?: (flag?: boolean) => void) => void` | 点击确认按钮的回调 |
 
-<!-- 更多 Event 请参考 <McTextLink to="Popover#event">Popover Event</McTextLink> 。 -->
+更多 Event 请参考 <McTextLink to="Popover#event">Popover Event</McTextLink> 。
 
 ## Slot
 

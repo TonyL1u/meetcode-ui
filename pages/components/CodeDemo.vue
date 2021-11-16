@@ -4,13 +4,13 @@
             <slot></slot>
         </div>
         <div class="code-preview-box" v-if="codePreviewVisiable">
-            <NTabs :default-value="tabIndex" :tab-pad="36" :content-style="{ 'padding-top': 0 }" @update:tab="handleUpdateTab">
+            <NTabs type="line" :default-value="tabIndex" :tab-pad="36" :content-style="{ 'padding-top': 0 }" @update:tab="handleUpdateTab">
                 <NTabPane v-for="(code, index) in codes" :name="index" :tab="code.name + '.vue'" style="padding-top: 0; overflow: auto">
                     <pre class="code-preview language-html" v-html="highlighted(code.importSource)"></pre>
                 </NTabPane>
             </NTabs>
         </div>
-        <div v-if="showToolbox" class="tool-box" :class="!codePreviewVisiable ? 'mc-mt-4' : ''">
+        <div v-if="showToolbox" class="tool-box" :class="!codePreviewVisiable ? 'mc-mt-3.5' : ''">
             <NSpace justify="center">
                 <NTooltip placement="top" trigger="hover">
                     <template #trigger>

@@ -2,7 +2,7 @@
 import Basic from '@/popselect/demos/DemoBasic.vue'
 import Multiple from '@/popselect/demos/DemoMultiple.vue'
 import HeightLimit from '@/popselect/demos/DemoHeightLimit.vue'
-// import { McTextLink } from '../../McUI'
+import { McTextLink } from 'meetcode-ui'
 </script>
 
 # Popselect 弹出选择
@@ -42,7 +42,7 @@ import HeightLimit from '@/popselect/demos/DemoHeightLimit.vue'
 |  multiple  |        `boolean`         | `false` |        是否多选        |
 | max-height |         `number`         |  `300`  | 弹出框的最大高度（px） |
 
-<!-- 更多 Props 请参考 <McTextLink to="Popover#props">Popover Props</McTextLink> 。 -->
+更多 Props 请参考 <McTextLink to="Popover#props">Popover Props</McTextLink> 。
 
 ## Event
 
@@ -50,7 +50,7 @@ import HeightLimit from '@/popselect/demos/DemoHeightLimit.vue'
 | :-------------: | :----------------------------------------------------------------: | :----------------: |
 | on-update:value | `(value: PopselectValue, selectedValues?: PopselectValue) => void` | 选中的值改变时触发 |
 
-<!-- 更多 Event 请参考 <McTextLink to="Popover#event">Popover Event</McTextLink> 。 -->
+更多 Event 请参考 <McTextLink to="Popover#event">Popover Event</McTextLink> 。
 
 ## Slot
 

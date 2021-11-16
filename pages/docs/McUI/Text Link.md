@@ -1,35 +1,35 @@
 <script setup>
-import TextLinkDemo1 from '../../components/McUI-demo/TextLink/TextLinkDemo1.vue'
-import TextLinkDemo2 from '../../components/McUI-demo/TextLink/TextLinkDemo2.vue'
-import TextLinkDemo3 from '../../components/McUI-demo/TextLink/TextLinkDemo3.vue'
-import TextLinkDemo4 from '../../components/McUI-demo/TextLink/TextLinkDemo4.vue'
+import Basic from '@/text-link/demos/DemoBasic.vue'
+import Underline from '@/text-link/demos/DemoUnderline.vue'
+import Email from '@/text-link/demos/DemoEmail.vue'
+import EmailPlain from '@/text-link/demos/DemoEmailPlain.vue'
 </script>
 
 # TextLink 文字链接
 
 ## 演示
 
-::: demo codePreview=TextLinkDemo1
+::: demo codePreview=Basic
 
 ### 基础用法
 
-<TextLinkDemo1 />
+<Basic />
 :::
 
-::: demo codePreview=TextLinkDemo2
+::: demo codePreview=Underline
 
 ### 显示下划线
 
-<TextLinkDemo2 />
+<Underline />
 :::
 
-::: demo codePreview=TextLinkDemo3,TextLinkDemo4
+::: demo codePreview=Email,EmailPlain
 
 ### 邮件链接
 
-有时候可能想添加一个邮件跳转链接，当 TextLink 的内容是邮件链接时，会自动识别，点击<TextLinkDemo3 />，会打开你默认的本地邮箱应用。
+有时候可能想添加一个邮件跳转链接，当 TextLink 的内容是邮件链接时，会自动识别，点击<Email />，会打开你默认的本地邮箱应用。
 
-如果想取消这一功能，设置 `plain = true` 。点击<TextLinkDemo4 />，什么都不会发生。
+若只是想展示文字，设置 `plain = true` 。点击<EmailPlain />，什么都不会发生。
 
 :::
 
