@@ -12,7 +12,7 @@ const extensions = ['.js', '.ts', '.tsx'];
 const file = type => `dist/${name}.${type}.js`;
 const overrides = {
     compilerOptions: { declaration: true }, // 生成.d.ts的文件
-    exclude: ['tests/**/*.ts', 'tests/**/*.tsx']
+    exclude: ['playground', 'pages', '*.config.ts']
 };
 export { name, file };
 export default {
