@@ -1,7 +1,12 @@
 {
     "compilerOptions": {
+        "baseUrl": ".",
         "paths": {
-            "meetcode-ui": ["./src"]
+            "meetcode-ui": ["src"],
+            "@/*": ["src/*"],
+            "@dist/*": ["dist/*"],
+            "@playground/*": ["playground/*"],
+            "@pages/*": ["pages/*"]
         },
         "target": "esnext",
         "useDefineForClassFields": true,
@@ -13,7 +18,6 @@
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "lib": ["esnext", "dom"],
-        "declaration": true    
-    },
-    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+        "declaration": true
+    }
 }
