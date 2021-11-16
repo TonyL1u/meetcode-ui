@@ -5,7 +5,3 @@ dist
 dist-ssr
 *.local
 package-lock.json
-postcss.config.js
-tsconfig.json
-tailwind.config.js
-.prettierrc.js

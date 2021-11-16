@@ -1,0 +1,15 @@
+build
+pages
+node_modules
+playground
+src
+.DS_Store
+.vscode
+dist
+dist-ssr
+*.local
+*.ts
+*.js
+*.html
+*.json
+!package.json
