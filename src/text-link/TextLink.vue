@@ -1,12 +1,11 @@
 <script lang="ts">
 export default {
-    name: 'TextLink',
-    inheritAttrs: false
+    name: 'TextLink'
 };
 </script>
 
 <script lang="ts" setup>
-import { computed, ref, toRefs, onMounted, useSlots, useAttrs, renderSlot, createVNode, mergeProps } from 'vue';
+import { computed, toRefs, useSlots, useAttrs, renderSlot, createVNode } from 'vue';
 import { getSlotFirstVNode } from '../_utils_';
 import * as CSS from 'csstype';
 
@@ -80,16 +79,15 @@ const Render = () => {
     const textContent = getSlotFirstVNode(slots.default)?.children ?? '';
     const isEmail = typeof textContent === 'string' && /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/.test(textContent);
 
-    const mergedProps = mergeProps(
+    return createVNode(
+        'a',
         {
             class: ['mc-text-link', { 'mc-text-link--block': block.value }, showUnderline.value],
             style: cssVars.value,
             href: to.value || (!plain.value && isEmail ? `mailto:${textContent}` : '')
         },
-        attrs
+        [renderSlot(slots, 'default')]
     );
-
-    return createVNode('a', mergedProps, [renderSlot(slots, 'default')]);
 };
 </script>
 

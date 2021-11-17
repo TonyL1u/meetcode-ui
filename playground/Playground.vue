@@ -13,11 +13,22 @@ import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 import InitialCode from './source/demoInitialCode';
 
+const { filePath = '' } = defineProps<{ filePath: string }>();
+
 const route = useRoute();
 const code = <string>route.query.code;
 const { script, template } = InitialCode[code || 'test'];
 const initialScript = ref(script);
 const initialTemplate = ref(template);
+(async () => {
+    if (!filePath) return;
+    const demoFile = (await import(`${filePath}?raw`)).default;
+    const [templateStartIndex, templateEndIndex] = [demoFile.indexOf('<template>'), demoFile.lastIndexOf('</template>')];
+    const template = demoFile.slice(templateStartIndex + 10, templateEndIndex);
+    const script = demoFile.match(/<script lang="ts" setup>([\s\S]*?)<\/script>/)?.[1] ?? '';
+    initialScript.value = script.trim();
+    initialTemplate.value = template.trim();
+})();
 
 const onContentChanged = (source: string, content: string) => {
     if (orchestrator.activeFile) {

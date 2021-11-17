@@ -6,6 +6,7 @@ import { createSingletonPromise } from '@antfu/utils';
 import vueuseTypes from '@vueuse/core/index.d.ts?raw';
 import vueTypes from '@vue/runtime-core/dist/runtime-core.d.ts?raw';
 import meetcodeuiTypes from '@dist/index.d.ts?raw';
+import naiveuiTypes from 'naive-ui/lib/index.d.ts?raw';
 
 import { orchestrator } from '../orchestrator';
 
@@ -31,7 +32,7 @@ const setup = createSingletonPromise(async () => {
         typeRoots: ['node_modules/@types']
     });
 
-    const registered: string[] = ['vue', '@vueuse/core', 'meetcode-ui'];
+    const registered: string[] = ['vue', '@vueuse/core', 'meetcode-ui', 'naive-ui'];
 
     monaco.languages.typescript.javascriptDefaults.addExtraLib(
         `
@@ -52,6 +53,13 @@ const setup = createSingletonPromise(async () => {
     declare module 'meetcode-ui' { ${meetcodeuiTypes} }
   `,
         'ts:meetcode-ui'
+    );
+
+    monaco.languages.typescript.javascriptDefaults.addExtraLib(
+        `
+    declare module 'naive-ui' { ${naiveuiTypes} }
+  `,
+        'ts:naive-ui'
     );
 
     watch(

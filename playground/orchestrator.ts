@@ -1,6 +1,6 @@
 import { reactive, watch, watchEffect } from 'vue';
 // import { parse } from '@vue/compiler-sfc'
-import { createEventHook } from '@vueuse/core';
+import { createEventHook, EventHookOn } from '@vueuse/core';
 // import lz from 'lz-string';
 import { compileFile } from './compiler/sfcCompiler';
 // const demos = import.meta.glob('../demos/**/*.(vue|json)')
@@ -198,7 +198,7 @@ export function removeAllFiles() {
 //   shouldUpdateContent.trigger(null)
 // }
 
-export const onShouldUpdateContent = shouldUpdateContent.on;
+export const onShouldUpdateContent: EventHookOn = shouldUpdateContent.on;
 
 const initialPackages = [
     // {
@@ -221,7 +221,11 @@ const initialPackages = [
     },
     {
         name: 'meetcode-ui',
-        url: '/src/playground/source/meetcode-ui.esm.js'
+        url: '/dist/meetcode-ui.esm.js'
+    },
+    {
+        name: 'naive-ui',
+        url: '/playground/source/naive-ui-dev-proxy'
     }
 ];
 

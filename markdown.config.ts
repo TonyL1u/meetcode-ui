@@ -51,7 +51,8 @@ export default {
 
                         return {
                             name,
-                            importSource
+                            importSource,
+                            filePath: importPath
                         };
                     });
 

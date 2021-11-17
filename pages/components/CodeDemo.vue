@@ -1,6 +1,6 @@
 <template>
     <div class="code-demo">
-        <div class="demo-box">
+        <div class="demo-box mc-overflow-auto">
             <slot></slot>
         </div>
         <div class="code-preview-box" v-if="codePreviewVisiable">
@@ -49,7 +49,7 @@
 
     <NModal v-model:show="showModal">
         <NCard style="width: 90%; height: 90vh" :bordered="false" :content-style="{ height: '100%' }">
-            <Playground />
+            <Playground :file-path="codes[tabIndex].filePath" />
         </NCard>
     </NModal>
 </template>
