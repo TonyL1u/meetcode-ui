@@ -88,8 +88,8 @@ const setup = createSingletonPromise(async () => {
         (async () => {
             const [{ default: EditorWorker }, { default: HtmlWorker }, { default: TsWorker }] = await Promise.all([
                 import('monaco-editor/esm/vs/editor/editor.worker?worker'),
-                import('monaco-editor/esm/vs/language/html/html.worker?worker'),
-                // import('./languages/html/html.worker?worker'),
+                // import('monaco-editor/esm/vs/language/html/html.worker?worker'),
+                import('./languages/html/html.worker?worker'),
                 import('monaco-editor/esm/vs/language/typescript/ts.worker?worker')
             ]);
 

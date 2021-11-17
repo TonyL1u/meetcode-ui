@@ -36,7 +36,6 @@ export class HTMLWorker {
         const htmlDocument = this._languageService.parseHTMLDocument(document);
         const items = htmlCompletionPlugins.map(plugin => plugin.completions({ document, html: htmlDocument, position })).flat();
         const completions = this._languageService.doComplete(document, position, htmlDocument, this._languageSettings && this._languageSettings.suggest);
-        console.log(completions);
 
         return Promise.resolve({
             isIncomplete: true,

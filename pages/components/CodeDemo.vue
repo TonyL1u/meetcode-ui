@@ -49,7 +49,7 @@
 
     <NModal v-model:show="showModal">
         <NCard style="width: 90%; height: 90vh" :bordered="false" :content-style="{ height: '100%' }">
-            <Playground :file-path="codes[tabIndex].filePath" />
+            <Playground />
         </NCard>
     </NModal>
 </template>
@@ -60,33 +60,25 @@ import hljs from 'highlight.js';
 import { NButton, NCard, NIcon, NSpace, NModal, useNotification, NTooltip, NTabs, NTabPane } from 'naive-ui';
 import { Code as IconCode, CopyOutline as IconCopy, CubeOutline as IconEdit } from '@vicons/ionicons5';
 // import { copyToBoard } from './utils';
-import { useRouter } from 'vue-router';
 import Playground from '@playground/Playground.vue';
 import { loadInitialState } from '@playground/orchestrator';
 
 const props = defineProps<{ codeSources: string }>();
-
-const router = useRouter();
 const notification = useNotification();
 const codes = ref<Array<any>>(JSON.parse(props.codeSources) || []);
 const codePreviewVisiable = ref(false);
 const showModal = ref(false);
 const tabIndex = ref(0);
+
 const showToolbox = computed(() => {
     return codes.value.length > 0;
 });
-
 const handleUpdateTab = (val: string | number) => {
     tabIndex.value = <number>val;
 };
 const handleShowModal = () => {
-    router.push({
-        query: {
-            code: 'code2'
-        }
-    });
     setTimeout(() => {
-        loadInitialState();
+        loadInitialState(codes.value[tabIndex.value].filePath);
         showModal.value = true;
     }, 0);
 };

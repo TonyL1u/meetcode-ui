@@ -8,7 +8,7 @@ import { flatColors, isAttrUtility, isAttrVariant, isValidColor, isDarkColor, rg
 import { generateCompletions } from './utils/completions';
 import { HTMLParser } from './utils/parser';
 import { EditorPlugin } from '../types';
-// import { useStyleSheet } from '../../../logic/useStyleSheet';
+import { useStyleSheet } from '../../../logic/useStyleSheet';
 
 const processor = new Processor();
 const windi = {
@@ -26,7 +26,7 @@ interface Provider {
     decoration: Editor.IModelDecoration[];
 }
 
-// const { rules } = useStyleSheet('__windicss_styles__');
+const { rules } = useStyleSheet('__windicss_styles__');
 const state: State = {
     decorations: []
 };
@@ -118,14 +118,14 @@ export const WindiDecoration: EditorPlugin = {
             })
             .flat();
 
-        // rules.value = [...attributeProviders, ...classProviders]
-        //     .filter(({ color }) => color)
-        //     .reduce((acc, color) => {
-        //         const _color = isString(color.color) ? color.color : rgb2Hex(color.color[0], color.color[1], color.color[2]);
-        //         // @ts-ignore
-        //         acc[`.color-${_color.replace('#', '')}`] = `background-color: ${_color}`;
-        //         return acc;
-        //     }, {});
+        rules.value = [...attributeProviders, ...classProviders]
+            .filter(({ color }) => color)
+            .reduce((acc, color) => {
+                const _color = isString(color.color) ? color.color : rgb2Hex(color.color[0], color.color[1], color.color[2]);
+                // @ts-ignore
+                acc[`.color-${_color.replace('#', '')}`] = `background-color: ${_color}`;
+                return acc;
+            }, {});
 
         // @ts-ignore
         state.decorations = editor.deltaDecorations(state.decorations, [...attributeProviders.map(({ decoration }) => decoration), ...classProviders.map(({ decoration }) => decoration)]);
