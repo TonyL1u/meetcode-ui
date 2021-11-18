@@ -3,5 +3,7 @@ node_modules
 .vscode
 dist
 dist-ssr
+lib
+lib-ssr
 *.local
 package-lock.json

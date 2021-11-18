@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import viteCompression from 'vite-plugin-compression';
 import path from 'path';
 import Markdown from 'vite-plugin-md';
 import MarkdownConfig from './markdown.config';
@@ -10,12 +11,12 @@ const resolve = (dir: string) => path.join(__dirname, dir);
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    base: isProduction ? '/public/component-docs/' : '/',
+    base: isProduction ? '/public/meetcode-ui/' : '/',
     resolve: {
         alias: {
             'meetcode-ui': resolve('src'),
             '@': resolve('src'),
-            '@dist': resolve('dist'),
+            '@lib': resolve('lib'),
             '@playground': resolve('playground'),
             '@pages': resolve('pages')
         }
@@ -24,7 +25,8 @@ export default defineConfig({
         vue({
             include: [/\.vue$/, /\.md$/]
         }),
-        Markdown(MarkdownConfig)
+        Markdown(MarkdownConfig),
+        viteCompression()
     ],
     server: {
         port: 3001,

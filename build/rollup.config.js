@@ -9,7 +9,7 @@ import { name } from '../package.json';
 
 const extensions = ['.js', '.ts', '.tsx'];
 // 输出打包后的文件名称type 1.esm 2.umd
-const file = type => `dist/${name}.${type}.js`;
+const file = type => `lib/${name}.${type}.js`;
 const overrides = {
     compilerOptions: { declaration: true }, // 生成.d.ts的文件
     exclude: ['playground', 'pages', '*.config.ts']

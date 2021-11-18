@@ -6,7 +6,7 @@ import Red from '@pages/components/tailwind/color/Red.vue'
 import Yellow from '@pages/components/tailwind/color/Yellow.vue'
 </script>
 
-# Tailwind CSS
+# Tailwind
 
 ## Color
 

@@ -1,16 +1,23 @@
 <template>
-    <NAnchor v-if="anchorLinks.length > 0" :bound="67" style="z-index: 1; width: 144px">
+    <NAnchor :bound="67" style="z-index: 1; width: 144px">
         <RecursionAnchorLink :key="navigatorUpdateKey" :anchor-links="anchorLinks" />
     </NAnchor>
 </template>
 
 <script lang="ts" setup>
 import { nextTick, onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { NAnchor } from 'naive-ui';
-import RecursionAnchorLink from '../view/AutoGenerate/RecursionAnchorLink.vue';
-import type { AnchorLink } from '../types';
+import RecursionAnchorLink from '../home/RecursionAnchorLink.vue';
+
+interface AnchorLink {
+    title: string;
+    href: string;
+    sub?: Array<AnchorLink>;
+}
 
 // 初始化路由
+const route = useRoute();
 const anchorLinks = ref<AnchorLink[]>([]);
 const navigatorUpdateKey = ref(0);
 
@@ -20,6 +27,7 @@ onMounted(() => {
         anchorLinks.value = [];
         const anchorElementSet = document.querySelectorAll('h1, h2, h3');
         const filterSet = Array.from(anchorElementSet).filter((e: Element) => !!e.id);
+
         const findNode = (id: string, linkArr: Array<AnchorLink>): AnchorLink | null => {
             let find: AnchorLink | null = null;
             for (const link of linkArr) {

@@ -5,7 +5,7 @@ import { createSingletonPromise } from '@antfu/utils';
 
 import vueuseTypes from '@vueuse/core/index.d.ts?raw';
 import vueTypes from '@vue/runtime-core/dist/runtime-core.d.ts?raw';
-import meetcodeuiTypes from '@dist/index.d.ts?raw';
+import meetcodeuiTypes from '@lib/index.d.ts?raw';
 import naiveuiTypes from 'naive-ui/lib/index.d.ts?raw';
 
 import { orchestrator } from '../orchestrator';

@@ -158,7 +158,7 @@ const initialPackages = [
     },
     {
         name: 'meetcode-ui',
-        url: '/dist/meetcode-ui.esm.js'
+        url: '/lib/meetcode-ui.esm.js'
     },
     {
         name: 'naive-ui',

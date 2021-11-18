@@ -10,14 +10,13 @@ import { useSlots, useAttrs, ref, createVNode, cloneVNode, computed, renderSlot,
 import { getSlotFirstVNode } from '../_utils_';
 import { VBinder, VTarget, VFollower } from 'vueuc';
 import { useElementBounding, useMouseInElement } from '@vueuse/core';
+import type { PopoverTrigger, PopoverPlacement } from './interface';
 
 type ReachedDir = 'top' | 'right' | 'bottom' | 'left';
-type PopoverTrigger = 'hover' | 'click' | 'manual' | 'follow';
-type PopoverPlacement = 'top' | 'bottom' | 'left' | 'right' | 'top-start' | 'top-end' | 'left-start' | 'left-end' | 'right-start' | 'right-end' | 'bottom-start' | 'bottom-end';
 interface Props {
     trigger?: PopoverTrigger;
     placement?: PopoverPlacement;
-    destoryWhenHide?: boolean;
+    destroyWhenHide?: boolean;
     zIndex?: number;
     show?: boolean;
     disabled?: boolean;
@@ -33,7 +32,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
     trigger: 'hover',
     placement: 'top',
-    destoryWhenHide: true,
+    destroyWhenHide: true,
     show: false,
     disabled: false,
     withArrow: true,
@@ -53,10 +52,12 @@ const emit = defineEmits<{
 
 const slots = useSlots();
 const attrs = useAttrs();
-const showRef = props.trigger === 'manual' ? toRefs(props).show : ref(!!props.show);
+const { trigger, placement, destroyWhenHide, zIndex, show, disabled, withArrow, showDelay, hideDelay, offset, wrapBoundary, matchTrigger, autoSync, title } = toRefs(props);
+const showRef = trigger.value === 'manual' ? show : ref(!!props.show);
 const followerRef = ref(null);
 const followX = ref(0);
 const followY = ref(0);
+const mouseInFollowTrigger = ref(false);
 const contentShowTimer = ref();
 const contentHideTimer = ref();
 
@@ -90,8 +91,8 @@ const handleContentShow = () => {
         showRef.value = true;
         callShow();
         callUpdateShow();
-        props.trigger === 'click' && window.addEventListener('click', handleClickInside);
-    }, props.showDelay);
+        trigger.value === 'click' && window.addEventListener('click', handleClickInside);
+    }, showDelay.value);
 };
 const handleContentHide = () => {
     clearShowTimer();
@@ -100,8 +101,8 @@ const handleContentHide = () => {
         showRef.value = false;
         callHide();
         callUpdateShow();
-        props.trigger === 'click' && window.removeEventListener('click', handleClickInside);
-    }, props.hideDelay);
+        trigger.value === 'click' && window.removeEventListener('click', handleClickInside);
+    }, hideDelay.value);
 };
 const handleClickInside = (e: MouseEvent) => {
     const isClickContent = contentVNode.value?.el?.contains(e.target);
@@ -118,7 +119,7 @@ const syncPosition = () => {
 
 // 悬浮控制
 const contentHoverControl = computed(() => {
-    if (props.trigger !== 'hover') return {};
+    if (trigger.value !== 'hover') return {};
 
     return {
         onMouseenter: handleContentShow,
@@ -128,12 +129,12 @@ const contentHoverControl = computed(() => {
 
 // 事件列表
 const triggerEvent = computed(() => {
-    if (props.trigger === 'hover') {
+    if (trigger.value === 'hover') {
         return {
             onMouseenter: handleContentShow,
             onMouseleave: handleContentHide
         };
-    } else if (props.trigger === 'click') {
+    } else if (trigger.value === 'click') {
         return {
             onClick: () => {
                 if (showRef.value) {
@@ -141,6 +142,15 @@ const triggerEvent = computed(() => {
                 } else {
                     handleContentShow();
                 }
+            }
+        };
+    } else if (trigger.value === 'follow') {
+        return {
+            onMouseenter: () => {
+                mouseInFollowTrigger.value = true;
+            },
+            onMouseleave: () => {
+                mouseInFollowTrigger.value = false;
             }
         };
     } else {
@@ -154,7 +164,7 @@ const triggerVNode = computed(() => {
     if (!firstDefaultVNode) return null;
     const tempVNode = cloneVNode(firstDefaultVNode);
 
-    if (props.disabled) return tempVNode;
+    if (disabled.value) return tempVNode;
 
     // 事件绑定
     if (!tempVNode.props) {
@@ -177,12 +187,12 @@ const triggerVNode = computed(() => {
     return tempVNode;
 });
 const contentVNode = computed(() => {
-    if (props.disabled) return null;
+    if (disabled.value) return null;
 
-    const { top = '', right = '', bottom = '', left = '' } = props.offset;
+    const { top = '', right = '', bottom = '', left = '' } = offset.value;
     const mergedProps = mergeProps(
         {
-            class: ['mc-popover', { 'mc-popover--with-arrow': props.withArrow }],
+            class: ['mc-popover', { 'mc-popover--with-arrow': withArrow.value }],
             style: {
                 '--popover-offset-top': top,
                 '--popover-offset-right': right,
@@ -193,9 +203,9 @@ const contentVNode = computed(() => {
         },
         attrs
     );
-    const tempVNode = createVNode('div', mergedProps, [props.title ? createVNode('div', { class: 'mc-popover__title' }, [props.title]) : null, renderSlot(slots, 'content'), props.withArrow ? createVNode('div', { class: 'mc-popover__arrow' }) : null]);
+    const tempVNode = createVNode('div', mergedProps, [title?.value ? createVNode('div', { class: 'mc-popover__title' }, [title.value]) : null, renderSlot(slots, 'content'), withArrow.value ? createVNode('div', { class: 'mc-popover__arrow' }) : null]);
 
-    if (props.destoryWhenHide) {
+    if (destroyWhenHide.value) {
         if (!showRef.value) return null;
         return tempVNode;
     } else {
@@ -219,13 +229,13 @@ const Render = () => {
                     VFollower,
                     {
                         ref: followerRef,
-                        x: props.trigger === 'follow' ? followX.value : undefined,
-                        y: props.trigger === 'follow' ? followY.value : undefined,
-                        zIndex: props.zIndex,
+                        x: trigger.value === 'follow' ? followX.value : undefined,
+                        y: trigger.value === 'follow' ? followY.value : undefined,
+                        zIndex: zIndex?.value,
                         show: showRef.value,
                         enabled: showRef.value,
-                        placement: props.placement,
-                        width: props.matchTrigger ? 'target' : undefined
+                        placement: placement.value,
+                        width: matchTrigger.value ? 'target' : undefined
                     },
                     {
                         default: () => {
@@ -248,10 +258,10 @@ const Render = () => {
 };
 
 void nextTick(() => {
-    if (props.disabled || !triggerEl.value) return;
+    if (disabled.value || !triggerEl.value) return;
 
     // 自动同步位置
-    if (props.autoSync) {
+    if (autoSync.value) {
         const { top, right, bottom, left } = useElementBounding(triggerEl.value);
         watch([top, right, bottom, left], () => {
             syncPosition();
@@ -259,14 +269,15 @@ void nextTick(() => {
     }
 
     // follow 控制
-    if (props.trigger === 'follow') {
+    if (trigger.value === 'follow') {
         const { x, y, isOutside, elementHeight, elementWidth, elementX, elementY } = useMouseInElement(triggerEl.value);
         // 首次进入不做检测
         let isFirstEnter = true;
 
         watch([x, y, isOutside], () => {
-            showRef.value = !isOutside.value;
+            showRef.value = !isOutside.value && mouseInFollowTrigger.value;
             callUpdateShow();
+
             if (showRef.value) {
                 callShow();
                 followX.value = x.value;
@@ -277,7 +288,7 @@ void nextTick(() => {
                     return;
                 }
                 void nextTick(() => {
-                    if (props.wrapBoundary) {
+                    if (wrapBoundary.value) {
                         let isReachBorder = false;
                         let reachedDir: Array<ReachedDir> = [];
                         const contentRect = contentEl.value.getBoundingClientRect();

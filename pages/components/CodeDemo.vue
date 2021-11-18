@@ -1,10 +1,10 @@
 <template>
     <div class="code-demo">
-        <div class="demo-box mc-overflow-auto">
+        <div class="demo-box">
             <slot></slot>
         </div>
         <div class="code-preview-box" v-if="codePreviewVisiable">
-            <NTabs type="line" :default-value="tabIndex" :tab-pad="36" :content-style="{ 'padding-top': 0 }" @update:tab="handleUpdateTab">
+            <NTabs type="line" :default-value="tabIndex" :tab-pad="36" :content-style="{ 'padding-top': 0 }" @update:value="handleUpdateTab">
                 <NTabPane v-for="(code, index) in codes" :name="index" :tab="code.name + '.vue'" style="padding-top: 0; overflow: auto">
                     <pre class="code-preview language-html" v-html="highlighted(code.importSource)"></pre>
                 </NTabPane>
@@ -48,7 +48,7 @@
     </div>
 
     <NModal v-model:show="showModal">
-        <NCard style="width: 90%; height: 90vh" :bordered="false" :content-style="{ height: '100%' }">
+        <NCard style="width: 60%; height: 60vh" :bordered="false" :content-style="{ height: '100%' }">
             <Playground />
         </NCard>
     </NModal>

@@ -77,7 +77,7 @@ const getOptionVNode = (data: PopselectOption) => {
                 {
                     class: 'mc-popselect-option__inner'
                 },
-                [createVNode('div', { class: 'mc-truncate', style: 'max-width: 200px' }, label), checkVNode]
+                [createVNode('div', null, label), checkVNode]
             )
         ]
     );
@@ -164,6 +164,11 @@ const Render = () => {
 
     &__inner {
         @apply mc-flex mc-justify-between mc-items-center;
+
+        div {
+            @apply mc-truncate;
+            max-width: 200px;
+        }
     }
 }
 </style>

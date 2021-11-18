@@ -1,5 +1,5 @@
 <template>
-    <NAnchor v-if="anchorLinks.length > 0" :bound="67" style="z-index: 1; width: 144px; position: fixed; top: 88px">
+    <NAnchor :bound="67" style="z-index: 1; width: 144px; position: fixed; top: 88px">
         <RecursionAnchorLink :key="navigatorUpdateKey" :anchor-links="anchorLinks" />
     </NAnchor>
 </template>
@@ -9,7 +9,6 @@ import { nextTick, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { NAnchor } from 'naive-ui';
 import RecursionAnchorLink from './RecursionAnchorLink.vue';
-// import type { AnchorLink } from '../../types';
 
 interface AnchorLink {
     title: string;

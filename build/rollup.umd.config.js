@@ -2,7 +2,7 @@ import basicConfig, { name, file } from './rollup.config';
 export default {
     ...basicConfig,
     output: {
-        name: 'thComponents',
+        name,
         file: file('umd'),
         format: 'umd',
         globals: {
