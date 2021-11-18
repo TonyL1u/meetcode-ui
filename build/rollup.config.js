@@ -31,7 +31,6 @@ export default {
         commonjs({
             include: ['node_modules/**', 'node_modules/**/*']
         }),
-        // scss({ include: /\.scss$/, sass: dartSass }),
         typescript({ tsconfigOverride: overrides }),
         postcss({
             extensions: ['.css'],

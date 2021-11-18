@@ -5,7 +5,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { computed, toRefs, useSlots, useAttrs, renderSlot, createVNode } from 'vue';
+import { computed, toRefs, useSlots, renderSlot, createVNode } from 'vue';
 import { getSlotFirstVNode } from '../_utils_';
 import * as CSS from 'csstype';
 
@@ -29,7 +29,6 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const slots = useSlots();
-const attrs = useAttrs();
 const { type, to, underline, trigger, color, hoverColor, block, plain } = toRefs(props);
 const typeMap: any = {
     primary: {
