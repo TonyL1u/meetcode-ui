@@ -10,9 +10,8 @@ import { useSlots, useAttrs, ref, createVNode, cloneVNode, computed, renderSlot,
 import { getSlotFirstVNode } from '../_utils_';
 import { VBinder, VTarget, VFollower } from 'vueuc';
 import { useElementBounding, useMouseInElement } from '@vueuse/core';
-import type { PopoverTrigger, PopoverPlacement } from './interface';
+import type { PopoverTriggerBorder, PopoverTrigger, PopoverPlacement } from './interface';
 
-type ReachedDir = 'top' | 'right' | 'bottom' | 'left';
 interface Props {
     trigger?: PopoverTrigger;
     placement?: PopoverPlacement;
@@ -47,7 +46,7 @@ const emit = defineEmits<{
     (e: 'show', value: true): void;
     (e: 'hide', value: false): void;
     (e: 'update:show', value: boolean): void;
-    (e: 'border:reached', value: boolean, dirs: Array<ReachedDir>): void;
+    (e: 'border:reached', value: boolean, dirs: Array<PopoverTriggerBorder>): void;
 }>();
 
 const slots = useSlots();
@@ -71,7 +70,7 @@ const callHide = () => {
 const callUpdateShow = () => {
     emit('update:show', showRef.value);
 };
-const callBorderReached = (flag: boolean, dirs: Array<ReachedDir>) => {
+const callBorderReached = (flag: boolean, dirs: Array<PopoverTriggerBorder>) => {
     emit('border:reached', flag, dirs);
 };
 
@@ -290,7 +289,7 @@ void nextTick(() => {
                 void nextTick(() => {
                     if (wrapBoundary.value) {
                         let isReachBorder = false;
-                        let reachedDir: Array<ReachedDir> = [];
+                        let reachedDir: Array<PopoverTriggerBorder> = [];
                         const contentRect = contentEl.value.getBoundingClientRect();
                         const { x: contentX, y: contentY, width, height } = contentRect;
                         const cursorOffsetX = contentX - x.value;

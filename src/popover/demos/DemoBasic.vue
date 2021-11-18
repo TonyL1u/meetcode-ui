@@ -18,9 +18,9 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 import { NButton, NSpace } from 'naive-ui';
 import { McPopover } from 'meetcode-ui';
-import { ref } from 'vue';
 
 const show = ref(false);
 </script>

@@ -9,8 +9,7 @@ import { Ref, ref, toRefs, useSlots, renderSlot, createVNode, createTextVNode, F
 import { NButton, NIcon } from 'naive-ui';
 import { getSlotFirstVNode } from '../_utils_';
 import { AlertCircle as IconAlert } from '@vicons/ionicons5';
-import { McPopover } from '..';
-import type { PopoverBaseProps, PopoverExposeInstance } from '../popover';
+import { McPopover, PopoverBaseProps, PopoverExposeInstance } from '../popover';
 
 interface Props extends PopoverBaseProps {
     content?: string;

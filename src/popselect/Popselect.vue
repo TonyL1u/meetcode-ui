@@ -10,8 +10,7 @@ import { NIcon } from 'naive-ui';
 import { CheckmarkSharp as IconCheck } from '@vicons/ionicons5';
 import { useVModels } from '@vueuse/core';
 import { UseVirtualList } from '@vueuse/components';
-import { McPopover } from '..';
-import type { PopoverBaseProps, PopoverExposeInstance } from '../popover';
+import { McPopover, PopoverBaseProps, PopoverExposeInstance } from '../popover';
 import type { PopselectValue, PopselectOption } from './interface';
 
 interface Props extends PopoverBaseProps {

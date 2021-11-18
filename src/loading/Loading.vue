@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+    name: 'Loading'
+};
+</script>
+
 <script lang="ts" setup>
 import { computed, toRefs, useSlots, renderSlot, createVNode, createTextVNode, CSSProperties } from 'vue';
 import Spin from './type/Spin.vue';

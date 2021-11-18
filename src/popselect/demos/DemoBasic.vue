@@ -5,9 +5,9 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 import { NButton } from 'naive-ui';
 import { McPopselect } from 'meetcode-ui';
-import { ref } from 'vue';
 
 const value = ref('');
 const options = ref([

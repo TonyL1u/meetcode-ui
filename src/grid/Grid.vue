@@ -2,7 +2,7 @@
 import { GridIKey } from './interface';
 
 export default {
-    name: 'GridItem',
+    name: 'Grid',
     alias: [GridIKey]
 };
 </script>

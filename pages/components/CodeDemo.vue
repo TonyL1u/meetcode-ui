@@ -48,7 +48,7 @@
     </div>
 
     <NModal v-model:show="showModal">
-        <NCard style="width: 60%; height: 60vh" :bordered="false" :content-style="{ height: '100%' }">
+        <NCard style="width: 60%; height: 60vh; min-width: 1280px; min-height: 768px" :bordered="false" :content-style="{ height: '100%' }">
             <Playground />
         </NCard>
     </NModal>
@@ -59,16 +59,18 @@ import { ref, computed } from 'vue';
 import hljs from 'highlight.js';
 import { NButton, NCard, NIcon, NSpace, NModal, useNotification, NTooltip, NTabs, NTabPane } from 'naive-ui';
 import { Code as IconCode, CopyOutline as IconCopy, CubeOutline as IconEdit } from '@vicons/ionicons5';
-// import { copyToBoard } from './utils';
+import { useClipboard } from '@vueuse/core';
 import Playground from '@playground/Playground.vue';
 import { loadInitialState } from '@playground/orchestrator';
 
 const props = defineProps<{ codeSources: string }>();
-const notification = useNotification();
+
 const codes = ref<Array<any>>(JSON.parse(props.codeSources) || []);
 const codePreviewVisiable = ref(false);
 const showModal = ref(false);
 const tabIndex = ref(0);
+const notification = useNotification();
+const { copy } = useClipboard();
 
 const showToolbox = computed(() => {
     return codes.value.length > 0;
@@ -87,14 +89,13 @@ const highlighted = (content: string) => {
 };
 const copyCode = () => {
     const code = codes.value[tabIndex.value];
-    // if (copyToBoard(code.importSource)) {
-    //     notification.success({
-    //         content: '复制成功',
-    //         meta: `${code.name}.vue代码已复制到剪贴板`,
-    //         duration: 2000,
-    //         closable: true
-    //     });
-    // }
+    copy(code.importSource);
+    notification.success({
+        content: '复制成功',
+        meta: `${code.name}.vue代码已复制到剪贴板`,
+        duration: 2000,
+        closable: true
+    });
 };
 </script>
 <style lang="scss" scoped>
