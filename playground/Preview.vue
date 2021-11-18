@@ -145,7 +145,7 @@ async function updatePreview() {
       document.getElementById('__sfc-styles').innerHTML = window.__css__
       const app = window.__app__ = _createApp(__modules__["${MAIN_FILE}"].default)
       app.config.errorHandler = e => console.error(e)
-      app.mount('#app .demo-box')`.trim()
+      app.mount('#app')`.trim()
         ]);
     } catch (e: any) {
         runtimeError.value = e.message;
