@@ -17,7 +17,7 @@ interface Props {
     trigger?: 'always' | 'hover';
     color?: string;
     hoverColor?: string;
-    plain?: boolean;
+    raw?: boolean;
 }
 const props = withDefaults(defineProps<Props>(), {
     type: 'success',
@@ -25,11 +25,11 @@ const props = withDefaults(defineProps<Props>(), {
     underline: false,
     block: false,
     trigger: 'always',
-    plain: false
+    raw: false
 });
 
 const slots = useSlots();
-const { type, to, underline, trigger, color, hoverColor, block, plain } = toRefs(props);
+const { type, to, underline, trigger, color, hoverColor, block, raw } = toRefs(props);
 const typeMap: any = {
     primary: {
         color: '#3B82F6',
@@ -83,7 +83,7 @@ const Render = () => {
         {
             class: ['mc-text-link', { 'mc-text-link--block': block.value }, showUnderline.value],
             style: cssVars.value,
-            href: to.value || (!plain.value && isEmail ? `mailto:${textContent}` : '')
+            href: to.value || (!raw.value && isEmail ? `mailto:${textContent}` : '')
         },
         [renderSlot(slots, 'default')]
     );

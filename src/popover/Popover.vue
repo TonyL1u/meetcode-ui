@@ -6,7 +6,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { useSlots, useAttrs, ref, createVNode, cloneVNode, computed, renderSlot, withDirectives, vShow, watch, toRefs, nextTick, Transition, mergeProps } from 'vue';
+import { useSlots, useAttrs, ref, createVNode, Text, cloneVNode, computed, renderSlot, withDirectives, vShow, watch, toRefs, nextTick, Transition, mergeProps } from 'vue';
 import { getSlotFirstVNode } from '../_utils_';
 import { VBinder, VTarget, VFollower } from 'vueuc';
 import { useElementBounding, useMouseInElement } from '@vueuse/core';
@@ -161,7 +161,7 @@ const triggerEvent = computed(() => {
 const triggerVNode = computed(() => {
     const firstDefaultVNode = getSlotFirstVNode(slots.default);
     if (!firstDefaultVNode) return null;
-    const tempVNode = cloneVNode(firstDefaultVNode);
+    const tempVNode = cloneVNode(firstDefaultVNode.type === Text ? createVNode('span', null, [firstDefaultVNode]) : firstDefaultVNode);
 
     if (disabled.value) return tempVNode;
 

@@ -1,5 +1,5 @@
 <template>
-    <McTextLink plain>YourEmail@mcui.com</McTextLink>
+    <McTextLink raw>YourEmail@mcui.com</McTextLink>
 </template>
 
 <script lang="ts" setup>
