@@ -10,16 +10,11 @@ const router = createRouter({
         {
             path: '/',
             redirect: encodeURI('/起步')
-            // component: () => import('./home/404.vue')
         },
         {
             path: '/:catchAll(.*)',
             component: () => import('./home/404.vue')
         }
-        // {
-        //     path: '/Playground',
-        //     component: () => import('./playground/Playground.vue')
-        // }
     ]
 });
 

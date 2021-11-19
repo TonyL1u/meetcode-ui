@@ -50,15 +50,19 @@ const setup = createSingletonPromise(async () => {
 
     monaco.languages.typescript.javascriptDefaults.addExtraLib(
         `
-    declare module 'meetcode-ui' { ${meetcodeuiTypes} }
-  `,
+        declare module 'meetcode-ui' { 
+            export { McGrid, McGridItem, McLoading, McPopconfirm, McPopover, McPopselect, McTextLink };
+        }
+      `,
         'ts:meetcode-ui'
     );
 
     monaco.languages.typescript.javascriptDefaults.addExtraLib(
         `
-    declare module 'naive-ui' { ${naiveuiTypes} }
-  `,
+        declare module 'naive-ui' { 
+            export { NButton }
+        }
+      `,
         'ts:naive-ui'
     );
 
@@ -76,7 +80,7 @@ const setup = createSingletonPromise(async () => {
           export = x;
         }
       `,
-                    pack.name
+                    `ts:${pack.name}`
                 );
             });
         },
