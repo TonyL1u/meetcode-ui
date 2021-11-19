@@ -5,7 +5,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { Ref, ref, toRefs, useSlots, renderSlot, createVNode, createTextVNode, Fragment, useAttrs, mergeProps } from 'vue';
+import { Ref, ref, toRefs, useSlots, useAttrs, renderSlot, createVNode, createTextVNode, Fragment, mergeProps } from 'vue';
 import { NButton, NIcon } from 'naive-ui';
 import { getSlotFirstVNode } from '../_utils_';
 import { AlertCircle as IconAlert } from '@vicons/ionicons5';

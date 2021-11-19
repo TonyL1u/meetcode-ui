@@ -12,37 +12,27 @@
         </div>
         <div v-if="showToolbox" class="tool-box" :class="!codePreviewVisiable ? 'mc-mt-3.5' : ''">
             <NSpace justify="center">
-                <NTooltip placement="top" trigger="hover">
-                    <template #trigger>
-                        <NButton text class="toolbox-btn" @click="copyCode">
-                            <NIcon>
-                                <IconCopy />
-                            </NIcon>
-                        </NButton>
-                    </template>
-                    <span>复制代码</span>
-                </NTooltip>
-                <NTooltip placement="top" trigger="hover">
-                    <template #trigger>
-                        <NButton text class="toolbox-btn" @click="codePreviewVisiable = !codePreviewVisiable">
-                            <NIcon>
-                                <IconCode />
-                            </NIcon>
-                        </NButton>
-                    </template>
-                    <span v-if="codePreviewVisiable">隐藏代码</span>
-                    <span v-else>展开代码</span>
-                </NTooltip>
-                <NTooltip placement="top" trigger="hover">
-                    <template #trigger>
-                        <NButton text class="toolbox-btn" @click="handleShowModal">
-                            <NIcon>
-                                <IconEdit />
-                            </NIcon>
-                        </NButton>
-                    </template>
-                    <span>在线运行</span>
-                </NTooltip>
+                <McTooltip content="复制代码">
+                    <NButton text class="toolbox-btn" @click="copyCode">
+                        <NIcon>
+                            <IconCopy />
+                        </NIcon>
+                    </NButton>
+                </McTooltip>
+                <McTooltip :content="codePreviewVisiable ? '隐藏代码' : '展开代码'">
+                    <NButton text class="toolbox-btn" @click="codePreviewVisiable = !codePreviewVisiable">
+                        <NIcon>
+                            <IconCode />
+                        </NIcon>
+                    </NButton>
+                </McTooltip>
+                <McTooltip content="在线运行">
+                    <NButton text class="toolbox-btn" @click="handleShowModal">
+                        <NIcon>
+                            <IconEdit />
+                        </NIcon>
+                    </NButton>
+                </McTooltip>
             </NSpace>
         </div>
     </div>
@@ -57,7 +47,8 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
 import hljs from 'highlight.js';
-import { NButton, NCard, NIcon, NSpace, NModal, useNotification, NTooltip, NTabs, NTabPane } from 'naive-ui';
+import { NButton, NCard, NIcon, NSpace, NModal, useNotification, NTabs, NTabPane } from 'naive-ui';
+import { McTooltip } from 'meetcode-ui';
 import { Code as IconCode, CopyOutline as IconCopy, CubeOutline as IconEdit } from '@vicons/ionicons5';
 import { useClipboard } from '@vueuse/core';
 import Playground from '@playground/Playground.vue';
