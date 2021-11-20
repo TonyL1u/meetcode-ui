@@ -16,7 +16,8 @@
         "build:umd": "rollup --config ./build/rollup.umd.config.js",
         "clean:packages": "rimraf ./lib",
         "clean:site": "rimraf ./dist",
-        "serve": "vite preview"
+        "serve": "vite preview",
+        "new": "sh scripts/new.sh"
     },
     "dependencies": {
         "@antfu/utils": "^0.3.0",
