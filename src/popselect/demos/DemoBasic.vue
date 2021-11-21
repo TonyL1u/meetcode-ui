@@ -1,6 +1,6 @@
 <template>
     <McPopselect v-model:value="value" :options="options">
-        <NButton type="primary" ghost>{{ value || '请选择' }}</NButton>
+        <NButton type="primary" ghost @click="options.push({ label: 'test4', value: 'test4' })">{{ value || '请选择' }}</NButton>
     </McPopselect>
 </template>
 

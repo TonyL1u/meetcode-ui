@@ -1,8 +1,8 @@
 <template>
     <NSpace>
-        <McPopover title="标题" trigger="hover">
-            <NButton type="primary" ghost>悬浮</NButton>
-            <template #content>这是测试内容</template>
+        <McPopover :title="'标题' + count" trigger="hover">
+            <NButton type="primary" ghost @click="count++">悬浮</NButton>
+            <template #content>这是测试内容{{ count }}</template>
         </McPopover>
 
         <McPopover title="标题" trigger="click" placement="bottom">
@@ -23,4 +23,5 @@ import { NButton, NSpace } from 'naive-ui';
 import { McPopover } from 'meetcode-ui';
 
 const show = ref(false);
+const count = ref(0);
 </script>

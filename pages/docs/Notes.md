@@ -11,3 +11,8 @@
 -   h() 和 createVNode() 有什么区别，参数怎么传？
 -   引用组件时，怎么透传 props？
 -   对比 sfc 和 tsx 写法，各有优劣
+
+2021-11-21
+
+-   Popover content 热更新有问题
+-   在 script setup 里用 Render 写法会有问题，因此决定改用纯 ts 写，使用 Functional Component 和 defineComponent

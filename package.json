@@ -9,7 +9,7 @@
     "module": "lib/meetcode-ui.esm.js",
     "types": "lib/index.d.ts",
     "scripts": {
-        "dev": "npm run build:packages && vite",
+        "dev": "vite",
         "build:site": "npm run clean:site && vite build",
         "build:packages": "npm run clean:packages && npm run build:esm && npm run build:umd",
         "build:esm": "rollup --config ./build/rollup.esm.config.js",

@@ -9,7 +9,7 @@ import { ref } from 'vue';
 import { NButton } from 'naive-ui';
 import { McPopselect } from 'meetcode-ui';
 
-const value = ref('test1');
+const value = ref('test15');
 const options = ref([
     {
         label: 'test1',
@@ -50,6 +50,46 @@ const options = ref([
     {
         label: 'test10',
         value: 'test10'
+    },
+    {
+        label: 'test11',
+        value: 'test11'
+    },
+    {
+        label: 'test12',
+        value: 'test12'
+    },
+    {
+        label: 'test13',
+        value: 'test13'
+    },
+    {
+        label: 'test14',
+        value: 'test14'
+    },
+    {
+        label: 'test15',
+        value: 'test15'
+    },
+    {
+        label: 'test16',
+        value: 'test16'
+    },
+    {
+        label: 'test17',
+        value: 'test18'
+    },
+    {
+        label: 'test18',
+        value: 'test18'
+    },
+    {
+        label: 'test19',
+        value: 'test19'
+    },
+    {
+        label: 'test20',
+        value: 'test20'
     }
 ]);
 </script>

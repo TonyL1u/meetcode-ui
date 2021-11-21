@@ -69,8 +69,8 @@ const showUnderline = computed(() => {
 });
 const cssVars = computed<CSS.Properties>(() => {
     return {
-        '--default-color': textColor,
-        '--hover-color': textHoverColor
+        '--text-link-default-color': textColor,
+        '--text-link-hover-color': textHoverColor
     };
 });
 
@@ -96,12 +96,12 @@ const Render = () => {
 
 <style lang="scss">
 .mc-text-link {
-    color: var(--default-color);
+    color: var(--text-link-default-color);
     cursor: pointer;
     text-decoration: none;
 
     &:hover {
-        color: var(--hover-color);
+        color: var(--text-link-hover-color);
     }
 
     &--block {
