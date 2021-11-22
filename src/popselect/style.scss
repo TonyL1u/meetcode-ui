@@ -1,0 +1,39 @@
+.mc-popselect {
+    @apply mc-p-0;
+    min-width: 110px;
+
+    .mc-virtual-list {
+        padding: 4px;
+        overflow: auto;
+
+        & > div > div:not(:first-child) {
+            margin-top: 4px;
+        }
+    }
+}
+
+.mc-popselect-option {
+    @apply mc-px-3 mc-py-2 mc-cursor-pointer mc-rounded;
+
+    &:not(&--disabled):hover {
+        background: #f2fcf8;
+    }
+
+    &--selected {
+        background: #f2fcf8;
+        color: #10b981;
+    }
+
+    &--disabled {
+        @apply mc-cursor-not-allowed mc-bg-gray-100 mc-text-gray-400;
+    }
+
+    &__inner {
+        @apply mc-flex mc-justify-between mc-items-center;
+
+        div {
+            @apply mc-truncate;
+            max-width: 200px;
+        }
+    }
+}

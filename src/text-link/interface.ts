@@ -2,7 +2,7 @@ import * as CSS from 'csstype';
 
 declare module 'csstype' {
     interface Properties {
-        '--default-color'?: string;
-        '--hover-color'?: string;
+        '--text-link-default-color'?: string;
+        '--text-link-hover-color'?: string;
     }
 }

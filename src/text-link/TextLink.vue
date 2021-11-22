@@ -8,6 +8,7 @@ export default {
 import { computed, toRefs, useSlots, renderSlot, createVNode } from 'vue';
 import { getSlotFirstVNode } from '../_utils_';
 import * as CSS from 'csstype';
+import './style.scss';
 
 interface Props {
     type?: 'primary' | 'success' | 'warning' | 'danger' | 'info';
@@ -69,8 +70,8 @@ const showUnderline = computed(() => {
 });
 const cssVars = computed<CSS.Properties>(() => {
     return {
-        '--default-color': textColor,
-        '--hover-color': textHoverColor
+        '--text-link-default-color': textColor,
+        '--text-link-hover-color': textHoverColor
     };
 });
 
@@ -93,28 +94,3 @@ const Render = () => {
 <template>
     <Render />
 </template>
-
-<style lang="scss">
-.mc-text-link {
-    color: var(--default-color);
-    cursor: pointer;
-    text-decoration: none;
-
-    &:hover {
-        color: var(--hover-color);
-    }
-
-    &--block {
-        display: block;
-        width: max-content;
-    }
-
-    &.underline {
-        text-decoration: underline;
-    }
-
-    &.underline-hover:hover {
-        text-decoration: underline;
-    }
-}
-</style>

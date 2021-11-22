@@ -10,6 +10,7 @@ import { NButton, NIcon } from 'naive-ui';
 import { getSlotFirstVNode } from '../_utils_';
 import { AlertCircle as IconAlert } from '@vicons/ionicons5';
 import { McPopover, PopoverBaseProps, PopoverExposeInstance } from '../popover';
+import './style.scss';
 
 interface Props extends PopoverBaseProps {
     content?: string;
@@ -107,16 +108,3 @@ const Render = () => {
 <template>
     <Render />
 </template>
-
-<style lang="scss">
-.mc-popconfirm {
-    &__content {
-        @apply mc-flex mc-items-center mc-text-gray-700;
-        min-width: 110px;
-    }
-
-    &__action {
-        @apply mc-flex mc-justify-end mc-mt-2;
-    }
-}
-</style>

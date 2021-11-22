@@ -1,0 +1,11 @@
+.mc-tabs {
+    &__header {
+        display: flex;
+    }
+}
+
+.mc-tabs--line {
+    .mc-tabs__header {
+        display: flex;
+    }
+}

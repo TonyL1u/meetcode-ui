@@ -5,13 +5,13 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { Ref, ref, useAttrs, toRefs, createVNode, nextTick, useSlots, renderSlot, mergeProps } from 'vue';
+import { Ref, ref, useAttrs, toRefs, createVNode, nextTick, useSlots, renderSlot, mergeProps, watch } from 'vue';
 import { NIcon } from 'naive-ui';
 import { CheckmarkSharp as IconCheck } from '@vicons/ionicons5';
-import { useVModels } from '@vueuse/core';
-import { UseVirtualList } from '@vueuse/components';
+import { useVModels, useVirtualList } from '@vueuse/core';
 import { McPopover, PopoverBaseProps, PopoverExposeInstance } from '../popover';
 import type { PopselectValue, PopselectOption } from './interface';
+import './style.scss';
 
 interface Props extends PopoverBaseProps {
     value: PopselectValue;
@@ -33,14 +33,12 @@ const attrs = useAttrs();
 const { options, multiple, maxHeight } = toRefs(props);
 const { value: valueRef } = useVModels(props, emit);
 const popoverRef = <Ref<PopoverExposeInstance>>ref();
-const virtualListRef = ref();
+let scrollToOption: (index: number) => void;
 
 const handleShow = () => {
     nextTick(() => {
-        const selectedIndex = options.value.findIndex(e => e.value === (multiple.value ? (<Array<string | number>>valueRef.value)[0] : valueRef.value));
-        if (selectedIndex > -1) {
-            virtualListRef.value.$el.scrollTop = selectedIndex * 42;
-        }
+        const index = options.value.findIndex(e => e.value === (multiple.value ? (<Array<string | number>>valueRef.value)[0] : valueRef.value));
+        scrollToOption(index);
     });
 };
 
@@ -85,6 +83,12 @@ const getOptionVNode = (data: PopselectOption) => {
 const Render = () => {
     const listHeigth = Math.min(options.value.length * 38 + (options.value.length - 1) * 4, maxHeight.value);
     const itemHeight = 38 + ((options.value.length - 1) / options.value.length) * 4;
+    const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(options.value, {
+        // Keep `itemHeight` in sync with the item's row.
+        itemHeight
+    });
+    scrollToOption = scrollTo;
+
     const popoverMergedProps = mergeProps(
         {
             ref: popoverRef,
@@ -107,19 +111,21 @@ const Render = () => {
             default: () => renderSlot(slots, 'default'),
             content: () => {
                 return createVNode(
-                    UseVirtualList,
+                    'div',
                     {
-                        ref: virtualListRef,
+                        ...containerProps,
                         class: 'mc-popselect__content mc-virtual-list',
-                        list: options.value,
-                        options: { itemHeight },
-                        height: `${listHeigth}px`
+                        style: { height: listHeigth + 'px' }
                     },
-                    {
-                        default: (item: { data: PopselectOption; index: number }) => {
-                            return getOptionVNode(item.data);
-                        }
-                    }
+                    [
+                        createVNode(
+                            'div',
+                            wrapperProps.value,
+                            list.value.map((item: { data: PopselectOption; index: number }) => {
+                                return getOptionVNode(item.data);
+                            })
+                        )
+                    ]
                 );
             }
         }
@@ -130,44 +136,3 @@ const Render = () => {
 <template>
     <Render />
 </template>
-
-<style lang="scss">
-.mc-popselect {
-    @apply mc-p-0;
-    min-width: 110px;
-
-    .mc-virtual-list {
-        padding: 4px;
-
-        & > div > div:not(:first-child) {
-            margin-top: 4px;
-        }
-    }
-}
-
-.mc-popselect-option {
-    @apply mc-px-3 mc-py-2 mc-cursor-pointer mc-rounded;
-
-    &:not(&--disabled):hover {
-        background: #f2fcf8;
-    }
-
-    &--selected {
-        background: #f2fcf8;
-        color: #10b981;
-    }
-
-    &--disabled {
-        @apply mc-cursor-not-allowed mc-bg-gray-100 mc-text-gray-400;
-    }
-
-    &__inner {
-        @apply mc-flex mc-justify-between mc-items-center;
-
-        div {
-            @apply mc-truncate;
-            max-width: 200px;
-        }
-    }
-}
-</style>
