@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, toRefs, useSlots, useAttrs, computed, renderSlot, provide, createVNode, createTextVNode, CSSProperties, VNode, Fragment } from 'vue';
+import { toRefs, useSlots, useAttrs, computed, renderSlot, provide, createVNode, createTextVNode, CSSProperties, VNode, Fragment } from 'vue';
 import { useVModels } from '@vueuse/core';
 import { flatten, kebabCaseEscape } from '../_utils_';
 import { tabsInjectionKey, tabPaneIKey, TabPaneProps } from './interface';
@@ -46,8 +46,13 @@ const cssVars = computed<CSS.Properties>(() => {
 
 provide(tabsInjectionKey, valueRef);
 
+const handleClick = (name: string | number) => {
+    valueRef.value = name;
+    emit('update:value', name);
+};
+
 const tabsHeaderVNode = computed(() => {
-    const barVNode = type.value === 'line' ? createVNode('div', { class: 'mc-tabs-bar' }) : null;
+    const barVNode = type.value === 'line' ? createVNode('div', { class: 'mc-tabs__header-bar' }) : null;
     // use tabPaneIKey, ensure non-tabPane element won't be rendered in header
     const tabPanes = flatten(slots.default!(), tabPaneIKey);
     console.log(tabPanes);
@@ -56,14 +61,17 @@ const tabsHeaderVNode = computed(() => {
         { class: 'mc-tabs__header-scroll-content' },
         tabPanes.map(tabPane => {
             const { children, props } = tabPane;
-            const escapeProps = <TabPaneProps | null>kebabCaseEscape(props);
+            const { name = '', tabLabel } = <TabPaneProps>kebabCaseEscape(props);
             return createVNode(
                 'div',
                 {
-                    class: 'mc-tabs-tab'
+                    class: 'mc-tabs-tab',
+                    onClick: () => {
+                        handleClick(name);
+                    }
                 },
                 // @ts-ignore
-                children?.tab ? children?.tab() : [createVNode('span', null, [createTextVNode(escapeProps?.tabLabel ?? '')])]
+                children?.tab ? children?.tab() : [createVNode('span', null, [createTextVNode(tabLabel ?? '')])]
             );
         })
     );
@@ -76,7 +84,24 @@ const Render = () => {
             class: ['mc-tabs', `mc-tabs--${type.value}`],
             style: cssVars.value
         },
-        [createVNode('div', { class: 'mc-tabs__header', style: headerStyle?.value }, [tabsHeaderVNode.value]), createVNode('div', { class: 'mc-tabs__content', style: contentStyle?.value }, [renderSlot(slots, 'default')])]
+        [
+            createVNode(
+                'div',
+                {
+                    class: 'mc-tabs__header',
+                    style: headerStyle?.value
+                },
+                [tabsHeaderVNode.value]
+            ),
+            createVNode(
+                'div',
+                {
+                    class: 'mc-tabs__content',
+                    style: contentStyle?.value
+                },
+                [renderSlot(slots, 'default')]
+            )
+        ]
     );
 };
 </script>

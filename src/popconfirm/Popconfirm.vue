@@ -5,7 +5,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { Ref, ref, toRefs, useSlots, useAttrs, renderSlot, createVNode, createTextVNode, Fragment, mergeProps } from 'vue';
+import { ref, toRefs, useSlots, useAttrs, renderSlot, createVNode, createTextVNode, Fragment, mergeProps } from 'vue';
 import { NButton, NIcon } from 'naive-ui';
 import { getSlotFirstVNode } from '../_utils_';
 import { AlertCircle as IconAlert } from '@vicons/ionicons5';
@@ -32,7 +32,7 @@ const emit = defineEmits<{
 const slots = useSlots();
 const attrs = useAttrs();
 const { content, cancelText, confirmText, hideIcon } = toRefs(props);
-const popoverRef = <Ref<PopoverExposeInstance>>ref();
+const popoverRef = ref<PopoverExposeInstance>();
 
 const handleCancel = () => {
     let callback!: boolean;
@@ -40,7 +40,7 @@ const handleCancel = () => {
         callback = flag;
     });
     if (callback === undefined || !callback) {
-        popoverRef.value.hide();
+        popoverRef?.value?.hide();
     }
 };
 const handleConfirm = () => {
@@ -49,7 +49,7 @@ const handleConfirm = () => {
         callback = flag;
     });
     if (callback === undefined || !callback) {
-        popoverRef.value.hide();
+        popoverRef?.value?.hide();
     }
 };
 

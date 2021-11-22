@@ -4,7 +4,7 @@ export function kebabCaseEscape(targetObj: any) {
     for (const [key, value] of Object.entries(targetObj)) {
         if (key.indexOf('-') > -1) {
             const escapeKey = key.split('-').reduce((prev: string, cur: string) => {
-                return `${prev}${cur.charAt(0).toLocaleUpperCase()}${cur.slice(1)}`;
+                return `${prev}${cur.charAt(0).toUpperCase()}${cur.slice(1)}`;
             });
             obj[escapeKey] = value;
         } else {

@@ -5,7 +5,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { Ref, ref, useAttrs, toRefs, createVNode, nextTick, useSlots, renderSlot, mergeProps, watch } from 'vue';
+import { ref, useAttrs, toRefs, createVNode, nextTick, useSlots, renderSlot, mergeProps } from 'vue';
 import { NIcon } from 'naive-ui';
 import { CheckmarkSharp as IconCheck } from '@vicons/ionicons5';
 import { useVModels, useVirtualList } from '@vueuse/core';
@@ -32,7 +32,7 @@ const slots = useSlots();
 const attrs = useAttrs();
 const { options, multiple, maxHeight } = toRefs(props);
 const { value: valueRef } = useVModels(props, emit);
-const popoverRef = <Ref<PopoverExposeInstance>>ref();
+const popoverRef = ref<PopoverExposeInstance>();
 let scrollToOption: (index: number) => void;
 
 const handleShow = () => {
@@ -59,7 +59,7 @@ const getOptionVNode = (data: PopselectOption) => {
           }
         : () => {
               valueRef.value = value;
-              popoverRef.value.hide();
+              popoverRef?.value?.hide();
           };
 
     return createVNode(
@@ -81,11 +81,10 @@ const getOptionVNode = (data: PopselectOption) => {
 };
 
 const Render = () => {
-    const listHeigth = Math.min(options.value.length * 38 + (options.value.length - 1) * 4, maxHeight.value);
-    const itemHeight = 38 + ((options.value.length - 1) / options.value.length) * 4;
+    const listHeigth = Math.min(options.value.length * 42, maxHeight.value);
     const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(options.value, {
         // Keep `itemHeight` in sync with the item's row.
-        itemHeight
+        itemHeight: 42
     });
     scrollToOption = scrollTo;
 
@@ -114,14 +113,15 @@ const Render = () => {
                     'div',
                     {
                         ...containerProps,
-                        class: 'mc-popselect__content mc-virtual-list',
-                        style: { height: listHeigth + 'px' }
+                        class: 'mc-popselect__content',
+                        style: { height: listHeigth + 'px', overflow: 'auto', padding: '4px 4px 0px 4px' }
                     },
                     [
                         createVNode(
                             'div',
                             wrapperProps.value,
                             list.value.map((item: { data: PopselectOption; index: number }) => {
+                                console.log(item);
                                 return getOptionVNode(item.data);
                             })
                         )

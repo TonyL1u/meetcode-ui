@@ -1,19 +1,10 @@
 .mc-popselect {
     @apply mc-p-0;
     min-width: 110px;
-
-    .mc-virtual-list {
-        padding: 4px;
-        overflow: auto;
-
-        & > div > div:not(:first-child) {
-            margin-top: 4px;
-        }
-    }
 }
 
 .mc-popselect-option {
-    @apply mc-px-3 mc-py-2 mc-cursor-pointer mc-rounded;
+    @apply mc-px-3 mc-py-2 mc-cursor-pointer mc-rounded mc-mb-1;
 
     &:not(&--disabled):hover {
         background: #f2fcf8;

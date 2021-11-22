@@ -194,19 +194,16 @@ const contentVNode = computed(() => {
     if (disabled.value) return null;
 
     const { top = '', right = '', bottom = '', left = '' } = offset?.value ?? {};
-    const mergedProps = mergeProps(
-        {
-            class: ['mc-popover', { 'mc-popover--with-arrow': withArrow.value }],
-            style: {
-                '--popover-offset-top': top,
-                '--popover-offset-right': right,
-                '--popover-offset-bottom': bottom,
-                '--popover-offset-left': left
-            },
-            ...contentHoverControl.value
+    const mergedProps = mergeProps(attrs, {
+        class: ['mc-popover', { 'mc-popover--with-arrow': withArrow.value }],
+        style: {
+            '--popover-offset-top': top,
+            '--popover-offset-right': right,
+            '--popover-offset-bottom': bottom,
+            '--popover-offset-left': left
         },
-        attrs
-    );
+        ...contentHoverControl.value
+    });
     const tempVNode = createVNode('div', mergedProps, [title?.value ? createVNode('div', { class: 'mc-popover__title' }, [title.value]) : null, renderSlot(slots, 'content'), withArrow.value ? createVNode('div', { class: 'mc-popover__arrow' }) : null]);
 
     if (destroyWhenHide.value) {
@@ -350,126 +347,3 @@ const Render = () => {
 <template>
     <Render />
 </template>
-
-<style lang="scss">
-[v-placement^='top'] > .mc-popover {
-    margin-bottom: 8px;
-    &.mc-popover--with-arrow {
-        margin-bottom: 10px;
-    }
-
-    & > .mc-popover__arrow {
-        transform: translateX(-50%) rotate(45deg);
-        bottom: -4px;
-    }
-}
-
-[v-placement^='right'] > .mc-popover {
-    margin-left: 8px;
-    &.mc-popover--with-arrow {
-        margin-left: 10px;
-    }
-
-    & > .mc-popover__arrow {
-        transform: translateY(-50%) rotate(45deg);
-        left: -4px;
-    }
-}
-
-[v-placement^='bottom'] > .mc-popover {
-    margin-top: 8px;
-    &.mc-popover--with-arrow {
-        margin-top: 10px;
-    }
-
-    & > .mc-popover__arrow {
-        transform: translateX(-50%) rotate(45deg);
-        top: -4px;
-    }
-}
-
-[v-placement^='left'] > .mc-popover {
-    margin-right: 8px;
-    &.mc-popover--with-arrow {
-        margin-right: 10px;
-    }
-
-    & > .mc-popover__arrow {
-        transform: translateY(-50%) rotate(45deg);
-        right: -4px;
-    }
-}
-
-[v-placement='top-start'],
-[v-placement='bottom-start'] {
-    & > .mc-popover > .mc-popover__arrow {
-        left: 15%;
-    }
-}
-
-[v-placement='top'],
-[v-placement='bottom'] {
-    & > .mc-popover > .mc-popover__arrow {
-        left: 50%;
-    }
-}
-
-[v-placement='top-end'],
-[v-placement='bottom-end'] {
-    & > .mc-popover > .mc-popover__arrow {
-        left: 85%;
-    }
-}
-
-[v-placement='right-start'],
-[v-placement='left-start'] {
-    & > .mc-popover > .mc-popover__arrow {
-        top: 15%;
-    }
-}
-
-[v-placement='right'],
-[v-placement='left'] {
-    & > .mc-popover > .mc-popover__arrow {
-        top: 50%;
-    }
-}
-
-[v-placement='right-end'],
-[v-placement='left-end'] {
-    & > .mc-popover > .mc-popover__arrow {
-        top: 85%;
-    }
-}
-
-.mc-popover {
-    @apply mc-px-3 mc-py-2 mc-rounded-sm;
-    background: #fff;
-    position: relative;
-    top: var(--popover-offset-top);
-    right: var(--popover-offset-right);
-    bottom: var(--popover-offset-bottom);
-    left: var(--popover-offset-left);
-    box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
-
-    &__title {
-        @apply mc-font-bold mc-mb-1 mc-text-base;
-    }
-
-    &__arrow {
-        @apply mc-w-2 mc-h-2 mc-inline-block mc-absolute;
-        transform-origin: 50% 50%;
-        background: inherit;
-    }
-}
-
-.mc-popover-fade-enter-active,
-.mc-popover-fade-leave-active {
-    transition: opacity 0.1s ease;
-}
-
-.mc-popover-fade-enter-from,
-.mc-popover-fade-leave-to {
-    opacity: 0;
-}
-</style>

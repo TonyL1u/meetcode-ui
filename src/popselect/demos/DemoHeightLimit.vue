@@ -1,5 +1,5 @@
 <template>
-    <McPopselect v-model:value="value" :options="options" :max-height="250" trigger="click">
+    <McPopselect v-model:value="value" :options="options" :max-height="250">
         <NButton type="primary" ghost>{{ value }}</NButton>
     </McPopselect>
 </template>
