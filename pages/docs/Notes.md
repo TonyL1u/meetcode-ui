@@ -16,3 +16,8 @@
 
 -   Popover content 热更新有问题
 -   在 script setup 里用 Render 写法会有问题，因此决定改用纯 ts 写，使用 Functional Component 和 defineComponent
+
+2021-11-22
+
+-   尝试用 defineComponent + ts 写组件，体验太差（告辞），还是决定用 script setup
+-   这样写只在开发侧会有热更新问题，遇到其他的问题在特别作兼容

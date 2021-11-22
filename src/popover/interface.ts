@@ -11,7 +11,12 @@ export interface PopoverBaseProps {
     withArrow?: boolean;
     showDelay?: number;
     hideDelay?: number;
-    offset?: any;
+    offset?: {
+        top?: string;
+        right?: string;
+        bottom?: string;
+        left?: string;
+    };
     wrapBoundary?: boolean;
     matchTrigger?: boolean;
     autoSync?: boolean;

@@ -4,7 +4,7 @@
             <NButton type="primary" ghost>点击</NButton>
         </McPopconfirm>
 
-        <McPopconfirm content="这是一段内容确定删除吗？1" cancel-text="我要删除">
+        <McPopconfirm content="这是一段内容确定删除吗？" cancel-text="我要删除">
             <NButton type="primary" ghost>确认</NButton>
         </McPopconfirm>
 

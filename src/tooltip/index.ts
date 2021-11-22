@@ -1,1 +1,1 @@
-export { default as McTooltip } from './Tooltip';
+export { default as McTooltip } from './Tooltip.vue';

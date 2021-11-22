@@ -11,6 +11,7 @@ import { getSlotFirstVNode } from '../_utils_';
 import { VBinder, VTarget, VFollower } from 'vueuc';
 import { useElementBounding, useMouseInElement } from '@vueuse/core';
 import type { PopoverTriggerBorder, PopoverTrigger, PopoverPlacement } from './interface';
+import './style.scss';
 
 interface Props {
     trigger?: PopoverTrigger;
@@ -22,7 +23,12 @@ interface Props {
     withArrow?: boolean;
     showDelay?: number;
     hideDelay?: number;
-    offset?: any;
+    offset?: {
+        top?: string;
+        right?: string;
+        bottom?: string;
+        left?: string;
+    };
     wrapBoundary?: boolean;
     matchTrigger?: boolean;
     autoSync?: boolean;
@@ -37,7 +43,6 @@ const props = withDefaults(defineProps<Props>(), {
     withArrow: true,
     showDelay: 100,
     hideDelay: 100,
-    offset: {},
     wrapBoundary: false,
     matchTrigger: false,
     autoSync: true
@@ -188,7 +193,7 @@ const triggerVNode = computed(() => {
 const contentVNode = computed(() => {
     if (disabled.value) return null;
 
-    const { top = '', right = '', bottom = '', left = '' } = offset.value;
+    const { top = '', right = '', bottom = '', left = '' } = offset?.value ?? {};
     const mergedProps = mergeProps(
         {
             class: ['mc-popover', { 'mc-popover--with-arrow': withArrow.value }],
@@ -216,6 +221,91 @@ const triggerEl = computed(() => {
 });
 const contentEl = computed(() => {
     return <HTMLElement>contentVNode.value?.el || null;
+});
+
+void nextTick(() => {
+    if (disabled.value || !triggerEl.value) return;
+
+    // 自动同步位置
+    if (autoSync.value) {
+        const { top, right, bottom, left } = useElementBounding(triggerEl.value);
+        watch([top, right, bottom, left], () => {
+            syncPosition();
+        });
+    }
+
+    // follow 控制
+    if (trigger.value === 'follow') {
+        const { x, y, isOutside, elementHeight, elementWidth, elementX, elementY } = useMouseInElement(triggerEl.value);
+        // 首次进入不做检测
+        let isFirstEnter = true;
+
+        watch([x, y, isOutside], () => {
+            showRef.value = !isOutside.value && mouseInFollowTrigger.value;
+            callUpdateShow();
+
+            if (showRef.value) {
+                callShow();
+                followX.value = x.value;
+                followY.value = y.value;
+
+                if (isFirstEnter) {
+                    isFirstEnter = false;
+                    return;
+                }
+                void nextTick(() => {
+                    if (wrapBoundary.value) {
+                        let isReachBorder = false;
+                        let reachedDir: Array<PopoverTriggerBorder> = [];
+                        const contentRect = contentEl.value.getBoundingClientRect();
+                        const { x: contentX, y: contentY, width, height } = contentRect;
+                        const cursorOffsetX = contentX - x.value;
+                        const cursorOffsetY = contentY - y.value;
+
+                        // 上边界检测
+                        if (cursorOffsetY < 0 && Math.abs(cursorOffsetY) > elementY.value) {
+                            followY.value += Math.abs(cursorOffsetY);
+                            isReachBorder = true;
+                            reachedDir.push('top');
+                        }
+
+                        // 右边界检测
+                        if (elementX.value + width + cursorOffsetX >= elementWidth.value) {
+                            followX.value -= width + cursorOffsetX;
+                            isReachBorder = true;
+                            reachedDir.push('right');
+                        }
+
+                        // 下边界检测
+                        if (elementY.value + height + cursorOffsetY >= elementHeight.value) {
+                            followY.value -= height + cursorOffsetY;
+                            isReachBorder = true;
+                            reachedDir.push('bottom');
+                        }
+
+                        // 左边界检测
+                        if (cursorOffsetX < 0 && Math.abs(cursorOffsetX) > elementX.value) {
+                            followX.value += Math.abs(cursorOffsetX);
+                            isReachBorder = true;
+                            reachedDir.push('left');
+                        }
+
+                        callBorderReached(isReachBorder, reachedDir);
+                    }
+                });
+            } else {
+                callHide();
+                callBorderReached(false, []);
+            }
+        });
+    }
+});
+
+defineExpose({
+    syncPosition,
+    show: handleContentShow,
+    hide: handleContentHide,
+    el: contentEl
 });
 
 // 渲染
@@ -255,91 +345,6 @@ const Render = () => {
         }
     });
 };
-
-void nextTick(() => {
-    if (disabled.value || !triggerEl.value) return;
-
-    // 自动同步位置
-    if (autoSync.value) {
-        const { top, right, bottom, left } = useElementBounding(triggerEl.value);
-        watch([top, right, bottom, left], () => {
-            syncPosition();
-        });
-    }
-
-    // follow 控制
-    if (trigger.value === 'follow') {
-        const { x, y, isOutside, elementHeight, elementWidth, elementX, elementY } = useMouseInElement(triggerEl.value);
-        // 首次进入不做检测
-        let isFirstEnter = true;
-
-        watch([x, y, isOutside], () => {
-            showRef.value = !isOutside.value && mouseInFollowTrigger.value;
-            callUpdateShow();
-
-            if (showRef.value) {
-                callShow();
-                followX.value = x.value;
-                followY.value = y.value;
-
-                if (isFirstEnter) {
-                    isFirstEnter = false;
-                    return;
-                }
-                void nextTick(() => {
-                    if (wrapBoundary.value) {
-                        let isReachBorder = false;
-                        let reachedDir: Array<PopoverTriggerBorder> = [];
-                        const contentRect = contentEl.value.getBoundingClientRect();
-                        const { x: contentX, y: contentY, width, height } = contentRect;
-                        const cursorOffsetX = contentX - x.value;
-                        const cursotOffsetY = contentY - y.value;
-
-                        // 上边界检测
-                        if (cursotOffsetY < 0 && Math.abs(cursotOffsetY) > elementY.value) {
-                            followY.value += Math.abs(cursotOffsetY);
-                            isReachBorder = true;
-                            reachedDir.push('top');
-                        }
-
-                        // 右边界检测
-                        if (elementX.value + width + cursorOffsetX >= elementWidth.value) {
-                            followX.value -= width + cursorOffsetX;
-                            isReachBorder = true;
-                            reachedDir.push('right');
-                        }
-
-                        // 下边界检测
-                        if (elementY.value + height + cursotOffsetY >= elementHeight.value) {
-                            followY.value -= height + cursotOffsetY;
-                            isReachBorder = true;
-                            reachedDir.push('bottom');
-                        }
-
-                        // 左边界检测
-                        if (cursorOffsetX < 0 && Math.abs(cursorOffsetX) > elementX.value) {
-                            followX.value += Math.abs(cursorOffsetX);
-                            isReachBorder = true;
-                            reachedDir.push('left');
-                        }
-
-                        callBorderReached(isReachBorder, reachedDir);
-                    }
-                });
-            } else {
-                callHide();
-                callBorderReached(false, []);
-            }
-        });
-    }
-});
-
-defineExpose({
-    syncPosition,
-    show: handleContentShow,
-    hide: handleContentHide,
-    el: contentEl
-});
 </script>
 
 <template>

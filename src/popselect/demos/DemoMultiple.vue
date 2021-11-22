@@ -1,5 +1,5 @@
 <template>
-    <McPopselect v-model:value="value" :options="options" trigger="click" :multiple="true">
+    <McPopselect v-model:value="value" :options="options" trigger="click" multiple>
         <NButton type="primary" ghost>{{ value }}</NButton>
     </McPopselect>
 </template>

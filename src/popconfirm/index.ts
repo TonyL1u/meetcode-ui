@@ -1,1 +1,1 @@
-export { default as McPopconfirm } from './Popconfirm';
+export { default as McPopconfirm } from './Popconfirm.vue';

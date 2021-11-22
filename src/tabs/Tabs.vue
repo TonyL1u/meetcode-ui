@@ -46,7 +46,6 @@ const cssVars = computed<CSS.Properties>(() => {
 provide(tabsInjectionKey, valueRef);
 
 const tabsHeaderVNode = computed(() => {
-    console.log(1);
     // use tabPaneIKey, ensure non-tabPane element won't be rendered in header
     const tabPanes = flatten(slots.default!(), tabPaneIKey);
     console.log(tabPanes);
