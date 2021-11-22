@@ -4,6 +4,7 @@ import { useVModels } from '@vueuse/core';
 import { flatten, kebabCaseEscape } from '../_utils_';
 import { tabsInjectionKey, tabPaneIKey, TabPaneProps } from './interface';
 import * as CSS from 'csstype';
+import './style.scss';
 
 interface Props {
     value?: string | number;
@@ -46,12 +47,13 @@ const cssVars = computed<CSS.Properties>(() => {
 provide(tabsInjectionKey, valueRef);
 
 const tabsHeaderVNode = computed(() => {
+    const barVNode = type.value === 'line' ? createVNode('div', { class: 'mc-tabs-bar' }) : null;
     // use tabPaneIKey, ensure non-tabPane element won't be rendered in header
     const tabPanes = flatten(slots.default!(), tabPaneIKey);
     console.log(tabPanes);
     return createVNode(
-        Fragment,
-        null,
+        'div',
+        { class: 'mc-tabs__header-scroll-content' },
         tabPanes.map(tabPane => {
             const { children, props } = tabPane;
             const escapeProps = <TabPaneProps | null>kebabCaseEscape(props);
@@ -82,5 +84,3 @@ const Render = () => {
 <template>
     <Render />
 </template>
-
-<style lang="scss"></style>
