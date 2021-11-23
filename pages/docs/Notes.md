@@ -22,3 +22,9 @@
 -   尝试用 defineComponent + ts 写组件，体验太差（告辞），还是决定用 script setup
 -   这样写只在开发侧会有热更新问题，遇到其他的问题在特别作兼容
 -   Popover 的箭头会覆盖在弹出框上面，暂未解决
+
+2021-11-23
+
+-   script setup 内容书写顺序：import、Props、props(withDefaults)、emit、useSlots & useAttrs、toRefs、inject、ref、computed、watch、function、provide、nextTick、expose、VNode 、Render、onMounted(...)
+-   button 要做一个 content slot，允许自定义内容
+-   目标：自由定义所有样式，不需要写额外的选择器

@@ -121,7 +121,6 @@ const Render = () => {
                             'div',
                             wrapperProps.value,
                             list.value.map((item: { data: PopselectOption; index: number }) => {
-                                console.log(item);
                                 return getOptionVNode(item.data);
                             })
                         )

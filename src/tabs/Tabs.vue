@@ -1,13 +1,12 @@
 <script lang="ts" setup>
-import { toRefs, useSlots, useAttrs, computed, renderSlot, provide, createVNode, createTextVNode, CSSProperties, VNode, Fragment } from 'vue';
-import { useVModels } from '@vueuse/core';
-import { flatten, kebabCaseEscape } from '../_utils_';
+import { ref, toRefs, useSlots, computed, renderSlot, provide, createVNode, createTextVNode, CSSProperties, VNode } from 'vue';
+import { getSlotFirstVNode, kebabCaseEscape } from '../_utils_';
 import { tabsInjectionKey, tabPaneIKey, TabPaneProps } from './interface';
 import * as CSS from 'csstype';
 import './style.scss';
 
 interface Props {
-    value?: string | number;
+    defaultTab?: string | number;
     type?: 'line' | 'empty' | 'card' | 'segment';
     stretch?: boolean;
     inline?: boolean;
@@ -16,10 +15,10 @@ interface Props {
     activeColor?: string;
     linePosition?: string;
     headerStyle?: CSSProperties;
+    tabStyle?: CSSProperties;
     contentStyle?: CSSProperties;
 }
 const props = withDefaults(defineProps<Props>(), {
-    value: '',
     type: 'line',
     stretch: false,
     inline: false,
@@ -29,13 +28,16 @@ const props = withDefaults(defineProps<Props>(), {
     linePosition: 'bottom'
 });
 const emit = defineEmits<{
-    (e: 'update:value', value: string | number): void;
+    (e: 'update:tab', value: string | number): void;
+    (e: 'tab:click', value: string | number): void;
+    (e: 'tab:switch', cb: (flag: { from?: boolean; to?: boolean }) => void): void;
 }>();
 
 const slots = useSlots();
-const attrs = useAttrs();
-const { defaultColor, activeColor, stretch, tabGap, type, headerStyle, contentStyle } = toRefs(props);
-const { value: valueRef } = useVModels(props, emit);
+const { defaultTab, defaultColor, activeColor, stretch, tabGap, type, headerStyle, contentStyle } = toRefs(props);
+// use tabPaneIKey, ensure non-tabPane element won't be rendered in header
+const { firstVNode: firstTabPane, flattened: tabPanes } = getSlotFirstVNode<TabPaneProps>(slots.default, tabPaneIKey, true);
+const activeTab = ref(defaultTab?.value ?? firstTabPane?.props?.name);
 const cssVars = computed<CSS.Properties>(() => {
     return {
         '--tab-default-color': defaultColor.value,
@@ -44,30 +46,35 @@ const cssVars = computed<CSS.Properties>(() => {
     };
 });
 
-provide(tabsInjectionKey, valueRef);
-
 const handleClick = (name: string | number) => {
-    valueRef.value = name;
-    emit('update:value', name);
+    emit('tab:click', name);
+    // only update when value change
+    if (activeTab.value !== name) {
+        activeTab.value = name;
+        emit('update:tab', name);
+    }
 };
 
+provide(tabsInjectionKey, activeTab);
+
 const tabsHeaderVNode = computed(() => {
+    if (!tabPanes || tabPanes.length === 0) return null;
+
     const barVNode = type.value === 'line' ? createVNode('div', { class: 'mc-tabs__header-bar' }) : null;
-    // use tabPaneIKey, ensure non-tabPane element won't be rendered in header
-    const tabPanes = flatten(slots.default!(), tabPaneIKey);
-    console.log(tabPanes);
     return createVNode(
         'div',
         { class: 'mc-tabs__header-scroll-content' },
         tabPanes.map(tabPane => {
             const { children, props } = tabPane;
-            const { name = '', tabLabel } = <TabPaneProps>kebabCaseEscape(props);
+            const { name, tabLabel } = <TabPaneProps>kebabCaseEscape(props);
+            const isActive = activeTab.value === name;
+
             return createVNode(
                 'div',
                 {
-                    class: 'mc-tabs-tab',
+                    class: ['mc-tabs-tab', { 'mc-tabs-tab--active': isActive }],
                     onClick: () => {
-                        handleClick(name);
+                        name && handleClick(name);
                     }
                 },
                 // @ts-ignore

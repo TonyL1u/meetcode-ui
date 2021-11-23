@@ -2,10 +2,23 @@
     &__header-scroll-content {
         display: flex;
     }
+
+    &-tab--active {
+        color: #10b981;
+    }
 }
 
 .mc-tabs--line {
     .mc-tabs__header {
-        display: flex;
+        // display: flex;
     }
+}
+
+.mc-tabs--empty {
+}
+
+.mc-tabs--card {
+}
+
+.mc-tabs--segment {
 }
