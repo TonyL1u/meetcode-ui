@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { ref, toRefs, useSlots, computed, renderSlot, provide, createVNode, createTextVNode, CSSProperties, VNode } from 'vue';
 import { getSlotFirstVNode, kebabCaseEscape } from '../_utils_';
-import { tabsInjectionKey, tabPaneIKey, TabPaneProps } from './interface';
+import { tabsInjectionKey, tabPaneIKey, PaneName, TabPaneProps, OnTabSwitchImpl } from './interface';
 import * as CSS from 'csstype';
 import './style.scss';
 
 interface Props {
-    defaultTab?: string | number;
+    defaultTab?: PaneName;
     type?: 'line' | 'empty' | 'card' | 'segment';
     stretch?: boolean;
     inline?: boolean;
@@ -17,6 +17,7 @@ interface Props {
     headerStyle?: CSSProperties;
     tabStyle?: CSSProperties;
     contentStyle?: CSSProperties;
+    onTabSwitch?: OnTabSwitchImpl;
 }
 const props = withDefaults(defineProps<Props>(), {
     type: 'line',
@@ -28,13 +29,12 @@ const props = withDefaults(defineProps<Props>(), {
     linePosition: 'bottom'
 });
 const emit = defineEmits<{
-    (e: 'update:tab', value: string | number): void;
-    (e: 'tab:click', value: string | number): void;
-    (e: 'tab:switch', cb: (flag: { from?: boolean; to?: boolean }) => void): void;
+    (e: 'update:tab', value: PaneName): void;
+    (e: 'tab:click', value: PaneName): void;
 }>();
 
 const slots = useSlots();
-const { defaultTab, defaultColor, activeColor, stretch, tabGap, type, headerStyle, contentStyle } = toRefs(props);
+const { defaultTab, defaultColor, activeColor, stretch, tabGap, type, headerStyle, contentStyle, onTabSwitch } = toRefs(props);
 // use tabPaneIKey, ensure non-tabPane element won't be rendered in header
 const { firstVNode: firstTabPane, flattened: tabPanes } = getSlotFirstVNode<TabPaneProps>(slots.default, tabPaneIKey, true);
 const activeTab = ref(defaultTab?.value ?? firstTabPane?.props?.name);
@@ -46,12 +46,24 @@ const cssVars = computed<CSS.Properties>(() => {
     };
 });
 
-const handleClick = (name: string | number) => {
+const callUpdateTab = (name: PaneName) => {
+    activeTab.value = name;
+    emit('update:tab', activeTab.value);
+};
+
+const handleClick = async (name: PaneName) => {
     emit('tab:click', name);
     // only update when value change
     if (activeTab.value !== name) {
-        activeTab.value = name;
-        emit('update:tab', name);
+        if (onTabSwitch?.value) {
+            const { value: tabSwitch } = onTabSwitch;
+            const callback = await tabSwitch(activeTab.value, name);
+            if (callback) {
+                callUpdateTab(name);
+            }
+        } else {
+            callUpdateTab(name);
+        }
     }
 };
 

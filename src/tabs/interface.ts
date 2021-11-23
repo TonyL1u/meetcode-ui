@@ -12,7 +12,9 @@ declare module 'csstype' {
 const tabsInjectionKey: InjectionKey<Ref<string | number>> = Symbol();
 const tabPaneIKey = Symbol('TabPane');
 export { tabsInjectionKey, tabPaneIKey };
+export type PaneName = string | number;
 export interface TabPaneProps {
-    name?: string | number;
+    name?: PaneName;
     tabLabel?: string;
 }
+export type OnTabSwitchImpl = (from?: PaneName, to?: PaneName) => boolean | Promise<boolean> | undefined;
