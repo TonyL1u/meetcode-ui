@@ -39,6 +39,7 @@
         "theme-vitesse": "^0.1.13",
         "vfonts": "^0.1.0",
         "vue": "^3.2.16",
+        "vue-global-api": "^0.4.1",
         "vue-router": "^4.0.12",
         "vueuc": "^0.4.15",
         "windicss": "^3.2.1"

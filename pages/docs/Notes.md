@@ -28,3 +28,10 @@
 -   script setup 内容书写顺序：import、Props、props(withDefaults)、emit、useSlots & useAttrs、toRefs、inject、ref、computed、watch、function、provide、nextTick、expose、VNode 、Render、onMounted(...)
 -   button 要做一个 content slot，允许自定义内容
 -   目标：自由定义所有样式，不需要写额外的选择器
+
+2021-11-24
+
+-   事件如果当作 props，用 kebabCase ；如果当作 emits，用 : 分割
+-   把 Popconfirm 的 onCancel 和 onConfirm 事件变成 props，用返回值来控制弹出框是否在点击按钮后关闭
+-   Popselect 和 Popconfirm 组件从 Popover 继承过来的 props 没有类型提示，但实际会生效
+-   getSlotFirstVNode 重载有问题

@@ -17,4 +17,4 @@ export interface TabPaneProps {
     name?: PaneName;
     tabLabel?: string;
 }
-export type OnTabSwitchImpl = (from?: PaneName, to?: PaneName) => boolean | Promise<boolean> | undefined;
+export type OnBeforeTabSwitchImpl = (from?: PaneName, to?: PaneName) => Promise<boolean | undefined | void> | boolean | undefined | void;

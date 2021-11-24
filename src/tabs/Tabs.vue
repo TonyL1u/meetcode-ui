@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { ref, toRefs, useSlots, computed, renderSlot, provide, createVNode, createTextVNode, CSSProperties, VNode } from 'vue';
+import { ref, toRefs, useSlots, computed, renderSlot, provide, createVNode, createTextVNode, CSSProperties } from 'vue';
 import { getSlotFirstVNode, kebabCaseEscape } from '../_utils_';
-import { tabsInjectionKey, tabPaneIKey, PaneName, TabPaneProps, OnTabSwitchImpl } from './interface';
+import { tabsInjectionKey, tabPaneIKey, PaneName, TabPaneProps, OnBeforeTabSwitchImpl } from './interface';
 import * as CSS from 'csstype';
 import './style.scss';
 
@@ -17,7 +17,7 @@ interface Props {
     headerStyle?: CSSProperties;
     tabStyle?: CSSProperties;
     contentStyle?: CSSProperties;
-    onTabSwitch?: OnTabSwitchImpl;
+    onBeforeTabSwitch?: OnBeforeTabSwitchImpl;
 }
 const props = withDefaults(defineProps<Props>(), {
     type: 'line',
@@ -34,7 +34,7 @@ const emit = defineEmits<{
 }>();
 
 const slots = useSlots();
-const { defaultTab, defaultColor, activeColor, stretch, tabGap, type, headerStyle, contentStyle, onTabSwitch } = toRefs(props);
+const { defaultTab, defaultColor, activeColor, stretch, tabGap, type, headerStyle, contentStyle, onBeforeTabSwitch } = toRefs(props);
 // use tabPaneIKey, ensure non-tabPane element won't be rendered in header
 const { firstVNode: firstTabPane, flattened: tabPanes } = getSlotFirstVNode<TabPaneProps>(slots.default, tabPaneIKey, true);
 const activeTab = ref(defaultTab?.value ?? firstTabPane?.props?.name);
@@ -53,12 +53,12 @@ const callUpdateTab = (name: PaneName) => {
 
 const handleClick = async (name: PaneName) => {
     emit('tab:click', name);
-    // only update when value change
+    // call updateTab only when the value is changed
     if (activeTab.value !== name) {
-        if (onTabSwitch?.value) {
-            const { value: tabSwitch } = onTabSwitch;
-            const callback = await tabSwitch(activeTab.value, name);
-            if (callback) {
+        if (onBeforeTabSwitch?.value) {
+            const { value: beforeTabSwitch } = onBeforeTabSwitch;
+            const callback = await beforeTabSwitch(activeTab.value, name);
+            if (callback || callback === undefined) {
                 callUpdateTab(name);
             }
         } else {
@@ -78,7 +78,7 @@ const tabsHeaderVNode = computed(() => {
         { class: 'mc-tabs__header-scroll-content' },
         tabPanes.map(tabPane => {
             const { children, props } = tabPane;
-            const { name, tabLabel } = <TabPaneProps>kebabCaseEscape(props);
+            const { name, tabLabel } = kebabCaseEscape<TabPaneProps>(props) ?? {};
             const isActive = activeTab.value === name;
 
             return createVNode(

@@ -1,4 +1,4 @@
-export function kebabCaseEscape(targetObj: any) {
+export function kebabCaseEscape<T>(targetObj: T | null): T | null {
     if (typeof targetObj !== 'object' || !targetObj) return targetObj;
     const obj: any = {};
     for (const [key, value] of Object.entries(targetObj)) {

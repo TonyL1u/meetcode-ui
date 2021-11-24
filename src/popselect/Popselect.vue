@@ -120,8 +120,8 @@ const Render = () => {
                         createVNode(
                             'div',
                             wrapperProps.value,
-                            list.value.map((item: { data: PopselectOption; index: number }) => {
-                                return getOptionVNode(item.data);
+                            list.value.map(({ data, index }: { data: PopselectOption; index: number }) => {
+                                return getOptionVNode(data);
                             })
                         )
                     ]
