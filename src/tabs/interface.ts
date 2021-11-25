@@ -11,7 +11,8 @@ declare module 'csstype' {
 
 const tabsInjectionKey: InjectionKey<Ref<string | number>> = Symbol();
 const tabPaneIKey = Symbol('TabPane');
-export { tabsInjectionKey, tabPaneIKey };
+const tabIKey = Symbol('Tab');
+export { tabsInjectionKey, tabPaneIKey, tabIKey };
 export type PaneName = string | number;
 export interface TabPaneProps {
     name?: PaneName;

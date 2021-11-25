@@ -35,3 +35,8 @@
 -   把 Popconfirm 的 onCancel 和 onConfirm 事件变成 props，用返回值来控制弹出框是否在点击按钮后关闭
 -   Popselect 和 Popconfirm 组件从 Popover 继承过来的 props 没有类型提示，但实际会生效
 -   getSlotFirstVNode 重载有问题
+
+2021-11-25
+
+-   怎么把 iKey 属性加到 VNodeTypes 里
+-   渲染 children 的 slot 时，总是会报类型错误

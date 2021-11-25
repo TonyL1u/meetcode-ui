@@ -6,7 +6,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { toRefs, inject, computed, createVNode, useSlots, renderSlot, createCommentVNode } from 'vue';
+import { toRefs, inject, computed, createVNode, createCommentVNode, useSlots, renderSlot } from 'vue';
 import { tabsInjectionKey, tabPaneIKey } from './interface';
 
 interface Props {

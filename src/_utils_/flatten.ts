@@ -1,10 +1,17 @@
 import { Fragment, Comment, VNode } from 'vue';
 
-export function flatten(vNodes: Array<VNode>, identificationKey: Symbol | null = null, result: Array<VNode> = []) {
-    const filterVNodes = identificationKey ? vNodes.filter(vNode => (vNode.type as any).iKey === identificationKey || vNode.type === Fragment) : vNodes;
+export function flatten(vNodes: Array<VNode>, identificationKey: Symbol | Symbol[] | null = null, mode = false, result: Array<VNode> = []) {
+    const filterVNodes = identificationKey
+        ? vNodes.filter(vNode => {
+              const { iKey } = <any>vNode.type;
+              const isAuth = Array.isArray(identificationKey) ? (mode ? !identificationKey.includes(iKey) : identificationKey.includes(iKey)) : mode ? iKey !== identificationKey : iKey === identificationKey;
+              return isAuth || vNode.type === Fragment;
+          })
+        : vNodes;
+
     for (const vNode of filterVNodes) {
         if (vNode.type === Fragment) {
-            flatten(vNode.children as Array<VNode>, identificationKey, result);
+            flatten(vNode.children as Array<VNode>, identificationKey, mode, result);
         } else if (vNode.type !== Comment) {
             result.push(vNode);
         }
