@@ -10,6 +10,7 @@ import { toRefs, inject, createVNode, useSlots, renderSlot } from 'vue';
 import { tabsInjectionKey, tabIKey } from './interface';
 
 interface Props {
+    name?: string | number;
     isActive: boolean;
 }
 const props = withDefaults(defineProps<Props>(), {

@@ -2,7 +2,7 @@
 import { ref, toRefs, useSlots, computed, renderSlot, provide, createVNode, createTextVNode, createCommentVNode, CSSProperties } from 'vue';
 import { flatten, getSlotFirstVNode, kebabCaseEscape } from '../_utils_';
 import McTab from './Tab.vue';
-import { tabsInjectionKey, tabPaneIKey, tabIKey, PaneName, TabPaneProps, OnBeforeTabSwitchImpl } from './interface';
+import { tabsInjectionKey, tabPaneIKey, tabIKey, PaneName, TabPaneProps, TabProps, OnBeforeTabSwitchImpl } from './interface';
 import * as CSS from 'csstype';
 import './style.scss';
 
@@ -37,7 +37,7 @@ const emit = defineEmits<{
 const slots = useSlots();
 const { defaultTab, defaultColor, activeColor, stretch, tabGap, type, headerStyle, contentStyle, onBeforeTabSwitch } = toRefs(props);
 // use tabPaneIKey, ensure non-maybeTabPane element won't be rendered in header
-const [firstTabPane, maybeTabPanes] = getSlotFirstVNode<TabPaneProps>(slots.default, [tabPaneIKey, tabIKey], true);
+const [firstTabPane, maybeTabPanes] = getSlotFirstVNode<TabPaneProps & TabProps>(slots.default, [tabPaneIKey, tabIKey], true);
 const activeTab = ref(defaultTab?.value ?? firstTabPane?.props?.name);
 const cssVars = computed<CSS.Properties>(() => {
     return {
@@ -78,9 +78,37 @@ const tabsHeaderVNode = computed(() => {
         'div',
         { class: 'mc-tabs__header-scroll-content' },
         maybeTabPanes.map(maybeTabPane => {
+            console.log(maybeTabPane);
             const { children, props, type } = maybeTabPane;
-            const { name, tabLabel } = kebabCaseEscape<TabPaneProps>(props) ?? {};
+            const { name, tabLabel } = kebabCaseEscape<TabPaneProps & TabProps>(props) ?? {};
+            const tabClickEvent = () => {
+                name && handleClick(name);
+            };
             const isActive = activeTab.value === name;
+            console.log(isActive);
+            const tabProps = {
+                isActive,
+                onClick: tabClickEvent
+            };
+
+            if ((<any>type).iKey === tabIKey) {
+                if (maybeTabPane.props) {
+                    maybeTabPane.props = {
+                        ...maybeTabPane.props,
+                        ...tabProps
+                    };
+                } else {
+                    maybeTabPane.props = tabProps;
+                }
+                return maybeTabPane;
+            } else {
+                return createVNode(McTab, tabProps, {
+                    default: () => {
+                        // @ts-ignore
+                        return children?.tab ? children?.tab() : [createVNode('span', null, [createTextVNode(tabLabel ?? '')])];
+                    }
+                });
+            }
 
             return createVNode(
                 McTab,
@@ -107,33 +135,31 @@ const tabsHeaderVNode = computed(() => {
 });
 
 const Render = () => {
-    return slots.default
-        ? createVNode(
-              'div',
-              {
-                  class: ['mc-tabs', `mc-tabs--${type.value}`],
-                  style: cssVars.value
-              },
-              [
-                  createVNode(
-                      'div',
-                      {
-                          class: 'mc-tabs__header',
-                          style: headerStyle?.value
-                      },
-                      [tabsHeaderVNode.value]
-                  ),
-                  createVNode(
-                      'div',
-                      {
-                          class: 'mc-tabs__content',
-                          style: contentStyle?.value
-                      },
-                      flatten(slots.default(), tabIKey, true)
-                  )
-              ]
-          )
-        : createCommentVNode('', true);
+    return createVNode(
+        'div',
+        {
+            class: ['mc-tabs', `mc-tabs--${type.value}`],
+            style: cssVars.value
+        },
+        [
+            createVNode(
+                'div',
+                {
+                    class: 'mc-tabs__header',
+                    style: headerStyle?.value
+                },
+                [tabsHeaderVNode.value]
+            ),
+            createVNode(
+                'div',
+                {
+                    class: 'mc-tabs__content',
+                    style: contentStyle?.value
+                },
+                slots.default ? flatten(slots.default(), tabIKey, true) : createCommentVNode('', true)
+            )
+        ]
+    );
 };
 </script>
 

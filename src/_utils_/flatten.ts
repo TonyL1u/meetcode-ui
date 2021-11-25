@@ -1,5 +1,14 @@
 import { Fragment, Comment, VNode } from 'vue';
 
+/**
+ *
+ * @param vNodes flatten target
+ * @param identificationKey filter key
+ * @param mode When mode is true, every elements in vNodes which iKey === identificationKey will be filtered
+ * @param result
+ * @returns
+ */
+
 export function flatten(vNodes: Array<VNode>, identificationKey: Symbol | Symbol[] | null = null, mode = false, result: Array<VNode> = []) {
     const filterVNodes = identificationKey
         ? vNodes.filter(vNode => {
