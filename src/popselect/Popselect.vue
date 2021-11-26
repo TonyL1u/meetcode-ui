@@ -101,7 +101,7 @@ const Render = () => {
         McPopover,
         {
             ...popoverMergedProps,
-            onShow: (...args: Array<any>) => {
+            onShow: (...args: Array<unknown>) => {
                 handleShow();
                 attrs.show && (<any>attrs).onShow(...args);
             }

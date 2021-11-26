@@ -8,7 +8,6 @@ import { Fragment, Comment, VNode } from 'vue';
  * @param result
  * @returns
  */
-
 export function flatten(vNodes: Array<VNode>, identificationKey: Symbol | Symbol[] | null = null, mode = false, result: Array<VNode> = []) {
     const filterVNodes = identificationKey
         ? vNodes.filter(vNode => {

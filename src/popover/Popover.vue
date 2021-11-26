@@ -182,7 +182,7 @@ const triggerVNode = computed(() => {
         const originalHandler = tempVNode.props[name];
 
         tempVNode.props[name] = originalHandler
-            ? (...args: Array<any>) => {
+            ? (...args: Array<unknown>) => {
                   originalHandler(...args);
                   handler(...args);
               }

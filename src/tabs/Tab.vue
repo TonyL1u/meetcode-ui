@@ -6,19 +6,15 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { toRefs, inject, createVNode, useSlots, renderSlot } from 'vue';
+import { useSlots, useAttrs, inject, createVNode, renderSlot } from 'vue';
 import { tabsInjectionKey, tabIKey } from './interface';
 
 interface Props {
     name?: string | number;
-    isActive: boolean;
 }
-const props = withDefaults(defineProps<Props>(), {
-    isActive: false
-});
+defineProps<Props>();
 
 const slots = useSlots();
-const { isActive } = toRefs(props);
 const valueRef = inject(tabsInjectionKey, null);
 
 if (!valueRef) {
@@ -29,7 +25,7 @@ const Render = () => {
     return createVNode(
         'div',
         {
-            class: ['mc-tabs-tab', { 'mc-tabs-tab--active': isActive.value }]
+            class: 'mc-tabs-tab'
         },
         [renderSlot(slots, 'default')]
     );

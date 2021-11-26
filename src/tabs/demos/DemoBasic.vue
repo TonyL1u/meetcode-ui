@@ -10,10 +10,14 @@
         <McTab name="test3">测试3</McTab>
         <McTab name="test4">测试4</McTab>
         <McTab name="test5">测试5</McTab> -->
-        <McTab name="test6">测试6</McTab>
+        <McTab name="test6" @click="handleClick" class="mc-text-blue-500" style="background: red">测试6</McTab>
     </McTabs>
 </template>
 
 <script lang="ts" setup>
 import { McTabs, McTabPane, McTab } from 'meetcode-ui';
+
+const handleClick = () => {
+    console.log(1);
+};
 </script>
