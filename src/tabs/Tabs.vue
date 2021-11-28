@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+    name: 'Tabs'
+};
+</script>
+
 <script lang="ts" setup>
 import { ref, toRefs, useSlots, computed, watch, mergeProps, provide, createVNode, createTextVNode, createCommentVNode, CSSProperties } from 'vue';
 import { flatten, getSlotFirstVNode, kebabCaseEscape } from '../_utils_';
@@ -87,7 +93,7 @@ const tabsHeaderVNode = computed(() => {
     if (!maybeTabPanes || maybeTabPanes.length === 0) return null;
     activeTab.value ||= firstTabPane?.props?.name ?? '';
 
-    const barVNode = type.value === 'line' ? createVNode('div', { class: 'mc-tabs__header-bar' }) : null;
+    const barVNode = type.value === 'line' ? createVNode('div', { class: 'mc-tabs__header-line-bar' }) : null;
     return createVNode(
         'div',
         { class: 'mc-tabs__header-scroll-content' },
@@ -111,7 +117,7 @@ const tabsHeaderVNode = computed(() => {
                             return children?.default() ?? null;
                         } else {
                             // @ts-ignore
-                            return children?.tab ? children?.tab() : [createVNode('span', null, [createTextVNode(tabLabel ?? '')])];
+                            return children?.tab ? children?.tab() : [createVNode('span', { class: 'mc-tabs-tab__label' }, [createTextVNode(tabLabel ?? '')])];
                         }
                     }
                 }

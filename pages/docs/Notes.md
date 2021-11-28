@@ -45,3 +45,4 @@
 
 -   动态添加 tab 失效
 -   tabPane 的 lazy load 怎么做？相当于首次加载用 v-if，之后 v-show
+-   如果 tab 外面被其他元素包裹，例如 tooltip、popover 等，怎么正确渲染到 tabs header 上

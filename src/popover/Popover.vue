@@ -167,7 +167,7 @@ const triggerVNode = computed(() => {
     const firstDefaultVNode = getSlotFirstVNode(slots.default);
     if (!firstDefaultVNode) return null;
     const clonedVNode = cloneVNode(firstDefaultVNode);
-    const tempVNode = firstDefaultVNode.type === Text ? createVNode('span', null, [clonedVNode]) : clonedVNode;
+    const tempVNode = clonedVNode.type === Text ? createVNode('span', null, [clonedVNode]) : clonedVNode;
 
     if (disabled.value) return tempVNode;
 

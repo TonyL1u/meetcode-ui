@@ -33,11 +33,11 @@ if (!valueRef) {
 const isActive = computed(() => {
     return name?.value === valueRef?.value;
 });
-const hasShow = ref(isActive.value);
+const hasShown = ref(isActive.value);
 
-if (lazy.value && !hasShow.value) {
+if (lazy.value && !hasShown.value) {
     watchOnce(isActive, () => {
-        hasShow.value = true;
+        hasShown.value = true;
     });
 }
 
@@ -47,7 +47,7 @@ const Render = () => {
         return withDirectives(tabPaneVNode, [[vShow, isActive.value]]);
     } else {
         if (lazy.value) {
-            return hasShow.value ? withDirectives(tabPaneVNode, [[vShow, isActive.value]]) : createCommentVNode('v-if', true);
+            return hasShown.value ? withDirectives(tabPaneVNode, [[vShow, isActive.value]]) : createCommentVNode('v-if', true);
         } else {
             return isActive.value ? tabPaneVNode : createCommentVNode('v-if', true);
         }

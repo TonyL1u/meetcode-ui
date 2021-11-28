@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+    name: 'Tooltip'
+};
+</script>
+
 <script lang="ts" setup>
 import { toRefs, useSlots, useAttrs, renderSlot, createVNode, createTextVNode, mergeProps } from 'vue';
 import { McPopover, PopoverBaseProps } from '../popover';
