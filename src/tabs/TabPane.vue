@@ -6,17 +6,25 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { toRefs, inject, computed, createVNode, createCommentVNode, useSlots, renderSlot } from 'vue';
+import { ref, toRefs, inject, computed, createVNode, createCommentVNode, useSlots, renderSlot, vShow, withDirectives } from 'vue';
+import { watchOnce } from '@vueuse/core';
 import { tabsInjectionKey, tabPaneIKey } from './interface';
 
 interface Props {
     name?: string | number;
     tabLabel?: string;
+    disabled?: boolean;
+    preload?: boolean;
+    lazy?: boolean;
 }
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+    disabled: false,
+    preload: false,
+    lazy: false
+});
 
 const slots = useSlots();
-const { name } = toRefs(props);
+const { name, preload, lazy } = toRefs(props);
 const valueRef = inject(tabsInjectionKey, null);
 
 if (!valueRef) {
@@ -25,17 +33,25 @@ if (!valueRef) {
 const isActive = computed(() => {
     return name?.value === valueRef?.value;
 });
+const hasShow = ref(isActive.value);
+
+if (lazy.value && !hasShow.value) {
+    watchOnce(isActive, () => {
+        hasShow.value = true;
+    });
+}
 
 const Render = () => {
-    return isActive.value
-        ? createVNode(
-              'div',
-              {
-                  class: 'mc-tab-pane'
-              },
-              [renderSlot(slots, 'default')]
-          )
-        : createCommentVNode('v-if', true);
+    const tabPaneVNode = createVNode('div', { class: 'mc-tab-pane' }, [renderSlot(slots, 'default')]);
+    if (preload.value) {
+        return withDirectives(tabPaneVNode, [[vShow, isActive.value]]);
+    } else {
+        if (lazy.value) {
+            return hasShow.value ? withDirectives(tabPaneVNode, [[vShow, isActive.value]]) : createCommentVNode('v-if', true);
+        } else {
+            return isActive.value ? tabPaneVNode : createCommentVNode('v-if', true);
+        }
+    }
 };
 </script>
 

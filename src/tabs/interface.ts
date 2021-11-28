@@ -15,8 +15,11 @@ const tabIKey = Symbol('Tab');
 export { tabsInjectionKey, tabPaneIKey, tabIKey };
 export type PaneName = string | number;
 export interface TabPaneProps {
-    name?: PaneName;
+    name?: string | number;
     tabLabel?: string;
+    disabled?: boolean;
+    preload?: boolean;
+    lazy?: boolean;
 }
 export interface MaybeTabPaneProps extends TabPaneProps {
     [key: string]: any;

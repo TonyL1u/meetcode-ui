@@ -1,12 +1,14 @@
 <script lang="ts" setup>
-import { ref, toRefs, useSlots, computed, mergeProps, provide, createVNode, createTextVNode, createCommentVNode, CSSProperties } from 'vue';
+import { ref, toRefs, useSlots, computed, watch, mergeProps, provide, createVNode, createTextVNode, createCommentVNode, CSSProperties } from 'vue';
 import { flatten, getSlotFirstVNode, kebabCaseEscape } from '../_utils_';
+import { useVModel } from '@vueuse/core';
 import McTab from './Tab.vue';
 import { tabsInjectionKey, tabPaneIKey, tabIKey, PaneName, MaybeTabPaneProps, OnBeforeTabSwitchImpl } from './interface';
 import * as CSS from 'csstype';
 import './style.scss';
 
 interface Props {
+    value?: PaneName;
     defaultTab?: PaneName;
     type?: 'line' | 'empty' | 'card' | 'segment';
     stretch?: boolean;
@@ -30,15 +32,16 @@ const props = withDefaults(defineProps<Props>(), {
     linePosition: 'bottom'
 });
 const emit = defineEmits<{
+    (e: 'update:value', value: PaneName): void;
     (e: 'update:tab', value: PaneName): void;
     (e: 'tab:click', value: PaneName): void;
 }>();
 
 const slots = useSlots();
 const { defaultTab, defaultColor, activeColor, stretch, tabGap, type, headerStyle, contentStyle, onBeforeTabSwitch } = toRefs(props);
-// use tabPaneIKey, ensure non-maybeTabPane element won't be rendered in header
-const [firstTabPane, maybeTabPanes] = getSlotFirstVNode<MaybeTabPaneProps>(slots.default, [tabPaneIKey, tabIKey], true);
-const activeTab = ref(defaultTab?.value ?? firstTabPane?.props?.name);
+const valueVM = useVModel(props, 'value', emit);
+const activeTab = ref(valueVM.value || (defaultTab?.value ?? ''));
+const tabsElRef = ref();
 const cssVars = computed<CSS.Properties>(() => {
     return {
         '--tab-default-color': defaultColor.value,
@@ -47,14 +50,22 @@ const cssVars = computed<CSS.Properties>(() => {
     };
 });
 
+watch(valueVM, name => {
+    name && handleBeforeTabSwitch(name);
+});
+
 const callUpdateTab = (name: PaneName) => {
     activeTab.value = name;
+    valueVM.value = name; // emit('update:value', name);
     emit('update:tab', activeTab.value);
 };
 
-const handleClick = async (name: PaneName) => {
+const handleTabClick = async (name: PaneName) => {
     emit('tab:click', name);
-    // call updateTab only when the value is changed
+    handleBeforeTabSwitch(name);
+};
+const handleBeforeTabSwitch = async (name: PaneName) => {
+    // callback only when the value is changed
     if (activeTab.value !== name) {
         if (onBeforeTabSwitch?.value) {
             const { value: beforeTabSwitch } = onBeforeTabSwitch;
@@ -70,12 +81,11 @@ const handleClick = async (name: PaneName) => {
 
 provide(tabsInjectionKey, activeTab);
 
-const getTabProps = () => {};
-
-const getTabDefaultSlot = () => {};
-
 const tabsHeaderVNode = computed(() => {
+    // use IKey, ensure non-SpecificVNode element won't be rendered in header
+    const [firstTabPane, maybeTabPanes] = getSlotFirstVNode<MaybeTabPaneProps>(slots.default, [tabPaneIKey, tabIKey], true);
     if (!maybeTabPanes || maybeTabPanes.length === 0) return null;
+    activeTab.value ||= firstTabPane?.props?.name ?? '';
 
     const barVNode = type.value === 'line' ? createVNode('div', { class: 'mc-tabs__header-bar' }) : null;
     return createVNode(
@@ -83,77 +93,43 @@ const tabsHeaderVNode = computed(() => {
         { class: 'mc-tabs__header-scroll-content' },
         maybeTabPanes.map(maybeTabPane => {
             const { children, props, type } = maybeTabPane;
-            const isTab = (<any>type).iKey === tabIKey;
             const { name, tabLabel } = kebabCaseEscape<MaybeTabPaneProps>(props) ?? {};
-            const tabClickEvent = () => {
-                name && handleClick(name);
-            };
-            const tabProps = {
-                class: { 'mc-tabs-tab--active': activeTab.value === name },
-                onClick: tabClickEvent
-            };
+            const isTab = (<any>type).iKey === tabIKey;
 
-            if ((<any>type).iKey === tabIKey) {
-                if (maybeTabPane.props) {
-                    console.log(maybeTabPane.props);
-                    const originalClickHandler = maybeTabPane.props.onClick;
-                    const originalCls = maybeTabPane.props.class;
-                    const mergedProps = mergeProps(maybeTabPane.props, {
-                        class: { 'mc-tabs-tab--active': activeTab.value === name }
-                    });
-                    console.log(mergedProps);
-                    maybeTabPane.props = {
-                        // ...maybeTabPane.props,
-                        // class: [originalCls, activeTab.value === name ? 'mc-tabs-tab--active' : ''],
-                        ...mergedProps,
-                        onClick: originalClickHandler
-                            ? (...args: Array<unknown>) => {
-                                  originalClickHandler(...args);
-                                  tabClickEvent();
-                              }
-                            : tabClickEvent
-                    };
-                } else {
-                    maybeTabPane.props = tabProps;
-                }
-                return maybeTabPane;
-            } else {
-                return createVNode(McTab, tabProps, {
-                    default: () => {
-                        // @ts-ignore
-                        return children?.tab ? children?.tab() : [createVNode('span', null, [createTextVNode(tabLabel ?? '')])];
+            return createVNode(
+                McTab,
+                mergeProps(isTab ? maybeTabPane.props ?? {} : {}, {
+                    class: { 'mc-tabs-tab--active': activeTab.value === name },
+                    onClick: () => {
+                        name && handleTabClick(name);
                     }
-                });
-            }
-
-            // const tabProps = isTab ?
-
-            // const tabDefaultSlot = isTab
-            // // @ts-ignore
-            // ? children?.default() ?? null
-            // // @ts-ignore
-            // : children?.tab ? children?.tab() : [createVNode('span', null, [createTextVNode(tabLabel ?? '')])];
-
-            // return createVNode(
-            //     McTab,
-            //     {
-
-            //         onClick: () => {
-            //             name && handleClick(name);
-            //         }
-            //     },
-            //     {
-            //         default: () => tabDefaultSlot
-            //     }
-            // );
+                }),
+                {
+                    default: () => {
+                        if (isTab) {
+                            // @ts-ignore
+                            return children?.default() ?? null;
+                        } else {
+                            // @ts-ignore
+                            return children?.tab ? children?.tab() : [createVNode('span', null, [createTextVNode(tabLabel ?? '')])];
+                        }
+                    }
+                }
+            );
         })
     );
+});
+
+defineExpose({
+    switchTo: handleBeforeTabSwitch,
+    el: tabsElRef
 });
 
 const Render = () => {
     return createVNode(
         'div',
         {
+            ref: tabsElRef,
             class: ['mc-tabs', `mc-tabs--${type.value}`],
             style: cssVars.value
         },

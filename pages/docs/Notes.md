@@ -40,3 +40,8 @@
 
 -   怎么把 iKey 属性加到 VNodeTypes 里
 -   渲染 children 的 slot 时，总是会报类型错误
+
+2021-11-27
+
+-   动态添加 tab 失效
+-   tabPane 的 lazy load 怎么做？相当于首次加载用 v-if，之后 v-show

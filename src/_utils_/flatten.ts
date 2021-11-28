@@ -1,5 +1,5 @@
-import { Fragment, Comment, VNode } from 'vue';
-
+import { Fragment, Comment } from 'vue';
+import { SpecificVNode } from './tsutils';
 /**
  *
  * @param vNodes flatten target
@@ -8,7 +8,7 @@ import { Fragment, Comment, VNode } from 'vue';
  * @param result
  * @returns
  */
-export function flatten(vNodes: Array<VNode>, identificationKey: Symbol | Symbol[] | null = null, mode = false, result: Array<VNode> = []) {
+export function flatten<T = { [key: string]: any }>(vNodes: Array<SpecificVNode<T>>, identificationKey: Symbol | Symbol[] | null = null, mode = false, result: Array<SpecificVNode<T>> = []) {
     const filterVNodes = identificationKey
         ? vNodes.filter(vNode => {
               const { iKey } = <any>vNode.type;
@@ -19,7 +19,7 @@ export function flatten(vNodes: Array<VNode>, identificationKey: Symbol | Symbol
 
     for (const vNode of filterVNodes) {
         if (vNode.type === Fragment) {
-            flatten(vNode.children as Array<VNode>, identificationKey, mode, result);
+            flatten(vNode.children as Array<SpecificVNode<T>>, identificationKey, mode, result);
         } else if (vNode.type !== Comment) {
             result.push(vNode);
         }

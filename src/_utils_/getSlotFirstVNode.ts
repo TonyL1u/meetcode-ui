@@ -1,7 +1,6 @@
-import { Slot, VNode, RendererNode, RendererElement } from 'vue';
+import { Slot } from 'vue';
 import { flatten } from './flatten';
-
-type SpecificVNode<T> = VNode<RendererNode, RendererElement, T>;
+import { SpecificVNode } from './tsutils';
 
 type TupleData<T> = [SpecificVNode<T> | null, SpecificVNode<T>[] | null];
 
