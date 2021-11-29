@@ -7,7 +7,7 @@ export default {
 <script lang="ts" setup>
 import { ref, toRefs, useSlots, computed, watch, mergeProps, provide, createVNode, createTextVNode, createCommentVNode, nextTick, onMounted, VNode, CSSProperties } from 'vue';
 import { flatten, getSlotFirstVNode, kebabCaseEscape, SpecificVNode } from '../_utils_';
-import { useVModel, useElementBounding } from '@vueuse/core';
+import { useVModel } from '@vueuse/core';
 import McTab from './Tab.vue';
 import { tabsInjectionKey, tabPaneIKey, tabIKey, PaneName, MaybeTabPaneProps, OnBeforeTabSwitchImpl } from './interface';
 import * as CSS from 'csstype';
@@ -16,9 +16,10 @@ import './style.scss';
 interface Props {
     value?: PaneName;
     defaultTab?: PaneName;
-    type?: 'line' | 'empty' | 'card' | 'segment';
+    type?: 'bar' | 'line' | 'empty' | 'card' | 'segment';
     stretch?: boolean;
     inline?: boolean;
+    center?: boolean;
     tabGap?: number;
     defaultColor?: string;
     activeColor?: string;
@@ -29,9 +30,10 @@ interface Props {
     onBeforeTabSwitch?: OnBeforeTabSwitchImpl;
 }
 const props = withDefaults(defineProps<Props>(), {
-    type: 'line',
+    type: 'bar',
     stretch: false,
     inline: false,
+    center: false,
     tabGap: 0,
     defaultColor: '#000',
     activeColor: '#10b981',
@@ -44,7 +46,7 @@ const emit = defineEmits<{
 }>();
 
 const slots = useSlots();
-const { defaultTab, defaultColor, activeColor, stretch, tabGap, type, headerStyle, contentStyle, onBeforeTabSwitch } = toRefs(props);
+const { defaultTab, center, defaultColor, activeColor, stretch, tabGap, type, headerStyle, contentStyle, onBeforeTabSwitch } = toRefs(props);
 const valueVM = useVModel(props, 'value', emit);
 const activeTabName = ref(valueVM.value || (defaultTab?.value ?? ''));
 const activeTabVNode = ref<VNode>();
@@ -86,16 +88,11 @@ const handleBeforeTabSwitch = async (name: PaneName) => {
         }
     }
 };
-const updateBarStyle = () => {
-    nextTick(() => {
-        console.log(1234);
-    });
-};
 
 provide(tabsInjectionKey, activeTabName);
 
 onMounted(() => {
-    if (type.value === 'line') {
+    if (type.value === 'bar' || type.value === 'line') {
         watch(
             activeTabVNode,
             () => {
@@ -149,7 +146,8 @@ const getTabVNode = (maybeTabPane: SpecificVNode<MaybeTabPaneProps>) => {
 };
 
 const lineBarVNode = computed(() => {
-    return type.value === 'line' ? createVNode('div', { ref: barElRef, class: 'mc-tabs__header-bar' }) : null;
+    if (type.value === 'bar' || type.value === 'line') return createVNode('div', { ref: barElRef, class: 'mc-tabs__header-bar' });
+    return null;
 });
 
 const tabsHeaderVNode = computed(() => {
@@ -179,7 +177,7 @@ const Render = () => {
             createVNode(
                 'div',
                 {
-                    class: 'mc-tabs__header',
+                    class: ['mc-tabs__header', { 'mc-tabs__header--center': center.value }],
                     style: headerStyle?.value
                 },
                 [tabsHeaderVNode.value, lineBarVNode.value]

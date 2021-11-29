@@ -5,9 +5,9 @@
         <McTabPane name="test3" tab-label="测试33333" lazy>3</McTabPane>
         <McTabPane name="test4" tab-label="测试4444444">4</McTabPane>
         <McTabPane name="test5" tab-label="测试555555555">5</McTabPane>
-        <McTab name="test6" class="mc-text-blue-500" style="background: red">
+        <!-- <McTab name="test6" class="mc-text-blue-500" style="background: red">
             <McTooltip content="测试6">测试6</McTooltip>
-        </McTab>
+        </McTab> -->
     </McTabs>
     <McPopselect v-model:value="value" :options="options" trigger="click">
         <button>{{ value }}</button>
