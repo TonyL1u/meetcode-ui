@@ -77,7 +77,7 @@ const options = ref([
     },
     {
         label: 'test17',
-        value: 'test18'
+        value: 'test17'
     },
     {
         label: 'test18',

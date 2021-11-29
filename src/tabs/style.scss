@@ -1,6 +1,7 @@
 .mc-tabs {
     &__header-scroll-content {
         display: flex;
+        position: relative;
     }
 
     &-tab {
@@ -15,27 +16,37 @@
     }
 }
 
-.mc-tabs--line {
-    .mc-tabs__header {
-        .mc-tabs-tab {
-            margin: 0 20px;
-            padding: 12px 0;
+.mc-tabs--line .mc-tabs__header {
+    position: relative;
 
-            &:first-child {
-                margin-left: 0;
-            }
+    .mc-tabs-tab {
+        margin: 0 20px;
+        padding: 12px 0;
 
-            &:last-child {
-                margin-right: 0;
-            }
-
-            &__label {
-                display: flex;
-                line-height: 1.5;
-            }
+        &:first-child {
+            margin-left: 0;
         }
 
-        // display: flex;
+        &:last-child {
+            margin-right: 0;
+        }
+
+        &__label {
+            display: flex;
+        }
+    }
+
+    &-scroll-content {
+        border-bottom: 2px solid #e4e7ed;
+    }
+
+    &-bar {
+        transition: 0.3s;
+        position: absolute;
+        height: 2px;
+        width: 8192px;
+        background: #10b981;
+        bottom: 0;
     }
 }
 

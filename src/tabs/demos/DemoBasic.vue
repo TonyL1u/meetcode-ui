@@ -1,12 +1,12 @@
 <template>
     <McTabs v-model:value="value" @before-tab-switch="handleSwitch" ref="tabs">
         <McTabPane name="test1" tab-label="测试1" preload>1</McTabPane>
-        <McTabPane name="test2" tab-label="测试2">2</McTabPane>
-        <McTabPane name="test3" tab-label="测试3" lazy>3</McTabPane>
-        <McTabPane name="test4" tab-label="测试4">4</McTabPane>
-        <McTabPane name="test5" tab-label="测试5">5</McTabPane>
+        <McTabPane name="test2" tab-label="测试222">2</McTabPane>
+        <McTabPane name="test3" tab-label="测试33333" lazy>3</McTabPane>
+        <McTabPane name="test4" tab-label="测试4444444">4</McTabPane>
+        <McTabPane name="test5" tab-label="测试555555555">5</McTabPane>
         <McTab name="test6" class="mc-text-blue-500" style="background: red">
-            <McTooltip content="测试6"> 测试6 </McTooltip>
+            <McTooltip content="测试6">测试6</McTooltip>
         </McTab>
     </McTabs>
     <McPopselect v-model:value="value" :options="options" trigger="click">
@@ -19,7 +19,7 @@
 import { ref } from 'vue';
 import { McTabs, McTabPane, McTab, McTooltip, McPopselect } from 'meetcode-ui';
 
-const value = ref('test6');
+const value = ref('test2');
 const options = ref([
     {
         label: 'test1',
@@ -52,6 +52,6 @@ const handleClick = () => {
     switchTo('test3');
 };
 const handleSwitch = () => {
-    console.log(1);
+    // console.log(1);
 };
 </script>

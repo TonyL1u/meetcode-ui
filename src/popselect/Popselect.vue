@@ -81,10 +81,11 @@ const getOptionVNode = (data: PopselectOption) => {
 };
 
 const Render = () => {
-    const listHeigth = Math.min(options.value.length * 42, maxHeight.value);
+    const itemHeight = 41;
+    const listHeight = Math.min(options.value.length * itemHeight, maxHeight.value);
     const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(options.value, {
         // Keep `itemHeight` in sync with the item's row.
-        itemHeight: 42
+        itemHeight
     });
     scrollToOption = scrollTo;
 
@@ -114,7 +115,7 @@ const Render = () => {
                     {
                         ...containerProps,
                         class: 'mc-popselect__content',
-                        style: { height: listHeigth + 'px', overflow: 'auto', padding: '4px 4px 0px 4px' }
+                        style: { height: listHeight + 'px', overflow: 'auto', padding: '4px 4px 0px 4px' }
                     },
                     [
                         createVNode(

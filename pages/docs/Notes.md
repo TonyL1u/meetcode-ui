@@ -25,7 +25,7 @@
 
 2021-11-23
 
--   script setup 内容书写顺序：import、Props、props(withDefaults)、emit、useSlots & useAttrs、toRefs、inject、ref、computed、watch、function、provide、nextTick、expose、VNode 、Render、onMounted(...)
+-   script setup 内容书写顺序：import、Props、props(withDefaults)、emit、useSlots & useAttrs、toRefs、inject、ref、computed、watch、function、provide、nextTick、onMounted(...)、VNode 、Render、expose
 -   button 要做一个 content slot，允许自定义内容
 -   目标：自由定义所有样式，不需要写额外的选择器
 
@@ -46,3 +46,7 @@
 -   动态添加 tab 失效
 -   tabPane 的 lazy load 怎么做？相当于首次加载用 v-if，之后 v-show
 -   如果 tab 外面被其他元素包裹，例如 tooltip、popover 等，怎么正确渲染到 tabs header 上
+
+2021-11-28
+
+-

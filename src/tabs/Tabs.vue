@@ -5,9 +5,9 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { ref, toRefs, useSlots, computed, watch, mergeProps, provide, createVNode, createTextVNode, createCommentVNode, CSSProperties } from 'vue';
-import { flatten, getSlotFirstVNode, kebabCaseEscape } from '../_utils_';
-import { useVModel } from '@vueuse/core';
+import { ref, toRefs, useSlots, computed, watch, mergeProps, provide, createVNode, createTextVNode, createCommentVNode, nextTick, onMounted, VNode, CSSProperties } from 'vue';
+import { flatten, getSlotFirstVNode, kebabCaseEscape, SpecificVNode } from '../_utils_';
+import { useVModel, useElementBounding } from '@vueuse/core';
 import McTab from './Tab.vue';
 import { tabsInjectionKey, tabPaneIKey, tabIKey, PaneName, MaybeTabPaneProps, OnBeforeTabSwitchImpl } from './interface';
 import * as CSS from 'csstype';
@@ -46,8 +46,10 @@ const emit = defineEmits<{
 const slots = useSlots();
 const { defaultTab, defaultColor, activeColor, stretch, tabGap, type, headerStyle, contentStyle, onBeforeTabSwitch } = toRefs(props);
 const valueVM = useVModel(props, 'value', emit);
-const activeTab = ref(valueVM.value || (defaultTab?.value ?? ''));
-const tabsElRef = ref();
+const activeTabName = ref(valueVM.value || (defaultTab?.value ?? ''));
+const activeTabVNode = ref<VNode>();
+const tabsElRef = ref<HTMLElement>();
+const barElRef = ref<HTMLElement>();
 const cssVars = computed<CSS.Properties>(() => {
     return {
         '--tab-default-color': defaultColor.value,
@@ -61,9 +63,9 @@ watch(valueVM, name => {
 });
 
 const callUpdateTab = (name: PaneName) => {
-    activeTab.value = name;
+    activeTabName.value = name;
     valueVM.value = name; // emit('update:value', name);
-    emit('update:tab', activeTab.value);
+    emit('update:tab', activeTabName.value);
 };
 
 const handleTabClick = async (name: PaneName) => {
@@ -72,10 +74,10 @@ const handleTabClick = async (name: PaneName) => {
 };
 const handleBeforeTabSwitch = async (name: PaneName) => {
     // callback only when the value is changed
-    if (activeTab.value !== name) {
+    if (activeTabName.value !== name) {
         if (onBeforeTabSwitch?.value) {
             const { value: beforeTabSwitch } = onBeforeTabSwitch;
-            const callback = await beforeTabSwitch(activeTab.value, name);
+            const callback = await beforeTabSwitch(activeTabName.value, name);
             if (callback || callback === undefined) {
                 callUpdateTab(name);
             }
@@ -84,51 +86,85 @@ const handleBeforeTabSwitch = async (name: PaneName) => {
         }
     }
 };
+const updateBarStyle = () => {
+    nextTick(() => {
+        console.log(1234);
+    });
+};
 
-provide(tabsInjectionKey, activeTab);
+provide(tabsInjectionKey, activeTabName);
+
+onMounted(() => {
+    if (type.value === 'line') {
+        watch(
+            activeTabVNode,
+            () => {
+                nextTick(() => {
+                    if (!activeTabVNode.value) return;
+                    const {
+                        value: { el: tabEl }
+                    } = activeTabVNode;
+                    const { value: barEl } = barElRef;
+                    const { offsetWidth, offsetLeft } = tabEl!;
+
+                    barEl!.style.left = `${offsetLeft}px`;
+                    barEl!.style.maxWidth = `${offsetWidth}px`;
+                });
+            },
+            { immediate: true }
+        );
+    }
+});
+
+const getTabVNode = (maybeTabPane: SpecificVNode<MaybeTabPaneProps>) => {
+    const { children, props, type } = maybeTabPane;
+    const { name, tabLabel } = kebabCaseEscape<MaybeTabPaneProps>(props) ?? {};
+    const isTab = (<any>type).iKey === tabIKey;
+    const isActive = activeTabName.value === name;
+    const tabVNode = createVNode(
+        McTab,
+        mergeProps(isTab ? maybeTabPane.props ?? {} : {}, {
+            class: { 'mc-tabs-tab--active': isActive },
+            onClick: () => {
+                name && handleTabClick(name);
+            }
+        }),
+        {
+            default: () => {
+                if (isTab) {
+                    // @ts-ignore
+                    return children?.default() ?? null;
+                } else {
+                    // @ts-ignore
+                    return children?.tab ? children?.tab() : [createVNode('span', { class: 'mc-tabs-tab__label' }, [createTextVNode(tabLabel ?? '')])];
+                }
+            }
+        }
+    );
+    if (isActive) {
+        activeTabVNode.value = tabVNode;
+    }
+
+    return tabVNode;
+};
+
+const lineBarVNode = computed(() => {
+    return type.value === 'line' ? createVNode('div', { ref: barElRef, class: 'mc-tabs__header-bar' }) : null;
+});
 
 const tabsHeaderVNode = computed(() => {
     // use IKey, ensure non-SpecificVNode element won't be rendered in header
     const [firstTabPane, maybeTabPanes] = getSlotFirstVNode<MaybeTabPaneProps>(slots.default, [tabPaneIKey, tabIKey], true);
     if (!maybeTabPanes || maybeTabPanes.length === 0) return null;
-    activeTab.value ||= firstTabPane?.props?.name ?? '';
+    activeTabName.value ||= firstTabPane?.props?.name ?? '';
 
-    const barVNode = type.value === 'line' ? createVNode('div', { class: 'mc-tabs__header-line-bar' }) : null;
     return createVNode(
         'div',
         { class: 'mc-tabs__header-scroll-content' },
         maybeTabPanes.map(maybeTabPane => {
-            const { children, props, type } = maybeTabPane;
-            const { name, tabLabel } = kebabCaseEscape<MaybeTabPaneProps>(props) ?? {};
-            const isTab = (<any>type).iKey === tabIKey;
-
-            return createVNode(
-                McTab,
-                mergeProps(isTab ? maybeTabPane.props ?? {} : {}, {
-                    class: { 'mc-tabs-tab--active': activeTab.value === name },
-                    onClick: () => {
-                        name && handleTabClick(name);
-                    }
-                }),
-                {
-                    default: () => {
-                        if (isTab) {
-                            // @ts-ignore
-                            return children?.default() ?? null;
-                        } else {
-                            // @ts-ignore
-                            return children?.tab ? children?.tab() : [createVNode('span', { class: 'mc-tabs-tab__label' }, [createTextVNode(tabLabel ?? '')])];
-                        }
-                    }
-                }
-            );
+            return getTabVNode(maybeTabPane);
         })
     );
-});
-
-defineExpose({
-    switchTo: handleBeforeTabSwitch,
-    el: tabsElRef
 });
 
 const Render = () => {
@@ -146,7 +182,7 @@ const Render = () => {
                     class: 'mc-tabs__header',
                     style: headerStyle?.value
                 },
-                [tabsHeaderVNode.value]
+                [tabsHeaderVNode.value, lineBarVNode.value]
             ),
             createVNode(
                 'div',
@@ -159,6 +195,11 @@ const Render = () => {
         ]
     );
 };
+
+defineExpose({
+    switchTo: handleBeforeTabSwitch,
+    el: tabsElRef
+});
 </script>
 
 <template>
