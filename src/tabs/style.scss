@@ -40,6 +40,12 @@
     &--center &-scroll-content {
         justify-content: center;
     }
+
+    &--stretch {
+        .mc-tabs-tab {
+            flex: 1;
+        }
+    }
 }
 
 .mc-tabs__content {

@@ -2,6 +2,7 @@
 import Basic from '@/tabs/demos/DemoBasic.vue'
 import DefaultValue from '@/tabs/demos/DemoDefaultValue.vue'
 import ValueBinding from '@/tabs/demos/DemoValueBinding.vue'
+import HeaderLayout from '@/tabs/demos/DemoHeaderLayout.vue'
 </script>
 
 # Tabs 标签页
@@ -35,6 +36,13 @@ import ValueBinding from '@/tabs/demos/DemoValueBinding.vue'
 如果同时设置了 `v-model:value` 和 `default-tab`，标签页的默认值会优先使用**前者**。
 
 <ValueBinding />
+:::
+
+::: demo codePreview=HeaderLayout
+
+### 头部布局
+
+<HeaderLayout />
 :::
 
 ## Props

@@ -5,9 +5,9 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { ref, toRefs, useSlots, computed, watch, mergeProps, provide, createVNode, createTextVNode, createCommentVNode, nextTick, onMounted, VNode, CSSProperties } from 'vue';
+import { ref, toRefs, useSlots, computed, watch, mergeProps, provide, createVNode, createTextVNode, createCommentVNode, nextTick, VNode, CSSProperties } from 'vue';
 import { flatten, getSlotFirstVNode, kebabCaseEscape, SpecificVNode } from '../_utils_';
-import { useVModel } from '@vueuse/core';
+import { useVModel, useElementBounding, throttledWatch } from '@vueuse/core';
 import McTab from './Tab.vue';
 import { tabsInjectionKey, tabPaneIKey, tabIKey, PaneName, MaybeTabPaneProps, OnBeforeTabSwitchImpl } from './interface';
 import * as CSS from 'csstype';
@@ -47,7 +47,9 @@ const valueVM = useVModel(props, 'value', emit);
 const activeTabName = ref(valueVM.value || (defaultTab?.value ?? ''));
 const activeTabVNode = ref<VNode>();
 const tabsElRef = ref<HTMLElement>();
+const headerElRef = ref<HTMLElement>();
 const barElRef = ref<HTMLElement>();
+const barUpdatedTimer = ref();
 const cssVars = computed<CSS.Properties>(() => {
     return {
         // '--tab-default-color': defaultColor.value,
@@ -60,12 +62,38 @@ watch(valueVM, name => {
     name && handleBeforeTabSwitch(name);
 });
 
+if (type.value === 'bar' || type.value === 'line') {
+    watch(activeTabVNode, () => {
+        nextTick(() => {
+            updateLineBarStyle();
+        });
+    });
+
+    const { top, right, width, height } = useElementBounding(headerElRef);
+    throttledWatch(
+        [top, right, width, height],
+        () => {
+            clearBarUpdatedTimer();
+            const { value: barEl } = barElRef;
+            barEl!.style.transition = '0s';
+            updateLineBarStyle();
+        },
+        {
+            throttle: 32
+        }
+    );
+}
+
 const callUpdateTab = (name: PaneName) => {
     activeTabName.value = name;
     valueVM.value = name; // emit('update:value', name);
     emit('update:tab', activeTabName.value);
 };
 
+const clearBarUpdatedTimer = () => {
+    window.clearTimeout(barUpdatedTimer.value);
+    barUpdatedTimer.value = null;
+};
 const handleTabClick = async (name: PaneName) => {
     emit('tab:click', name);
     handleBeforeTabSwitch(name);
@@ -84,30 +112,23 @@ const handleBeforeTabSwitch = async (name: PaneName) => {
         }
     }
 };
+const updateLineBarStyle = () => {
+    if (!activeTabVNode.value) return;
+
+    const {
+        value: { el: activeTabEl }
+    } = activeTabVNode;
+    const { value: barEl } = barElRef;
+    const { offsetWidth, offsetLeft } = activeTabEl!;
+
+    barEl!.style.left = `${offsetLeft}px`;
+    barEl!.style.maxWidth = `${offsetWidth}px`;
+    barUpdatedTimer.value = window.setTimeout(() => {
+        barEl!.style.transition = '0.3s';
+    }, 64);
+};
 
 provide(tabsInjectionKey, activeTabName);
-
-onMounted(() => {
-    if (type.value === 'bar' || type.value === 'line') {
-        watch(
-            activeTabVNode,
-            () => {
-                nextTick(() => {
-                    if (!activeTabVNode.value) return;
-                    const {
-                        value: { el: tabEl }
-                    } = activeTabVNode;
-                    const { value: barEl } = barElRef;
-                    const { offsetWidth, offsetLeft } = tabEl!;
-
-                    barEl!.style.left = `${offsetLeft}px`;
-                    barEl!.style.maxWidth = `${offsetWidth}px`;
-                });
-            },
-            { immediate: true }
-        );
-    }
-});
 
 const getTabVNode = (maybeTabPane: SpecificVNode<MaybeTabPaneProps>) => {
     const { children, props, type } = maybeTabPane;
@@ -178,7 +199,8 @@ const Render = () => {
             createVNode(
                 'div',
                 {
-                    class: ['mc-tabs__header', { 'mc-tabs__header--center': center.value }],
+                    ref: headerElRef,
+                    class: ['mc-tabs__header', { 'mc-tabs__header--center': center.value, 'mc-tabs__header--stretch': stretch.value }],
                     style: headerStyle?.value
                 },
                 [tabsHeaderVNode.value, lineBarVNode.value]
