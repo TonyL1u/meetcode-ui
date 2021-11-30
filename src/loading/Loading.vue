@@ -11,11 +11,13 @@ import Ripple from './type/Ripple.vue';
 import Dots from './type/Dots.vue';
 import Bars from './type/Bars.vue';
 import Arcs from './type/Arcs.vue';
+import Flip from './type/Flip.vue';
+import Rings from './type/Rings.vue';
 import './style.scss';
 
 interface Props {
     show?: boolean;
-    type?: 'spin' | 'ripple' | 'dots' | 'bars' | 'arcs';
+    type?: 'spin' | 'ripple' | 'dots' | 'bars' | 'arcs' | 'flip' | 'rings';
     size?: 'small' | 'medium' | 'large';
     placement?: 'top' | 'right' | 'bottom' | 'left';
     color?: string;
@@ -99,6 +101,30 @@ const arcsSize = computed(() => {
             return 34;
     }
 });
+const flipWidth = computed(() => {
+    switch (size.value) {
+        case 'small':
+            return 28;
+        case 'medium':
+            return 34;
+        case 'large':
+            return 40;
+        default:
+            return 34;
+    }
+});
+const ringsSize = computed(() => {
+    switch (size.value) {
+        case 'small':
+            return { ringSize: 48, ringPadding: 1 };
+        case 'medium':
+            return { ringSize: 54, ringPadding: 2 };
+        case 'large':
+            return { ringSize: 60, ringPadding: 3 };
+        default:
+            return { ringSize: 54, ringPadding: 2 };
+    }
+});
 
 const LoadingVNode = computed(() => {
     switch (type.value) {
@@ -114,6 +140,11 @@ const LoadingVNode = computed(() => {
             return createVNode(Bars, { loadingWidth: barsWidth.value, color: color.value });
         case 'arcs':
             return createVNode(Arcs, { arcSize: arcsSize.value, color: color.value });
+        case 'flip':
+            return createVNode(Flip, { flipWidth: flipWidth.value, color: color.value });
+        case 'rings':
+            const { ringSize, ringPadding } = ringsSize.value;
+            return createVNode(Rings, { ringSize, ringPadding, color: color.value });
         default:
             return null;
     }

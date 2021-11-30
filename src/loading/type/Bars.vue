@@ -6,6 +6,7 @@
         <div class="bar"></div>
     </div>
 </template>
+
 <script lang="ts" setup>
 // open source: https://codepen.io/alphardex/pen/abzaxBB
 const { loadingWidth, color } = defineProps<{ loadingWidth?: number; color?: string }>();

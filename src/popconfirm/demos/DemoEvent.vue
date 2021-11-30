@@ -15,7 +15,7 @@ const sleep = (wait: number) => {
 
     countDown.value = wait;
     return new Promise<void>(resolve => {
-        const timer = setInterval(async () => {
+        const timer = setInterval(() => {
             if (--countDown.value === 0) {
                 clearInterval(timer);
                 resolve();

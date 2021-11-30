@@ -47,6 +47,6 @@
 -   tabPane 的 lazy load 怎么做？相当于首次加载用 v-if，之后 v-show
 -   如果 tab 外面被其他元素包裹，例如 tooltip、popover 等，怎么正确渲染到 tabs header 上
 
-2021-11-28
+2021-11-30
 
--
+-   Popover 关闭和显示默认有 100ms 的延迟。离开 trigger 100ms 之后，Popover 会默认消失，也有 100ms 的延迟，在 100ms 内如果再进入 Popover 的话，Popover 又会重新显示

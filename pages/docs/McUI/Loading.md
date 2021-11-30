@@ -14,7 +14,7 @@ import LoadingType from '@/loading/demos/DemoLoadingType.vue'
 
 ### 基础用法
 
-默认的 Loading 样式是 spin，提供 `small` 、 `medium` 和 `large` 三种大小。
+默认的 Loading 样式是 `spin` ，提供 `small` 、 `medium` 和 `large` 三种大小。
 
 <Basic />
 
@@ -73,3 +73,5 @@ import LoadingType from '@/loading/demos/DemoLoadingType.vue'
 |  `'bars'`  |  <LoadingType type="bars" />  |
 |  `'arcs'`  |  <LoadingType type="arcs" />  |
 |  `'dots'`  |  <LoadingType type="dots" />  |
+|  `'flip'`  |  <LoadingType type="flip" />  |
+| `'rings'`  | <LoadingType type="rings" />  |

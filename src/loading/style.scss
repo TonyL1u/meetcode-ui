@@ -218,3 +218,91 @@
         opacity: 0;
     }
 }
+
+.mc-loading--flip {
+    width: var(--flip-width);
+    height: var(--flip-width);
+    background-color: var(--flip-color);
+    animation: sk-rotateplane 1.2s infinite ease-in-out;
+}
+
+@keyframes sk-rotateplane {
+    0% {
+        transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+    }
+    50% {
+        transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+    }
+    100% {
+        transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+    }
+}
+
+.mc-loading--rings,
+.mc-loading--rings * {
+    box-sizing: border-box;
+}
+
+.mc-loading--rings {
+    height: var(--ring-size);
+    width: var(--ring-size);
+    padding: var(--ring-padding);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+.mc-loading--rings .circle {
+    position: absolute;
+    display: block;
+    border-radius: 50%;
+    border: 3px solid var(--ring-color);
+    opacity: 1;
+}
+
+.mc-loading--rings .circle:nth-child(1) {
+    height: calc(var(--ring-size) - var(--ring-padding) * 2);
+    width: calc(var(--ring-size) - var(--ring-padding) * 2);
+    animation: mc-loading--rings-circle1-animation 1.5s infinite linear;
+    border-width: 3px;
+}
+.mc-loading--rings .circle:nth-child(2) {
+    height: calc((var(--ring-size) - var(--ring-padding) * 2) * 0.65);
+    width: calc((var(--ring-size) - var(--ring-padding) * 2) * 0.65);
+    animation: mc-loading--rings-circle2-animation 1.5s infinite linear;
+    border-width: 2px;
+}
+.mc-loading--rings .circle:nth-child(3) {
+    height: calc((var(--ring-size) - var(--ring-padding) * 2) * 0.1);
+    width: calc((var(--ring-size) - var(--ring-padding) * 2) * 0.1);
+    animation: mc-loading--rings-circle3-animation 1.5s infinite linear;
+    border-width: 1px;
+}
+
+@keyframes mc-loading--rings-circle1-animation {
+    0% {
+        transform: rotateZ(20deg) rotateY(0deg);
+    }
+    100% {
+        transform: rotateZ(100deg) rotateY(360deg);
+    }
+}
+@keyframes mc-loading--rings-circle2-animation {
+    0% {
+        transform: rotateZ(100deg) rotateX(0deg);
+    }
+    100% {
+        transform: rotateZ(0deg) rotateX(360deg);
+    }
+}
+@keyframes mc-loading--rings-circle3-animation {
+    0% {
+        transform: rotateZ(100deg) rotateX(-360deg);
+    }
+    100% {
+        transform: rotateZ(-360deg) rotateX(360deg);
+    }
+}

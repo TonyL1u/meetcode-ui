@@ -27,7 +27,14 @@
         height: 2px;
         width: 8192px;
         background: #10b981;
-        bottom: 0;
+
+        &--bottom {
+            bottom: 0;
+        }
+
+        &--top {
+            top: 0;
+        }
     }
 
     &--center &-scroll-content {

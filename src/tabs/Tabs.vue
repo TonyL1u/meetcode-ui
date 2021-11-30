@@ -21,9 +21,7 @@ interface Props {
     inline?: boolean;
     center?: boolean;
     tabGap?: number;
-    defaultColor?: string;
-    activeColor?: string;
-    linePosition?: string;
+    barPosition?: 'bottom' | 'top';
     headerStyle?: CSSProperties;
     tabStyle?: CSSProperties;
     contentStyle?: CSSProperties;
@@ -35,9 +33,7 @@ const props = withDefaults(defineProps<Props>(), {
     inline: false,
     center: false,
     tabGap: 0,
-    defaultColor: '#000',
-    activeColor: '#10b981',
-    linePosition: 'bottom'
+    barPosition: 'bottom'
 });
 const emit = defineEmits<{
     (e: 'update:value', value: PaneName): void;
@@ -46,7 +42,7 @@ const emit = defineEmits<{
 }>();
 
 const slots = useSlots();
-const { defaultTab, center, defaultColor, activeColor, stretch, tabGap, type, headerStyle, contentStyle, onBeforeTabSwitch } = toRefs(props);
+const { defaultTab, type, center, stretch, tabGap, barPosition, headerStyle, contentStyle, onBeforeTabSwitch } = toRefs(props);
 const valueVM = useVModel(props, 'value', emit);
 const activeTabName = ref(valueVM.value || (defaultTab?.value ?? ''));
 const activeTabVNode = ref<VNode>();
@@ -54,8 +50,8 @@ const tabsElRef = ref<HTMLElement>();
 const barElRef = ref<HTMLElement>();
 const cssVars = computed<CSS.Properties>(() => {
     return {
-        '--tab-default-color': defaultColor.value,
-        '--tab-active-color': activeColor.value,
+        // '--tab-default-color': defaultColor.value,
+        // '--tab-active-color': activeColor.value,
         '--tab-pad': stretch.value ? 0 : tabGap.value / 2 + 'px'
     };
 });
@@ -146,7 +142,12 @@ const getTabVNode = (maybeTabPane: SpecificVNode<MaybeTabPaneProps>) => {
 };
 
 const lineBarVNode = computed(() => {
-    if (type.value === 'bar' || type.value === 'line') return createVNode('div', { ref: barElRef, class: 'mc-tabs__header-bar' });
+    if (type.value === 'bar' || type.value === 'line') {
+        return createVNode('div', {
+            ref: barElRef,
+            class: ['mc-tabs__header-bar', `mc-tabs__header-bar--${barPosition.value}`]
+        });
+    }
     return null;
 });
 

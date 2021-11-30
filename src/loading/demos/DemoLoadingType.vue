@@ -7,5 +7,5 @@
 <script lang="ts" setup>
 import { McLoading } from 'meetcode-ui';
 
-defineProps<{ type?: 'spin' | 'ripple' | 'dots' | 'bars' | 'arcs' }>();
+defineProps<{ type?: 'spin' | 'ripple' | 'dots' | 'bars' | 'arcs' | 'flip' | 'rings' }>();
 </script>
