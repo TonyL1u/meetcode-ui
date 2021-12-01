@@ -3,6 +3,8 @@ import Basic from '@/tabs/demos/DemoBasic.vue'
 import DefaultValue from '@/tabs/demos/DemoDefaultValue.vue'
 import ValueBinding from '@/tabs/demos/DemoValueBinding.vue'
 import HeaderLayout from '@/tabs/demos/DemoHeaderLayout.vue'
+import TabSwitch from '@/tabs/demos/DemoTabSwitch.vue'
+import BeforeTabSwitch from '@/tabs/demos/DemoBeforeTabSwitch.vue'
 </script>
 
 # Tabs 标签页
@@ -45,6 +47,26 @@ import HeaderLayout from '@/tabs/demos/DemoHeaderLayout.vue'
 <HeaderLayout />
 :::
 
+::: demo codePreview=TabSwitch
+
+### Tab 切换
+
+通过 `on-tab:click` 和 `on-tab:switch` 事件来获取 tab 点击/切换之后的回调。
+
+<TabSwitch />
+:::
+
+::: demo codePreview=BeforeTabSwitch
+
+### Tab 切换前的回调
+
+提供钩子函数 `on-before-tab-switch` 来控制 tab 切换前的行为。
+
+返回值为 `false` 时，会阻止 tab 的切换；返回值为 `void | undefined | true` 时允许 tab 切换。支持异步调用。
+
+<BeforeTabSwitch />
+:::
+
 ## Props
 
 ### Tabs
@@ -67,7 +89,7 @@ import HeaderLayout from '@/tabs/demos/DemoHeaderLayout.vue'
 |         名称         |                                                    类型                                                     |         说明          |
 | :------------------: | :---------------------------------------------------------------------------------------------------------: | :-------------------: |
 |     on-tab:click     |                                         `(value: PaneName) => void`                                         |    点击 tab 时触发    |
-|    on-update:tab     |                                         `(value: PaneName) => void`                                         | 选中的 tab 改变时触发 |
+|    on-tab:switch     |                                         `(value: PaneName) => void`                                         | 选中的 tab 改变时触发 |
 | on-before-tab-switch | `(from?: PaneName, to?: PaneName) => Promise<boolean \| undefined \| void> \| boolean \| undefined \| void` | tab 切换前的勾子函数  |
 
 ## Slot

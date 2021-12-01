@@ -11,6 +11,7 @@ import { tabsInjectionKey, tabIKey } from './interface';
 
 interface Props {
     name?: string | number;
+    disabled?: boolean;
 }
 defineProps<Props>();
 

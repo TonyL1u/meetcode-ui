@@ -95,7 +95,7 @@ const copyCode = () => {
     border-radius: 4px;
     position: relative;
     padding: 12px;
-    margin: 12px 0;
+    margin: 16px 0;
     overflow: auto;
 }
 

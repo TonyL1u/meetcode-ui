@@ -37,7 +37,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 const emit = defineEmits<{
     (e: 'update:value', value: PaneName): void;
-    (e: 'update:tab', value: PaneName): void;
+    (e: 'tab:switch', value: PaneName): void;
     (e: 'tab:click', value: PaneName): void;
 }>();
 
@@ -87,7 +87,7 @@ if (type.value === 'bar' || type.value === 'line') {
 const callUpdateTab = (name: PaneName) => {
     activeTabName.value = name;
     valueVM.value = name; // emit('update:value', name);
-    emit('update:tab', activeTabName.value);
+    emit('tab:switch', activeTabName.value);
 };
 
 const clearBarUpdatedTimer = () => {
