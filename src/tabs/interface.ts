@@ -1,11 +1,11 @@
-import { InjectionKey, Ref } from 'vue';
+import { InjectionKey, Ref, CSSProperties } from 'vue';
 import * as CSS from 'csstype';
 
 declare module 'csstype' {
     interface Properties {
         '--tab-default-color'?: string;
         '--tab-active-color'?: string;
-        '--tab-pad'?: string | number;
+        '--tab-gap'?: string | number;
     }
 }
 
@@ -17,6 +17,7 @@ export type PaneName = string | number;
 export interface TabPaneProps {
     name?: string | number;
     tabLabel?: string;
+    tabStyle?: CSSProperties;
     disabled?: boolean;
     preload?: boolean;
     lazy?: boolean;

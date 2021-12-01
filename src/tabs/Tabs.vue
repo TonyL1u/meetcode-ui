@@ -18,21 +18,22 @@ interface Props {
     defaultTab?: PaneName;
     type?: 'bar' | 'line' | 'empty' | 'card' | 'segment';
     stretch?: boolean;
-    inline?: boolean;
     center?: boolean;
     tabGap?: number;
+    activeColor?: string;
     barPosition?: 'bottom' | 'top';
     headerStyle?: CSSProperties;
-    tabStyle?: CSSProperties;
+    headerClass?: string;
     contentStyle?: CSSProperties;
+    contentClass?: string;
     onBeforeTabSwitch?: OnBeforeTabSwitchImpl;
 }
 const props = withDefaults(defineProps<Props>(), {
-    type: 'bar',
+    type: 'line',
     stretch: false,
-    inline: false,
     center: false,
-    tabGap: 0,
+    tabGap: 40,
+    activeColor: '#10b981',
     barPosition: 'bottom'
 });
 const emit = defineEmits<{
@@ -42,7 +43,7 @@ const emit = defineEmits<{
 }>();
 
 const slots = useSlots();
-const { defaultTab, type, center, stretch, tabGap, barPosition, headerStyle, contentStyle, onBeforeTabSwitch } = toRefs(props);
+const { defaultTab, type, center, stretch, tabGap, activeColor, barPosition, headerStyle, headerClass, contentStyle, contentClass, onBeforeTabSwitch } = toRefs(props);
 const valueVM = useVModel(props, 'value', emit);
 const activeTabName = ref(valueVM.value || (defaultTab?.value ?? ''));
 const activeTabVNode = ref<VNode>();
@@ -53,8 +54,8 @@ const barUpdatedTimer = ref();
 const cssVars = computed<CSS.Properties>(() => {
     return {
         // '--tab-default-color': defaultColor.value,
-        // '--tab-active-color': activeColor.value,
-        '--tab-pad': stretch.value ? 0 : tabGap.value / 2 + 'px'
+        '--tab-active-color': activeColor.value,
+        '--tab-gap': stretch.value ? 0 : tabGap.value / 2 + 'px'
     };
 });
 
@@ -132,14 +133,16 @@ provide(tabsInjectionKey, activeTabName);
 
 const getTabVNode = (maybeTabPane: SpecificVNode<MaybeTabPaneProps>) => {
     const { children, props, type } = maybeTabPane;
-    const { name, tabLabel } = kebabCaseEscape<MaybeTabPaneProps>(props) ?? {};
+    const { name, tabLabel, tabStyle = {}, disabled = false } = kebabCaseEscape<MaybeTabPaneProps>(props) ?? {};
     const isTab = (<any>type).iKey === tabIKey;
     const isActive = activeTabName.value === name;
+    const isDisabled = typeof disabled === 'boolean' ? disabled : disabled === '';
     const tabVNode = createVNode(
         McTab,
-        mergeProps(isTab ? maybeTabPane.props ?? {} : {}, {
-            class: { 'mc-tabs-tab--active': isActive },
+        mergeProps(isTab ? maybeTabPane.props ?? {} : { style: tabStyle }, {
+            class: { 'mc-tabs-tab--active': isActive, 'mc-tabs-tab--disabled': isDisabled },
             onClick: () => {
+                if (isDisabled) return;
                 name && handleTabClick(name);
             }
         }),
@@ -180,7 +183,10 @@ const tabsHeaderVNode = computed(() => {
 
     return createVNode(
         'div',
-        { class: 'mc-tabs__header-scroll-content' },
+        {
+            class: ['mc-tabs__header-scroll-content', headerClass?.value],
+            style: headerStyle?.value
+        },
         maybeTabPanes.map(maybeTabPane => {
             return getTabVNode(maybeTabPane);
         })
@@ -200,15 +206,14 @@ const Render = () => {
                 'div',
                 {
                     ref: headerElRef,
-                    class: ['mc-tabs__header', { 'mc-tabs__header--center': center.value, 'mc-tabs__header--stretch': stretch.value }],
-                    style: headerStyle?.value
+                    class: ['mc-tabs__header', { 'mc-tabs__header--center': center.value, 'mc-tabs__header--stretch': stretch.value }]
                 },
                 [tabsHeaderVNode.value, lineBarVNode.value]
             ),
             createVNode(
                 'div',
                 {
-                    class: 'mc-tabs__content',
+                    class: ['mc-tabs__content', contentClass?.value],
                     style: contentStyle?.value
                 },
                 slots.default ? flatten(slots.default(), tabIKey, true) : createCommentVNode('', true)

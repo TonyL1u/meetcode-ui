@@ -11,12 +11,21 @@
         align-items: center;
 
         &:hover {
-            color: #10b981;
+            color: var(--tab-active-color);
         }
     }
 
     &-tab--active {
-        color: #10b981;
+        color: var(--tab-active-color);
+    }
+
+    &-tab--disabled {
+        cursor: not-allowed;
+        color: #bbb;
+
+        &:hover {
+            color: #bbb;
+        }
     }
 }
 
@@ -26,7 +35,7 @@
         position: absolute;
         height: 2px;
         width: 8192px;
-        background: #10b981;
+        background: var(--tab-active-color);
 
         &--bottom {
             bottom: 0;
@@ -58,7 +67,7 @@
         position: relative;
 
         .mc-tabs-tab {
-            margin: 0 20px;
+            margin: 0 var(--tab-gap);
             padding: 12px 0;
 
             &:first-child {

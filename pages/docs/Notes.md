@@ -51,3 +51,8 @@
 
 -   Popover 关闭和显示默认有 100ms 的延迟。离开 trigger 100ms 之后，Popover 会默认消失，也有 100ms 的延迟，在 100ms 内如果再进入 Popover 的话，Popover 又会重新显示
 -   tab 的 transition 属性会导致在更新 line bar 的位置时会有一个明显的过渡效果，看起来像是卡了
+
+2021-12-01
+
+-   如果一个 props 的类型是 CSSProperties | string，ts 编译会报错
+-   使用 McTab 组件总是报错，重启项目之后正常，原因不明
