@@ -30,22 +30,6 @@
 }
 
 .mc-tabs__header {
-    &-bar {
-        transition: 0.3s;
-        position: absolute;
-        height: 2px;
-        width: 8192px;
-        background: var(--tab-active-color);
-
-        &--bottom {
-            bottom: 0;
-        }
-
-        &--top {
-            top: 0;
-        }
-    }
-
     &--center &-scroll-content {
         justify-content: center;
     }
@@ -55,14 +39,29 @@
             flex: 1;
         }
     }
+
+    &--with-line {
+        .mc-tabs__header-scroll-content {
+            border-bottom: 1px solid #e4e7ed;
+        }
+
+        .mc-tabs__header-bar--bottom + .mc-tabs__header-scroll-content {
+            border-top: none;
+            border-bottom: 1px solid #e4e7ed;
+        }
+
+        .mc-tabs__header-bar--top + .mc-tabs__header-scroll-content {
+            border-top: 1px solid #e4e7ed;
+            border-bottom: none;
+        }
+    }
 }
 
 .mc-tabs__content {
     padding-top: 12px;
 }
 
-.mc-tabs--bar,
-.mc-tabs--line {
+.mc-tabs--bar {
     .mc-tabs__header {
         position: relative;
 
@@ -82,20 +81,84 @@
                 display: flex;
             }
         }
-    }
-}
 
-.mc-tabs--line .mc-tabs__header {
-    &-scroll-content {
-        border-bottom: 1px solid #e4e7ed;
+        &-bar {
+            transition: 0.3s;
+            position: absolute;
+            height: 2px;
+            width: 8192px;
+            background: var(--tab-active-color);
+            z-index: 1;
+
+            &--bottom {
+                bottom: 0;
+            }
+
+            &--top {
+                top: 0;
+            }
+        }
     }
 }
 
 .mc-tabs--empty {
+    .mc-tabs-tab {
+        margin: 0 var(--tab-gap);
+        padding: 12px 0;
+    }
 }
 
 .mc-tabs--card {
+    .mc-tabs-tab {
+        padding: 8px var(--tab-gap);
+        transition: 0.2s;
+
+        &--active {
+            background: #f2fcf8;
+            position: relative;
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 2px;
+                background: #10b981;
+            }
+
+            &::after {
+                content: '';
+                position: absolute;
+                left: 0;
+                bottom: -1px;
+                width: 100%;
+                height: 1px;
+                background: inherit;
+            }
+        }
+    }
 }
 
 .mc-tabs--segment {
+    .mc-tabs__header {
+        background: #f6f6f9;
+        align-items: center;
+        padding: 2px;
+        box-sizing: border-box;
+        border-radius: 4px;
+    }
+
+    .mc-tabs-tab {
+        min-width: 100px;
+        padding: 4px 0;
+        border-radius: 2px;
+        margin: 0;
+        flex: 1;
+        transition: 0.2s;
+
+        &.mc-tabs-tab--active {
+            background: #fff;
+        }
+    }
 }

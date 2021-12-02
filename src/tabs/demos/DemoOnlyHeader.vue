@@ -1,5 +1,5 @@
 <template>
-    <McTabs type="bar">
+    <McTabs>
         <McTab name="tab1">Tab 1</McTab>
         <McTab name="tab2">Tab 2</McTab>
         <McTab name="tab3">Tab 3</McTab>

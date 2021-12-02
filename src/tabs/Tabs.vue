@@ -16,7 +16,8 @@ import './style.scss';
 interface Props {
     value?: TabPaneName;
     defaultTab?: TabPaneName;
-    type?: 'bar' | 'line' | 'empty' | 'card' | 'segment';
+    type?: 'bar' | 'empty' | 'card' | 'segment';
+    showLine?: boolean;
     stretch?: boolean;
     center?: boolean;
     tabGap?: number;
@@ -29,7 +30,8 @@ interface Props {
     onBeforeTabSwitch?: OnBeforeTabSwitchImpl;
 }
 const props = withDefaults(defineProps<Props>(), {
-    type: 'line',
+    type: 'bar',
+    showLine: true,
     stretch: false,
     center: false,
     tabGap: 40,
@@ -43,7 +45,7 @@ const emit = defineEmits<{
 }>();
 
 const slots = useSlots();
-const { defaultTab, type, center, stretch, tabGap, activeColor, barPosition, headerStyle, headerClass, contentStyle, contentClass, onBeforeTabSwitch } = toRefs(props);
+const { defaultTab, type, showLine, center, stretch, tabGap, activeColor, barPosition, headerStyle, headerClass, contentStyle, contentClass, onBeforeTabSwitch } = toRefs(props);
 const valueVM = useVModel(props, 'value', emit);
 const activeTabName = ref(valueVM.value || (defaultTab?.value ?? ''));
 const activeTabVNode = ref<VNode>();
@@ -63,10 +65,10 @@ watch(valueVM, name => {
     name && handleBeforeTabSwitch(name);
 });
 
-if (type.value === 'bar' || type.value === 'line') {
+if (type.value === 'bar') {
     watch(activeTabVNode, () => {
         nextTick(() => {
-            updateLineBarStyle();
+            updateBarStyle();
         });
     });
 
@@ -77,7 +79,7 @@ if (type.value === 'bar' || type.value === 'line') {
             clearBarUpdatedTimer();
             const { value: barEl } = barElRef;
             barEl!.style.transition = '0s';
-            updateLineBarStyle();
+            updateBarStyle();
         },
         {
             throttle: 32
@@ -113,7 +115,7 @@ const handleBeforeTabSwitch = async (name: TabPaneName) => {
         }
     }
 };
-const updateLineBarStyle = () => {
+const updateBarStyle = () => {
     if (!activeTabVNode.value) return;
 
     const {
@@ -166,7 +168,7 @@ const getTabVNode = (maybeTabPane: SpecificVNode<MaybeTabPaneProps>) => {
 };
 
 const lineBarVNode = computed(() => {
-    if (type.value === 'bar' || type.value === 'line') {
+    if (type.value === 'bar') {
         return createVNode('div', {
             ref: barElRef,
             class: ['mc-tabs__header-bar', `mc-tabs__header-bar--${barPosition.value}`]
@@ -206,9 +208,16 @@ const Render = () => {
                 'div',
                 {
                     ref: headerElRef,
-                    class: ['mc-tabs__header', { 'mc-tabs__header--center': center.value, 'mc-tabs__header--stretch': stretch.value }]
+                    class: [
+                        'mc-tabs__header',
+                        {
+                            'mc-tabs__header--center': center.value,
+                            'mc-tabs__header--stretch': stretch.value,
+                            'mc-tabs__header--with-line': type.value === 'segment' || type.value === 'empty' ? false : showLine.value
+                        }
+                    ]
                 },
-                [tabsHeaderVNode.value, lineBarVNode.value]
+                [lineBarVNode.value, tabsHeaderVNode.value]
             ),
             createVNode(
                 'div',
