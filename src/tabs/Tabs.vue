@@ -9,13 +9,13 @@ import { ref, toRefs, useSlots, computed, watch, mergeProps, provide, createVNod
 import { flatten, getSlotFirstVNode, kebabCaseEscape, SpecificVNode } from '../_utils_';
 import { useVModel, useElementBounding, throttledWatch } from '@vueuse/core';
 import McTab from './Tab.vue';
-import { tabsInjectionKey, tabPaneIKey, tabIKey, PaneName, MaybeTabPaneProps, OnBeforeTabSwitchImpl } from './interface';
+import { tabsInjectionKey, tabPaneIKey, tabIKey, TabPaneName, MaybeTabPaneProps, OnBeforeTabSwitchImpl } from './interface';
 import * as CSS from 'csstype';
 import './style.scss';
 
 interface Props {
-    value?: PaneName;
-    defaultTab?: PaneName;
+    value?: TabPaneName;
+    defaultTab?: TabPaneName;
     type?: 'bar' | 'line' | 'empty' | 'card' | 'segment';
     stretch?: boolean;
     center?: boolean;
@@ -37,9 +37,9 @@ const props = withDefaults(defineProps<Props>(), {
     barPosition: 'bottom'
 });
 const emit = defineEmits<{
-    (e: 'update:value', value: PaneName): void;
-    (e: 'tab:switch', value: PaneName): void;
-    (e: 'tab:click', value: PaneName): void;
+    (e: 'update:value', value: TabPaneName): void;
+    (e: 'tab:switch', value: TabPaneName): void;
+    (e: 'tab:click', value: TabPaneName): void;
 }>();
 
 const slots = useSlots();
@@ -85,7 +85,7 @@ if (type.value === 'bar' || type.value === 'line') {
     );
 }
 
-const callUpdateTab = (name: PaneName) => {
+const callUpdateTab = (name: TabPaneName) => {
     activeTabName.value = name;
     valueVM.value = name; // emit('update:value', name);
     emit('tab:switch', activeTabName.value);
@@ -95,11 +95,11 @@ const clearBarUpdatedTimer = () => {
     window.clearTimeout(barUpdatedTimer.value);
     barUpdatedTimer.value = null;
 };
-const handleTabClick = async (name: PaneName) => {
+const handleTabClick = async (name: TabPaneName) => {
     emit('tab:click', name);
     handleBeforeTabSwitch(name);
 };
-const handleBeforeTabSwitch = async (name: PaneName) => {
+const handleBeforeTabSwitch = async (name: TabPaneName) => {
     // callback only when the value is changed
     if (activeTabName.value !== name) {
         if (onBeforeTabSwitch?.value) {
@@ -133,7 +133,7 @@ provide(tabsInjectionKey, activeTabName);
 
 const getTabVNode = (maybeTabPane: SpecificVNode<MaybeTabPaneProps>) => {
     const { children, props, type } = maybeTabPane;
-    const { name, tabLabel, tabStyle = {}, disabled = false } = kebabCaseEscape<MaybeTabPaneProps>(props) ?? {};
+    const { name, tabLabel = '', tabStyle = '', disabled = false } = kebabCaseEscape<MaybeTabPaneProps>(props) ?? {};
     const isTab = (<any>type).iKey === tabIKey;
     const isActive = activeTabName.value === name;
     const isDisabled = typeof disabled === 'boolean' ? disabled : disabled === '';
@@ -153,7 +153,7 @@ const getTabVNode = (maybeTabPane: SpecificVNode<MaybeTabPaneProps>) => {
                     return children?.default() ?? null;
                 } else {
                     // @ts-ignore
-                    return children?.tab ? children?.tab() : [createVNode('span', { class: 'mc-tabs-tab__label' }, [createTextVNode(tabLabel ?? '')])];
+                    return children?.tab ? children?.tab() : [createVNode('span', { class: 'mc-tabs-tab__label' }, [typeof tabLabel === 'string' ? createTextVNode(tabLabel) : tabLabel])];
                 }
             }
         }

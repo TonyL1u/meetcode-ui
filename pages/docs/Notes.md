@@ -56,3 +56,8 @@
 
 -   如果一个 props 的类型是 CSSProperties | string，ts 编译会报错
 -   使用 McTab 组件总是报错，重启项目之后正常，原因不明
+
+2021-12-02
+
+-   props 的定义可以使用运行时声明和类型声明，简单的 props 直接使用类型声明，复杂的 props 使用运行时声明
+-   使用类型声明来定义 props 时，如果只有 CSSProperties，编译和类型推导均正常，但是 CSSProperties | string 就会编译报错

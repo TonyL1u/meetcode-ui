@@ -3,6 +3,7 @@ import Basic from '@/tabs/demos/DemoBasic.vue'
 import DefaultValue from '@/tabs/demos/DemoDefaultValue.vue'
 import HeaderLayout from '@/tabs/demos/DemoHeaderLayout.vue'
 import CustomTab from '@/tabs/demos/DemoCustomTab.vue'
+import OnlyHeader from '@/tabs/demos/DemoOnlyHeader.vue'
 import RenderMode from '@/tabs/demos/DemoRenderMode.vue'
 import TabSwitch from '@/tabs/demos/DemoTabSwitch.vue'
 import BeforeTabSwitch from '@/tabs/demos/DemoBeforeTabSwitch.vue'
@@ -28,24 +29,33 @@ import BeforeTabSwitch from '@/tabs/demos/DemoBeforeTabSwitch.vue'
 <HeaderLayout />
 :::
 
+::: demo codePreview=CustomTab
+
+### 自定义 Tab 和样式
+
+<CustomTab />
+:::
+
+::: demo codePreview=OnlyHeader
+
+### 仅头部
+
+如果只是想展示 Tabs 头部，请使用 `McTab` 。可以与 `McTabPane` 混合使用。
+
+<OnlyHeader />
+:::
+
 ::: demo codePreview=DefaultValue
 
 ### 默认值
 
 通过 `default-tab` 来设置默认激活（初始值）的 tab。
 
-设置了默认值之后，无法通过修改它的值来切换 tab，因为它不是双向绑定的。如果希望动态控制 tab 切换 ，可以通过设置 `v-model:value` 。
+设置了默认值之后，无法通过修改它的值来切换 tab，因为它不是双向绑定的。如果希望动态控制 tab 切换 ，可以设置 `v-model:value` 。
 
 如果同时设置了 `v-model:value` 和 `default-tab`，默认值会优先使用**前者**。
 
 <DefaultValue />
-:::
-
-::: demo codePreview=CustomTab
-
-### 自定义 Tab 和样式
-
-<CustomTab />
 :::
 
 ::: demo codePreview=RenderMode
@@ -95,23 +105,28 @@ import BeforeTabSwitch from '@/tabs/demos/DemoBeforeTabSwitch.vue'
 | bar-position  |                   `bottom \| top`                   | `'bottom'`  | 用于设置 line bar 的位置 |
 |    tab-gap    |                      `number`                       |    `40`     |    标签之间的距离(px)    |
 | active-color  |                      `string`                       |  `#10b981`  |      标签激活的颜色      |
-| header-style  |                 `object \| string`                  | `undefined` |         头部样式         |
+| header-style  |                 `string \| object`                  | `undefined` |         头部样式         |
 | header-class  |                      `string`                       | `undefined` |         头部类名         |
-| content-style |                 `object \| string`                  | `undefined` |         面板样式         |
+| content-style |                 `string \| object`                  | `undefined` |         面板样式         |
 | content-class |                      `string`                       | `undefined` |         面板类名         |
 
 ### TabPane
 
-|   名称    |        类型        |   默认值    |        说明        |
-| :-------: | :----------------: | :---------: | :----------------: |
-|   name    | `string \| number` | `undefined` | 标签名称，唯一标识 |
-| tab-label |      `string`      | `undefined` |  显示在头部的文字  |
-| tab-style | `object \| string` |   `false`   |      标签样式      |
-| disabled  |     `boolean`      |   `false`   |    是否禁用标签    |
-|  preload  |     `boolean`      |   `false`   |     面板预加载     |
-|   lazy    |     `boolean`      |   `false`   |    面板延迟加载    |
+|   名称    |        类型         |   默认值    |         说明         |
+| :-------: | :-----------------: | :---------: | :------------------: |
+|   name    | `string \| number`  | `undefined` |  标签名称，唯一标识  |
+| tab-label |  `string \| VNode`  | `undefined` | 显示在标签头部的内容 |
+| tab-style | ` string \| object` |   `false`   |       标签样式       |
+| disabled  |      `boolean`      |   `false`   |     是否禁用标签     |
+|  preload  |      `boolean`      |   `false`   |      面板预加载      |
+|   lazy    |      `boolean`      |   `false`   |     面板延迟加载     |
 
 ### Tab
+
+|   名称   |        类型        |   默认值    |        说明        |
+| :------: | :----------------: | :---------: | :----------------: |
+|   name   | `string \| number` | `undefined` | 标签名称，唯一标识 |
+| disabled |     `boolean`      |   `false`   |    是否禁用标签    |
 
 ## Event
 
@@ -125,6 +140,15 @@ import BeforeTabSwitch from '@/tabs/demos/DemoBeforeTabSwitch.vue'
 
 ## Slot
 
-|  名称   | 参数 |      说明      |
-| :-----: | :--: | :------------: |
-| default | `()` | 弹出框触发元素 |
+### Tabs
+
+|  名称   | 参数 |   说明   |
+| :-----: | :--: | :------: |
+| default | `()` | 标签内容 |
+
+### TabPane
+
+|  名称   | 参数 |         说明         |
+| :-----: | :--: | :------------------: |
+|   tab   | `()` | 显示在标签头部的内容 |
+| default | `()` |       面板内容       |

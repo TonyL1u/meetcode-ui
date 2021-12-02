@@ -8,12 +8,12 @@
 </template>
 
 <script lang="ts" setup>
-import { McTabs, McTabPane, PaneName } from 'meetcode-ui';
+import { McTabs, McTabPane, TabPaneName } from 'meetcode-ui';
 
-const handleTabClick = (name: PaneName) => {
+const handleTabClick = (name: TabPaneName) => {
     console.log(`click ${name}`);
 };
-const handleSwitchTab = (name: PaneName) => {
+const handleSwitchTab = (name: TabPaneName) => {
     console.log(`switch to ${name}`);
 };
 </script>

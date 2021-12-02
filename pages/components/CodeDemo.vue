@@ -3,14 +3,14 @@
         <div class="demo-box">
             <slot></slot>
         </div>
-        <div class="code-preview-box" v-if="codePreviewVisiable">
+        <div class="code-preview-box" v-if="codePreviewVisible">
             <NTabs type="line" :default-value="tabIndex" :tab-pad="36" :content-style="{ 'padding-top': 0 }" @update:value="handleUpdateTab">
                 <NTabPane v-for="(code, index) in codes" :name="index" :tab="code.name + '.vue'" style="padding-top: 0; overflow: auto">
                     <pre class="code-preview language-html" v-html="highlighted(code.importSource)"></pre>
                 </NTabPane>
             </NTabs>
         </div>
-        <div v-if="showToolbox" class="tool-box" :class="!codePreviewVisiable ? 'mc-mt-3.5' : ''">
+        <div v-if="showToolbox" class="tool-box" :class="!codePreviewVisible ? 'mc-mt-3.5' : ''">
             <NSpace justify="center">
                 <McTooltip content="复制代码">
                     <NButton text class="toolbox-btn" @click="copyCode">
@@ -19,8 +19,8 @@
                         </NIcon>
                     </NButton>
                 </McTooltip>
-                <McTooltip :content="codePreviewVisiable ? '隐藏代码' : '展开代码'">
-                    <NButton text class="toolbox-btn" @click="codePreviewVisiable = !codePreviewVisiable">
+                <McTooltip :content="codePreviewVisible ? '隐藏代码' : '展开代码'">
+                    <NButton text class="toolbox-btn" @click="codePreviewVisible = !codePreviewVisible">
                         <NIcon>
                             <IconCode />
                         </NIcon>
@@ -57,7 +57,7 @@ import { loadInitialState } from '@playground/orchestrator';
 const props = defineProps<{ codeSources: string }>();
 
 const codes = ref<Array<any>>(JSON.parse(props.codeSources) || []);
-const codePreviewVisiable = ref(false);
+const codePreviewVisible = ref(false);
 const showModal = ref(false);
 const tabIndex = ref(0);
 const notification = useNotification();

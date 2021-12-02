@@ -1,4 +1,4 @@
 export { default as McTabs } from './Tabs.vue';
 export { default as McTabPane } from './TabPane.vue';
 export { default as McTab } from './Tab.vue';
-export type { PaneName, TabPaneProps, OnBeforeTabSwitchImpl } from './interface';
+export type { TabPaneName, TabPaneProps, OnBeforeTabSwitchImpl } from './interface';
