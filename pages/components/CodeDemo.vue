@@ -71,7 +71,7 @@ const handleUpdateTab = (val: string | number) => {
 };
 const handleShowModal = () => {
     setTimeout(() => {
-        loadInitialState(codes.value[tabIndex.value].filePath);
+        loadInitialState(codes.value[tabIndex.value].compressdSource);
         showModal.value = true;
     }, 0);
 };

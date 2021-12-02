@@ -159,9 +159,9 @@ import BeforeTabSwitch from '@/tabs/demos/DemoBeforeTabSwitch.vue'
 
 ### Tabs
 
-|  名称   | 参数 |   说明   |
-| :-----: | :--: | :------: |
-| default | `()` | 标签内容 |
+|  名称   | 参数 |    说明    |
+| :-----: | :--: | :--------: |
+| default | `()` | 标签页内容 |
 
 ### TabPane
 
@@ -169,3 +169,12 @@ import BeforeTabSwitch from '@/tabs/demos/DemoBeforeTabSwitch.vue'
 | :-----: | :--: | :------------------: |
 |   tab   | `()` | 显示在标签头部的内容 |
 | default | `()` |       面板内容       |
+
+## Expose
+
+### Tabs
+
+|   名称   |                类型                 |       说明        |
+| :------: | :---------------------------------: | :---------------: |
+| switchTo | `(value: string \| number) => void` |  切换至指定 tab   |
+|    el    |            `HTMLElement`            | 标签页的 Dom 节点 |

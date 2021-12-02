@@ -61,3 +61,4 @@
 
 -   props 的定义可以使用运行时声明和类型声明，简单的 props 直接使用类型声明，复杂的 props 使用运行时声明
 -   使用类型声明来定义 props 时，如果只有 CSSProperties，编译和类型推导均正常，但是 CSSProperties | string 就会编译报错
+-   在线编辑功能在生产环境存在几个问题：1.lodash-es 报错找不到；2.css 导入有问题

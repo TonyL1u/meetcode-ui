@@ -1,6 +1,7 @@
 import { reactive, watch, watchEffect } from 'vue';
 import { createEventHook, EventHookOn } from '@vueuse/core';
 import { compileFile } from './compiler/sfcCompiler';
+import lz from 'lz-string';
 
 const shouldUpdateContent = createEventHook();
 
@@ -158,7 +159,7 @@ const initialPackages = [
     },
     {
         name: 'meetcode-ui',
-        url: '/lib/meetcode-ui.esm.js'
+        url: import.meta.env.PROD ? '/assets/meetcode-ui.esm.js' : '/lib/meetcode-ui.esm.js'
     },
     {
         name: 'naive-ui',
@@ -166,15 +167,18 @@ const initialPackages = [
     }
 ];
 
-export async function loadInitialState(filePath: string = '') {
+export async function loadInitialState(fileSourceString: string = '') {
     removeAllFiles();
-    const demoFile = <string>(await import(/* @vite-ignore */ `${filePath}?raw`)).default;
-    const [templateStartIndex, templateEndIndex] = [demoFile.indexOf('<template>'), demoFile.lastIndexOf('</template>')];
-    const template = demoFile.slice(templateStartIndex + 10, templateEndIndex);
-    const script = demoFile.match(/<script lang="ts" setup>([\s\S]*?)<\/script>/)?.[1] ?? '';
+    const demoFile = lz.decompressFromEncodedURIComponent(fileSourceString);
 
-    orchestrator.packages = initialPackages;
-    addFile(new OrchestratorFile('App.vue', template.trim(), script.trim()));
-    setActiveFile('App.vue');
-    shouldUpdateContent.trigger(null);
+    queueMicrotask(() => {
+        const [templateStartIndex, templateEndIndex] = [demoFile!.indexOf('<template>'), demoFile!.lastIndexOf('</template>')];
+        const template = demoFile!.slice(templateStartIndex + 10, templateEndIndex);
+        const script = demoFile!.match(/<script lang="ts" setup>([\s\S]*?)<\/script>/)?.[1] ?? '';
+
+        orchestrator.packages = initialPackages;
+        addFile(new OrchestratorFile('App.vue', template.trim(), script.trim()));
+        setActiveFile('App.vue');
+        shouldUpdateContent.trigger(null);
+    });
 }
