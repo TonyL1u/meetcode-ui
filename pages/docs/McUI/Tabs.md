@@ -54,9 +54,9 @@ import BeforeTabSwitch from '@/tabs/demos/DemoBeforeTabSwitch.vue'
 
 ::: demo codePreview=OnlyHeader
 
-### 仅头部
+### 无面板
 
-如果只是想展示 Tabs 头部，请使用 `McTab` 。可以与 `McTabPane` 混合使用。
+如果不想展示标签页面板，可以使用 `McTab` 。支持与 `McTabPane` 混合使用。
 
 <OnlyHeader />
 :::

@@ -51,7 +51,7 @@ const setup = createSingletonPromise(async () => {
     monaco.languages.typescript.javascriptDefaults.addExtraLib(
         `
         declare module 'meetcode-ui' { 
-            export { McGrid, McGridItem, McLoading, McPopconfirm, McPopover, McPopselect, McTextLink, McTooltip };
+            export { McGrid, McGridItem, McLoading, McPopconfirm, McPopover, McPopselect, McTabs, McTabPane, McTab, McTextLink, McTooltip };
         }
       `,
         'ts:meetcode-ui'

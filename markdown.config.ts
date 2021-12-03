@@ -49,12 +49,12 @@ export default {
                         const rootDir = fileSourceMap[root];
                         const importPath = path.join(__dirname, `${rootDir}/${rest.join('/')}`);
                         const importSource = fs.readFileSync(importPath, 'utf-8').trim();
-                        const compressdSource = lz.compressToEncodedURIComponent(importSource);
+                        const compressedSource = lz.compressToEncodedURIComponent(importSource);
 
                         return {
                             name,
                             importSource,
-                            compressdSource
+                            compressedSource
                         };
                     });
 

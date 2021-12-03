@@ -7,3 +7,4 @@ export * from './text-link';
 export * from './tooltip';
 export * from './navigation';
 export * from './tabs';
+export * from './message';

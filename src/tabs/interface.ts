@@ -1,4 +1,4 @@
-import { InjectionKey, Ref, CSSProperties, VNode } from 'vue';
+import { InjectionKey, Ref, CSSProperties, VNodeChild } from 'vue';
 import * as CSS from 'csstype';
 
 declare module 'csstype' {
@@ -16,7 +16,7 @@ export { tabsInjectionKey, tabPaneIKey, tabIKey };
 export type TabPaneName = string | number;
 export interface TabPaneProps {
     name?: TabPaneName;
-    tabLabel?: string | VNode;
+    tabLabel?: string | (() => VNodeChild);
     tabStyle?: string | CSSProperties;
     disabled?: boolean;
     preload?: boolean;

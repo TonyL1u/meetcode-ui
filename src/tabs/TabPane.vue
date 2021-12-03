@@ -6,13 +6,13 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { ref, toRefs, inject, computed, createVNode, createCommentVNode, useSlots, renderSlot, vShow, withDirectives, CSSProperties } from 'vue';
+import { ref, toRefs, inject, computed, createVNode, createCommentVNode, useSlots, renderSlot, vShow, withDirectives, CSSProperties, VNodeChild } from 'vue';
 import { watchOnce } from '@vueuse/core';
 import { tabsInjectionKey, tabPaneIKey } from './interface';
 
 interface Props {
     name?: string | number;
-    tabLabel?: string;
+    tabLabel?: string | (() => VNodeChild);
     tabStyle?: CSSProperties;
     disabled?: boolean;
     preload?: boolean;

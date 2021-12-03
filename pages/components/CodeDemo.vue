@@ -38,7 +38,7 @@
     </div>
 
     <NModal v-model:show="showModal">
-        <NCard style="width: 60%; height: 60vh; min-width: 1280px; min-height: 768px" :bordered="false" :content-style="{ height: '100%' }">
+        <NCard style="width: 75%; height: 75vh; min-width: 1280px; min-height: 768px" :bordered="false" :content-style="{ height: '100%' }">
             <Playground />
         </NCard>
     </NModal>
@@ -71,7 +71,7 @@ const handleUpdateTab = (val: string | number) => {
 };
 const handleShowModal = () => {
     setTimeout(() => {
-        loadInitialState(codes.value[tabIndex.value].compressdSource);
+        loadInitialState(codes.value[tabIndex.value].compressedSource);
         showModal.value = true;
     }, 0);
 };

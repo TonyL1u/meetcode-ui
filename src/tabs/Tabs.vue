@@ -155,7 +155,7 @@ const getTabVNode = (maybeTabPane: SpecificVNode<MaybeTabPaneProps>) => {
                     return children?.default() ?? null;
                 } else {
                     // @ts-ignore
-                    return children?.tab ? children?.tab() : [createVNode('span', { class: 'mc-tabs-tab__label' }, [typeof tabLabel === 'string' ? createTextVNode(tabLabel) : tabLabel])];
+                    return children?.tab ? children?.tab() : [createVNode('span', { class: 'mc-tabs-tab__label' }, [typeof tabLabel === 'string' ? createTextVNode(tabLabel) : tabLabel()])];
                 }
             }
         }
