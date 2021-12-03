@@ -1,22 +1,42 @@
 // export { default as McMessage } from './Message.vue';
-import { createVNode, FunctionalComponent, render, computed, Fragment, VNode } from 'vue';
+import { createVNode, ComputedRef, computed, Ref, ref, toRefs, reactive, render, watchEffect, watch, Fragment, VNode, VNodeChild } from 'vue';
 import MessageEntity from './Message.vue';
+import type { MessageInstanceImpl, MessageApiOptions } from './interface';
 
+class MessageInstance implements MessageInstanceImpl {
+    type!: 'success' | 'warning' | 'info' | 'error';
+    content: Ref<string>;
+    node!: VNode;
+
+    constructor(options: MessageApiOptions) {
+        const { content } = toRefs(options);
+        this.content = content!;
+        this.node = createVNode(MessageEntity, null, {
+            default: () => this.content.value
+        });
+    }
+
+    close() {
+        console.log(123);
+        this.content.value = null;
+    }
+
+    destroy() {}
+}
 const container = document.createElement('div');
-container.className = `mc-message-container`;
-const messages: VNode[] = [];
-class McMessage {}
-const MsgListVNode = computed(() => {
-    return createVNode(Fragment, null, messages);
-});
+container.className = `mc_message_container`;
+document.body.appendChild(container);
 
+const vnodeList: VNode[] = [];
 const MessageApi = {
-    success() {
-        messages.push(createVNode(MessageEntity));
-        render(MsgListVNode.value, container);
-        console.log(MsgListVNode.value);
-        console.log(container);
-        document.body.appendChild(container);
+    success(options: MessageApiOptions) {
+        render(null, container);
+        const instance = new MessageInstance(options);
+        vnodeList.push(instance.node);
+        console.log(vnodeList);
+
+        render(createVNode(Fragment, null, vnodeList), container);
+        return instance;
     },
     warning() {
         return createVNode(MessageEntity);
@@ -30,9 +50,3 @@ const MessageApi = {
 };
 
 export { MessageApi };
-
-const msg: FunctionalComponent = () => {
-    return createVNode(McMessage);
-};
-
-export { msg };

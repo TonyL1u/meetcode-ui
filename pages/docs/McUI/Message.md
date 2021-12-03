@@ -3,7 +3,7 @@ import Basic from '@/message/demos/DemoBasic.vue'
 import Basic2 from '@/message/demos/DemoBasic2.vue'
 </script>
 
-# Tabs 标签页
+# Message 信息
 
 ## 演示
 

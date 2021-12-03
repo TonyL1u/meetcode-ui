@@ -1,11 +1,12 @@
 <template>
-    2
-    <!-- <msg /> -->
+    <button @click="addMsg">点击2</button>
 </template>
 
 <script lang="ts" setup>
-import { MessageApi, msg } from 'meetcode-ui';
+import { MessageApi } from 'meetcode-ui';
 
-console.log(MessageApi.success());
-console.log(msg);
+const addMsg = () => {
+    const msg = MessageApi.success();
+    console.log(msg);
+};
 </script>

@@ -1,16 +1,21 @@
 <template>
-    1
-    <!-- <msg /> -->
-    <button @click="addMsg">点击</button>
+    <button @click="addMsg">点击1</button>
+    <button @click="options.content++">点击++</button>
+    <button @click="close">关闭</button>
 </template>
 
 <script lang="ts" setup>
-import { MessageApi, msg } from 'meetcode-ui';
+import { ref, reactive } from 'vue';
+import { MessageApi } from 'meetcode-ui';
 
-console.log(MessageApi.success());
-console.log(msg);
-
+const options = reactive({ content: 1 });
+let msg = null;
 const addMsg = () => {
-    MessageApi.success();
+    msg = MessageApi.success(options);
+    console.log(msg);
+};
+
+const close = () => {
+    msg.close();
 };
 </script>

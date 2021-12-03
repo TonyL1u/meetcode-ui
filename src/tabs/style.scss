@@ -17,6 +17,7 @@
 
     &-tab--active {
         color: var(--tab-active-color);
+        font-weight: bold;
     }
 
     &-tab--disabled {
@@ -167,10 +168,11 @@
         border-radius: 2px;
         margin: 0;
         flex: 1;
-        transition: 0.2s;
+        transition: background 0.2s;
 
         &.mc-tabs-tab--active {
             background: #fff;
+            box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.02), 0px 2px 12px 0px rgba(0, 0, 0, 0.04), 0px 2px 6px 0px rgba(0, 0, 0, 0.02);
         }
     }
 }
