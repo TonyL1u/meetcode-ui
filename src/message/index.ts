@@ -1,52 +1,53 @@
 // export { default as McMessage } from './Message.vue';
-import { createVNode, ComputedRef, computed, Ref, ref, toRefs, reactive, render, watchEffect, watch, Fragment, VNode, VNodeChild } from 'vue';
-import MessageEntity from './Message.vue';
-import type { MessageInstanceImpl, MessageApiOptions } from './interface';
+import { render } from 'vue';
+import { MessageType, MessageInstanceOptions, MessageApiOptions, MessageDefaultOptions, MessageApi, MaybeMessageApiOptions } from './interface';
+import MessageInstance from './MessageInstance';
+import './style.scss';
 
-class MessageInstance implements MessageInstanceImpl {
-    type!: 'success' | 'warning' | 'info' | 'error';
-    content: Ref<string>;
-    node!: VNode;
-
-    constructor(options: MessageApiOptions) {
-        const { content } = toRefs(options);
-        this.content = content!;
-        this.node = createVNode(MessageEntity, null, {
-            default: () => this.content.value
-        });
-    }
-
-    close() {
-        console.log(123);
-        this.content.value = null;
-    }
-
-    destroy() {}
-}
+const MessageInstanceList: MessageInstance<MessageType>[] = [];
 const container = document.createElement('div');
-container.className = `mc_message_container`;
+container.className = 'mc-message-global-container';
 document.body.appendChild(container);
 
-const vnodeList: VNode[] = [];
-const MessageApi = {
-    success(options: MessageApiOptions) {
-        render(null, container);
-        const instance = new MessageInstance(options);
-        vnodeList.push(instance.node);
-        console.log(vnodeList);
+function create<T extends MessageType>(options: MessageApiOptions, type: T) {
+    const instance = new MessageInstance<T>(options, type);
+    const { VNode, wrapperEl } = instance;
+    render(VNode, wrapperEl);
+    container.appendChild(wrapperEl);
 
-        render(createVNode(Fragment, null, vnodeList), container);
-        return instance;
-    },
-    warning() {
-        return createVNode(MessageEntity);
-    },
-    info() {
-        return createVNode(MessageEntity);
-    },
-    error() {
-        return createVNode(MessageEntity);
+    MessageInstanceList.push(instance);
+    return instance;
+}
+
+function ApiConstructor<T extends MessageType>(maybeOptions?: MaybeMessageApiOptions, options: MessageApiOptions = MessageDefaultOptions, type?: T): MessageInstance<T> {
+    if (maybeOptions) {
+        if (typeof maybeOptions === 'string') {
+            return create<T>({ message: maybeOptions, ...options }, type!);
+        } else {
+            return create<T>(maybeOptions, type!);
+        }
     }
+    return create<T>(options, type!);
+}
+
+const McMessage: MessageApi = (options: MessageInstanceOptions): MessageInstance<MessageType> => {
+    return create<MessageType>(options, options.type!);
 };
 
-export { MessageApi };
+McMessage.text = (maybeOptions?: MaybeMessageApiOptions, options?: MessageApiOptions) => {
+    return ApiConstructor<'text'>(maybeOptions, options, 'text');
+};
+McMessage.success = (maybeOptions?: MaybeMessageApiOptions, options?: MessageApiOptions) => {
+    return ApiConstructor<'success'>(maybeOptions, options, 'success');
+};
+McMessage.warning = (maybeOptions?: MaybeMessageApiOptions, options?: MessageApiOptions) => {
+    return ApiConstructor<'warning'>(maybeOptions, options, 'warning');
+};
+McMessage.info = (maybeOptions?: MaybeMessageApiOptions, options?: MessageApiOptions) => {
+    return ApiConstructor<'info'>(maybeOptions, options, 'info');
+};
+McMessage.error = (maybeOptions?: MaybeMessageApiOptions, options?: MessageApiOptions) => {
+    return ApiConstructor<'error'>(maybeOptions, options, 'error');
+};
+export { McMessage };
+export type { MessageApiOptions } from './interface';

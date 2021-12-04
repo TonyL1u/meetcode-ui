@@ -32,7 +32,7 @@ const handleClick = (value: string) => {
 </script>
 
 <style lang="scss" scoped>
-#meetcode-ui .color-item {
+.color-item {
     &:hover .copy-wrapper {
         display: flex;
         animation: slide-up 0.2s ease-in-out forwards;
