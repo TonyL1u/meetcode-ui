@@ -1,32 +1,49 @@
 <script lang="ts" setup>
-import { ref, useSlots, renderSlot, createVNode, toRefs, Transition, withDirectives, vShow } from 'vue';
-import { MessageType } from './interface';
+import { watch, ref, computed, useSlots, renderSlot, createVNode, toRefs, Transition, withDirectives, vShow } from 'vue';
+import { MessageType, MessageCloseImpl } from './interface';
+import { NIcon } from 'naive-ui';
+import { CloseOutline as IconClose } from '@vicons/ionicons5';
 
 interface Props {
     type?: MessageType;
+    duration?: number;
+    closable?: boolean;
+    onClose?: MessageCloseImpl;
 }
 const props = withDefaults(defineProps<Props>(), {
-    type: 'text'
+    type: 'text',
+    duration: 2000,
+    closable: false
 });
 
 const slots = useSlots();
-const { type } = toRefs(props);
+const { type, duration, closable, onClose } = toRefs(props);
 const visible = ref(true);
 const messageCloseTimer = ref();
+const autoClose = computed(() => duration.value > 0);
 
+const closeMessage = () => {
+    visible.value = false;
+    if (onClose?.value) {
+        const { value: close } = onClose;
+        close();
+    }
+};
 const startCloseTimer = () => {
     messageCloseTimer.value = window.setTimeout(() => {
-        visible.value = false;
         console.log(1234);
+        closeMessage();
         clearCloseTimer();
-    }, 2000);
+    }, duration.value);
 };
 const clearCloseTimer = () => {
     window.clearTimeout(messageCloseTimer.value);
     messageCloseTimer.value = null;
 };
 
-startCloseTimer();
+if (autoClose.value) {
+    startCloseTimer();
+}
 
 const Render = () => {
     const messageVNode = withDirectives(
@@ -35,13 +52,28 @@ const Render = () => {
             {
                 class: ['mc-message', `mc-message--${type.value}`],
                 onMouseenter() {
-                    clearCloseTimer();
+                    autoClose.value && clearCloseTimer();
                 },
                 onMouseleave() {
-                    startCloseTimer();
+                    autoClose.value && startCloseTimer();
                 }
             },
-            [renderSlot(slots, 'default')]
+            [
+                createVNode('div', { class: 'mc-message__content' }, [renderSlot(slots, 'default')]),
+                closable.value
+                    ? createVNode(
+                          NIcon,
+                          {
+                              size: 16,
+                              class: 'mc-message__close-icon',
+                              onClick() {
+                                  closeMessage();
+                              }
+                          },
+                          { default: () => createVNode(IconClose) }
+                      )
+                    : null
+            ]
         ),
         [[vShow, visible.value]]
     );

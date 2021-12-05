@@ -12,16 +12,16 @@
     .mc-message-wrapper {
         width: min-content;
         height: min-content;
+        margin-top: 8px;
     }
 }
 
 .mc-message {
-    padding: 8px 16px;
+    padding: 8px;
     border-radius: 4px;
     line-height: 1;
     min-width: 140px;
-    text-align: center;
-    transition: 0.3s;
+    display: flex;
 
     &--text {
         background: #f5faff;
@@ -47,6 +47,15 @@
         background: #fff6f3;
         border: 1px solid #ff561b;
     }
+
+    &__content {
+        text-align: center;
+        flex: 1;
+    }
+
+    &__close-icon {
+        cursor: pointer;
+    }
 }
 
 .mc-message-slide-down-enter-active {
@@ -59,18 +68,22 @@
 
 @keyframes slide-down-in {
     from {
-        transform: translateY(-100px);
+        transform: translateY(-50px);
+        opacity: 0;
     }
     to {
         transform: translateY(0);
+        opacity: 1;
     }
 }
 
 @keyframes slide-up-out {
     from {
         transform: translateY(0);
+        opacity: 1;
     }
     to {
-        transform: translateY(-100px);
+        transform: translateY(-50px);
+        opacity: 0;
     }
 }

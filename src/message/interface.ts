@@ -1,18 +1,9 @@
-import { VNode, CSSProperties } from 'vue';
+import { VNode, CSSProperties, Ref, ref } from 'vue';
 import MessageInstance from './MessageInstance';
 
 export type MessageCloseImpl = () => void;
 export type MessageDestroyImpl = () => void;
 export type MessageType = 'text' | 'success' | 'warning' | 'info' | 'error';
-
-export interface MessageImpl {
-    options: MessageApiOptions;
-    VNode: VNode;
-    wrapperEl: HTMLElement;
-    close: MessageCloseImpl;
-    destroy: MessageDestroyImpl;
-}
-export type Message<T> = { type: T } & MessageImpl;
 
 export interface MessageInstanceOptions {
     type: MessageType;
@@ -22,18 +13,21 @@ export interface MessageInstanceOptions {
     closable?: boolean;
     duration?: number;
 }
-export type MessageApiOptions = Omit<MessageInstanceOptions, 'type'>;
+export type MessageApiOptions<T extends MessageType = 'text'> = Omit<MessageInstanceOptions, 'type'>;
 export type MaybeMessageApiOptions = string | MessageApiOptions;
-export type MessageApi = {
-    (options: MessageInstanceOptions): MessageInstance<MessageType>;
-    text: (maybeOptions?: MaybeMessageApiOptions, options?: MessageApiOptions) => MessageInstance<'text'>;
-    success: (maybeOptions?: MaybeMessageApiOptions, options?: MessageApiOptions) => MessageInstance<'success'>;
-    warning: (maybeOptions?: MaybeMessageApiOptions, options?: MessageApiOptions) => MessageInstance<'warning'>;
-    info: (maybeOptions?: MaybeMessageApiOptions, options?: MessageApiOptions) => MessageInstance<'info'>;
-    error: (maybeOptions?: MaybeMessageApiOptions, options?: MessageApiOptions) => MessageInstance<'error'>;
+export type Message = {
+    type: MessageType;
+    options: MessageApiOptions;
 };
 
-export const MessageDefaultOptions: MessageApiOptions = {
-    closable: false,
-    duration: 3000
+export type MessageApi = {
+    (options: MessageInstanceOptions): MessageInstanceOptions;
+    text: (maybeOptions?: MaybeMessageApiOptions, options?: MessageApiOptions) => MessageApiOptions<'text'>;
+    success: (maybeOptions?: MaybeMessageApiOptions, options?: MessageApiOptions) => MessageApiOptions<'success'>;
+    warning: (maybeOptions?: MaybeMessageApiOptions, options?: MessageApiOptions) => MessageApiOptions<'warning'>;
+    info: (maybeOptions?: MaybeMessageApiOptions, options?: MessageApiOptions) => MessageApiOptions<'info'>;
+    error: (maybeOptions?: MaybeMessageApiOptions, options?: MessageApiOptions) => MessageApiOptions<'error'>;
 };
+
+export const MessageGlobalContainer: HTMLDivElement = document.createElement('div');
+MessageGlobalContainer.className = 'mc-message-global-container';

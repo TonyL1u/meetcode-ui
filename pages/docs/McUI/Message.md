@@ -13,5 +13,11 @@ import Basic2 from '@/message/demos/DemoBasic2.vue'
 
 <Basic />
 
+:::
+
+::: demo codePreview=Basic2
+
+### 测试
+
 <Basic2 />
 :::
