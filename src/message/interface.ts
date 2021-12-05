@@ -16,7 +16,7 @@ export interface MessageInstanceOptions {
 export type MessageApiOptions<T extends MessageType = 'text'> = Omit<MessageInstanceOptions, 'type'>;
 export type MaybeMessageApiOptions = string | MessageApiOptions;
 export type Message = {
-    type: MessageType;
+    type: MessageType | Ref<MessageType>;
     options: MessageApiOptions;
 };
 

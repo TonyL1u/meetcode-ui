@@ -1,5 +1,5 @@
-import { reactive, toRef, watch } from 'vue';
-import { reactivePick } from '@vueuse/core';
+import { reactive, toRef, watch, ref, toRefs } from 'vue';
+import { reactivePick, toReactive, reactifyObject } from '@vueuse/core';
 import { MessageApi, MessageInstanceOptions, MessageApiOptions, MaybeMessageApiOptions, MessageType, Message } from './interface';
 import * as CSS from '@vue/runtime-dom/node_modules/csstype';
 
@@ -10,21 +10,30 @@ function createMessage(message: Message) {
 
 function ApiConstructor<T extends MessageType>(maybeOptions?: MaybeMessageApiOptions, options?: MessageApiOptions, type?: MessageType): MessageApiOptions<T> {
     let apiOptions: MessageApiOptions;
+
     if (maybeOptions) {
         if (typeof maybeOptions === 'string') {
-            apiOptions = reactive<MessageApiOptions>({
-                message: maybeOptions,
-                ...options
-            });
+            const reactiveOptions = reactive(options!);
+            apiOptions = reactive(
+                toRefs<MessageApiOptions>({
+                    message: maybeOptions,
+                    ...options
+                })
+            );
+            console.log(apiOptions);
         } else {
-            apiOptions = reactive<MessageApiOptions>(maybeOptions);
+            apiOptions = toRefs<MessageApiOptions>(maybeOptions);
         }
     } else {
-        apiOptions = reactive<MessageApiOptions>(options!);
+        apiOptions = toRefs<MessageApiOptions>(options!);
     }
     createMessage({
         type: type!,
         options: apiOptions
+    });
+    watch(apiOptions, () => {
+        console.log(apiOptions);
+        console.log(MessageReactiveList);
     });
     return apiOptions;
 }
@@ -34,7 +43,7 @@ const McMessage: MessageApi = (options: MessageInstanceOptions): MessageInstance
     const type = toRef(reactiveOptions, 'type');
     const apiOptions = reactivePick<MessageInstanceOptions, keyof MessageApiOptions>(reactiveOptions, 'message', 'className', 'closable', 'duration', 'style');
     createMessage({
-        type: type.value,
+        type,
         options: apiOptions
     });
     watch([apiOptions, type], () => {

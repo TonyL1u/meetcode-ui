@@ -8,6 +8,7 @@ const Render = () => {
         Fragment,
         null,
         MessageReactiveList.map(message => {
+            console.log(message.type);
             return createVNode(
                 Message,
                 {

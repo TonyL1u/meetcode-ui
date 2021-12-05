@@ -30,9 +30,10 @@ const handleClick = () => {
     // msg.type = 'error';
     // msg.className = 'test-12';
 
-    // msg2 = McMessage.text('text', {
-    //     duration: 0
-    // });
+    msg2 = McMessage.text('text', {
+        duration: 0
+    });
+    // msg2.message = 'test5555';
     // setTimeout(() => {
     //     msg2.message = 'test5555';
     // }, 0);
@@ -52,17 +53,17 @@ const handleClick = () => {
 
 const handleChange = () => {
     // console.log(MessageInstanceList[0]);
-    MessageInstanceList[0].type = 'success';
-    MessageInstanceList[0].options.message = 'test1';
+    // MessageInstanceList[0].type = 'success';
+    // MessageInstanceList[0].options.message = 'test1';
 };
 const handleChange2 = () => {
     // console.log(msg);
-    msg.type = 'error';
-    // msg.message = 'test2';
+    // msg.type = 'error';
+    msg.message = 'test2';
     // options.type = 'error';
     // options.message = 'test2';
     // msg.options.message = 'test2';
     // console.log(MessageInstanceList[0]);
-    // msg2.meessage = 'test3';
+    msg2.meessage = 'test3';
 };
 </script>
