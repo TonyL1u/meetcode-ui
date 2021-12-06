@@ -70,3 +70,4 @@
 2021-12-06
 
 -   如果先定义一个 options 对象，再把这个对象传入 Message，修改 Message()的返回值后，options 对象也会被改变
+-   @vue/vue3-jest 对应 jest@27，但是测试 SFC 时会报错

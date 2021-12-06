@@ -18,10 +18,13 @@
         "clean:site": "rimraf ./dist",
         "serve": "vite preview",
         "new": "sh scripts/new.sh",
-        "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --passWithNoTests"
+        "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --passWithNoTests --collectCoverage=false",
+        "test:watch": "NODE_OPTIONS=--experimental-vm-modules npx jest ---watch --verbose --coverage",
+        "test:coverage": "NODE_OPTIONS=--experimental-vm-modules npx jest"
     },
     "dependencies": {
         "@antfu/utils": "^0.3.0",
+        "@babel/core": "^7.16.0",
         "@vicons/ionicons5": "^0.11.0",
         "@vue/compiler-sfc": "^3.2.21",
         "@vueuse/components": "^6.7.4",
@@ -45,6 +48,9 @@
         "vueuc": "^0.4.15",
         "windicss": "^3.2.1"
     },
+    "peerDependencies": {
+        "vue": "^3.0.0"
+    },
     "devDependencies": {
         "@babel/preset-env": "^7.16.4",
         "@babel/preset-typescript": "^7.16.0",
@@ -59,10 +65,13 @@
         "@types/splitpanes": "^2.2.1",
         "@vicons/ionicons5": "^0.11.0",
         "@vitejs/plugin-vue": "^1.9.4",
+        "@vue/babel-preset-app": "^4.5.15",
         "@vue/test-utils": "^2.0.0-rc.17",
-        "@vue/vue3-jest": "^27.0.0-alpha.4",
-        "babel-jest": "^27.4.2",
-        "jest": "^27.4.3",
+        "babel-core": "^7.0.0-bridge.0",
+        "babel-jest": "^26.6.3",
+        "jest": "^26.0.0",
+        "jest-canvas-mock": "^2.3.1",
+        "jest-css-modules": "^2.1.0",
         "markdown-it": "^12.2.0",
         "markdown-it-anchor": "^8.4.1",
         "markdown-it-container": "^3.0.0",
@@ -72,12 +81,13 @@
         "rollup-plugin-postcss": "^4.0.1",
         "rollup-plugin-typescript2": "^0.30.0",
         "rollup-plugin-vue": "^6.0.0",
-        "ts-jest": "^27.1.0",
+        "ts-jest": "^26.5.6",
         "ts-node": "^10.4.0",
         "typescript": "^4.5.2",
         "vite": "^2.6.14",
         "vite-plugin-compression": "^0.3.5",
         "vite-plugin-md": "^0.11.0",
+        "vue-jest": "^5.0.0-alpha.10",
         "vue-tsc": "^0.3.0"
     },
     "repository": {
