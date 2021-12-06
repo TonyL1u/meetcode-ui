@@ -14,7 +14,7 @@
 <script lang="ts" setup>
 import { ref, reactive } from 'vue';
 import { NSpace, NButton } from 'naive-ui';
-// import { McMessage, MessageInstanceOptions } from 'meetcode-ui';
+// import { McMessage, MessageOptions } from 'meetcode-ui';
 
 // let msg = null;
 // let msg2 = null;
@@ -24,7 +24,7 @@ import { NSpace, NButton } from 'naive-ui';
 //     duration: 0,
 //     closable: true
 // });
-// const options2 = reactive<MessageInstanceOptions>({
+// const options2 = reactive<MessageOptions>({
 //     type: 'text',
 //     message: 'text',
 //     duration: 0,

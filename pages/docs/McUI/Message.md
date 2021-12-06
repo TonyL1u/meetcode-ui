@@ -1,4 +1,5 @@
 <script setup>
+import { NMessageProvider } from 'naive-ui';
 import Basic from '@/message/demos/DemoBasic.vue'
 import Basic2 from '@/message/demos/DemoBasic2.vue'
 </script>
@@ -19,5 +20,8 @@ import Basic2 from '@/message/demos/DemoBasic2.vue'
 
 ### 测试
 
+<NMessageProvider>
 <Basic2 />
+</NMessageProvider>
+
 :::

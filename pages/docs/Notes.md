@@ -66,3 +66,7 @@
 2021-12-03
 
 -   props 如果支持传入 VNode，类型应该定义为 () => VNodeChild
+
+2021-12-06
+
+-   如果先定义一个 options 对象，再把这个对象传入 Message，修改 Message()的返回值后，options 对象也会被改变
