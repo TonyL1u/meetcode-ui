@@ -1,19 +1,20 @@
-// export { default as McMessage } from './Message.vue';
 import { render, watch, createVNode } from 'vue';
-import MessageReactiveList from './MessageComposable';
+import { MessageCounter, destroyAllMessage } from './MessageComposable';
 import MessageEnvironment from './MessageEnvironment.vue';
+import { MessageGlobalContainer } from './interface';
 import './style.scss';
 
-const MessageGlobalContainer: HTMLDivElement = document.createElement('div');
-MessageGlobalContainer.className = 'mc-message-global-container';
 let containerAppended = false;
-
-watch(MessageReactiveList, list => {
-    if (list.length === 0) {
-        // remove message container when message list is empty
-        render(null, MessageGlobalContainer);
-        document.body.removeChild(MessageGlobalContainer);
-        containerAppended = false;
+watch(MessageCounter, () => {
+    console.log(MessageCounter.value);
+    if (MessageCounter.value === 0) {
+        setTimeout(() => {
+            // remove message container when message list is empty
+            render(null, MessageGlobalContainer);
+            document.body.removeChild(MessageGlobalContainer);
+            destroyAllMessage();
+            containerAppended = false;
+        }, 100);
     } else if (!containerAppended) {
         render(createVNode(MessageEnvironment), MessageGlobalContainer);
         document.body.appendChild(MessageGlobalContainer);
@@ -21,5 +22,6 @@ watch(MessageReactiveList, list => {
     }
 });
 
-export { McMessage } from './MessageComposable';
-export type { MessageOptions, MessageApiOptions } from './interface';
+export { default as McMessage } from './MessageApi';
+export { default as McAsyncMessage } from './MessageAsyncApi';
+export type { MessageInstance, MessageOptions, MessageApiInstance, MessageApiOptions, MessageType } from './interface';

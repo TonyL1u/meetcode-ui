@@ -71,3 +71,8 @@
 
 -   如果先定义一个 options 对象，再把这个对象传入 Message，修改 Message()的返回值后，options 对象也会被改变
 -   @vue/vue3-jest 对应 jest@27，但是测试 SFC 时会报错
+-   Message 通过 api 调用时，第一个参数传字符串，第二个参数传配置项时，视图无法响应传入参数的修改来动态修改
+-   Popover 暴露出的 el 可以用 ref 代替
+-   通过 Message() 创建的实例无法注入 close 和 el
+-   Message 打包报类型错误 `semantic error TS7031: Binding element 'expose' implicitly has an 'any' type.` ，是由于使用了 defineExpose 导致的，原因不明
+-   异步关闭最后一个 Message 时，会有 300ms 的延迟来置空 MessageReactiveList，如果此时有新的 Message 生成，300ms 后再执行 destroyAll ，会连带新生成的 Message 一起销毁

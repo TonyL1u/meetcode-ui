@@ -1,14 +1,21 @@
+<script lang="ts">
+export default {
+    name: 'Message'
+};
+</script>
+
 <script lang="ts" setup>
-import { watch, ref, computed, useSlots, renderSlot, createVNode, toRefs, Transition, withDirectives, vShow } from 'vue';
+import { ref, computed, useSlots, renderSlot, createVNode, toRefs, Transition, withDirectives, vShow, VNodeChild } from 'vue';
 import { MessageType, MessageCloseImpl } from './interface';
 import { NIcon } from 'naive-ui';
-import { CloseOutline as IconClose } from '@vicons/ionicons5';
+import { AlertCircle as IconAlert, CheckmarkCircle as IconSuccess, Warning as IconWarning, InformationCircle as IconInfo, CloseCircleSharp as IconError, CloseOutline as IconClose } from '@vicons/ionicons5';
 
 interface Props {
     type?: MessageType;
     duration?: number;
     closable?: boolean;
     destroyWhenClose?: boolean;
+    icon?: () => VNodeChild;
     onClose?: MessageCloseImpl;
 }
 const props = withDefaults(defineProps<Props>(), {
@@ -19,21 +26,23 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const slots = useSlots();
-const { type, duration, closable, destroyWhenClose, onClose } = toRefs(props);
+const { type, duration, closable, destroyWhenClose, icon, onClose } = toRefs(props);
 const visible = ref(true);
+const messageElRef = ref<HTMLElement>();
 const messageCloseTimer = ref();
 const autoClose = computed(() => duration.value > 0);
 
-const closeMessage = () => {
+const handleCloseMessage = () => {
     visible.value = false;
     if (onClose?.value) {
         const { value: close } = onClose;
+        console.log(close);
         close();
     }
 };
 const startCloseTimer = () => {
     messageCloseTimer.value = window.setTimeout(() => {
-        closeMessage();
+        handleCloseMessage();
         clearCloseTimer();
     }, duration.value);
 };
@@ -46,10 +55,56 @@ if (autoClose.value) {
     startCloseTimer();
 }
 
+const iconVNode = computed(() => {
+    return (
+        icon?.value ??
+        createVNode(
+            NIcon,
+            {
+                size: 18,
+                class: 'mc-message__icon'
+            },
+            {
+                default: () => {
+                    switch (type.value) {
+                        case 'text':
+                            return createVNode(IconAlert);
+                        case 'success':
+                            return createVNode(IconSuccess);
+                        case 'warning':
+                            return createVNode(IconWarning);
+                        case 'info':
+                            return createVNode(IconInfo);
+                        case 'error':
+                            return createVNode(IconError);
+                    }
+                }
+            }
+        )
+    );
+});
+
+const closableVNode = computed(() => {
+    return closable.value
+        ? createVNode(
+              NIcon,
+              {
+                  size: 18,
+                  class: 'mc-message__close',
+                  onClick() {
+                      handleCloseMessage();
+                  }
+              },
+              { default: () => createVNode(IconClose) }
+          )
+        : null;
+});
+
 const messageVNode = computed(() => {
     const tempVNode = createVNode(
         'div',
         {
+            ref: messageElRef,
             class: ['mc-message', `mc-message--${type.value}`],
             onMouseenter() {
                 autoClose.value && clearCloseTimer();
@@ -58,22 +113,7 @@ const messageVNode = computed(() => {
                 autoClose.value && startCloseTimer();
             }
         },
-        [
-            createVNode('div', { class: 'mc-message__content' }, [renderSlot(slots, 'default')]),
-            closable.value
-                ? createVNode(
-                      NIcon,
-                      {
-                          size: 16,
-                          class: 'mc-message__close-icon',
-                          onClick() {
-                              closeMessage();
-                          }
-                      },
-                      { default: () => createVNode(IconClose) }
-                  )
-                : null
-        ]
+        [iconVNode.value, createVNode('div', { class: 'mc-message__content' }, [renderSlot(slots, 'default')]), closableVNode.value]
     );
 
     if (destroyWhenClose.value) {
@@ -85,38 +125,6 @@ const messageVNode = computed(() => {
 });
 
 const Render = () => {
-    // const messageVNode = withDirectives(
-    //     createVNode(
-    //         'div',
-    //         {
-    //             class: ['mc-message', `mc-message--${type.value}`],
-    //             onMouseenter() {
-    //                 autoClose.value && clearCloseTimer();
-    //             },
-    //             onMouseleave() {
-    //                 autoClose.value && startCloseTimer();
-    //             }
-    //         },
-    //         [
-    //             createVNode('div', { class: 'mc-message__content' }, [renderSlot(slots, 'default')]),
-    //             closable.value
-    //                 ? createVNode(
-    //                       NIcon,
-    //                       {
-    //                           size: 16,
-    //                           class: 'mc-message__close-icon',
-    //                           onClick() {
-    //                               closeMessage();
-    //                           }
-    //                       },
-    //                       { default: () => createVNode(IconClose) }
-    //                   )
-    //                 : null
-    //         ]
-    //     ),
-    //     [[vShow, visible.value]]
-    // );
-
     return createVNode(
         Transition,
         { name: 'mc-message-slide-down', appear: true },
@@ -127,7 +135,8 @@ const Render = () => {
 };
 
 defineExpose({
-    close: closeMessage
+    close: handleCloseMessage,
+    el: messageElRef
 });
 </script>
 

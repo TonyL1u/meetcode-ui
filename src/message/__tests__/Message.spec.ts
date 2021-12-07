@@ -1,34 +1,75 @@
 import { mount } from '@vue/test-utils';
-import { defineComponent, reactive, isReactive } from 'vue';
-// import MessageEnvironment from './MessageEnvironment.vue';
-import { McMessage, MessageApiOptions, MessageOptions } from '..';
-import Test from './test.vue';
+import { reactive, isReactive, nextTick } from 'vue';
+import MessageEnvironment from '../MessageEnvironment.vue';
+import Message from '../Message.vue';
+import { McMessage, MessageApiOptions, MessageOptions, MessageType } from '../index';
+import { MessageGlobalContainer } from '../interface';
 
-test('displays message', () => {
-    const wrapper = mount(Test, {
-        props: {
-            msg: 'Hello world'
-        }
+const env = mount(MessageEnvironment);
+describe('mc-message', () => {
+    const options: MessageOptions = {
+        type: 'info',
+        message: 'test',
+        duration: 0,
+        closable: true
+    };
+    const apiOptions: MessageApiOptions<MessageType> = {
+        message: 'test',
+        duration: 0,
+        closable: true
+    };
+
+    it('container destroy', () => {
+        const textMessage = McMessage.text(apiOptions);
+        void nextTick(() => {
+            expect(MessageGlobalContainer.innerHTML).not.toBe('');
+
+            textMessage.close!();
+            setTimeout(() => {
+                expect(MessageGlobalContainer.innerHTML).toBe('1');
+            }, 300);
+        });
     });
 
-    // Assert the rendered text of the component
-    expect(wrapper.text()).toContain('Hello world');
-});
+    it('basic', () => {
+        McMessage(options);
+        McMessage.text(apiOptions);
+        McMessage.success(apiOptions);
+        McMessage.warning(apiOptions);
+        McMessage.info('info', apiOptions);
+        McMessage.error();
 
-describe('mc-message', () => {
+        void nextTick(() => {
+            expect(env.findAllComponents(Message).length).toBe(6);
+        });
+    });
+
     it('raw-options', () => {
-        const options: MessageOptions = {
-            type: 'info',
-            message: 'test',
-            duration: 0,
-            closable: true
-        };
-
-        const messageInstance = McMessage(options);
-
-        expect(messageInstance).not.toBe(options);
-        expect(isReactive(messageInstance)).toBe(true);
-        messageInstance.message = 'modify test';
+        const message = McMessage(options);
+        expect(message).not.toBe(options);
+        expect(isReactive(message)).toBe(true);
+        message.message = 'modify';
         expect(options.message).toBe('test');
+
+        const textMessage = McMessage.text(apiOptions);
+        expect(textMessage).not.toBe(options);
+        expect(isReactive(textMessage)).toBe(true);
+        options.message = 'modify text';
+        expect(textMessage.message).toBe('test');
+    });
+
+    it('reactive-options', () => {
+        const reactiveOptions = reactive(options);
+        const reactiveApiOptions = reactive(apiOptions);
+
+        const message = McMessage(reactiveOptions);
+        expect(message).toBe(reactiveOptions);
+        message.message = 'modify';
+        expect(reactiveOptions.message).toBe('modify');
+
+        const textMessage = McMessage.text(reactiveApiOptions);
+        expect(textMessage).not.toBe(reactiveApiOptions);
+        reactiveApiOptions.message = 'modify text';
+        expect(reactiveApiOptions.message).toBe('modify text');
     });
 });

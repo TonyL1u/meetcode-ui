@@ -18,7 +18,7 @@
         "clean:site": "rimraf ./dist",
         "serve": "vite preview",
         "new": "sh scripts/new.sh",
-        "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --passWithNoTests --collectCoverage=false",
+        "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --collectCoverage=false",
         "test:watch": "NODE_OPTIONS=--experimental-vm-modules npx jest ---watch --verbose --coverage",
         "test:coverage": "NODE_OPTIONS=--experimental-vm-modules npx jest"
     },

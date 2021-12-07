@@ -8,52 +8,66 @@
     align-items: center;
     width: 100vw;
     z-index: 5000;
-
-    .mc-message-wrapper {
-        width: min-content;
-        height: min-content;
-        margin-top: 8px;
-    }
 }
 
 .mc-message {
     padding: 8px;
     border-radius: 4px;
     line-height: 1;
-    min-width: 140px;
+    min-width: 220px;
     display: flex;
+    align-items: center;
+    background: #fff;
 
     &--text {
-        background: #f5faff;
-        border: 1px solid #3b97ff;
+        border: 1px solid #3b82f6;
+
+        .mc-message__icon {
+            color: #3b82f6;
+        }
     }
 
     &--success {
-        background: #f2fcf8;
-        border: 1px solid #00bf80;
+        border: 1px solid #10b981;
+
+        .mc-message__icon {
+            color: #10b981;
+        }
     }
 
     &--warning {
-        background: #fffbf4;
-        border: 1px solid #ffaa20;
+        border: 1px solid #f59e0b;
+
+        .mc-message__icon {
+            color: #f59e0b;
+        }
     }
 
     &--info {
-        background: #e5e7eb;
         border: 1px solid #6b7280;
+
+        .mc-message__icon {
+            color: #6b7280;
+        }
     }
 
     &--error {
-        background: #fff6f3;
-        border: 1px solid #ff561b;
+        border: 1px solid #ef4444;
+
+        .mc-message__icon {
+            color: #ef4444;
+        }
+    }
+
+    &__icon {
+        margin-right: 6px;
     }
 
     &__content {
-        text-align: center;
         flex: 1;
     }
 
-    &__close-icon {
+    &__close {
         cursor: pointer;
     }
 }

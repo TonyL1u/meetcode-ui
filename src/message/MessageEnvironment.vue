@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { createVNode, Fragment, ref } from 'vue';
 import Message from './Message.vue';
-import MessageReactiveList from './MessageComposable';
+import MessageReactiveList, { MessageCounter } from './MessageComposable';
 import { MessageExposeInstance } from './interface';
 
 // const messageRefs = useTemplateRefsList<MessageExposeInstance>();
@@ -14,22 +14,26 @@ const Render = () => {
         MessageReactiveList.map((message, index) => {
             const {
                 type,
-                options: { duration, className, style, closable }
+                options: { duration, className, style, closable, onClose }
             } = message;
 
-            message.options.close = () => {
-                messageRefs.value[index].close();
-            };
             return createVNode(
                 Message,
                 {
-                    ref: el => (messageRefs.value[index] = el as MessageExposeInstance),
+                    ref: ins => {
+                        const { close, el } = (ins as MessageExposeInstance) ?? {};
+                        message.options.close = close;
+                        message.options.el = el;
+                    },
                     type,
                     duration,
                     class: className,
                     style,
                     closable,
-                    index
+                    onClose: () => {
+                        onClose && onClose();
+                        MessageCounter.value--;
+                    }
                 },
                 {
                     //if use destructure message, message can't be reactive

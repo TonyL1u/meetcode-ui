@@ -299,13 +299,6 @@ void nextTick(() => {
     }
 });
 
-defineExpose({
-    syncPosition,
-    show: handleContentShow,
-    hide: handleContentHide,
-    el: contentEl
-});
-
 // 渲染
 const Render = () => {
     return createVNode(VBinder, null, {
@@ -343,6 +336,13 @@ const Render = () => {
         }
     });
 };
+
+defineExpose({
+    syncPosition,
+    show: handleContentShow,
+    hide: handleContentHide,
+    el: contentEl
+});
 </script>
 
 <template>
