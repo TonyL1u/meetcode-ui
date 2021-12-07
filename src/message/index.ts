@@ -8,13 +8,13 @@ let containerAppended = false;
 watch(MessageCounter, () => {
     console.log(MessageCounter.value);
     if (MessageCounter.value === 0) {
-        setTimeout(() => {
-            // remove message container when message list is empty
-            render(null, MessageGlobalContainer);
-            document.body.removeChild(MessageGlobalContainer);
-            destroyAllMessage();
-            containerAppended = false;
-        }, 100);
+        // setTimeout(() => {
+        // remove message container when message list is empty
+        render(null, MessageGlobalContainer);
+        document.body.removeChild(MessageGlobalContainer);
+        destroyAllMessage();
+        containerAppended = false;
+        // }, 300);
     } else if (!containerAppended) {
         render(createVNode(MessageEnvironment), MessageGlobalContainer);
         document.body.appendChild(MessageGlobalContainer);

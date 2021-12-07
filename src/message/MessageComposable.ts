@@ -45,8 +45,8 @@ function ApiConstructor<T extends MessageType>(maybeOptions?: MaybeMessageApiOpt
     if (async) {
         return new Promise<MessageApiInstance<T>>(resolve => {
             const originalOnCloseHandler = apiOptions.onClose;
-            apiOptions.onClose = () => {
-                originalOnCloseHandler && originalOnCloseHandler();
+            apiOptions.onClose = async () => {
+                originalOnCloseHandler && (await originalOnCloseHandler());
                 resolve(apiOptions);
             };
         });

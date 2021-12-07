@@ -36,7 +36,6 @@ const handleCloseMessage = () => {
     visible.value = false;
     if (onClose?.value) {
         const { value: close } = onClose;
-        console.log(close);
         close();
     }
 };

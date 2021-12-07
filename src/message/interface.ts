@@ -1,7 +1,6 @@
 import { VNodeChild, CSSProperties, Ref, ref } from 'vue';
 
-export type MessageCloseImpl = () => void;
-export type MessageDestroyImpl = () => void;
+export type MessageCloseImpl = () => void | Promise<void>;
 export type MessageType = 'text' | 'success' | 'warning' | 'info' | 'error';
 
 export interface MessageOptions {

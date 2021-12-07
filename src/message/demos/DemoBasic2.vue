@@ -10,7 +10,13 @@ import { ref, reactive, watch, render } from 'vue';
 import { McMessage, MessageInstance, MessageApiInstance, MessageType, McAsyncMessage } from 'meetcode-ui';
 
 let msg: MessageInstance;
-let msg2: MessageApiInstance<MessageType> | null;
+let msg2: MessageApiInstance<'text'> | null;
+const sleep = (wait: number) =>
+    new Promise<void>(resolve => {
+        setTimeout(() => {
+            resolve();
+        }, wait);
+    });
 const handleClick = () => {
     msg = McMessage({
         type: 'text',
@@ -26,16 +32,25 @@ const handleChange = () => {
 };
 const options = reactive({
     message: '123',
+    duration: 3000,
     closable: true,
-    onClose() {
-        console.log(1);
+    async onClose() {
+        console.log('onClose call');
+        await sleep(3000);
+        console.log('async call');
     }
 });
 
 const handleClick2 = async () => {
     await McAsyncMessage.text(options);
-    McAsyncMessage.success('测试', {
-        duration: 0,
+    console.log('then call 1');
+    await McAsyncMessage.success('测试', {
+        duration: 2000,
+        closable: true
+    });
+    console.log('then call 2');
+    await McAsyncMessage.error('测试', {
+        duration: 2000,
         closable: true
     });
     // McMessage.warning('测试', {
@@ -50,7 +65,7 @@ const handleClick2 = async () => {
     //     duration: 0,
     //     closable: true
     // });
-    console.log(msg2);
+    // console.log(msg2);
 };
 const handleChange2 = () => {
     options.message = '345';
