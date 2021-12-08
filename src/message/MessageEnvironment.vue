@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { createVNode, reactive, ref, TransitionGroup } from 'vue';
 import Message from './Message.vue';
-import MessageReactiveList, { destroyMessage, mountContainer, unmountContainer } from './MessageComposable';
+import MessageReactiveList, { closeMessage, mountContainer, unmountContainer } from './MessageComposable';
 import { MessageExposeInstance } from './interface';
 
 const handleAfterLeave = () => {
     if (MessageReactiveList.length === 0) {
-        unmountContainer();
+        // unmountContainer();
     }
 };
 
@@ -16,8 +16,8 @@ const Render = () => {
         {
             name: 'mc-message-slide-down',
             appear: true,
-            tag: 'div',
-            class: 'basic-transition-group',
+            // tag: 'span',
+            // class: 'basic-transition-group',
             onAfterLeave: handleAfterLeave
         },
         {
@@ -35,8 +35,8 @@ const Render = () => {
                             key,
                             ref: ins => {
                                 const { close, el } = (ins as MessageExposeInstance) ?? {};
-                                message.options.close = close;
-                                message.options.el = el;
+                                // message.options.close = close;
+                                // message.options.el = el;
                             },
                             type,
                             duration,
@@ -45,7 +45,7 @@ const Render = () => {
                             closable,
                             onClose: () => {
                                 onClose && onClose();
-                                destroyMessage(key);
+                                closeMessage(key);
                             }
                         },
                         {

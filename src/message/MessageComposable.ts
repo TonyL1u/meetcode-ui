@@ -1,6 +1,6 @@
 import { reactive, render, createVNode, ref, toRefs } from 'vue';
 import { responsiveTarget, createKey } from '../_utils_';
-import { MessageApiOptions, MaybeMessageApiOptions, MessageType, Message, MessageApiInstance, CreateMessageOptions } from './interface';
+import { MessageApiOptions, MaybeMessageApiOptions, MessageType, Message, MessageApiInstance } from './interface';
 import MessageEnvironment from './MessageEnvironment.vue';
 import * as CSS from '@vue/runtime-dom/node_modules/csstype';
 
@@ -21,20 +21,20 @@ function unmountContainer() {
     containerMounted.value = false;
 }
 
-function createMessage(options: CreateMessageOptions) {
-    const key = createKey('message');
+function createMessage(message: Message) {
     // @ts-ignore
-    MessageReactiveList.push({ key, ...options });
+    MessageReactiveList.push(message);
 }
 
-function destroyMessage(key: string) {
+function closeMessage(key: string) {
     const index = MessageReactiveList.findIndex(m => m.key === key);
-    MessageReactiveList.splice(index, 1);
+    index > -1 && MessageReactiveList.splice(index, 1);
 }
 
 function ApiConstructor<T extends MessageType>(maybeOptions?: MaybeMessageApiOptions<T>, options?: MessageApiOptions<T>, type?: MessageType, async?: false): MessageApiInstance<T>;
 function ApiConstructor<T extends MessageType>(maybeOptions?: MaybeMessageApiOptions<T>, options?: MessageApiOptions<T>, type?: MessageType, async?: true): Promise<MessageApiInstance<T>>;
 function ApiConstructor<T extends MessageType>(maybeOptions?: MaybeMessageApiOptions<T>, options: MessageApiOptions<T> = {}, type: MessageType = 'text', async: boolean = false): MessageApiInstance<T> | Promise<MessageApiInstance<T>> {
+    const key = createKey('message');
     let apiOptions: MessageApiOptions<T>;
 
     if (maybeOptions) {
@@ -53,9 +53,14 @@ function ApiConstructor<T extends MessageType>(maybeOptions?: MaybeMessageApiOpt
         apiOptions = reactive(toRefs<MessageApiOptions<T>>(reactiveOptions));
     }
     createMessage({
+        key,
         type,
         options: apiOptions
     });
+    (apiOptions as MessageApiInstance<T>).close = () => {
+        apiOptions.onClose?.();
+        closeMessage(key);
+    };
 
     if (async) {
         return new Promise<MessageApiInstance<T>>(resolve => {
@@ -70,4 +75,4 @@ function ApiConstructor<T extends MessageType>(maybeOptions?: MaybeMessageApiOpt
 }
 
 export default MessageReactiveList;
-export { createMessage, destroyMessage, ApiConstructor, containerMounted, mountContainer, unmountContainer };
+export { createMessage, closeMessage, ApiConstructor, containerMounted, mountContainer, unmountContainer };

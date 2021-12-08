@@ -24,7 +24,6 @@ export type Message = {
     type: MessageType | Ref<MessageType | undefined>;
     options: Partial<MessageApiInstance<MessageType>>;
 };
-export type CreateMessageOptions = Omit<Message, 'key'>;
 export type MessageApi = {
     (options: MessageOptions): MessageInstance;
     text: (maybeOptions?: MaybeMessageApiOptions<'text'>, options?: MessageApiOptions<'text'>) => MessageApiInstance<'text'>;

@@ -84,3 +84,4 @@
 
 -   在 transition-group 中使用 VNode 直接渲染，过渡效果有问题，并且插入会报错报错
 -   在 VNode 中使用 ref，transition 过渡效果消失
+-   销毁 message 时有 bug

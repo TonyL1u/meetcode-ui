@@ -10,7 +10,7 @@
     z-index: 5000;
 
     .basic-transition-group {
-        width: 0;
+        min-width: 220px;
     }
 }
 
@@ -18,7 +18,7 @@
     padding: 8px;
     border-radius: 4px;
     line-height: 1;
-    width: 220px;
+    min-width: 220px;
     display: flex;
     align-items: center;
     background: #fff;
@@ -75,6 +75,7 @@
 
     &__close {
         cursor: pointer;
+        margin-left: 4px;
     }
 }
 

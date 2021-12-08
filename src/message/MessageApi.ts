@@ -1,22 +1,23 @@
 import { reactive, toRef, watch, ref, toRefs, nextTick } from 'vue';
-import { reactiveOmit, responsiveTarget } from '../_utils_';
+import { reactiveOmit, responsiveTarget, createKey } from '../_utils_';
 import { MessageApi, MessageOptions, MessageApiOptions, MessageApiInstance, MaybeMessageApiOptions, MessageInstance, MessageType } from './interface';
-import { createMessage, ApiConstructor } from './MessageComposable';
+import { createMessage, closeMessage, ApiConstructor } from './MessageComposable';
 
 const McMessage: MessageApi = (options: MessageOptions): MessageInstance => {
+    const key = createKey('message');
     const reactiveOptions = responsiveTarget(options) as MessageInstance;
     const type = toRef(reactiveOptions, 'type');
     const apiOptions = reactiveOmit<MessageOptions, 'type'>(reactiveOptions, 'type') as MessageApiInstance<MessageType>;
     createMessage({
+        key,
         type,
         options: apiOptions
     });
 
-    // hack-in close and el
-    // nextTick(() => {
-    //     reactiveOptions.close = apiOptions.close;
-    //     reactiveOptions.el = apiOptions.el;
-    // });
+    reactiveOptions.close = () => {
+        reactiveOptions.onClose?.();
+        closeMessage(key);
+    };
 
     return reactiveOptions;
 };
