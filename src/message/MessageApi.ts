@@ -12,7 +12,7 @@ const McMessage: MessageApi = (options: MessageOptions): MessageInstance => {
         options: apiOptions
     });
 
-    return reactiveOptions;
+    return reactiveOptions as MessageInstance;
 };
 McMessage.text = (maybeOptions?: MaybeMessageApiOptions<'text'>, options?: MessageApiOptions<'text'>) => {
     return ApiConstructor<'text'>(maybeOptions, options, 'text');

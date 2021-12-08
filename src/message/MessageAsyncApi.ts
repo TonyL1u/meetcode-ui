@@ -16,7 +16,7 @@ const McAsyncMessage: MessageAsyncApi = (options: MessageOptions): Promise<Messa
         const originalOnCloseHandler = apiOptions.onClose;
         apiOptions.onClose = () => {
             originalOnCloseHandler && originalOnCloseHandler();
-            resolve(reactiveOptions);
+            resolve(reactiveOptions as MessageInstance);
         };
     });
 };

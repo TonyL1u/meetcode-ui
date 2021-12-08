@@ -47,11 +47,11 @@ function ApiConstructor<T extends MessageType>(maybeOptions?: MaybeMessageApiOpt
             const originalOnCloseHandler = apiOptions.onClose;
             apiOptions.onClose = async () => {
                 originalOnCloseHandler && (await originalOnCloseHandler());
-                resolve(apiOptions);
+                resolve(apiOptions as MessageApiInstance<T>);
             };
         });
     }
-    return apiOptions;
+    return apiOptions as MessageApiInstance<T>;
 }
 
 export default MessageReactiveList;

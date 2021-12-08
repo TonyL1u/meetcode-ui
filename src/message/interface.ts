@@ -4,7 +4,7 @@ export type MessageCloseImpl = () => void | Promise<void>;
 export type MessageType = 'text' | 'success' | 'warning' | 'info' | 'error';
 
 export interface MessageOptions {
-    type: MessageType;
+    type?: MessageType;
     className?: string | { [key: string]: boolean } | Array<string | { [key: string]: boolean }>;
     style?: CSSProperties;
     message?: string;
@@ -21,8 +21,8 @@ export type MessageApiInstance<T extends MessageType> = MessageExposeInstance & 
 
 export type MaybeMessageApiOptions<T extends MessageType> = string | MessageApiOptions<T>;
 export type Message = {
-    type: MessageType | Ref<MessageType>;
-    options: MessageApiInstance<MessageType>;
+    type: MessageType | Ref<MessageType | undefined>;
+    options: Partial<MessageApiInstance<MessageType>>;
 };
 export type MessageApi = {
     (options: MessageOptions): MessageInstance;
@@ -43,8 +43,8 @@ export type MessageAsyncApi = {
 };
 
 export interface MessageExposeInstance {
-    close?: MessageCloseImpl;
-    el?: HTMLElement;
+    close: MessageCloseImpl;
+    el: HTMLElement;
 }
 
 export const MessageGlobalContainer: HTMLDivElement = document.createElement('div');

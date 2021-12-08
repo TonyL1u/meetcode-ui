@@ -36,7 +36,7 @@ const Render = () => {
                     }
                 },
                 {
-                    //if use destructure message, message can't be reactive
+                    //if destructure message, message can't be reactive
                     default: () => message.options.message
                 }
             );
