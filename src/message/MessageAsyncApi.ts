@@ -1,22 +1,28 @@
-import { reactive, toRef, watch, ref, toRefs } from 'vue';
+import { reactive, toRef, watch, ref, toRefs, nextTick } from 'vue';
 import { reactiveOmit, responsiveTarget } from '../_utils_';
-import { MessageAsyncApi, MessageOptions, MessageApiOptions, MaybeMessageApiOptions, MessageInstance } from './interface';
+import { MessageAsyncApi, MessageOptions, MessageApiOptions, MessageApiInstance, MaybeMessageApiOptions, MessageInstance, MessageType } from './interface';
 import { createMessage, ApiConstructor } from './MessageComposable';
 
 const McAsyncMessage: MessageAsyncApi = (options: MessageOptions): Promise<MessageInstance> => {
-    const reactiveOptions = responsiveTarget(options);
+    const reactiveOptions = responsiveTarget(options) as MessageInstance;
     const type = toRef(reactiveOptions, 'type');
-    const apiOptions = reactiveOmit<MessageOptions, 'type'>(reactiveOptions, 'type');
+    const apiOptions = reactiveOmit<MessageOptions, 'type'>(reactiveOptions, 'type') as MessageApiInstance<MessageType>;
     createMessage({
         type,
         options: apiOptions
+    });
+
+    // hack-in close and el
+    nextTick(() => {
+        reactiveOptions.close = apiOptions.close;
+        reactiveOptions.el = apiOptions.el;
     });
 
     return new Promise<MessageInstance>(resolve => {
         const originalOnCloseHandler = apiOptions.onClose;
         apiOptions.onClose = () => {
             originalOnCloseHandler && originalOnCloseHandler();
-            resolve(reactiveOptions as MessageInstance);
+            resolve(reactiveOptions);
         };
     });
 };

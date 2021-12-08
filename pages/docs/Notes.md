@@ -75,4 +75,12 @@
 -   Popover 暴露出的 el 可以用 ref 代替
 -   通过 Message() 创建的实例无法注入 close 和 el
 -   Message 打包报类型错误 `semantic error TS7031: Binding element 'expose' implicitly has an 'any' type.` ，是由于使用了 defineExpose 导致的，原因不明
+
+2021-12-07
+
 -   异步关闭最后一个 Message 时，会有 300ms 的延迟来置空 MessageReactiveList，如果此时有新的 Message 生成，300ms 后再执行 destroyAll ，会连带新生成的 Message 一起销毁
+
+2021-12-08
+
+-   在 transition-group 中使用 VNode 直接渲染，过渡效果有问题，并且插入会报错报错
+-   在 VNode 中使用 ref，transition 过渡效果消失

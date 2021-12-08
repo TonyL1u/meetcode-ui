@@ -1,5 +1,8 @@
 <template>
-    <p>{{ msg }}</p>
+    <p>
+        {{ msg }}
+        <slot></slot>
+    </p>
 </template>
 
 <script lang="ts" setup>

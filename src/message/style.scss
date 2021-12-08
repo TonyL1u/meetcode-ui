@@ -8,16 +8,22 @@
     align-items: center;
     width: 100vw;
     z-index: 5000;
+
+    .basic-transition-group {
+        width: 0;
+    }
 }
 
 .mc-message {
     padding: 8px;
     border-radius: 4px;
     line-height: 1;
-    min-width: 220px;
+    width: 220px;
     display: flex;
     align-items: center;
     background: #fff;
+    margin-top: 8px;
+    transition: all 0.3s ease;
 
     &--text {
         border: 1px solid #3b82f6;
@@ -72,32 +78,12 @@
     }
 }
 
-.mc-message-slide-down-enter-active {
-    animation: slide-down-in 0.3s;
+.mc-message-slide-down-enter-from,
+.mc-message-slide-down-leave-to {
+    opacity: 0;
+    transform: translateY(-30px);
 }
 
 .mc-message-slide-down-leave-active {
-    animation: slide-up-out 0.3s;
-}
-
-@keyframes slide-down-in {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slide-up-out {
-    from {
-        transform: translateY(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
+    position: absolute;
 }

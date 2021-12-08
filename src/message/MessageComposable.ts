@@ -1,20 +1,35 @@
-import { reactive, toRef, watch, ref, toRefs } from 'vue';
-import { responsiveTarget } from '../_utils_';
-import { MessageApiOptions, MaybeMessageApiOptions, MessageType, Message, MessageApiInstance } from './interface';
+import { reactive, render, createVNode, ref, toRefs } from 'vue';
+import { responsiveTarget, createKey } from '../_utils_';
+import { MessageApiOptions, MaybeMessageApiOptions, MessageType, Message, MessageApiInstance, CreateMessageOptions } from './interface';
+import MessageEnvironment from './MessageEnvironment.vue';
 import * as CSS from '@vue/runtime-dom/node_modules/csstype';
 
+const MessageGlobalContainer: HTMLDivElement = document.createElement('div');
+const containerMounted = ref(false);
+MessageGlobalContainer.className = 'mc-message-global-container';
 const MessageReactiveList = reactive<Message[]>([]);
-const MessageCounter = ref(0);
 
-function destroyAllMessage() {
-    // can't do this directly: MessageReactiveList = []
-    MessageReactiveList.length = 0;
+function mountContainer() {
+    render(createVNode(MessageEnvironment), MessageGlobalContainer);
+    document.body.appendChild(MessageGlobalContainer);
+    containerMounted.value = true;
 }
 
-function createMessage(message: Message) {
+function unmountContainer() {
+    render(null, MessageGlobalContainer);
+    document.body.removeChild(MessageGlobalContainer);
+    containerMounted.value = false;
+}
+
+function createMessage(options: CreateMessageOptions) {
+    const key = createKey('message');
     // @ts-ignore
-    MessageReactiveList.push(message);
-    MessageCounter.value++;
+    MessageReactiveList.push({ key, ...options });
+}
+
+function destroyMessage(key: string) {
+    const index = MessageReactiveList.findIndex(m => m.key === key);
+    MessageReactiveList.splice(index, 1);
 }
 
 function ApiConstructor<T extends MessageType>(maybeOptions?: MaybeMessageApiOptions<T>, options?: MessageApiOptions<T>, type?: MessageType, async?: false): MessageApiInstance<T>;
@@ -55,4 +70,4 @@ function ApiConstructor<T extends MessageType>(maybeOptions?: MaybeMessageApiOpt
 }
 
 export default MessageReactiveList;
-export { MessageCounter, destroyAllMessage, createMessage, ApiConstructor };
+export { createMessage, destroyMessage, ApiConstructor, containerMounted, mountContainer, unmountContainer };
