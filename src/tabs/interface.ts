@@ -18,6 +18,7 @@ export interface TabPaneProps {
     name?: TabPaneName;
     tabLabel?: string | (() => VNodeChild);
     tabStyle?: string | CSSProperties;
+    tabClass?: string;
     disabled?: boolean;
     preload?: boolean;
     lazy?: boolean;

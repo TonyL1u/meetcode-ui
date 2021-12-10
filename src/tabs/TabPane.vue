@@ -14,6 +14,7 @@ interface Props {
     name?: string | number;
     tabLabel?: string | (() => VNodeChild);
     tabStyle?: CSSProperties;
+    tabClass?: string;
     disabled?: boolean;
     preload?: boolean;
     lazy?: boolean;

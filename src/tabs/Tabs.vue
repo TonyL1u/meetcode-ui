@@ -135,14 +135,14 @@ provide(tabsInjectionKey, activeTabName);
 
 const getTabVNode = (maybeTabPane: SpecificVNode<MaybeTabPaneProps>) => {
     const { children, props, type } = maybeTabPane;
-    const { name, tabLabel = '', tabStyle = '', disabled = false } = kebabCaseEscape<MaybeTabPaneProps>(props) ?? {};
+    const { name, tabLabel = '', tabStyle = '', tabClass = '', disabled = false } = kebabCaseEscape<MaybeTabPaneProps>(props) ?? {};
     const isTab = (<any>type).iKey === tabIKey;
     const isActive = activeTabName.value === name;
     const isDisabled = typeof disabled === 'boolean' ? disabled : disabled === '';
     const tabVNode = createVNode(
         McTab,
         mergeProps(isTab ? maybeTabPane.props ?? {} : { style: tabStyle }, {
-            class: { 'mc-tabs-tab--active': isActive, 'mc-tabs-tab--disabled': isDisabled },
+            class: [{ 'mc-tabs-tab--active': isActive, 'mc-tabs-tab--disabled': isDisabled }, tabClass],
             onClick: () => {
                 if (isDisabled) return;
                 name && handleTabClick(name);

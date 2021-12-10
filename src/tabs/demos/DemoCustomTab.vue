@@ -27,20 +27,23 @@
             </template>
             User
         </McTabPane>
-        <McTabPane name="setting">
-            <template #tab>
-                <NIcon style="margin-right: 8px">
-                    <IconSetting />
-                </NIcon>
-                Setting
-            </template>
-            Setting
-        </McTabPane>
+        <McTabPane name="setting" :tab-label="tabLabelVNode">Setting</McTabPane>
     </McTabs>
 </template>
 
 <script lang="ts" setup>
 import { NIcon } from 'naive-ui';
+import { createVNode, createTextVNode } from 'vue';
 import { McTabs, McTabPane } from 'meetcode-ui';
 import { HomeOutline as IconHome, ChatbubbleOutline as IconChat, SettingsOutline as IconSetting, PersonOutline as IconUser } from '@vicons/ionicons5';
+
+const tabLabelVNode = () => {
+    return createVNode(
+        'div',
+        {
+            class: 'mc-flex mc-justify-evenly mc-items-center'
+        },
+        [createVNode(NIcon, { style: 'margin-right: 8px' }, { default: () => createVNode(IconSetting) }), createTextVNode('Setting')]
+    );
+};
 </script>

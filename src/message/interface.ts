@@ -1,4 +1,4 @@
-import { VNodeChild, CSSProperties, Ref, ref } from 'vue';
+import { VNodeChild, CSSProperties, Ref } from 'vue';
 
 export type MessageCloseImpl = () => void | Promise<void>;
 export type MessageType = 'text' | 'success' | 'warning' | 'info' | 'error';

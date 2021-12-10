@@ -133,7 +133,8 @@ import BeforeTabSwitch from '@/tabs/demos/DemoBeforeTabSwitch.vue'
 | :-------: | :-----------------: | :---------: | :------------------: |
 |   name    | `string \| number`  | `undefined` |  标签名称，唯一标识  |
 | tab-label |  `string \| VNode`  | `undefined` | 显示在标签头部的内容 |
-| tab-style | ` string \| object` |   `false`   |       标签样式       |
+| tab-style | ` string \| object` | `undefined` |       标签样式       |
+| tab-class |      ` string`      | `undefined` |       标签类名       |
 | disabled  |      `boolean`      |   `false`   |     是否禁用标签     |
 |  preload  |      `boolean`      |   `false`   |      面板预加载      |
 |   lazy    |      `boolean`      |   `false`   |     面板延迟加载     |
