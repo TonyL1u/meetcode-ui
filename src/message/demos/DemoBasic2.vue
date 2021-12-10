@@ -39,7 +39,7 @@ const handleChange = () => {
 };
 const options = reactive({
     message: '1212312weqweqweqw123123',
-    duration: 0,
+    duration: 2000,
     closable: true,
     async onClose() {
         console.log('onClose call');
@@ -51,10 +51,10 @@ const options = reactive({
 const handleClick2 = async () => {
     msg2 = McMessage.text(options);
     console.log('then call 1');
-    // await McAsyncMessage.success('测试', {
-    //     duration: 2000,
-    //     closable: true
-    // });
+    await McAsyncMessage.success('测试', {
+        duration: 2000,
+        closable: true
+    });
     // console.log('then call 2');
     // await McAsyncMessage.error('测试', {
     //     duration: 2000,

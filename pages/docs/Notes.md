@@ -85,3 +85,7 @@
 -   在 transition-group 中使用 VNode 直接渲染，过渡效果有问题，并且插入会报错报错
 -   在 VNode 中使用 ref，transition 过渡效果消失
 -   销毁 message 时有 bug
+
+2021-12-09
+
+-   使用 transition-group 并添加 tag 时，最后一个元素消失的位置会出现偏移；如果不添加 tag，并且外层包裹的元素设置 display: flex ，元素消失时的位置不正确

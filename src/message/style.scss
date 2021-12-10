@@ -8,17 +8,13 @@
     align-items: center;
     width: 100vw;
     z-index: 5000;
-
-    .basic-transition-group {
-        min-width: 220px;
-    }
 }
 
 .mc-message {
     padding: 8px;
     border-radius: 4px;
     line-height: 1;
-    min-width: 220px;
+    width: max-content;
     display: flex;
     align-items: center;
     background: #fff;

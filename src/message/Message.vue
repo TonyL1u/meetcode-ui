@@ -5,7 +5,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { ref, computed, useSlots, renderSlot, createVNode, toRefs, Transition, withDirectives, vShow, VNodeChild } from 'vue';
+import { ref, computed, useSlots, renderSlot, createVNode, toRefs, VNode, withDirectives, vShow, VNodeChild } from 'vue';
 import { MessageType, MessageCloseImpl } from './interface';
 import { NIcon } from 'naive-ui';
 import { AlertCircle as IconAlert, CheckmarkCircle as IconSuccess, Warning as IconWarning, InformationCircle as IconInfo, CloseCircleSharp as IconError, CloseOutline as IconClose } from '@vicons/ionicons5';
@@ -49,9 +49,9 @@ if (autoClose.value) {
     startCloseTimer();
 }
 
-const iconVNode = computed(() => {
+const iconVNode = computed<VNodeChild | VNode>(() => {
     return (
-        icon?.value ??
+        icon?.value?.() ??
         createVNode(
             NIcon,
             {
@@ -78,7 +78,7 @@ const iconVNode = computed(() => {
     );
 });
 
-const closableVNode = computed(() => {
+const closableVNode = computed<VNode | null>(() => {
     return closable.value
         ? createVNode(
               NIcon,
@@ -94,7 +94,7 @@ const closableVNode = computed(() => {
         : null;
 });
 
-const Render = () => {
+const Render = (): VNode => {
     return createVNode(
         'div',
         {

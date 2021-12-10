@@ -1,61 +1,64 @@
 <script lang="ts" setup>
-import { createVNode, reactive, ref, TransitionGroup } from 'vue';
-import Message from './Message.vue';
-import MessageReactiveList, { closeMessage, mountContainer, unmountContainer } from './MessageComposable';
-import { MessageExposeInstance } from './interface';
+import { createVNode, createCommentVNode, TransitionGroup } from 'vue';
+import MessageEntity from './Message.vue';
+import MessageReactiveList, { closeMessage, unmountContainer } from './MessageComposable';
+import { MessageExposeInstance, Message } from './interface';
 
 const handleAfterLeave = () => {
-    if (MessageReactiveList.length === 0) {
-        // unmountContainer();
-    }
+    // console.log(MessageReactiveList.length);
+    // if (MessageReactiveList.length) {
+    //     unmountContainer();
+    // }
+};
+
+const getMessageEntityVNode = (message: Message) => {
+    const {
+        key,
+        type,
+        options: { duration, className, style, closable, onClose }
+    } = message;
+
+    return createVNode(
+        MessageEntity,
+        {
+            key,
+            ref: ins => {
+                const { close, el } = (ins as MessageExposeInstance) ?? {};
+                // message.options.close = close;
+                // message.options.el = el;
+            },
+            type,
+            duration,
+            class: className,
+            style,
+            closable,
+            onClose: () => {
+                onClose && onClose();
+                closeMessage(key);
+            }
+        },
+        {
+            //if destructure message, message can't be reactive
+            default: () => message.options.message
+        }
+    );
 };
 
 const Render = () => {
     return createVNode(
         TransitionGroup,
-        {
-            name: 'mc-message-slide-down',
-            appear: true,
-            // tag: 'span',
-            // class: 'basic-transition-group',
-            onAfterLeave: handleAfterLeave
-        },
-        {
-            default: () =>
-                MessageReactiveList.map((message, index) => {
-                    const {
-                        key,
-                        type,
-                        options: { duration, className, style, closable, onClose }
-                    } = message;
-
-                    return createVNode(
-                        Message,
-                        {
-                            key,
-                            ref: ins => {
-                                const { close, el } = (ins as MessageExposeInstance) ?? {};
-                                // message.options.close = close;
-                                // message.options.el = el;
-                            },
-                            type,
-                            duration,
-                            class: className,
-                            style,
-                            closable,
-                            onClose: () => {
-                                onClose && onClose();
-                                closeMessage(key);
-                            }
-                        },
-                        {
-                            //if destructure message, message can't be reactive
-                            default: () => message.options.message
-                        }
-                    );
-                })
-        }
+        { name: 'mc-message-slide-down', appear: true, tag: 'div', class: 'mc-message-global-container', onAfterLeave: handleAfterLeave },
+        { default: () => MessageReactiveList.map(message => getMessageEntityVNode(message)) }
     );
+    return MessageReactiveList.length > 0
+        ? createVNode(
+              'div',
+              {
+                  class: 'mc-message-global-container'
+              },
+              [createVNode(TransitionGroup, { name: 'mc-message-slide-down', appear: true }, { default: () => MessageReactiveList.map(message => getMessageEntityVNode(message)) })]
+          )
+        : createCommentVNode('', true);
 };
 </script>
 

@@ -4,25 +4,23 @@ import { MessageApiOptions, MaybeMessageApiOptions, MessageType, Message, Messag
 import MessageEnvironment from './MessageEnvironment.vue';
 import * as CSS from '@vue/runtime-dom/node_modules/csstype';
 
-const MessageGlobalContainer: HTMLDivElement = document.createElement('div');
 const containerMounted = ref(false);
-MessageGlobalContainer.className = 'mc-message-global-container';
-const MessageReactiveList = reactive<Message[]>([]);
+const MessageReactiveList: Message[] = reactive([]);
 
 function mountContainer() {
-    render(createVNode(MessageEnvironment), MessageGlobalContainer);
-    document.body.appendChild(MessageGlobalContainer);
+    render(createVNode(MessageEnvironment), document.body);
     containerMounted.value = true;
 }
 
 function unmountContainer() {
-    render(null, MessageGlobalContainer);
-    document.body.removeChild(MessageGlobalContainer);
+    const container = document.querySelector('.mc-message-global-container');
+    if (container) {
+        document.body.removeChild(container);
+    }
     containerMounted.value = false;
 }
 
 function createMessage(message: Message) {
-    // @ts-ignore
     MessageReactiveList.push(message);
 }
 
