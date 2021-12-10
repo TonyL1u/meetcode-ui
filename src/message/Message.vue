@@ -5,7 +5,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { ref, computed, useSlots, renderSlot, createVNode, toRefs, Transition, withDirectives, vShow, VNodeChild } from 'vue';
+import { ref, computed, useSlots, renderSlot, createVNode, toRefs, VNode, withDirectives, vShow, VNodeChild } from 'vue';
 import { MessageType, MessageCloseImpl } from './interface';
 import { NIcon } from 'naive-ui';
 import { AlertCircle as IconAlert, CheckmarkCircle as IconSuccess, Warning as IconWarning, InformationCircle as IconInfo, CloseCircleSharp as IconError, CloseOutline as IconClose } from '@vicons/ionicons5';
@@ -14,30 +14,25 @@ interface Props {
     type?: MessageType;
     duration?: number;
     closable?: boolean;
-    destroyWhenClose?: boolean;
     icon?: () => VNodeChild;
-    onClose?: MessageCloseImpl;
 }
 const props = withDefaults(defineProps<Props>(), {
     type: 'text',
     duration: 2000,
-    closable: false,
-    destroyWhenClose: true
+    closable: false
 });
+const emit = defineEmits<{
+    (e: 'close'): void;
+}>();
 
 const slots = useSlots();
-const { type, duration, closable, destroyWhenClose, icon, onClose } = toRefs(props);
-const visible = ref(true);
+const { type, duration, closable, icon } = toRefs(props);
 const messageElRef = ref<HTMLElement>();
 const messageCloseTimer = ref();
 const autoClose = computed(() => duration.value > 0);
 
 const handleCloseMessage = () => {
-    visible.value = false;
-    if (onClose?.value) {
-        const { value: close } = onClose;
-        close();
-    }
+    emit('close');
 };
 const startCloseTimer = () => {
     messageCloseTimer.value = window.setTimeout(() => {
@@ -54,9 +49,9 @@ if (autoClose.value) {
     startCloseTimer();
 }
 
-const iconVNode = computed(() => {
+const iconVNode = computed<VNodeChild | VNode>(() => {
     return (
-        icon?.value ??
+        icon?.value?.() ??
         createVNode(
             NIcon,
             {
@@ -83,7 +78,7 @@ const iconVNode = computed(() => {
     );
 });
 
-const closableVNode = computed(() => {
+const closableVNode = computed<VNode | null>(() => {
     return closable.value
         ? createVNode(
               NIcon,
@@ -99,11 +94,11 @@ const closableVNode = computed(() => {
         : null;
 });
 
-const messageVNode = computed(() => {
-    const tempVNode = createVNode(
+const Render = (): VNode => {
+    return createVNode(
         'div',
         {
-            ref: messageElRef,
+            // ref: messageElRef,
             class: ['mc-message', `mc-message--${type.value}`],
             onMouseenter() {
                 autoClose.value && clearCloseTimer();
@@ -113,23 +108,6 @@ const messageVNode = computed(() => {
             }
         },
         [iconVNode.value, createVNode('div', { class: 'mc-message__content' }, [renderSlot(slots, 'default')]), closableVNode.value]
-    );
-
-    if (destroyWhenClose.value) {
-        if (!visible.value) return null;
-        return tempVNode;
-    } else {
-        return withDirectives(tempVNode, [[vShow, visible.value]]);
-    }
-});
-
-const Render = () => {
-    return createVNode(
-        Transition,
-        { name: 'mc-message-slide-down', appear: true },
-        {
-            default: () => messageVNode.value
-        }
     );
 };
 

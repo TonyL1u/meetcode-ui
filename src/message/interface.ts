@@ -10,7 +10,6 @@ export interface MessageOptions {
     message?: string;
     closable?: boolean;
     duration?: number;
-    destroyWhenClose?: boolean;
     icon?: () => VNodeChild;
     onClose?: MessageCloseImpl;
 }
@@ -21,6 +20,7 @@ export type MessageApiInstance<T extends MessageType> = MessageExposeInstance & 
 
 export type MaybeMessageApiOptions<T extends MessageType> = string | MessageApiOptions<T>;
 export type Message = {
+    readonly key: string;
     type: MessageType | Ref<MessageType | undefined>;
     options: Partial<MessageApiInstance<MessageType>>;
 };
@@ -46,6 +46,3 @@ export interface MessageExposeInstance {
     close: MessageCloseImpl;
     el: HTMLElement;
 }
-
-export const MessageGlobalContainer: HTMLDivElement = document.createElement('div');
-MessageGlobalContainer.className = 'mc-message-global-container';
