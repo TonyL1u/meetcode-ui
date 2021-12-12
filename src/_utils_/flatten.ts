@@ -8,7 +8,7 @@ import { SpecificVNode } from './tsutils';
  * @param result
  * @returns
  */
-export function flatten<T = { [key: string]: any }>(vNodes: Array<SpecificVNode<T>>, identificationKey: Symbol | Symbol[] | null = null, mode = false, result: Array<SpecificVNode<T>> = []) {
+export function flatten<T = Record<string, any>>(vNodes: Array<SpecificVNode<T>>, identificationKey: Symbol | Symbol[] | null = null, mode = false, result: Array<SpecificVNode<T>> = []) {
     const filterVNodes = identificationKey
         ? vNodes.filter(vNode => {
               const { iKey } = <any>vNode.type;

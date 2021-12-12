@@ -19,15 +19,18 @@
 
 <script lang="ts" setup>
 import { NButton, NSpace } from 'naive-ui';
-import { McPopover } from 'meetcode-ui';
+import { McPopover, McMessage } from 'meetcode-ui';
 
 const handleShow = (val: boolean) => {
-    console.log(val);
+    McMessage.text('Popover Show');
 };
 const handleHide = (val: boolean) => {
-    console.log(val);
+    McMessage.warning('Popover Hide');
 };
 const handleUpdateShow = (val: boolean) => {
-    console.log(val);
+    McMessage({
+        type: val ? 'success' : 'error',
+        message: val ? 'Popover Show' : 'Popover Hide'
+    });
 };
 </script>

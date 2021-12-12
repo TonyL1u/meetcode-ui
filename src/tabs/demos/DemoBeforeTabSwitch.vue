@@ -9,7 +9,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { McTabs, McTabPane, TabPaneName } from 'meetcode-ui';
+import { McTabs, McTabPane, TabPaneName, McMessage } from 'meetcode-ui';
 
 const countDown = ref(0);
 const sleep = (wait: number) => {
@@ -34,6 +34,7 @@ const handleBeforeTabSwitch = async (from?: TabPaneName, to?: TabPaneName) => {
             await sleep(3);
             break;
         case 'tab3':
+            McMessage.error('不能切换');
             return false;
         case 'tab4':
             return true;

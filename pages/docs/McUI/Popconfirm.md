@@ -19,17 +19,6 @@ import { McTextLink } from 'meetcode-ui'
 <Basic />
 :::
 
-::: demo codePreview=Event
-
-### 事件
-
-通过 `on-cancel` 和 `on-confirm` 事件来处理取消和确认按钮点击后的回调。
-
-返回值为 `true` 时，点击按钮后不关闭弹出框，其他情况下均会关闭弹出框（`false、undefined、void`）。支持异步调用。
-
-<Event />
-:::
-
 ::: demo codePreview=Icon
 
 ### 图标
@@ -42,6 +31,17 @@ import { McTextLink } from 'meetcode-ui'
 ### 操作
 
 <Action />
+:::
+
+::: demo codePreview=Event
+
+### 事件
+
+通过 `on-cancel` 和 `on-confirm` 事件来处理取消和确认按钮点击后的回调。
+
+返回值为 `true` 时，点击按钮后不关闭弹出框，其他情况下均会关闭弹出框（`false、undefined、void`）。支持异步调用。
+
+<Event />
 :::
 
 ## Props

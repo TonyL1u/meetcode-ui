@@ -1,21 +1,17 @@
 <script lang="ts" setup>
-import { createVNode, createCommentVNode, TransitionGroup } from 'vue';
+import { createVNode, TransitionGroup } from 'vue';
 import MessageEntity from './Message.vue';
-import MessageReactiveList, { closeMessage, unmountContainer } from './MessageComposable';
+import MessageReactiveList, { closeMessage } from './MessageComposable';
 import { MessageExposeInstance, Message } from './interface';
 
-const handleAfterLeave = () => {
-    // console.log(MessageReactiveList.length);
-    // if (MessageReactiveList.length) {
-    //     unmountContainer();
-    // }
-};
+const handleBeforeLeave = (el: HTMLElement) => {};
+const handleAfterLeave = (el: HTMLElement) => {};
 
 const getMessageEntityVNode = (message: Message) => {
     const {
         key,
         type,
-        options: { duration, className, style, closable, onClose }
+        options: { duration, className, style, closable, hoverAlive, html, card, icon, action, onClose }
     } = message;
 
     return createVNode(
@@ -32,6 +28,11 @@ const getMessageEntityVNode = (message: Message) => {
             class: className,
             style,
             closable,
+            hoverAlive,
+            html,
+            card,
+            icon,
+            action,
             onClose: () => {
                 onClose && onClose();
                 closeMessage(key);
@@ -39,7 +40,10 @@ const getMessageEntityVNode = (message: Message) => {
         },
         {
             //if destructure message, message can't be reactive
-            default: () => message.options.message
+            default: () => {
+                const content = message.options.message;
+                return typeof content === 'string' ? content : content?.();
+            }
         }
     );
 };
@@ -47,18 +51,9 @@ const getMessageEntityVNode = (message: Message) => {
 const Render = () => {
     return createVNode(
         TransitionGroup,
-        { name: 'mc-message-slide-down', appear: true, tag: 'div', class: 'mc-message-global-container', onAfterLeave: handleAfterLeave },
+        { name: 'mc-message-slide-down', appear: true, tag: 'div', class: 'mc-message-global-container', onBeforeLeave: handleBeforeLeave, onAfterLeave: handleAfterLeave },
         { default: () => MessageReactiveList.map(message => getMessageEntityVNode(message)) }
     );
-    return MessageReactiveList.length > 0
-        ? createVNode(
-              'div',
-              {
-                  class: 'mc-message-global-container'
-              },
-              [createVNode(TransitionGroup, { name: 'mc-message-slide-down', appear: true }, { default: () => MessageReactiveList.map(message => getMessageEntityVNode(message)) })]
-          )
-        : createCommentVNode('', true);
 };
 </script>
 

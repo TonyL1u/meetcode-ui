@@ -164,6 +164,10 @@ const initialPackages = [
     {
         name: 'naive-ui',
         url: '/playground/source/naive-ui-dev-proxy'
+    },
+    {
+        name: '@vicons/ionicons5',
+        url: '/playground/source/icon-dev-proxy'
     }
 ];
 

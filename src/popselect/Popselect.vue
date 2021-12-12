@@ -25,7 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
     maxHeight: 300
 });
 const emit = defineEmits<{
-    (e: 'update:value', value: PopselectValue, selectedValues?: PopselectValue): void;
+    (e: 'update:value', value: PopselectValue, option: PopselectOption): void;
 }>();
 
 const slots = useSlots();
@@ -47,6 +47,7 @@ const getOptionVNode = (data: PopselectOption) => {
     const isDisabled = !!disabled;
     const isSelected = multiple.value ? (<Array<string | number>>valueRef.value).includes(value) : valueRef.value === value;
     const checkVNode = multiple.value && isSelected ? createVNode(NIcon, { size: 16 }, { default: () => createVNode(IconCheck) }) : null;
+    const option = options.value.find(e => e.value === value);
     const handleClick = multiple.value
         ? () => {
               const index = (<Array<string | number>>valueRef.value).indexOf(value);
@@ -55,10 +56,10 @@ const getOptionVNode = (data: PopselectOption) => {
               } else {
                   (<Array<string | number>>valueRef.value).splice(index, 1);
               }
-              emit('update:value', valueRef.value, value);
+              emit('update:value', valueRef.value, option!);
           }
         : () => {
-              valueRef.value = value;
+              emit('update:value', value, option!);
               popoverRef?.value?.hide();
           };
 

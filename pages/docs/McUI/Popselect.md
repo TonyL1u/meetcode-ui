@@ -46,9 +46,9 @@ import { McTextLink } from 'meetcode-ui'
 
 ## Event
 
-|      名称       |                                类型                                |        说明        |
-| :-------------: | :----------------------------------------------------------------: | :----------------: |
-| on-update:value | `(value: PopselectValue, selectedValues?: PopselectValue) => void` | 选中的值改变时触发 |
+|      名称       |                            类型                            |        说明        |
+| :-------------: | :--------------------------------------------------------: | :----------------: |
+| on-update:value | `(value: PopselectValue, option: PopselectOption) => void` | 选中的值改变时触发 |
 
 更多 Event 请参考 <McTextLink to="Popover#event">Popover Event</McTextLink> 。
 

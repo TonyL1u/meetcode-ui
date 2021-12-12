@@ -22,6 +22,7 @@
     transition: all 0.3s ease;
 
     &--text {
+        background: #eff6ff;
         border: 1px solid #3b82f6;
 
         .mc-message__icon {
@@ -30,6 +31,7 @@
     }
 
     &--success {
+        background: #ecfdf5;
         border: 1px solid #10b981;
 
         .mc-message__icon {
@@ -38,6 +40,7 @@
     }
 
     &--warning {
+        background: #fffbeb;
         border: 1px solid #f59e0b;
 
         .mc-message__icon {
@@ -46,6 +49,7 @@
     }
 
     &--info {
+        background: #f9fafb;
         border: 1px solid #6b7280;
 
         .mc-message__icon {
@@ -54,10 +58,22 @@
     }
 
     &--error {
+        background: #fef2f2;
         border: 1px solid #ef4444;
 
         .mc-message__icon {
             color: #ef4444;
+        }
+    }
+
+    &--card {
+        box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.02), 0px 2px 12px 0px rgba(0, 0, 0, 0.04), 0px 2px 6px 0px rgba(0, 0, 0, 0.02);
+        border: none;
+        background: #fff;
+        padding: 12px 16px;
+
+        .mc-message__icon {
+            margin-right: 8px;
         }
     }
 

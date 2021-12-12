@@ -7,29 +7,22 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { NButton } from 'naive-ui';
-import { McPopconfirm } from 'meetcode-ui';
+import { McPopconfirm, McMessage, McAsyncMessage } from 'meetcode-ui';
 
 const countDown = ref(0);
-const sleep = (wait: number) => {
-    if (wait <= 0) return;
-
-    countDown.value = wait;
-    return new Promise<void>(resolve => {
-        const timer = setInterval(() => {
-            if (--countDown.value === 0) {
-                clearInterval(timer);
-                resolve();
-            }
-        }, 1000);
-    });
-};
 
 const handleCancel = () => {
-    console.log('Cancel Clicked');
+    McMessage.text('Cancel Clicked');
     return true;
 };
 const handleConfirm = async () => {
-    console.log('Confirm Clicked');
-    await sleep(3);
+    countDown.value = 3;
+    const timer = setInterval(() => {
+        if (--countDown.value === 0) {
+            clearInterval(timer);
+        }
+    }, 1000);
+    await McAsyncMessage.warning('Confirm Clicked');
+    McMessage.success('Popconfirm Closed');
 };
 </script>

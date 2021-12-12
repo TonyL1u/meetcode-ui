@@ -5,12 +5,16 @@ export type MessageType = 'text' | 'success' | 'warning' | 'info' | 'error';
 
 export interface MessageOptions {
     type?: MessageType;
-    className?: string | { [key: string]: boolean } | Array<string | { [key: string]: boolean }>;
-    style?: CSSProperties;
-    message?: string;
-    closable?: boolean;
+    className?: string;
+    style?: string | CSSProperties;
+    message?: string | (() => VNodeChild);
     duration?: number;
+    closable?: boolean;
+    hoverAlive?: boolean;
+    html?: string;
+    card?: boolean;
     icon?: () => VNodeChild;
+    action?: () => VNodeChild;
     onClose?: MessageCloseImpl;
 }
 export type MessageApiOptions<T extends MessageType> = Omit<MessageOptions, 'type'>;

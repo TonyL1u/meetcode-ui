@@ -89,3 +89,8 @@
 2021-12-09
 
 -   使用 transition-group 并添加 tag 时，最后一个元素消失的位置会出现偏移；如果不添加 tag，并且外层包裹的元素设置 display: flex ，元素消失时的位置不正确
+
+2021-12-11
+
+-   考虑在 MessageOptions 中传入 ref 响应式变量，这样可以直接响应式修改 options
+-   所有的 Props 如果可以传入 className，类型应该规定为 `string | { [key: string]: boolean } | Array<string | { [key: string]: boolean }>`

@@ -1,5 +1,6 @@
 import { ref } from 'vue';
 import type { MenuOption, TreeSelectOption } from 'naive-ui';
+import * as CSS from '@vue/runtime-dom/node_modules/csstype';
 
 const markdownModules = import.meta.glob('./**/*.md');
 
