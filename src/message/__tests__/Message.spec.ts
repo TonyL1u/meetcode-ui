@@ -2,10 +2,9 @@ import { mount } from '@vue/test-utils';
 import { reactive, isReactive, nextTick } from 'vue';
 import MessageEnvironment from '../MessageEnvironment.vue';
 import Message from '../Message.vue';
+import MessageReactiveList from '../MessageComposable';
 import { McMessage, MessageApiOptions, MessageOptions, MessageType } from '../index';
-import { MessageGlobalContainer } from '../interface';
 
-const env = mount(MessageEnvironment);
 describe('mc-message', () => {
     const options: MessageOptions = {
         type: 'info',
@@ -19,19 +18,8 @@ describe('mc-message', () => {
         closable: true
     };
 
-    it('container destroy', () => {
-        const textMessage = McMessage.text(apiOptions);
-        void nextTick(() => {
-            expect(MessageGlobalContainer.innerHTML).not.toBe('');
-
-            textMessage.close!();
-            setTimeout(() => {
-                expect(MessageGlobalContainer.innerHTML).toBe('1');
-            }, 300);
-        });
-    });
-
     it('basic', () => {
+        const wrapper = mount(MessageEnvironment);
         McMessage(options);
         McMessage.text(apiOptions);
         McMessage.success(apiOptions);
@@ -40,7 +28,52 @@ describe('mc-message', () => {
         McMessage.error();
 
         void nextTick(() => {
-            expect(env.findAllComponents(Message).length).toBe(6);
+            expect(wrapper.findAllComponents(Message).length).toBe(6);
+
+            // reset
+            wrapper.unmount();
+            MessageReactiveList.length = 0;
+        });
+    });
+
+    it('duration', done => {
+        const wrapper = mount(MessageEnvironment);
+        McMessage({
+            message: 'duration test',
+            duration: 1000
+        });
+
+        void nextTick(() => {
+            setTimeout(() => {
+                expect(wrapper.findAllComponents(Message).length).toBe(1);
+            }, 500);
+            setTimeout(() => {
+                expect(wrapper.findAllComponents(Message).length).toBe(0);
+
+                // reset
+                wrapper.unmount();
+                MessageReactiveList.length = 0;
+                done();
+            }, 1200);
+        });
+    });
+
+    it('closable', done => {
+        const wrapper = mount(MessageEnvironment);
+        const message = McMessage(options);
+
+        void nextTick(() => {
+            expect(wrapper.findAllComponents(Message).length).toBe(1);
+            message.close();
+
+            void nextTick(() => {
+                expect(wrapper.findAllComponents(Message).length).toBe(0);
+
+                // reset
+                wrapper.unmount();
+                MessageReactiveList.length = 0;
+                done();
+            });
         });
     });
 
@@ -56,6 +89,9 @@ describe('mc-message', () => {
         expect(isReactive(textMessage)).toBe(true);
         options.message = 'modify text';
         expect(textMessage.message).toBe('test');
+
+        // reset
+        MessageReactiveList.length = 0;
     });
 
     it('reactive-options', () => {
@@ -71,5 +107,8 @@ describe('mc-message', () => {
         expect(textMessage).not.toBe(reactiveApiOptions);
         reactiveApiOptions.message = 'modify text';
         expect(reactiveApiOptions.message).toBe('modify text');
+
+        // reset
+        MessageReactiveList.length = 0;
     });
 });
