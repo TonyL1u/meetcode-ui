@@ -36,5 +36,8 @@ McMessage.info = (maybeOptions?: MaybeMessageApiOptions<'info'>, options?: Messa
 McMessage.error = (maybeOptions?: MaybeMessageApiOptions<'error'>, options?: MessageApiOptions<'error'>) => {
     return ApiConstructor<'error'>(maybeOptions, options, 'error');
 };
+McMessage.loading = (maybeOptions?: MaybeMessageApiOptions<'loading'>, options?: MessageApiOptions<'loading'>) => {
+    return ApiConstructor<'loading'>(maybeOptions, options, 'loading');
+};
 
 export default McMessage;

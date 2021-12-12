@@ -11,7 +11,6 @@ import { CheckmarkSharp as IconCheck } from '@vicons/ionicons5';
 import { useVModels, useVirtualList } from '@vueuse/core';
 import { McPopover, PopoverBaseProps, PopoverExposeInstance } from '../popover';
 import type { PopselectValue, PopselectOption } from './interface';
-import './style.scss';
 
 interface Props extends PopoverBaseProps {
     value: PopselectValue;

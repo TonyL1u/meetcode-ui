@@ -26,4 +26,4 @@ export interface TabPaneProps {
 export interface MaybeTabPaneProps extends TabPaneProps {
     [key: string]: any;
 }
-export type OnBeforeTabSwitchImpl = (from?: TabPaneName, to?: TabPaneName) => Promise<boolean | undefined | void> | boolean | undefined | void;
+export type OnBeforeTabSwitchImpl = (from: TabPaneName, to: TabPaneName) => Promise<boolean | undefined | void> | boolean | undefined | void;

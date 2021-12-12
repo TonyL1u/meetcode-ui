@@ -77,6 +77,8 @@ const iconVNode = computed<VNodeChild | VNode>(() => {
                               return createVNode(IconInfo);
                           case 'error':
                               return createVNode(IconError);
+                          case 'loading':
+                              return createVNode('div', { class: 'mc-message__icon-loading' });
                       }
                   }
               }

@@ -53,20 +53,3 @@ const Render = () => {
 <template>
     <Render />
 </template>
-
-<style lang="scss">
-.mc-grid-item {
-    @apply mc-flex;
-
-    grid-column-start: var(--column-start);
-    grid-row-start: var(--row-start);
-    grid-column-end: var(--column-end);
-    grid-row-end: var(--row-end);
-
-    justify-self: var(--item-justify);
-    align-self: var(--item-align);
-
-    justify-content: var(--justify-content);
-    align-items: var(--align-items);
-}
-</style>

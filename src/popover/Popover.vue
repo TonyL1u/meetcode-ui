@@ -11,7 +11,6 @@ import { getSlotFirstVNode } from '../_utils_';
 import { VBinder, VTarget, VFollower } from 'vueuc';
 import { useElementBounding, useMouseInElement } from '@vueuse/core';
 import type { PopoverTriggerBorder, PopoverTrigger, PopoverPlacement } from './interface';
-import './style.scss';
 
 interface Props {
     trigger?: PopoverTrigger;

@@ -97,11 +97,3 @@ const Render = () => {
 <template>
     <Render />
 </template>
-
-<style lang="scss">
-.mc-grid {
-    grid-template-columns: var(--columns-template);
-    grid-template-rows: var(--rows-template);
-    gap: var(--grid-gap);
-}
-</style>

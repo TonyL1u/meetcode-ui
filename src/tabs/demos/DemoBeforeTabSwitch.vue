@@ -1,7 +1,7 @@
 <template>
     <McTabs @before-tab-switch="handleBeforeTabSwitch">
         <McTabPane name="tab1" tab-label="Tab 1">1</McTabPane>
-        <McTabPane name="tab2" :tab-label="countDown ? `${countDown}秒后切换` : `Tab 2`">2</McTabPane>
+        <McTabPane name="tab2" :tab-label="countDown ? `${countDown}秒后切换` : `Tab 2`" :disabled="disabled">2</McTabPane>
         <McTabPane name="tab3" tab-label="不能切换">3</McTabPane>
         <McTabPane name="tab4" tab-label="Tab 4">4</McTabPane>
     </McTabs>
@@ -11,22 +11,25 @@
 import { ref } from 'vue';
 import { McTabs, McTabPane, TabPaneName, McMessage } from 'meetcode-ui';
 
+const disabled = ref(false);
 const countDown = ref(0);
 const sleep = (wait: number) => {
     if (wait <= 0) return;
 
     countDown.value = wait;
+    disabled.value = true;
     return new Promise<void>(resolve => {
         const timer = setInterval(() => {
             if (--countDown.value === 0) {
                 clearInterval(timer);
+                disabled.value = false;
                 resolve();
             }
         }, 1000);
     });
 };
 
-const handleBeforeTabSwitch = async (from?: TabPaneName, to?: TabPaneName) => {
+const handleBeforeTabSwitch = async (from: TabPaneName, to: TabPaneName) => {
     switch (to) {
         case 'tab1':
             break;

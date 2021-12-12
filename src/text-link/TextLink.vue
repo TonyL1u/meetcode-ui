@@ -8,7 +8,6 @@ export default {
 import { computed, toRefs, useSlots, renderSlot, createVNode } from 'vue';
 import { getSlotFirstVNode } from '../_utils_';
 import * as CSS from 'csstype';
-import './style.scss';
 
 interface Props {
     type?: 'primary' | 'success' | 'warning' | 'danger' | 'info';

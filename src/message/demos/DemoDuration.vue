@@ -11,7 +11,7 @@ import { McMessage } from 'meetcode-ui';
 
 const open1 = () => {
     let countDown = 10;
-    const messageInstance = McMessage.success({
+    const messageInstance = McMessage.loading({
         message: '10s 后关闭',
         duration: 10000,
         card: true

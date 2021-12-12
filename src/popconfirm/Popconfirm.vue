@@ -11,7 +11,6 @@ import { getSlotFirstVNode } from '../_utils_';
 import { AlertCircle as IconAlert } from '@vicons/ionicons5';
 import { McPopover, PopoverBaseProps, PopoverExposeInstance } from '../popover';
 import type { OnCancelImpl, OnConfirmImpl } from './interface';
-import './style.scss';
 
 interface Props extends PopoverBaseProps {
     content?: string;

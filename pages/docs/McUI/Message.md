@@ -16,6 +16,8 @@ import AsyncMessage from '@/message/demos/DemoAsyncMessage.vue'
 
 ### 基础用法
 
+通过内置 `Api` 生成。
+
 <Basic />
 
 :::
@@ -23,6 +25,8 @@ import AsyncMessage from '@/message/demos/DemoAsyncMessage.vue'
 ::: demo codePreview=Card
 
 ### 卡片样式
+
+通过 `McMessage()` 构造器生成。
 
 <Card />
 
@@ -44,7 +48,7 @@ import AsyncMessage from '@/message/demos/DemoAsyncMessage.vue'
 
 ### 动态配置
 
-通过传入一个响应式变量来动态修改信息，或者直接修改 Message 实例。
+通过传入一个响应式变量来动态修改信息，或者直接修改信息实例。
 
 <DynamicOptions />
 
@@ -80,16 +84,17 @@ import AsyncMessage from '@/message/demos/DemoAsyncMessage.vue'
 
 ## Api
 
-|       名称        |                       参数                        |        返回值        |
-| :---------------: | :-----------------------------------------------: | :------------------: |
-|     McMessage     |            `(options: MessageOptions)`            |  `MessageInstance`   |
-|  McMessage.text   | `(message?: string, options?: MessageApiOptions)` | `MessageApiInstance` |
-| McMessage.success | `(message?: string, options?: MessageApiOptions)` | `MessageApiInstance` |
-| McMessage.warning | `(message?: string, options?: MessageApiOptions)` | `MessageApiInstance` |
-|  McMessage.info   | `(message?: string, options?: MessageApiOptions)` | `MessageApiInstance` |
-|  McMessage.error  | `(message?: string, options?: MessageApiOptions)` | `MessageApiInstance` |
+|       名称        |                                  参数                                  |        返回值        |
+| :---------------: | :--------------------------------------------------------------------: | :------------------: |
+|     McMessage     |                      `(options: MessageOptions)`                       |  `MessageInstance`   |
+|  McMessage.text   | `(message?: string \| MessageApiOptions, options?: MessageApiOptions)` | `MessageApiInstance` |
+| McMessage.success | `(message?: string\| MessageApiOptions, options?: MessageApiOptions)`  | `MessageApiInstance` |
+| McMessage.warning | `(message?: string\| MessageApiOptions, options?: MessageApiOptions)`  | `MessageApiInstance` |
+|  McMessage.info   | `(message?: string\| MessageApiOptions, options?: MessageApiOptions)`  | `MessageApiInstance` |
+|  McMessage.error  | `(message?: string\| MessageApiOptions, options?: MessageApiOptions)`  | `MessageApiInstance` |
+| McMessage.loading | `(message?: string\| MessageApiOptions, options?: MessageApiOptions)`  | `MessageApiInstance` |
 
-## Message Options
+## Options
 
 |    名称    |                          类型                           |   默认值    |         说明         |
 | :--------: | :-----------------------------------------------------: | :---------: | :------------------: |

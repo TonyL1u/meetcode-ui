@@ -11,7 +11,6 @@ import { useVModel, useElementBounding, throttledWatch } from '@vueuse/core';
 import McTab from './Tab.vue';
 import { tabsInjectionKey, tabPaneIKey, tabIKey, TabPaneName, MaybeTabPaneProps, OnBeforeTabSwitchImpl } from './interface';
 import * as CSS from 'csstype';
-import './style.scss';
 
 interface Props {
     value?: TabPaneName;

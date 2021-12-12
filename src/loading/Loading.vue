@@ -13,7 +13,6 @@ import Bars from './type/Bars.vue';
 import Arcs from './type/Arcs.vue';
 import Flip from './type/Flip.vue';
 import Rings from './type/Rings.vue';
-import './style.scss';
 
 interface Props {
     show?: boolean;
