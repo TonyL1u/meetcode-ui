@@ -5,11 +5,13 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { useSlots, createVNode, renderSlot, toRefs, toRaw, computed, inject } from 'vue';
+import { useSlots, createVNode, renderSlot, toRefs, computed, inject } from 'vue';
 import CheckMark from './CheckMark.vue';
+import IndeterminateMark from './IndeterminateMark.vue';
 import { useVModels } from '@vueuse/core';
 import { createKey } from '../_utils_';
 import { checkboxGroupInjectionKey, CheckboxValue } from './interface';
+import * as CSS from 'csstype';
 
 interface Props {
     value?: CheckboxValue;
@@ -17,12 +19,14 @@ interface Props {
     checkedValue?: CheckboxValue;
     uncheckedValue?: CheckboxValue;
     disabled?: boolean;
-    checked?: boolean;
+    indeterminate?: boolean;
+    checkedColor?: string;
 }
 const props = withDefaults(defineProps<Props>(), {
     checkedValue: true,
     uncheckedValue: false,
-    disabled: false
+    disabled: false,
+    indeterminate: false
 });
 const emit = defineEmits<{
     (e: 'update:value', value: CheckboxValue): void;
@@ -30,22 +34,28 @@ const emit = defineEmits<{
 
 const slots = useSlots();
 const key = createKey('checkbox');
-const { checkedValue, uncheckedValue, checked } = toRefs(props);
+const { checkedValue, uncheckedValue, disabled, indeterminate, checkedColor } = toRefs(props);
 const { value: valueVM } = useVModels(props, emit);
-const { groupValue, updateGroupValue } = inject(checkboxGroupInjectionKey, null) ?? {};
+const { groupValue, updateGroupValue, groupCheckedColor } = inject(checkboxGroupInjectionKey, null) ?? {};
 const isChecked = computed(() => {
     if (groupValue) {
-        console.log(12345);
         return groupValue.indexOf(valueVM?.value!) > -1;
     }
-    console.log(valueVM?.value === checkedValue.value);
-    return checked?.value ?? valueVM?.value === checkedValue.value;
+    return valueVM?.value === checkedValue.value;
 });
-console.log(isChecked.value);
+const cssVars = computed<CSS.Properties>(() => {
+    const mergedColor = groupCheckedColor && !checkedColor?.value ? groupCheckedColor : checkedColor?.value ?? '#10b981';
+
+    return {
+        '--checkbox-checked-color': mergedColor,
+        '--checkbox-hover-color': mergedColor + '0f'
+    };
+});
+
 const handleChange = () => {
     if (valueVM) {
         if (!updateGroupValue) {
-            valueVM.value = valueVM?.value === checkedValue.value ? uncheckedValue.value : checkedValue.value;
+            valueVM.value = isChecked.value ? uncheckedValue.value : checkedValue.value;
         } else {
             updateGroupValue(valueVM.value);
         }
@@ -53,11 +63,26 @@ const handleChange = () => {
 };
 
 const Render = () => {
-    console.log(isChecked.value);
-    return createVNode('div', { class: 'mc-checkbox' }, [
-        createVNode('input', { class: 'checkbox-input', id: key, type: 'checkbox', onChange: handleChange, checked: isChecked.value }),
-        createVNode('label', { class: 'checkbox', for: key }, [createVNode('span', null, [createVNode(CheckMark)]), slots.default ? createVNode('span', null, [renderSlot(slots, 'default')]) : null])
-    ]);
+    return createVNode(
+        'div',
+        {
+            class: ['mc-checkbox', { 'mc-checkbox--disabled': disabled.value }],
+            style: cssVars.value
+        },
+        [
+            createVNode('input', { class: 'checkbox-input', id: key, type: 'checkbox', onChange: handleChange, checked: isChecked.value, disabled: disabled.value }),
+            createVNode('label', { class: 'checkbox', for: key }, [
+                createVNode(
+                    'span',
+                    {
+                        style: { background: disabled.value ? 'rgba(0, 0, 0, 0.02)' : '', borderColor: disabled.value ? '#cccfdb' : '' }
+                    },
+                    [createVNode(indeterminate.value ? IndeterminateMark : CheckMark)]
+                ),
+                slots.default ? createVNode('span', null, [renderSlot(slots, 'default')]) : null
+            ])
+        ]
+    );
 };
 </script>
 

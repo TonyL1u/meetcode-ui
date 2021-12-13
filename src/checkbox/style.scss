@@ -6,6 +6,23 @@
     align-items: center;
     flex-flow: row wrap;
     position: relative;
+
+    &--disabled {
+        color: #bbb;
+
+        .checkbox,
+        .checkbox:hover {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .checkbox span:first-child svg {
+            stroke: #cccfdb;
+        }
+
+        * {
+            cursor: not-allowed;
+        }
+    }
 }
 
 .mc-checkbox * {
@@ -31,7 +48,7 @@
 }
 
 .checkbox:hover {
-    background: rgba(16, 185, 129, 0.06);
+    background: var(--checkbox-hover-color);
 }
 
 .checkbox span {
@@ -68,12 +85,12 @@
 }
 
 .checkbox:hover span:first-child {
-    border-color: #10b981;
+    border-color: var(--checkbox-checked-color);
 }
 
 .checkbox-input:checked + .checkbox span:first-child {
-    background: #10b981;
-    border-color: #10b981;
+    background: var(--checkbox-checked-color);
+    border-color: var(--checkbox-checked-color);
     animation: zoom-in-out 0.3s ease;
 }
 
