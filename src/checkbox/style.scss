@@ -1,12 +1,11 @@
 .mc-checkbox {
     box-sizing: border-box;
     background: #ffffff;
-    color: #222;
-    height: 64px;
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
     flex-flow: row wrap;
+    position: relative;
 }
 
 .mc-checkbox * {
@@ -14,8 +13,7 @@
 }
 
 .checkbox-input {
-    position: absolute;
-    visibility: hidden;
+    display: none;
 }
 
 .checkbox {

@@ -7,7 +7,7 @@ export default {
 <script lang="ts" setup>
 import { ref, toRefs, useSlots, computed, watch, mergeProps, provide, createVNode, createTextVNode, createCommentVNode, nextTick, VNode, CSSProperties } from 'vue';
 import { flatten, getSlotFirstVNode, kebabCaseEscape, SpecificVNode } from '../_utils_';
-import { useVModel, useElementBounding, throttledWatch } from '@vueuse/core';
+import { useVModels, useElementBounding, throttledWatch } from '@vueuse/core';
 import McTab from './Tab.vue';
 import { tabsInjectionKey, tabPaneIKey, tabIKey, TabPaneName, MaybeTabPaneProps, OnBeforeTabSwitchImpl } from './interface';
 import * as CSS from 'csstype';
@@ -45,8 +45,8 @@ const emit = defineEmits<{
 
 const slots = useSlots();
 const { defaultTab, type, showLine, center, stretch, tabGap, activeColor, barPosition, headerStyle, headerClass, contentStyle, contentClass, onBeforeTabSwitch } = toRefs(props);
-const valueVM = useVModel(props, 'value', emit);
-const activeTabName = ref(valueVM.value || (defaultTab?.value ?? ''));
+const { value: valueVM } = useVModels(props, emit);
+const activeTabName = ref(valueVM?.value || (defaultTab?.value ?? ''));
 const activeTabVNode = ref<VNode>();
 const tabsElRef = ref<HTMLElement>();
 const headerElRef = ref<HTMLElement>();
@@ -60,9 +60,11 @@ const cssVars = computed<CSS.Properties>(() => {
     };
 });
 
-watch(valueVM, name => {
-    name && handleBeforeTabSwitch(name);
-});
+if (valueVM) {
+    watch(valueVM, name => {
+        name && handleBeforeTabSwitch(name);
+    });
+}
 
 if (type.value === 'bar') {
     watch(activeTabVNode, () => {
@@ -88,7 +90,7 @@ if (type.value === 'bar') {
 
 const callUpdateTab = (name: TabPaneName) => {
     activeTabName.value = name;
-    valueVM.value = name; // emit('update:value', name);
+    valueVM && (valueVM.value = name); // emit('update:value', name);
     emit('tab:switch', activeTabName.value);
 };
 

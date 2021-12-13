@@ -10,6 +10,8 @@ function component() {
     cd $1
     mkdir demos
     touch $file.vue
+    touch style.scss
+    echo "import './style.scss';" > index.ts
     echo "export { default as Mc$file } from './$file.vue';" > index.ts
 }
 

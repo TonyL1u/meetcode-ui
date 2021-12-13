@@ -30,13 +30,13 @@ const emit = defineEmits<{
 const slots = useSlots();
 const attrs = useAttrs();
 const { options, multiple, maxHeight } = toRefs(props);
-const { value: valueRef } = useVModels(props, emit);
+const { value: valueVM } = useVModels(props, emit);
 const popoverRef = ref<PopoverExposeInstance>();
 let scrollToOption: (index: number) => void;
 
 const handleShow = () => {
     nextTick(() => {
-        const index = options.value.findIndex(e => e.value === (multiple.value ? (<Array<string | number>>valueRef.value)[0] : valueRef.value));
+        const index = options.value.findIndex(e => e.value === (multiple.value ? (<Array<string | number>>valueVM.value)[0] : valueVM.value));
         scrollToOption(index);
     });
 };
@@ -44,18 +44,18 @@ const handleShow = () => {
 const getOptionVNode = (data: PopselectOption) => {
     const { label, value, disabled } = data;
     const isDisabled = !!disabled;
-    const isSelected = multiple.value ? (<Array<string | number>>valueRef.value).includes(value) : valueRef.value === value;
+    const isSelected = multiple.value ? (<Array<string | number>>valueVM.value).includes(value) : valueVM.value === value;
     const checkVNode = multiple.value && isSelected ? createVNode(NIcon, { size: 16 }, { default: () => createVNode(IconCheck) }) : null;
     const option = options.value.find(e => e.value === value);
     const handleClick = multiple.value
         ? () => {
-              const index = (<Array<string | number>>valueRef.value).indexOf(value);
+              const index = (<Array<string | number>>valueVM.value).indexOf(value);
               if (index === -1) {
-                  (<Array<string | number>>valueRef.value).push(value);
+                  (<Array<string | number>>valueVM.value).push(value);
               } else {
-                  (<Array<string | number>>valueRef.value).splice(index, 1);
+                  (<Array<string | number>>valueVM.value).splice(index, 1);
               }
-              emit('update:value', valueRef.value, option!);
+              emit('update:value', valueVM.value, option!);
           }
         : () => {
               emit('update:value', value, option!);

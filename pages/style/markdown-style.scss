@@ -22,7 +22,7 @@
         }
     }
 
-    code {
+    code:not(.hljs) {
         padding: 1px 4px;
         border-radius: 3px;
         font-family: v-mono;
