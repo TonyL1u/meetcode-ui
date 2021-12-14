@@ -1,4 +1,5 @@
 import { InjectionKey, Ref } from 'vue';
+import { useEventBus, UseEventBusReturn } from '@vueuse/core';
 import * as CSS from 'csstype';
 
 declare module 'csstype' {
@@ -8,10 +9,12 @@ declare module 'csstype' {
     }
 }
 
-interface CheckboxGroupInjection {
-    groupValue?: CheckboxValue[];
+type InternalBus = Record<string, UseEventBusReturn<any>>;
+export interface CheckboxGroupInjection {
+    groupValue?: Ref<CheckboxValue[] | undefined>;
+    groupCheckedColor: Ref<string>;
+    groupDisabled: Ref<boolean>;
     updateGroupValue: (value?: CheckboxValue) => void;
-    groupCheckedColor: string;
 }
 export const checkboxGroupInjectionKey: InjectionKey<CheckboxGroupInjection> = Symbol();
 export type CheckboxValue = string | number | boolean;
@@ -26,3 +29,8 @@ export interface CheckboxProps {
     uncheckedValue?: CheckboxValue;
     disabled?: boolean;
 }
+
+export const checkboxInternalEmitter: InternalBus = {
+    CheckedBus: useEventBus<boolean>('update-internal-checked'),
+    DisabledBus: useEventBus<boolean>('update-internal-disabled')
+};

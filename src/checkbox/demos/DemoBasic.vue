@@ -1,18 +1,21 @@
 <template>
-    <McCheckbox v-model:value="value" disabled indeterminate>Apples</McCheckbox>
+    <McCheckbox v-model:value="value" indeterminate>Apples</McCheckbox>
     {{ value }}
 
     <!-- <McCheckboxGroup v-model:value="groupValue" :options="options" checked-color="#3B82F6" disabled>
         <McCheckbox value="grape">Grape</McCheckbox>
     </McCheckboxGroup> -->
 
-    <McCheckboxGroup v-model:value="groupValue" :max="3">
+    <McCheckboxGroup v-model:value="groupValue" :max="3" :disabled="disabled" checked-color="#3B82F6">
         <McCheckbox value="apple">Apple</McCheckbox>
         <McCheckbox value="orange">Orange</McCheckbox>
         <McCheckbox value="banana">Banana</McCheckbox>
         <McCheckbox value="grape">Grape</McCheckbox>
     </McCheckboxGroup>
     {{ groupValue }}
+
+    <button @click="disabled = !disabled">测试</button>
+    <button @click="groupValue = []">全不选</button>
 </template>
 
 <script lang="ts" setup>
@@ -20,6 +23,7 @@ import { ref } from 'vue';
 import { McCheckboxGroup, McCheckbox, CheckboxGroupOptions } from 'meetcode-ui';
 
 const value = ref(true);
+const disabled = ref(false);
 const groupValue = ref(['apple', 'orange', 'grape']);
 const options = ref<CheckboxGroupOptions[]>([
     {

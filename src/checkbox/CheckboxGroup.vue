@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { provide, toRefs, computed, createVNode, useSlots, renderSlot } from 'vue';
+import { provide, toRefs, createVNode, useSlots, renderSlot, onUnmounted } from 'vue';
 import { useVModels } from '@vueuse/core';
 import McCheckbox from './Checkbox.vue';
-import { checkboxGroupInjectionKey, CheckboxValue, CheckboxGroupOptions } from './interface';
+import { checkboxGroupInjectionKey, CheckboxValue, CheckboxGroupOptions, checkboxInternalEmitter } from './interface';
 
 interface Props {
     value?: CheckboxValue[];
@@ -20,13 +20,9 @@ const emit = defineEmits<{
 }>();
 
 const slots = useSlots();
+const { CheckedBus, DisabledBus } = checkboxInternalEmitter;
 const { options, checkedColor, max, disabled } = toRefs(props);
 const { value: valueVM } = useVModels(props, emit);
-const checkboxMergedDisabled = computed(() => {
-    if (disabled.value) return true;
-    if (max?.value && valueVM?.value?.length === max?.value) {
-    }
-});
 const updateGroupValue = (value?: CheckboxValue) => {
     if (valueVM?.value && value) {
         const index = valueVM.value.indexOf(value);
@@ -35,12 +31,24 @@ const updateGroupValue = (value?: CheckboxValue) => {
         } else {
             valueVM.value.splice(index, 1);
         }
+
+        if (max?.value) {
+            if (valueVM.value?.length === max.value) {
+                DisabledBus.emit(true);
+            } else if (valueVM.value?.length < max.value) {
+                DisabledBus.emit(false);
+            }
+        }
     }
 };
+
+const selectAll = (selectDisabled: boolean = false) => {};
+
 provide(checkboxGroupInjectionKey, {
-    groupValue: valueVM?.value,
-    updateGroupValue,
-    groupCheckedColor: checkedColor.value
+    groupValue: valueVM,
+    groupCheckedColor: checkedColor,
+    groupDisabled: disabled,
+    updateGroupValue
 });
 
 const Render = () => {
@@ -59,6 +67,10 @@ const Render = () => {
         ]
     );
 };
+
+onUnmounted(() => {
+    DisabledBus.reset();
+});
 </script>
 
 <template>

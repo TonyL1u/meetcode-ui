@@ -94,3 +94,7 @@
 
 -   考虑在 MessageOptions 中传入 ref 响应式变量，这样可以直接响应式修改 options
 -   所有的 Props 如果可以传入 className，类型应该规定为 `string | { [key: string]: boolean } | Array<string | { [key: string]: boolean }>`
+
+2021-12-14
+
+-   向下 provide 数据时，要保证每个数据都是响应式的，不能传 raw value
