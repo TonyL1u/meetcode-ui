@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { provide, toRefs, createVNode, useSlots, renderSlot, onUnmounted } from 'vue';
+import { provide, toRefs, createVNode, useSlots, renderSlot, nextTick, onUnmounted, watch, computed } from 'vue';
 import { useVModels } from '@vueuse/core';
 import McCheckbox from './Checkbox.vue';
 import { checkboxGroupInjectionKey, CheckboxValue, CheckboxGroupOptions, checkboxInternalEmitter } from './interface';
@@ -23,6 +23,10 @@ const slots = useSlots();
 const { CheckedBus, DisabledBus } = checkboxInternalEmitter;
 const { options, checkedColor, max, disabled } = toRefs(props);
 const { value: valueVM } = useVModels(props, emit);
+const checkedCount = computed(() => {
+    return valueVM?.value?.length ?? 0;
+});
+
 const updateGroupValue = (value?: CheckboxValue) => {
     if (valueVM?.value && value) {
         const index = valueVM.value.indexOf(value);
@@ -31,24 +35,32 @@ const updateGroupValue = (value?: CheckboxValue) => {
         } else {
             valueVM.value.splice(index, 1);
         }
-
-        if (max?.value) {
-            if (valueVM.value?.length === max.value) {
-                DisabledBus.emit(true);
-            } else if (valueVM.value?.length < max.value) {
-                DisabledBus.emit(false);
-            }
-        }
     }
 };
-
-const selectAll = (selectDisabled: boolean = false) => {};
 
 provide(checkboxGroupInjectionKey, {
     groupValue: valueVM,
     groupCheckedColor: checkedColor,
     groupDisabled: disabled,
     updateGroupValue
+});
+
+void nextTick(() => {
+    if (valueVM?.value && max?.value) {
+        watch(
+            checkedCount,
+            () => {
+                if (valueVM.value?.length === max.value) {
+                    DisabledBus.emit(true);
+                } else {
+                    DisabledBus.emit(false);
+                }
+            },
+            {
+                immediate: true
+            }
+        );
+    }
 });
 
 const Render = () => {
@@ -68,8 +80,15 @@ const Render = () => {
     );
 };
 
+defineExpose({
+    selectAll() {
+        CheckedBus.emit();
+    }
+});
+
 onUnmounted(() => {
     DisabledBus.reset();
+    CheckedBus.reset();
 });
 </script>
 

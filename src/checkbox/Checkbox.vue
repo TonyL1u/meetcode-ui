@@ -38,14 +38,13 @@ const key = createKey('checkbox');
 const { checkedValue, uncheckedValue, disabled, indeterminate, checkedColor } = toRefs(props);
 const { groupValue, groupCheckedColor, groupDisabled, updateGroupValue } = inject(checkboxGroupInjectionKey, null) ?? {};
 const { value: valueVM } = useVModels(props, emit);
-const internalChecked = ref(false);
 const internalDisabled = ref(false);
 const mergedDisabled = or(groupDisabled, disabled, internalDisabled);
 const mergedChecked = computed(() => {
     if (groupValue?.value) {
-        return groupValue.value.indexOf(valueVM?.value!) > -1 || internalChecked.value;
+        return groupValue.value.indexOf(valueVM?.value!) > -1;
     }
-    return valueVM?.value === checkedValue.value || internalChecked.value;
+    return valueVM?.value === checkedValue.value;
 });
 const mergedCheckedColor = and(groupCheckedColor, not(checkedColor)).value ? groupCheckedColor : checkedColor;
 const cssVars = computed<CSS.Properties>(() => {
@@ -54,10 +53,6 @@ const cssVars = computed<CSS.Properties>(() => {
         '--checkbox-hover-color': (mergedCheckedColor?.value ?? '#10b981') + '0f'
     };
 });
-
-const updateInternalChecked = (checked: boolean) => {
-    internalChecked.value = checked;
-};
 
 const updateInternalDisabled = (reachMax: boolean) => {
     if (reachMax) {
@@ -78,7 +73,9 @@ const handleChange = () => {
 };
 
 DisabledBus.on(updateInternalDisabled);
-CheckedBus.on(updateInternalChecked);
+CheckedBus.on(() => {
+    !mergedChecked.value && updateGroupValue?.(valueVM?.value);
+});
 
 const Render = () => {
     return createVNode(
