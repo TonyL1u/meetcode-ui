@@ -96,20 +96,21 @@ import AsyncMessage from '@/message/demos/DemoAsyncMessage.vue'
 
 ## Options
 
-|    名称    |                          类型                           |   默认值    |         说明         |
-| :--------: | :-----------------------------------------------------: | :---------: | :------------------: |
-|    type    | `'text' \| 'success' \| 'warning' \| 'info' \| 'error'` |   `text`    |       信息类型       |
-|    card    |                        `boolean`                        |   `false`   |  是否展示为卡片样式  |
-|  message   |             `string \| (() => VNodeChild)`              |    `''`     |       信息内容       |
-|  duration  |                        `number`                         |   `3000`    |    持续时间（ms）    |
-|  closable  |                        `boolean`                        |   `false`   |      是否可关闭      |
-| className  |                        `string`                         | `undefined` |       信息类名       |
-|   style    |                   `string \| object`                    | `undefined` |       信息样式       |
-| hoverAlive |                        `boolean`                        |   `true`    |   Hover 不关闭信息   |
-|    html    |                        `string`                         | `undefined` | 内容自定义 HTML 片段 |
-|    icon    |                   `() => VNodeChild`                    | `undeinfed` |      自定义图标      |
-|   action   |                   `() => VNodeChild`                    | `undeinfed` |      自定义操作      |
-|  onClose   |                      `() => void`                       | `undefined` |   信息关闭时的回调   |
+|    名称    |                          类型                           |   默认值    |           说明           |
+| :--------: | :-----------------------------------------------------: | :---------: | :----------------------: |
+|    type    | `'text' \| 'success' \| 'warning' \| 'info' \| 'error'` |   `text`    |         信息类型         |
+|    card    |                        `boolean`                        |   `false`   |    是否展示为卡片样式    |
+|  message   |             `string \| (() => VNodeChild)`              |    `''`     |         信息内容         |
+|  duration  |                        `number`                         |   `3000`    |      持续时间（ms）      |
+|  closable  |                        `boolean`                        |   `false`   |        是否可关闭        |
+| className  |                        `string`                         | `undefined` |         信息类名         |
+|   style    |                   `string \| object`                    | `undefined` |         信息样式         |
+| hoverAlive |                        `boolean`                        |   `true`    |     Hover 不关闭信息     |
+|    html    |                        `string`                         | `undefined` |   内容自定义 HTML 片段   |
+|  item-gap  |                        `number`                         |     `8`     | 两个信息之间的距离（px） |
+|    icon    |                   `() => VNodeChild`                    | `undefined` |        自定义图标        |
+|   action   |                   `() => VNodeChild`                    | `undefined` |        自定义操作        |
+|  onClose   |                      `() => void`                       | `undefined` |     信息关闭时的回调     |
 
 ## Methods
 

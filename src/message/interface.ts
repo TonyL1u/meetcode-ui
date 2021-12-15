@@ -1,4 +1,11 @@
 import { VNodeChild, CSSProperties, Ref } from 'vue';
+import * as CSS from 'csstype';
+
+declare module 'csstype' {
+    interface Properties {
+        '--message-item-gap'?: string;
+    }
+}
 
 export type MessageCloseImpl = () => void | Promise<void>;
 export type MessageType = 'text' | 'success' | 'warning' | 'info' | 'error' | 'loading';
@@ -13,6 +20,7 @@ export interface MessageOptions {
     hoverAlive?: boolean;
     html?: string;
     card?: boolean;
+    itemGap?: number;
     icon?: () => VNodeChild;
     action?: () => VNodeChild;
     onClose?: MessageCloseImpl;

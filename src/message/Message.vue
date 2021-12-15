@@ -9,6 +9,7 @@ import { ref, computed, useSlots, renderSlot, createVNode, toRefs, VNode, VNodeC
 import { MessageType } from './interface';
 import { NIcon } from 'naive-ui';
 import { AlertCircle as IconAlert, CheckmarkCircle as IconSuccess, Warning as IconWarning, InformationCircle as IconInfo, CloseCircleSharp as IconError, CloseOutline as IconClose } from '@vicons/ionicons5';
+import * as CSS from 'csstype';
 
 interface Props {
     type?: MessageType;
@@ -17,6 +18,7 @@ interface Props {
     hoverAlive?: boolean;
     html?: string;
     card?: boolean;
+    itemGap?: number;
     icon?: () => VNodeChild;
     action?: () => VNodeChild;
 }
@@ -25,17 +27,23 @@ const props = withDefaults(defineProps<Props>(), {
     duration: 3000,
     closable: false,
     hoverAlive: true,
-    card: false
+    card: false,
+    itemGap: 8
 });
 const emit = defineEmits<{
     (e: 'close'): void;
 }>();
 
 const slots = useSlots();
-const { type, duration, closable, hoverAlive, html, card, icon, action } = toRefs(props);
+const { type, duration, closable, hoverAlive, html, card, itemGap, icon, action } = toRefs(props);
 const messageElRef = ref<HTMLElement>();
 const messageCloseTimer = ref();
 const autoClose = computed(() => duration.value > 0);
+const cssVars = computed<CSS.Properties>(() => {
+    return {
+        '--message-item-gap': itemGap.value + 'px'
+    };
+});
 
 const handleCloseMessage = () => {
     emit('close');
@@ -119,6 +127,7 @@ const Render = (): VNode => {
         {
             // ref: messageElRef,
             class: ['mc-message', { 'mc-message--card': card.value }, `mc-message--${type.value}`],
+            style: cssVars.value,
             onMouseenter() {
                 hoverAlive.value && autoClose.value && clearCloseTimer();
             },

@@ -11,7 +11,7 @@ const getMessageEntityVNode = (message: Message) => {
     const {
         key,
         type,
-        options: { duration, className, style, closable, hoverAlive, html, card, icon, action, onClose }
+        options: { duration, className, style, closable, hoverAlive, html, card, itemGap, icon, action, onClose }
     } = message;
 
     return createVNode(
@@ -31,6 +31,7 @@ const getMessageEntityVNode = (message: Message) => {
             hoverAlive,
             html,
             card,
+            itemGap,
             icon,
             action,
             onClose: () => {
