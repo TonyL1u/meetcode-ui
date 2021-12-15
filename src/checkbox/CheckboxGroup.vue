@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { provide, toRefs, createVNode, useSlots, renderSlot, nextTick, onUnmounted, watch, computed } from 'vue';
-import { useVModels } from '@vueuse/core';
+import { useVModels, useEventBus } from '@vueuse/core';
 import McCheckbox from './Checkbox.vue';
-import { checkboxGroupInjectionKey, CheckboxValue, CheckboxGroupOptions, checkboxInternalEmitter } from './interface';
+import { checkboxGroupInjectionKey, CheckboxValue, CheckboxGroupOptions } from './interface';
 
 interface Props {
     value?: CheckboxValue[];
@@ -20,9 +20,11 @@ const emit = defineEmits<{
 }>();
 
 const slots = useSlots();
-const { CheckedBus, DisabledBus } = checkboxInternalEmitter;
 const { options, checkedColor, max, disabled } = toRefs(props);
 const { value: valueVM } = useVModels(props, emit);
+const checkboxCount = computed(() => {
+    return options?.value?.length ?? 0;
+});
 const checkedCount = computed(() => {
     return valueVM?.value?.length ?? 0;
 });
@@ -38,23 +40,30 @@ const updateGroupValue = (value?: CheckboxValue) => {
     }
 };
 
+const SelectAllBus = useEventBus<boolean>('select-all');
+const UpdateDisabledBus = useEventBus<boolean>('update-internal-disabled');
+
 provide(checkboxGroupInjectionKey, {
     groupValue: valueVM,
     groupCheckedColor: checkedColor,
     groupDisabled: disabled,
-    updateGroupValue
+    updateGroupValue,
+    SelectAllBus,
+    UpdateDisabledBus
 });
 
 void nextTick(() => {
     if (valueVM?.value && max?.value) {
         watch(
-            checkedCount,
+            [checkboxCount, checkedCount],
             () => {
-                if (valueVM.value?.length === max.value) {
-                    DisabledBus.emit(true);
-                } else {
-                    DisabledBus.emit(false);
-                }
+                void nextTick(() => {
+                    if (valueVM.value?.length === max.value) {
+                        UpdateDisabledBus.emit(true);
+                    } else {
+                        UpdateDisabledBus.emit(false);
+                    }
+                });
             },
             {
                 immediate: true
@@ -81,14 +90,14 @@ const Render = () => {
 };
 
 defineExpose({
-    selectAll() {
-        CheckedBus.emit();
+    selectAll(selectDisabled: boolean = true) {
+        SelectAllBus.emit(selectDisabled);
     }
 });
 
 onUnmounted(() => {
-    DisabledBus.reset();
-    CheckedBus.reset();
+    UpdateDisabledBus.reset();
+    SelectAllBus.reset();
 });
 </script>
 

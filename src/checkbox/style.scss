@@ -10,8 +10,7 @@
     &--disabled {
         color: #bbb;
 
-        .checkbox,
-        .checkbox:hover {
+        .checkbox {
             background: rgba(0, 0, 0, 0.02);
         }
 
@@ -41,6 +40,7 @@
     overflow: hidden;
     transition: all 0.3s ease;
     display: flex;
+    align-items: center;
 }
 
 .checkbox:not(:last-child) {
@@ -62,7 +62,7 @@
     width: 18px;
     height: 18px;
     border-radius: 4px;
-    transform: scale(1);
+    transform: var(--checkbox-scale-size);
     border: 1px solid #cccfdb;
     transition: all 0.3s ease;
 }
