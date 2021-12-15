@@ -1,10 +1,10 @@
 <template>
-    {{ value }}
+    {{ isSelect }}
 
-    <McCheckbox v-model:value="value" :indeterminate="indeterminate" @update:value="handleUpdateValue">全选</McCheckbox>
+    <McCheckbox v-model:value="isSelect" :indeterminate="isIndeterminate">全选</McCheckbox>
 
-    <McCheckboxGroup v-model:value="groupValue" :options="options" checked-color="#3B82F6" :max="3">
-        <!-- <McCheckbox value="grape">Grape</McCheckbox> -->
+    <McCheckboxGroup ref="checkbox" v-model:value="groupValue" :options="options" checked-color="#3B82F6" :max="3" @update:value="handleUpdateValue">
+        <McCheckbox value="grape">Grape</McCheckbox>
     </McCheckboxGroup>
     <!-- 
     <McCheckboxGroup ref="checkbox" v-model:value="groupValue" :max="3" :disabled="disabled">
@@ -37,10 +37,8 @@ const checkbox = ref();
 const cities = ref();
 
 const groupValue = ref(['apple', 'orange', 'grape']);
-const value = ref(false);
-const indeterminate = computed(() => {
-    return groupValue.value.length < 4 && groupValue.value.length > 0;
-});
+const isSelect = ref(true);
+const isIndeterminate = ref(true);
 
 const options = ref<CheckboxGroupOptions[]>([
     {
@@ -54,19 +52,22 @@ const options = ref<CheckboxGroupOptions[]>([
     {
         value: 'banana',
         label: 'Banana'
-    },
-    {
-        value: 'grape',
-        label: 'Grape'
     }
+    // {
+    //     value: 'grape',
+    //     label: 'Grape'
+    // }
 ]);
 
-const handleUpdateValue = (value: CheckboxValue) => {
-    if (value) {
-        checkbox.value.selectAll(false);
-    } else {
-        groupValue.value = [];
-    }
+const handleUpdateValue = (value: CheckboxValue, groupValue: CheckboxValue[], { selectAll, indeterminate }) => {
+    console.log(selectAll, indeterminate);
+    isSelect.value = selectAll || indeterminate;
+    isIndeterminate.value = indeterminate;
+    // if (value) {
+    //     checkbox.value.selectAll(false);
+    // } else {
+    //     groupValue.value = [];
+    // }
 };
 
 const handleSelectAll = () => {

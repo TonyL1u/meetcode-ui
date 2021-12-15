@@ -10,7 +10,6 @@ declare module 'csstype' {
     }
 }
 
-type InternalBus = Record<string, UseEventBusReturn<any>>;
 export interface CheckboxGroupInjection {
     groupValue?: Ref<CheckboxValue[] | undefined>;
     groupCheckedColor: Ref<string>;
@@ -20,17 +19,24 @@ export interface CheckboxGroupInjection {
     UpdateDisabledBus: UseEventBusReturn<boolean>;
 }
 export const checkboxGroupInjectionKey: InjectionKey<CheckboxGroupInjection> = Symbol();
+export const checkboxIKey = Symbol('checbox');
 export type CheckboxValue = string | number | boolean;
 export type CheckboxSize = 'small' | 'medium' | 'large';
+export type CheckboxGroupStatus = {
+    selectAll: boolean;
+    indeterminate: boolean;
+};
 export interface CheckboxGroupOptions {
     value: CheckboxValue;
     label: string;
 }
 export interface CheckboxProps {
-    value: CheckboxValue;
-    size?: CheckboxSize;
+    value?: CheckboxValue;
     label?: string;
+    size?: CheckboxSize;
     checkedValue?: CheckboxValue;
     uncheckedValue?: CheckboxValue;
     disabled?: boolean;
+    indeterminate?: boolean;
+    checkedColor?: string;
 }

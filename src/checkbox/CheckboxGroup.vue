@@ -2,7 +2,8 @@
 import { provide, toRefs, createVNode, useSlots, renderSlot, nextTick, onUnmounted, watch, computed } from 'vue';
 import { useVModels, useEventBus } from '@vueuse/core';
 import McCheckbox from './Checkbox.vue';
-import { checkboxGroupInjectionKey, CheckboxValue, CheckboxGroupOptions } from './interface';
+import { flatten } from '../_utils_';
+import { checkboxGroupInjectionKey, CheckboxValue, CheckboxGroupOptions, CheckboxGroupStatus, checkboxIKey } from './interface';
 
 interface Props {
     value?: CheckboxValue[];
@@ -16,27 +17,54 @@ const props = withDefaults(defineProps<Props>(), {
     checkedColor: '#10b981'
 });
 const emit = defineEmits<{
-    (e: 'update:value', value: CheckboxValue[]): void;
+    (e: 'update:value', groupValue: CheckboxValue[], value: CheckboxValue, status: CheckboxGroupStatus): void;
 }>();
 
 const slots = useSlots();
 const { options, checkedColor, max, disabled } = toRefs(props);
 const { value: valueVM } = useVModels(props, emit);
 const checkboxCount = computed(() => {
-    return options?.value?.length ?? 0;
+    const slotsCount = slots.default ? flatten(slots.default(), checkboxIKey).length : 0;
+    const optionsCount = options?.value?.length ?? 0;
+    return slotsCount + optionsCount;
 });
 const checkedCount = computed(() => {
     return valueVM?.value?.length ?? 0;
 });
+const status = computed<CheckboxGroupStatus>(() => {
+    return {
+        selectAll: checkedCount.value === checkboxCount.value,
+        indeterminate: checkedCount.value > 0 && checkedCount.value < checkboxCount.value
+    };
+});
+
+if (valueVM?.value && max?.value) {
+    watch(
+        [checkboxCount, checkedCount],
+        () => {
+            void nextTick(() => {
+                if (valueVM.value?.length === max.value) {
+                    UpdateDisabledBus.emit(true);
+                } else {
+                    UpdateDisabledBus.emit(false);
+                }
+            });
+        },
+        {
+            immediate: true
+        }
+    );
+}
 
 const updateGroupValue = (value?: CheckboxValue) => {
-    if (valueVM?.value && value) {
+    if (valueVM?.value && value !== undefined) {
         const index = valueVM.value.indexOf(value);
         if (index === -1) {
             valueVM.value.push(value);
         } else {
             valueVM.value.splice(index, 1);
         }
+        emit('update:value', valueVM.value, value, status.value);
     }
 };
 
@@ -50,26 +78,6 @@ provide(checkboxGroupInjectionKey, {
     updateGroupValue,
     SelectAllBus,
     UpdateDisabledBus
-});
-
-void nextTick(() => {
-    if (valueVM?.value && max?.value) {
-        watch(
-            [checkboxCount, checkedCount],
-            () => {
-                void nextTick(() => {
-                    if (valueVM.value?.length === max.value) {
-                        UpdateDisabledBus.emit(true);
-                    } else {
-                        UpdateDisabledBus.emit(false);
-                    }
-                });
-            },
-            {
-                immediate: true
-            }
-        );
-    }
 });
 
 const Render = () => {
@@ -92,7 +100,8 @@ const Render = () => {
 defineExpose({
     selectAll(selectDisabled: boolean = true) {
         SelectAllBus.emit(selectDisabled);
-    }
+    },
+    status
 });
 
 onUnmounted(() => {

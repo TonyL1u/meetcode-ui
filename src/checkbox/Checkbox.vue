@@ -1,6 +1,7 @@
 <script lang="ts">
 export default {
-    name: 'Checkbox'
+    name: 'Checkbox',
+    iKey: checkboxIKey
 };
 </script>
 
@@ -10,7 +11,7 @@ import CheckMark from './CheckMark.vue';
 import IndeterminateMark from './IndeterminateMark.vue';
 import { useVModels, or, and, not } from '@vueuse/core';
 import { createKey } from '../_utils_';
-import { checkboxGroupInjectionKey, CheckboxValue, CheckboxSize } from './interface';
+import { checkboxGroupInjectionKey, CheckboxValue, CheckboxSize, checkboxIKey } from './interface';
 import * as CSS from 'csstype';
 
 interface Props {
@@ -68,7 +69,6 @@ const cssVars = computed<CSS.Properties>(() => {
 
 const updateInternalDisabled = (reachMax: boolean) => {
     if (reachMax) {
-        console.log(valueVM?.value, mergedChecked.value);
         !mergedChecked.value && (internalDisabled.value = true);
     } else {
         internalDisabled.value && (internalDisabled.value = false);
@@ -99,8 +99,6 @@ if (UpdateDisabledBus && SelectAllBus) {
 }
 
 const Render = () => {
-    console.log(mergedDisabled.value);
-    console.log(groupDisabled, disabled, internalDisabled);
     return createVNode(
         'div',
         {
