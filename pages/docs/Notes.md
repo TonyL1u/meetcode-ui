@@ -98,3 +98,7 @@
 2021-12-14
 
 -   向下 provide 数据时，要保证每个数据都是响应式的，不能传 raw value
+
+2021-12-15
+
+-   CheckboxGroup 向下提供了一个更新 internalDisabled 属性的 bus 用于更新 max 可选数量，如果这个时候新增了一个 Checkbox，

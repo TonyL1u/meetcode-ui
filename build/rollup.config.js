@@ -11,8 +11,9 @@ const extensions = ['.js', '.ts', '.tsx'];
 // 输出打包后的文件名称type 1.esm 2.umd
 const file = type => `lib/${name}.${type}.js`;
 const overrides = {
-    compilerOptions: { noImplicitAny: false }, // 忽略any
-    exclude: ['playground', 'pages', '*.config.ts']
+    // 忽略any
+    compilerOptions: { noImplicitAny: false },
+    exclude: ['playground', 'pages', '*.config.ts', 'src/**/__tests__']
 };
 export { name, file };
 export default {

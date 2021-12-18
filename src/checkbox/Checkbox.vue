@@ -1,4 +1,5 @@
 <script lang="ts">
+import { checkboxIKey } from './interface';
 export default {
     name: 'Checkbox',
     iKey: checkboxIKey
@@ -11,7 +12,7 @@ import CheckMark from './CheckMark.vue';
 import IndeterminateMark from './IndeterminateMark.vue';
 import { useVModels, or, and, not } from '@vueuse/core';
 import { createKey } from '../_utils_';
-import { checkboxGroupInjectionKey, CheckboxValue, CheckboxSize, checkboxIKey } from './interface';
+import { checkboxGroupInjectionKey, CheckboxValue, CheckboxSize } from './interface';
 import * as CSS from 'csstype';
 
 interface Props {
@@ -37,11 +38,11 @@ const emit = defineEmits<{
 
 const slots = useSlots();
 const key = createKey('checkbox');
-const { size, checkedValue, uncheckedValue, disabled, indeterminate, checkedColor } = toRefs(props);
-const { groupValue, groupCheckedColor, groupDisabled, updateGroupValue, SelectAllBus, UpdateDisabledBus } = inject(checkboxGroupInjectionKey, null) ?? {};
+const { label, size, checkedValue, uncheckedValue, disabled, indeterminate, checkedColor } = toRefs(props);
+const { groupValue, groupCheckedColor, groupDisabled, updateGroupValue, BusSelectAll, BusUpdateDisabled } = inject(checkboxGroupInjectionKey, null) ?? {};
 const { value: valueVM } = useVModels(props, emit);
 const internalDisabled = ref(false);
-const scaleRate = computed(() => {
+const scaleRatio = computed(() => {
     switch (size.value) {
         case 'small':
             return 0.8;
@@ -63,7 +64,7 @@ const cssVars = computed<CSS.Properties>(() => {
     return {
         '--checkbox-checked-color': mergedCheckedColor?.value ?? '#10b981',
         '--checkbox-hover-color': (mergedCheckedColor?.value ?? '#10b981') + '0f',
-        '--checkbox-scale-size': `scale(${scaleRate.value})`
+        '--checkbox-scale-size': `scale(${scaleRatio.value})`
     };
 });
 
@@ -85,18 +86,28 @@ const handleChange = () => {
     }
 };
 
-if (UpdateDisabledBus && SelectAllBus) {
-    UpdateDisabledBus.on(updateInternalDisabled);
-    SelectAllBus.on((selectDisabled: boolean) => {
+if (BusUpdateDisabled && BusSelectAll) {
+    BusUpdateDisabled.on(updateInternalDisabled);
+    BusSelectAll.on((selectDisabled: boolean) => {
         if (!mergedChecked.value) {
             if (!selectDisabled) {
-                !mergedDisabled.value && updateGroupValue?.(valueVM?.value);
+                !mergedDisabled.value && updateGroupValue?.(valueVM?.value, false);
             } else {
-                updateGroupValue?.(valueVM?.value);
+                updateGroupValue?.(valueVM?.value, false);
             }
         }
     });
 }
+
+const labelVNode = computed(() => {
+    if (slots.default) {
+        return createVNode('span', null, [renderSlot(slots, 'default')]);
+    } else if (label?.value) {
+        return createVNode('span', null, [label.value]);
+    } else {
+        return null;
+    }
+});
 
 const Render = () => {
     return createVNode(
@@ -118,7 +129,7 @@ const Render = () => {
                     },
                     [createVNode(indeterminate.value ? IndeterminateMark : CheckMark)]
                 ),
-                slots.default ? createVNode('span', null, [renderSlot(slots, 'default')]) : null
+                labelVNode.value
             ])
         ]
     );
