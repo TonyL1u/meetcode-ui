@@ -30,6 +30,14 @@ export interface CheckboxGroupOptions {
     value: CheckboxValue;
     label: string;
 }
+
+export interface CheckboxGroupProps {
+    value?: CheckboxValue[];
+    options?: CheckboxGroupOptions[];
+    max?: number;
+    disabled?: boolean;
+    checkedColor?: string;
+}
 export interface CheckboxProps {
     value?: CheckboxValue;
     label?: string;

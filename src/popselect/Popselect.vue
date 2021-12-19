@@ -89,7 +89,7 @@ const Render = () => {
     });
     scrollToOption = scrollTo;
 
-    const popoverMergedProps = mergeProps(
+    const mergedProps = mergeProps(
         {
             ref: popoverRef,
             class: 'mc-popselect',
@@ -101,7 +101,7 @@ const Render = () => {
     return createVNode(
         McPopover,
         {
-            ...popoverMergedProps,
+            ...mergedProps,
             onShow: (...args: Array<unknown>) => {
                 handleShow();
                 attrs.show && (<any>attrs).onShow(...args);

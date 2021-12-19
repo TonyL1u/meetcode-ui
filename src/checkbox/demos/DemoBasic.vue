@@ -1,6 +1,5 @@
 <template>
-    <McCheckbox></McCheckbox>
-    <McCheckbox :value="isSelect" class="test123">test</McCheckbox>
+    <McCheckbox>test</McCheckbox>{{ value }}
     <McCheckbox v-model:value="isSelect" :indeterminate="isIndeterminate" :disabled="disabled" @update:value="handleSelectAll">全选</McCheckbox>
 
     <McCheckboxGroup ref="checkboxGroup" v-model:value="groupValue" :options="options" checked-color="#3B82F6" :max="max" :disabled="disabled" @update:value="handleUpdateValue">
@@ -20,6 +19,7 @@ import { ref } from 'vue';
 import { McCheckboxGroup, McCheckbox, CheckboxGroupOptions, CheckboxValue, CheckboxGroupExposeInstance } from 'meetcode-ui';
 
 const groupValue = ref(['apple']);
+const value = ref('yes');
 
 const disabled = ref(false);
 const checkboxGroup = ref<CheckboxGroupExposeInstance>();

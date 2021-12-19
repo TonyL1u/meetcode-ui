@@ -1,53 +1,92 @@
 import { mount } from '@vue/test-utils';
-import { ref, nextTick } from 'vue';
+import { CheckboxProps } from '../interface';
 import { McCheckbox } from '../index';
 
-const _mount = (template: string, data?: () => unknown) => {
+const _mount = (template: string, data?: () => unknown, args?: Record<string, unknown>) => {
     return mount({
         components: { McCheckbox },
         template,
-        data
+        data,
+        ...args
     });
 };
 
 describe('mc-checkbox', () => {
     it('basic', async () => {
+        const wrapper = mount(McCheckbox);
+        expect(wrapper.classes()).toContain('mc-checkbox');
+    });
+
+    it('value-bind', async () => {
         const wrapper = _mount('<McCheckbox v-model:value="value">Test</McCheckbox>', () => {
             return {
                 value: false
             };
         });
-        expect(wrapper.classes()).toContain('mc-checkbox');
+
         const checkboxInput = wrapper.find('input[type=checkbox]');
         await checkboxInput.setValue();
-        // @ts-ignore
-        expect(wrapper.vm.value).toBe(true);
+        expect((wrapper.vm as CheckboxProps).value).toBe(true);
         wrapper.unmount();
     });
 
     it('label', () => {
         // label in props
-        const wrapper1 = _mount('<McCheckbox label="Test"></McCheckbox>');
+        const wrapper1 = mount(McCheckbox, {
+            props: {
+                label: 'Test'
+            }
+        });
         const label1 = wrapper1.find('.checkbox span:last-child');
         expect(label1.text()).toBe('Test');
         wrapper1.unmount();
 
-        // label in slots
-        const wrapper2 = _mount('<McCheckbox label="Test1">Test2</McCheckbox>');
+        // label in slots will override label props
+        const wrapper2 = mount(McCheckbox, {
+            props: {
+                label: 'Test1'
+            },
+            slots: {
+                default: () => 'Test2'
+            }
+        });
         const label2 = wrapper2.find('.checkbox span:last-child');
         expect(label2.text()).toBe('Test2');
         wrapper2.unmount();
     });
 
     it('size', () => {
-        const wrapper = _mount(`
-            <McCheckbox id="small" size="small">Test</McCheckbox>
-            <McCheckbox id="medium" size="medium">Test</McCheckbox>
-            <McCheckbox id="large" size="large">Test</McCheckbox>
-        `);
+        (['small', 'medium', 'large'] as const).forEach(size => {
+            const wrapper = mount(McCheckbox, { props: { size } });
+            expect(wrapper.attributes('style')).toMatchSnapshot();
+            wrapper.unmount();
+        });
+    });
 
-        console.log(wrapper.html());
-        const small = wrapper.find('#small');
-        console.log(small.html());
+    it('check-value', async () => {
+        const wrapper = _mount('<McCheckbox v-model:value="value" checked-value="yes" unchecked-value="no">Test</McCheckbox>', () => {
+            return {
+                value: 'no'
+            };
+        });
+
+        const checkboxInput = wrapper.find('input[type=checkbox]');
+        await checkboxInput.setValue();
+        expect((wrapper.vm as CheckboxProps).value).toBe('yes');
+        wrapper.unmount();
+    });
+
+    it('disabled', async () => {
+        const wrapper = _mount('<McCheckbox v-model:value="value" disabled>Test</McCheckbox>', () => {
+            return {
+                value: false
+            };
+        });
+
+        expect(wrapper.classes()).toContain('mc-checkbox--disabled');
+        const checkboxInput = wrapper.find('input[type=checkbox]');
+        await checkboxInput.setValue();
+        expect((wrapper.vm as CheckboxProps).value).toBe(false);
+        wrapper.unmount();
     });
 });

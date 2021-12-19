@@ -7,7 +7,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { ref, useSlots, createVNode, renderSlot, toRefs, computed, inject } from 'vue';
+import { ref, useSlots, useAttrs, createVNode, renderSlot, toRefs, computed, inject, mergeProps } from 'vue';
 import CheckMark from './CheckMark.vue';
 import IndeterminateMark from './IndeterminateMark.vue';
 import { useVModels, or, and, not } from '@vueuse/core';
@@ -37,6 +37,7 @@ const emit = defineEmits<{
 }>();
 
 const slots = useSlots();
+const attrs = useAttrs();
 const key = createKey('checkbox');
 const { label, size, checkedValue, uncheckedValue, disabled, indeterminate, checkedColor } = toRefs(props);
 const { groupValue, groupCheckedColor, groupDisabled, updateGroupValue, BusSelectAll, BusUpdateDisabled } = inject(checkboxGroupInjectionKey, null) ?? {};
@@ -110,29 +111,29 @@ const labelVNode = computed(() => {
 });
 
 const Render = () => {
-    return createVNode(
-        'div',
+    const mergedProps = mergeProps(
         {
             class: ['mc-checkbox', { 'mc-checkbox--disabled': mergedDisabled.value }],
             style: cssVars.value
         },
-        [
-            createVNode('input', { class: 'checkbox-input', id: key, type: 'checkbox', onChange: handleChange, checked: mergedChecked.value, disabled: mergedDisabled.value }),
-            createVNode('label', { class: 'checkbox', for: key }, [
-                createVNode(
-                    'span',
-                    {
-                        style: {
-                            background: mergedDisabled.value ? 'rgba(0, 0, 0, 0.02)' : '',
-                            borderColor: mergedDisabled.value ? '#cccfdb' : ''
-                        }
-                    },
-                    [createVNode(indeterminate.value ? IndeterminateMark : CheckMark)]
-                ),
-                labelVNode.value
-            ])
-        ]
+        attrs
     );
+    return createVNode('div', mergedProps, [
+        createVNode('input', { class: 'checkbox-input', id: key, type: 'checkbox', onChange: handleChange, checked: mergedChecked.value, disabled: mergedDisabled.value }),
+        createVNode('label', { class: 'checkbox', for: key }, [
+            createVNode(
+                'span',
+                {
+                    style: {
+                        background: mergedDisabled.value ? 'rgba(0, 0, 0, 0.02)' : '',
+                        borderColor: mergedDisabled.value ? '#cccfdb' : ''
+                    }
+                },
+                [createVNode(indeterminate.value ? IndeterminateMark : CheckMark)]
+            ),
+            labelVNode.value
+        ])
+    ]);
 };
 </script>
 

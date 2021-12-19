@@ -87,7 +87,7 @@ const getActionVNode = () => {
 
 const Render = () => {
     const iconVNode = hideIcon.value ? null : getSlotFirstVNode(slots.icon) || createVNode(NIcon, { size: 22, color: '#f59e0b', style: { 'margin-right': '8px' } }, { default: () => createVNode(IconAlert) });
-    const popoverMergedProps = mergeProps(
+    const mergedProps = mergeProps(
         {
             ref: popoverRef,
             class: 'mc-popconfirm',
@@ -96,7 +96,7 @@ const Render = () => {
         attrs
     );
 
-    return createVNode(McPopover, popoverMergedProps, {
+    return createVNode(McPopover, mergedProps, {
         default: () => renderSlot(slots, 'default'),
         content: () =>
             createVNode(Fragment, null, [

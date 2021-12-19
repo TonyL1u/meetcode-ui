@@ -20,14 +20,14 @@ const attrs = useAttrs();
 const { content } = toRefs(props);
 
 const Render = () => {
-    const popoverMergedProps = mergeProps(
+    const mergedProps = mergeProps(
         {
             class: 'mc-tooltip'
         },
         attrs
     );
 
-    return createVNode(McPopover, popoverMergedProps, {
+    return createVNode(McPopover, mergedProps, {
         default: () => renderSlot(slots, 'default'),
         content: () => createTextVNode(content.value)
     });
