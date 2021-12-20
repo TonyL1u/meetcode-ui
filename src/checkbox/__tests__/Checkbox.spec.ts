@@ -15,6 +15,7 @@ describe('mc-checkbox', () => {
     it('basic', async () => {
         const wrapper = mount(McCheckbox);
         expect(wrapper.classes()).toContain('mc-checkbox');
+        wrapper.unmount();
     });
 
     it('value-bind', async () => {
@@ -41,7 +42,7 @@ describe('mc-checkbox', () => {
         expect(label1.text()).toBe('Test');
         wrapper1.unmount();
 
-        // label in slots will override label props
+        // label in slots will override the label in props
         const wrapper2 = mount(McCheckbox, {
             props: {
                 label: 'Test1'
@@ -87,6 +88,16 @@ describe('mc-checkbox', () => {
         const checkboxInput = wrapper.find('input[type=checkbox]');
         await checkboxInput.setValue();
         expect((wrapper.vm as CheckboxProps).value).toBe(false);
+        wrapper.unmount();
+    });
+
+    it('event', async () => {
+        const onUpdateValue = jest.fn();
+        const wrapper = mount(McCheckbox, { props: { 'onUpdate:value': onUpdateValue } });
+
+        const checkboxInput = wrapper.find('input[type=checkbox]');
+        await checkboxInput.setValue();
+        expect(onUpdateValue).toBeCalled();
         wrapper.unmount();
     });
 });

@@ -1,4 +1,4 @@
-import { InjectionKey, Ref } from 'vue';
+import { InjectionKey, Ref, VNodeChild } from 'vue';
 import { UseEventBusReturn } from '@vueuse/core';
 import * as CSS from 'csstype';
 
@@ -27,8 +27,9 @@ export type CheckboxGroupStatus = {
     indeterminate: boolean;
 };
 export interface CheckboxGroupOptions {
-    value: CheckboxValue;
-    label: string;
+    value?: CheckboxValue;
+    label?: string | (() => VNodeChild);
+    disabled?: boolean;
 }
 
 export interface CheckboxGroupProps {

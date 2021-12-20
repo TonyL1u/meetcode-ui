@@ -2,7 +2,7 @@
 import { provide, toRefs, ref, createVNode, useSlots, renderSlot, nextTick, onUnmounted, watch, computed } from 'vue';
 import { useVModels, useEventBus } from '@vueuse/core';
 import McCheckbox from './Checkbox.vue';
-import { flatten } from '../_utils_';
+import { flatten, createKey } from '../_utils_';
 import { checkboxGroupInjectionKey, CheckboxValue, CheckboxGroupOptions, CheckboxGroupStatus, checkboxIKey } from './interface';
 
 interface Props {
@@ -21,6 +21,7 @@ const emit = defineEmits<{
 }>();
 
 const slots = useSlots();
+const key = createKey('checkbox-group');
 const { options, checkedColor, max, disabled } = toRefs(props);
 const { value: valueVM } = useVModels(props, emit);
 const checkboxGroupElRef = ref<HTMLElement>();
@@ -74,8 +75,8 @@ const updateGroupValue = (value?: CheckboxValue, call: boolean = true) => {
     }
 };
 
-const BusSelectAll = useEventBus<boolean>('select-all');
-const BusUpdateDisabled = useEventBus<boolean>('update-internal-disabled');
+const BusSelectAll = useEventBus<boolean>(key + 'select-all');
+const BusUpdateDisabled = useEventBus<boolean>(key + 'update-internal-disabled');
 
 provide(checkboxGroupInjectionKey, {
     groupValue: valueVM,
@@ -95,10 +96,14 @@ const Render = () => {
         },
         [
             ...(options?.value?.map(option => {
-                const { value, label } = option;
+                const { value, label, disabled } = option;
 
-                return createVNode(McCheckbox, { value }, { default: () => label });
-            }) ?? [null]),
+                if (!label || typeof label === 'string') {
+                    return createVNode(McCheckbox, { value, label, disabled });
+                } else {
+                    return createVNode(McCheckbox, { value, disabled }, { default: label });
+                }
+            }) ?? []),
             renderSlot(slots, 'default')
         ]
     );

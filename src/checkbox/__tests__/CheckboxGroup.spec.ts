@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { ref, createVNode, nextTick } from 'vue';
-import { CheckboxGroupProps, CheckboxGroupExposeInstance } from '../interface';
+import { CheckboxGroupProps } from '../interface';
 import { McCheckboxGroup, McCheckbox } from '../index';
 
 const _mount = (template: string, data?: () => unknown, args?: Record<string, unknown>) => {
@@ -48,8 +48,8 @@ describe('mc-checkbox-group', () => {
             };
         });
 
-        wrapper.findAllComponents(McCheckbox).forEach(async component => {
-            const checkboxInput = component.find('input[type=checkbox]');
+        wrapper.findAllComponents(McCheckbox).forEach(async checkbox => {
+            const checkboxInput = checkbox.find('input[type=checkbox]');
             await checkboxInput.setValue();
         });
         expect((wrapper.vm as CheckboxGroupProps).value).toEqual(['apple', 'orange', 'banana']);
@@ -67,6 +67,7 @@ describe('mc-checkbox-group', () => {
 
         void nextTick(() => {
             expect(wrapper.findAll('.mc-checkbox--disabled').length).toBe(2);
+            wrapper.unmount();
         });
     });
 
@@ -75,5 +76,22 @@ describe('mc-checkbox-group', () => {
 
         expect(wrapper.findAll('.mc-checkbox--disabled').length).toBe(3);
         wrapper.unmount();
+    });
+
+    it('event', () => {
+        const onUpdateValue = jest.fn();
+        const wrapper = mount(McCheckboxGroup, {
+            props: { 'onUpdate:value': onUpdateValue, options }
+        });
+
+        wrapper.findAllComponents(McCheckbox).forEach(async checkbox => {
+            const checkboxInput = checkbox.find('input[type=checkbox]');
+            await checkboxInput.setValue();
+        });
+
+        void nextTick(() => {
+            expect(onUpdateValue).toHaveBeenCalledTimes(3);
+            wrapper.unmount();
+        });
     });
 });

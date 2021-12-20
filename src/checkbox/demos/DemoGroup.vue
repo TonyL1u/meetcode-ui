@@ -1,0 +1,31 @@
+<template>
+    <McCheckboxGroup v-model:value="groupValue" :options="options">
+        <McCheckbox value="grape">Grape</McCheckbox>
+    </McCheckboxGroup>
+
+    <McPopselect v-model:value="groupValue"> </McPopselect>
+</template>
+
+<script lang="ts" setup>
+import { ref, createVNode } from 'vue';
+import { McCheckboxGroup, McCheckbox, McTooltip, McPopselect } from 'meetcode-ui';
+
+const groupValue = ref(['apple']);
+const options = [
+    {
+        value: 'apple',
+        label: 'Apple',
+        disabled: true
+    },
+    {
+        value: 'orange',
+        label: () => {
+            return createVNode(McTooltip, { content: 'This is an orange' }, ['Orange']);
+        }
+    },
+    {
+        value: 'banana',
+        label: 'Banana'
+    }
+];
+</script>
