@@ -74,7 +74,7 @@ const getOptionVNode = (data: PopselectOption) => {
                 {
                     class: 'mc-popselect-option__inner'
                 },
-                [createVNode('div', null, label), checkVNode]
+                [createVNode('div', null, [typeof label === 'string' ? label : label()]), checkVNode]
             )
         ]
     );

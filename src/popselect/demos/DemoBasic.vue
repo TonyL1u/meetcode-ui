@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, createVNode } from 'vue';
 import { NButton } from 'naive-ui';
 import { McPopselect } from 'meetcode-ui';
 

@@ -17,7 +17,7 @@ const props = withDefaults(defineProps<Props>(), {
     checkedColor: '#10b981'
 });
 const emit = defineEmits<{
-    (e: 'update:value', value: CheckboxValue[]): void;
+    (e: 'update:value', valueVM: CheckboxValue[]): void;
 }>();
 
 const slots = useSlots();

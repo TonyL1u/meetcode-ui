@@ -16,7 +16,9 @@
     }
 
     &--disabled {
-        @apply mc-cursor-not-allowed mc-bg-gray-100 mc-text-gray-400;
+        color: #bbb;
+        background: rgba(0, 0, 0, 0.02);
+        cursor: not-allowed;
     }
 
     &__inner {
