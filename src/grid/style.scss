@@ -1,4 +1,6 @@
 .mc-grid {
+    display: grid;
+
     grid-template-columns: var(--columns-template);
     grid-template-rows: var(--rows-template);
     gap: var(--grid-gap);

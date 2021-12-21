@@ -9,3 +9,4 @@ export * from './navigation';
 export * from './tabs';
 export * from './message';
 export * from './checkbox';
+export * from './spliter';
