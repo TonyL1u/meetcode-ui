@@ -17,7 +17,7 @@ const props = withDefaults(defineProps<Props>(), {
     checkedColor: '#10b981'
 });
 const emit = defineEmits<{
-    (e: 'update:value', valueVM: CheckboxValue[]): void;
+    (e: 'update:value', groupValue?: CheckboxValue[], value?: CheckboxValue): void;
 }>();
 
 const slots = useSlots();
@@ -40,8 +40,8 @@ const status = computed<CheckboxGroupStatus>(() => {
     };
 });
 
-const callUpdateValue = () => {
-    emit('update:value', valueVM!.value!);
+const callUpdateValue = (value?: CheckboxValue) => {
+    emit('update:value', valueVM!.value!, value);
 };
 
 // due with max props, some logic...
@@ -71,7 +71,7 @@ const updateGroupValue = (value?: CheckboxValue, call: boolean = true) => {
         } else {
             valueVM.value.splice(index, 1);
         }
-        call && callUpdateValue();
+        call && callUpdateValue(value);
     }
 };
 

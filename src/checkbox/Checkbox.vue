@@ -42,6 +42,7 @@ const key = createKey('checkbox');
 const { label, size, checkedValue, uncheckedValue, disabled, indeterminate, checkedColor } = toRefs(props);
 const { groupValue, groupCheckedColor, groupDisabled, updateGroupValue, BusSelectAll, BusUpdateDisabled } = inject(checkboxGroupInjectionKey, null) ?? {};
 const { value: valueVM } = useVModels(props, emit);
+const checkboxElRef = ref<HTMLElement>();
 const internalDisabled = ref(false);
 const scaleRatio = computed(() => {
     switch (size.value) {
@@ -113,6 +114,7 @@ const labelVNode = computed(() => {
 const Render = () => {
     const mergedProps = mergeProps(
         {
+            ref: checkboxElRef,
             class: ['mc-checkbox', { 'mc-checkbox--disabled': mergedDisabled.value }],
             style: cssVars.value
         },
@@ -135,6 +137,10 @@ const Render = () => {
         ])
     ]);
 };
+
+defineExpose({
+    el: checkboxElRef
+});
 </script>
 
 <template>

@@ -6,7 +6,7 @@
 import { ref } from 'vue';
 import { McCheckboxGroup } from 'meetcode-ui';
 
-const groupValue = ref([]);
+const groupValue = ref(['apple']);
 const options = [
     {
         value: 'apple',
