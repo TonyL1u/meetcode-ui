@@ -21,10 +21,10 @@ const props = withDefaults(defineProps<Props>(), {
 
 const slots = useSlots();
 const { horizontal } = toRefs(props);
-const originalSplits = slots.default ? flatten<SplitElement>(slots.default(), [SplitIKey, SplitPaneIKey]) : [];
 
-const s = computed(() => {
-    const splitters: SpecificVNode<SplitterProps>[] = new Array(originalSplits.length - 1).fill(null).map(() => createVNode(McSplitter, null, []));
+const splitsVNode = computed(() => {
+    const originalSplits = slots.default ? flatten<SplitElement>(slots.default(), [SplitIKey, SplitPaneIKey]) : [];
+    const splitters: SpecificVNode<SplitterProps>[] = new Array(originalSplits.length - 1).fill(null).map(() => createVNode(McSplitter));
     return new Array(2 * originalSplits.length - 1).fill(null).map((e, index) => {
         if (index % 2 === 0) return originalSplits[index >> 1];
         return splitters[(index - 1) >> 1];
@@ -32,13 +32,12 @@ const s = computed(() => {
 });
 
 const Render = () => {
-    console.log(s.value);
     return createVNode(
         'div',
         {
-            class: 'mc-splitter'
+            class: ['mc-split', horizontal.value ? 'mc-split--horizontal' : 'mc-split--vertical']
         },
-        [renderSlot(slots, 'default')]
+        [splitsVNode.value]
     );
 };
 </script>

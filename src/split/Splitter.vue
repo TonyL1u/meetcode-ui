@@ -18,8 +18,16 @@ const props = withDefaults(defineProps<Props>(), {
 
 const slots = useSlots();
 const { horizontal } = toRefs(props);
+
+const splitterMarkerVNode = computed(() => {
+    return createVNode('div', { class: 'mc-splitter__marker' });
+});
+
+const Render = () => {
+    return createVNode('div', { class: 'mc-splitter' }, [splitterMarkerVNode.value]);
+};
 </script>
 
 <template>
-    <div>1</div>
+    <Render />
 </template>

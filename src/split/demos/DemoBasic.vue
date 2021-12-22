@@ -1,7 +1,9 @@
 <template>
-    <McSplit>
-        <McSplitPane>1</McSplitPane>
-        <McSplitPane>2</McSplitPane>
+    <McSplit horizontal>
+        <McSplit>
+            <McSplitPane>1</McSplitPane>
+            <McSplitPane>2</McSplitPane>
+        </McSplit>
         <McSplitPane>3</McSplitPane>
     </McSplit>
 </template>
