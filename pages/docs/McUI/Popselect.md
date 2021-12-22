@@ -36,11 +36,11 @@ import { McTextLink } from 'meetcode-ui'
 
 ## Props
 
-|    名称    |           类型           | 默认值  |          说明          |
-| :--------: | :----------------------: | :-----: | :--------------------: |
-|  options   | `Array<PopselectOption>` |  `[]`   |          选项          |
-|  multiple  |        `boolean`         | `false` |        是否多选        |
-| max-height |         `number`         |  `300`  | 弹出框的最大高度（px） |
+|    名称    |           类型           | 默认值  |         说明         |
+| :--------: | :----------------------: | :-----: | :------------------: |
+|  options   | `Array<PopselectOption>` |  `[]`   |         选项         |
+|  multiple  |        `boolean`         | `false` |       是否多选       |
+| max-height |         `number`         |  `300`  | 弹出框的最大高度(px) |
 
 更多 Props 请参考 <McTextLink to="Popover#props">Popover Props</McTextLink> 。
 
