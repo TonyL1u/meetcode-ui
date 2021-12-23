@@ -35,7 +35,7 @@
 }
 
 .mc-split--vertical > .mc-split-pane {
-    flex: 1;
+    width: calc((100% - 9px) * 0.5);
 }
 
 .mc-split--vertical > .mc-splitter {
