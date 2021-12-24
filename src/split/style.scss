@@ -35,12 +35,14 @@
 }
 
 .mc-split--vertical > .mc-split-pane {
-    width: calc((100% - 9px) * 0.5);
+    // width: calc((100% - 9px) * 0.5);
+    // width: 50%;
+    // overflow: hidden;
 }
 
 .mc-split--vertical > .mc-splitter {
-    padding: 0 3px;
-    cursor: ew-resize;
+    padding: 0 5px;
+    cursor: col-resize;
 }
 
 .mc-split--vertical > .mc-splitter > .mc-splitter__marker {
@@ -65,8 +67,8 @@
     flex-direction: column;
 
     > .mc-splitter {
-        padding: 3px 0;
-        cursor: ns-resize;
+        padding: 5px 0;
+        cursor: row-resize;
     }
 }
 

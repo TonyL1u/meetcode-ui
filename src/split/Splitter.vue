@@ -5,10 +5,10 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { ref, computed, toRefs, useSlots, createVNode, renderSlot } from 'vue';
+import { ref, computed, toRefs, useSlots, createVNode, inject } from 'vue';
 import { useElementBounding } from '@vueuse/core';
 import { flatten, SpecificVNode } from '../_utils_';
-import { SplitPaneIKey } from './interface';
+import { splitInjectionKey } from './interface';
 
 interface Props {
     horizontal?: boolean;
@@ -19,6 +19,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const slots = useSlots();
 const { horizontal } = toRefs(props);
+const { parentWidth, BusResize } = inject(splitInjectionKey, null) ?? {};
 const splitterElRef = ref<HTMLElement>();
 const prevSplitPane = computed(() => {
     return splitterElRef.value?.previousElementSibling as HTMLElement;
@@ -28,6 +29,7 @@ const nextSplitPane = computed(() => {
 });
 
 const handleMousedown = (e: MouseEvent) => {
+    console.log(parentWidth?.value);
     const { clientX: startX, clientY: startY } = e;
     const prevRect = prevSplitPane.value?.getBoundingClientRect();
     const initWidth = getComputedStyle(prevSplitPane.value).width.slice(0, -2);
@@ -38,8 +40,8 @@ const handleMousedown = (e: MouseEvent) => {
 
     const move = (moveEvent: MouseEvent) => {
         const { clientX: curX, clientY: curY } = moveEvent;
-        console.log(curX - startX);
-        prevSplitPane.value.style.width = `${initWidth + (curX - startX)}px`;
+        BusResize?.emit(curX - startX);
+        // prevSplitPane.value.style.width = `${initWidth + (curX - startX)}px`;
     };
 
     const up = (upEvent: MouseEvent) => {

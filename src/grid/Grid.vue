@@ -3,7 +3,7 @@ import { GridIKey } from './interface';
 
 export default {
     name: 'Grid',
-    alias: [GridIKey]
+    iKey: GridIKey
 };
 </script>
 

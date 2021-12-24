@@ -1,4 +1,4 @@
-import { Fragment, Comment } from 'vue';
+import { Fragment, Comment, CustomVNodeTypes } from 'vue';
 import { SpecificVNode } from './tsutils';
 /**
  *
@@ -8,11 +8,11 @@ import { SpecificVNode } from './tsutils';
  * @param result
  * @returns
  */
-export function flatten<T = Record<string, unknown>>(vNodes: Array<SpecificVNode<T>>, identificationKey: Symbol | Symbol[] | null = null, mode = false, result: Array<SpecificVNode<T>> = []) {
+export function flatten<T = Record<string, unknown>>(vNodes: Array<SpecificVNode<T>>, identificationKey?: Symbol | Symbol[], mode = false, result: Array<SpecificVNode<T>> = []) {
     const filterVNodes = identificationKey
         ? vNodes.filter(vNode => {
-              const { iKey } = <any>vNode.type;
-              const isAuth = Array.isArray(identificationKey) ? (mode ? !identificationKey.includes(iKey) : identificationKey.includes(iKey)) : mode ? iKey !== identificationKey : iKey === identificationKey;
+              const { iKey } = vNode.type as CustomVNodeTypes;
+              const isAuth = iKey ? (Array.isArray(identificationKey) ? (mode ? !identificationKey.includes(iKey) : identificationKey.includes(iKey)) : mode ? iKey !== identificationKey : iKey === identificationKey) : false;
               return isAuth || vNode.type === Fragment;
           })
         : vNodes;
