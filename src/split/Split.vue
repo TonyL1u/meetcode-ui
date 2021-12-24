@@ -10,7 +10,7 @@ export default {
 import { computed, toRefs, useSlots, createVNode, renderSlot } from 'vue';
 import { flatten, SpecificVNode } from '../_utils_';
 import McSplitter from './Splitter.vue';
-import { SplitPaneIKey, SplitElement, SplitterProps } from './interface';
+import { SplitPaneIKey, SplitPaneProps, SplitterProps } from './interface';
 
 interface Props {
     horizontal?: boolean;
@@ -23,7 +23,7 @@ const slots = useSlots();
 const { horizontal } = toRefs(props);
 
 const splitsVNode = computed(() => {
-    const originalSplits = slots.default ? flatten<SplitElement>(slots.default(), [SplitIKey, SplitPaneIKey]) : [];
+    const originalSplits = slots.default ? flatten<SplitPaneProps>(slots.default(), SplitPaneIKey) : [];
     const splitters: SpecificVNode<SplitterProps>[] = new Array(originalSplits.length - 1).fill(null).map(() => createVNode(McSplitter));
     return new Array(2 * originalSplits.length - 1).fill(null).map((e, index) => {
         if (index % 2 === 0) return originalSplits[index >> 1];

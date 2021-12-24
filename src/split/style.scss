@@ -3,8 +3,7 @@
 }
 
 .mc-split-pane {
-    flex: 1;
-    height: 200px;
+    padding: 6px;
     border: 1px solid #000;
     border-radius: 4px;
 }
@@ -35,54 +34,56 @@
     }
 }
 
-.mc-split--vertical {
-    .mc-splitter {
-        padding: 0 3px;
-        cursor: ew-resize;
+.mc-split--vertical > .mc-split-pane {
+    width: calc((100% - 9px) * 0.5);
+}
 
-        &__marker {
-            width: 3px;
-            height: 56px;
+.mc-split--vertical > .mc-splitter {
+    padding: 0 3px;
+    cursor: ew-resize;
+}
 
-            &::before,
-            &::after {
-                left: 0px;
-            }
+.mc-split--vertical > .mc-splitter > .mc-splitter__marker {
+    width: 3px;
+    height: 56px;
 
-            &::before {
-                top: -1.5px;
-            }
+    &::before,
+    &::after {
+        left: 0px;
+    }
 
-            &::after {
-                bottom: -1.5px;
-            }
-        }
+    &::before {
+        top: -1.5px;
+    }
+
+    &::after {
+        bottom: -1.5px;
     }
 }
 
 .mc-split--horizontal {
     flex-direction: column;
 
-    .mc-splitter {
+    > .mc-splitter {
         padding: 3px 0;
         cursor: ns-resize;
+    }
+}
 
-        &__marker {
-            width: 56px;
-            height: 3px;
+.mc-split--horizontal > .mc-splitter > .mc-splitter__marker {
+    width: 56px;
+    height: 3px;
 
-            &::before,
-            &::after {
-                top: 0;
-            }
+    &::before,
+    &::after {
+        top: 0;
+    }
 
-            &::before {
-                left: -1.5px;
-            }
+    &::before {
+        left: -1.5px;
+    }
 
-            &::after {
-                right: -1.5px;
-            }
-        }
+    &::after {
+        right: -1.5px;
     }
 }
