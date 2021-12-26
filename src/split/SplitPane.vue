@@ -8,16 +8,17 @@ export default {
 
 <script lang="ts" setup>
 import { ref, createVNode, useSlots, renderSlot, inject } from 'vue';
+import { createKey } from '../_utils_';
 import { splitInjectionKey } from './interface';
 
 const slots = useSlots();
+const key = createKey('split-pane');
 const { parentWidth, BusResize } = inject(splitInjectionKey, null) ?? {};
-const widthPercentage = ref(50);
 
 const updateSize = (dragSize: number) => {
     console.log(dragSize);
     if (parentWidth?.value) {
-        widthPercentage.value += 1;
+        // widthPercentage.value += 1;
     }
 };
 
@@ -30,7 +31,7 @@ const Render = () => {
         'div',
         {
             class: 'mc-split-pane',
-            style: { width: `${widthPercentage.value}%` }
+            'data-key': key
         },
         [renderSlot(slots, 'default')]
     );

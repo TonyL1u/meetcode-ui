@@ -21,26 +21,26 @@ const slots = useSlots();
 const { horizontal } = toRefs(props);
 const { parentWidth, BusResize } = inject(splitInjectionKey, null) ?? {};
 const splitterElRef = ref<HTMLElement>();
-const prevSplitPane = computed(() => {
-    return splitterElRef.value?.previousElementSibling as HTMLElement;
+const prevSplitPaneDataKey = computed(() => {
+    return (splitterElRef.value?.previousElementSibling as HTMLElement).dataset.key;
 });
-const nextSplitPane = computed(() => {
-    return splitterElRef.value?.nextElementSibling as HTMLElement;
+const nextSplitPaneDataKey = computed(() => {
+    return (splitterElRef.value?.nextElementSibling as HTMLElement).dataset.key;
 });
 
 const handleMousedown = (e: MouseEvent) => {
-    console.log(parentWidth?.value);
     const { clientX: startX, clientY: startY } = e;
-    const prevRect = prevSplitPane.value?.getBoundingClientRect();
-    const initWidth = getComputedStyle(prevSplitPane.value).width.slice(0, -2);
-    console.log(prevRect);
-    console.log(prevSplitPane.value.style.width);
-    console.log(getComputedStyle(prevSplitPane.value).width);
-    getComputedStyle(prevSplitPane.value);
+    const { value: prevElKey } = prevSplitPaneDataKey;
+    const { value: nextElKey } = nextSplitPaneDataKey;
+
+    // console.log(prevRect);
+    // console.log(prevSplitPane.value.style.width);
+    // console.log(getComputedStyle(prevSplitPane.value).width);
+    // getComputedStyle(prevSplitPane.value);
 
     const move = (moveEvent: MouseEvent) => {
         const { clientX: curX, clientY: curY } = moveEvent;
-        BusResize?.emit(curX - startX);
+        BusResize?.emit(curX - startX, prevElKey, nextElKey);
         // prevSplitPane.value.style.width = `${initWidth + (curX - startX)}px`;
     };
 

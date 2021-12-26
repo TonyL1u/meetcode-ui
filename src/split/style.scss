@@ -35,9 +35,7 @@
 }
 
 .mc-split--vertical > .mc-split-pane {
-    // width: calc((100% - 9px) * 0.5);
-    // width: 50%;
-    // overflow: hidden;
+    width: var(--split-pane-initial-width);
 }
 
 .mc-split--vertical > .mc-splitter {
