@@ -54,7 +54,7 @@ import LoadingType from '@/loading/demos/DemoLoadingType.vue'
 |    size     |     `'small' \| 'medium' \| 'large'`     | `'medium'`  |         Loading 大小         |
 |  placement  | `'top' \| 'right' \| 'bottom' \| 'left'` |   `'top'`   | Loading 相对于描述信息的位置 |
 |    color    |                 `string`                 | `'#10b981'` |         Loading 颜色         |
-|  maskStyle  |                 `object`                 |    `{}`     |          遮罩层样式          |
+| mask-style  |                 `object`                 |    `{}`     |          遮罩层样式          |
 | description |                 `string`                 | `undefined` |      Loading 的描述信息      |
 
 ## Slot

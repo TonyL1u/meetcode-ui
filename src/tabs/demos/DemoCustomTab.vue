@@ -1,5 +1,5 @@
 <template>
-    <McTabs :header-style="{ justifyContent: 'space-evenly' }" :tab-gap="0" :show-line="false">
+    <McTabs :header-style="{ justifyContent: 'space-evenly' }" :tab-gap="0" :show-line="false" animation="scale">
         <McTabPane name="home">
             <template #tab>
                 <NIcon style="margin-right: 8px">

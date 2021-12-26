@@ -19,7 +19,7 @@ import BeforeTabSwitch from '@/tabs/demos/DemoBeforeTabSwitch.vue'
 
 ### 基础用法
 
-默认激活第一个 tab。
+默认激活第一个。
 
 <Basic />
 :::
@@ -111,21 +111,22 @@ import BeforeTabSwitch from '@/tabs/demos/DemoBeforeTabSwitch.vue'
 
 ### Tabs
 
-|     名称      |                   类型                    |   默认值    |        说明        |
-| :-----------: | :---------------------------------------: | :---------: | :----------------: |
-|     type      | `'bar' \| 'empty' \| 'card' \| 'segment'` |   `'bar'`   |     Tabs 样式      |
-|  default-tab  |            `string \| number`             | `undefined` |   默认激活的 tab   |
-|     value     |            `string \| number`             | `undefined` |    双向绑定的值    |
-|    center     |                 `boolean`                 |   `false`   |      标签居中      |
-|    stretch    |                 `boolean`                 |   `false`   |  标签宽度自动撑开  |
-| bar-position  |              `bottom \| top`              | `'bottom'`  |  设置 bar 的位置   |
-|   show-line   |                 `boolean`                 |   `true`    |    是否显示划线    |
-|    tab-gap    |                 `number`                  |    `40`     | 标签之间的距离(px) |
-| active-color  |                 `string`                  |  `#10b981`  |   标签激活的颜色   |
-| header-style  |            `string \| object`             | `undefined` |      头部样式      |
-| header-class  |                 `string`                  | `undefined` |      头部类名      |
-| content-style |            `string \| object`             | `undefined` |      面板样式      |
-| content-class |                 `string`                  | `undefined` |      面板类名      |
+|     名称      |                   类型                    |   默认值    |         说明         |
+| :-----------: | :---------------------------------------: | :---------: | :------------------: |
+|     type      | `'bar' \| 'empty' \| 'card' \| 'segment'` |   `'bar'`   |      Tabs 样式       |
+|  default-tab  |            `string \| number`             | `undefined` |    默认激活的 tab    |
+|     value     |            `string \| number`             | `undefined` |     双向绑定的值     |
+|    center     |                 `boolean`                 |   `false`   |       标签居中       |
+|    stretch    |                 `boolean`                 |   `false`   |   标签宽度自动撑开   |
+| bar-position  |              `bottom \| top`              | `'bottom'`  |   设置 bar 的位置    |
+|   show-line   |                 `boolean`                 |   `true`    |     是否显示划线     |
+|    tab-gap    |                 `number`                  |    `40`     |  标签之间的距离(px)  |
+|   animation   |      `'slide' \| 'scale' \| 'fade'`       |  `'slide'`  | 头部指示器的动画效果 |
+| active-color  |                 `string`                  |  `#10b981`  |    标签激活的颜色    |
+| header-style  |            `string \| object`             | `undefined` |       头部样式       |
+| header-class  |                 `string`                  | `undefined` |       头部类名       |
+| content-style |            `string \| object`             | `undefined` |       面板样式       |
+| content-class |                 `string`                  | `undefined` |       面板类名       |
 
 ### TabPane
 

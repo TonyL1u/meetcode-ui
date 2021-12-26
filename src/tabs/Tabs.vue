@@ -20,6 +20,7 @@ interface Props {
     stretch?: boolean;
     center?: boolean;
     tabGap?: number;
+    animation?: 'slide' | 'scale' | 'fade';
     activeColor?: string;
     barPosition?: 'bottom' | 'top';
     headerStyle?: CSSProperties;
@@ -34,6 +35,7 @@ const props = withDefaults(defineProps<Props>(), {
     stretch: false,
     center: false,
     tabGap: 40,
+    animation: 'slide',
     activeColor: '#10b981',
     barPosition: 'bottom'
 });
@@ -44,7 +46,7 @@ const emit = defineEmits<{
 }>();
 
 const slots = useSlots();
-const { defaultTab, type, showLine, center, stretch, tabGap, activeColor, barPosition, headerStyle, headerClass, contentStyle, contentClass, onBeforeTabSwitch } = toRefs(props);
+const { defaultTab, type, showLine, center, stretch, tabGap, animation, activeColor, barPosition, headerStyle, headerClass, contentStyle, contentClass, onBeforeTabSwitch } = toRefs(props);
 const { value: valueVM } = useVModels(props, emit);
 const activeTabName = ref(valueVM?.value || (defaultTab?.value ?? ''));
 const activeTabVNode = ref<VNode>();
@@ -66,26 +68,27 @@ if (valueVM) {
     });
 }
 
-if (type.value === 'bar') {
-    watch(activeTabVNode, () => {
-        nextTick(() => {
-            updateBarStyle();
+if (type.value === 'bar' || type.value === 'segment') {
+    if (animation.value === 'slide') {
+        watch(activeTabVNode, () => {
+            nextTick(() => {
+                updateBarStyle();
+            });
         });
-    });
-
-    const { top, right, width, height } = useElementBounding(headerElRef);
-    throttledWatch(
-        [top, right, width, height],
-        () => {
-            clearBarUpdatedTimer();
-            const { value: barEl } = barElRef;
-            barEl!.style.transition = '0s';
-            updateBarStyle();
-        },
-        {
-            throttle: 32
-        }
-    );
+        const { top, right, width, height } = useElementBounding(headerElRef);
+        throttledWatch(
+            [top, right, width, height],
+            () => {
+                clearBarUpdatedTimer();
+                const { value: barEl } = barElRef;
+                barEl!.style.transition = '0s';
+                updateBarStyle();
+            },
+            {
+                throttle: 32
+            }
+        );
+    }
 }
 
 const callUpdateTab = (name: TabPaneName) => {
@@ -170,11 +173,21 @@ const getTabVNode = (maybeTabPane: SpecificVNode<MaybeTabPaneProps>) => {
 
 const lineBarVNode = computed(() => {
     if (type.value === 'bar') {
-        return createVNode('div', {
-            ref: barElRef,
-            class: ['mc-tabs__header-bar', `mc-tabs__header-bar--${barPosition.value}`]
-        });
+        if (animation.value === 'slide') {
+            return createVNode('div', {
+                ref: barElRef,
+                class: ['mc-tabs__header-bar', `mc-tabs__header-bar--${barPosition.value}`]
+            });
+        }
+    } else if (type.value === 'segment') {
+        if (animation.value === 'slide') {
+            return createVNode('div', {
+                ref: barElRef,
+                class: ['mc-tabs__header-bar']
+            });
+        }
     }
+
     return null;
 });
 
@@ -215,7 +228,8 @@ const Render = () => {
                             'mc-tabs__header--center': center.value,
                             'mc-tabs__header--stretch': stretch.value,
                             'mc-tabs__header--with-line': type.value === 'segment' || type.value === 'empty' ? false : showLine.value
-                        }
+                        },
+                        type.value === 'bar' || type.value === 'segment' ? `mc-tabs__header--bar-${animation.value}` : ''
                     ]
                 },
                 [lineBarVNode.value, tabsHeaderVNode.value]

@@ -32,7 +32,7 @@ import SelectAll from '@/checkbox/demos/DemoSelectAll.vue'
 
 ### 选项组
 
-通过 `options` 或默认插槽来添加复选框。支持混合使用。
+通过 `options` 或默认 `slot` 来添加复选框。支持混合使用。
 
 <Group />
 

@@ -55,6 +55,12 @@
             border-bottom: none;
         }
     }
+
+    &-bar {
+        transition: 0.3s;
+        position: absolute;
+        width: 8192px;
+    }
 }
 
 .mc-tabs__content {
@@ -68,6 +74,7 @@
         .mc-tabs-tab {
             margin: 0 var(--tab-gap);
             padding: 12px 0;
+            position: relative;
 
             &:first-child {
                 margin-left: 0;
@@ -82,13 +89,28 @@
             }
         }
 
+        &--bar-scale .mc-tabs-tab {
+            &::after {
+                content: '';
+                position: absolute;
+                left: 0;
+                bottom: -1px;
+                width: 100%;
+                height: 2px;
+                background: var(--tab-active-color);
+                transition: transform 0.25s ease-in-out;
+                transform: scaleX(0);
+            }
+
+            &--active::after {
+                transform: scaleX(1);
+            }
+        }
+
         &-bar {
-            transition: 0.3s;
-            position: absolute;
-            height: 2px;
-            width: 8192px;
-            background: var(--tab-active-color);
             z-index: 1;
+            height: 2px;
+            background: var(--tab-active-color);
 
             &--bottom {
                 bottom: 0;
@@ -153,12 +175,35 @@
 }
 
 .mc-tabs--segment {
+    --segment-content-padding: 2px;
+
     .mc-tabs__header {
         background: #f6f6f9;
         align-items: center;
-        padding: 2px;
         box-sizing: border-box;
         border-radius: 4px;
+        position: relative;
+
+        &-scroll-content {
+            padding: var(--segment-content-padding);
+        }
+
+        &-bar {
+            border-radius: 4px;
+            top: var(--segment-content-padding);
+            height: calc(100% - var(--segment-content-padding) * 2);
+            background: #fff;
+            box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.02), 0px 2px 12px 0px rgba(0, 0, 0, 0.04), 0px 2px 6px 0px rgba(0, 0, 0, 0.02);
+        }
+
+        &--bar-fade .mc-tabs-tab {
+            transition: background 0.2s;
+
+            &--active {
+                background: #fff;
+                box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.02), 0px 2px 12px 0px rgba(0, 0, 0, 0.04), 0px 2px 6px 0px rgba(0, 0, 0, 0.02);
+            }
+        }
     }
 
     .mc-tabs-tab {
@@ -167,12 +212,9 @@
         border-radius: 2px;
         margin: 0;
         flex: 1;
-        transition: background 0.2s;
 
-        &.mc-tabs-tab--active {
+        &--active {
             font-weight: bold;
-            background: #fff;
-            box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.02), 0px 2px 12px 0px rgba(0, 0, 0, 0.04), 0px 2px 6px 0px rgba(0, 0, 0, 0.02);
         }
     }
 }
