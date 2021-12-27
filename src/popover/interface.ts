@@ -1,4 +1,4 @@
-import { PropType } from 'vue';
+import { PropType, VNodeChild } from 'vue';
 
 export type PopoverTrigger = 'hover' | 'click' | 'manual' | 'follow';
 export type PopoverPlacement = 'top' | 'bottom' | 'left' | 'right' | 'top-start' | 'top-end' | 'left-start' | 'left-end' | 'right-start' | 'right-end' | 'bottom-start' | 'bottom-end';
@@ -24,6 +24,7 @@ export interface PopoverBaseProps {
     matchTrigger: boolean;
     autoSync: boolean;
     title?: string;
+    content?: string | (() => VNodeChild);
 }
 export interface PopoverExposeInstance {
     syncPosition: () => void;
@@ -86,6 +87,10 @@ export const popoverProps = {
     },
     title: {
         type: String as PropType<PopoverBaseProps['title']>,
+        default: undefined
+    },
+    content: {
+        type: [String, Function] as PropType<PopoverBaseProps['content']>,
         default: undefined
     }
 };

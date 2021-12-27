@@ -1,8 +1,7 @@
 <template>
     <NSpace>
-        <McPopover title="标题" trigger="hover">
+        <McPopover title="标题" content="这是测试内容" trigger="hover">
             <NButton type="primary" ghost>悬浮</NButton>
-            <template #content>这是测试内容</template>
         </McPopover>
 
         <McPopover title="标题" trigger="click" placement="bottom">

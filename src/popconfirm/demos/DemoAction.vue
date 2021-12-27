@@ -1,5 +1,5 @@
 <template>
-    <McPopconfirm ref="popconfirm" :content="`点击了 ${count} 次`">
+    <McPopconfirm :content="`点击了 ${count} 次`">
         <NButton type="primary" ghost>点击</NButton>
         <template #action>
             <NButton size="small" type="info" @click="count++">确定</NButton>

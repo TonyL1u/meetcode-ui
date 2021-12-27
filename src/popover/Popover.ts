@@ -1,4 +1,4 @@
-import { ref, createVNode, Text, cloneVNode, computed, renderSlot, withDirectives, vShow, watch, toRefs, nextTick, Transition, mergeProps, defineComponent } from 'vue';
+import { ref, createVNode, createTextVNode, Text, cloneVNode, computed, renderSlot, withDirectives, vShow, watch, toRefs, nextTick, Transition, mergeProps, defineComponent } from 'vue';
 import { getSlotFirstVNode } from '../_utils_';
 import { VBinder, VTarget, VFollower } from 'vueuc';
 import { useElementBounding, useMouseInElement } from '@vueuse/core';
@@ -10,7 +10,7 @@ export default defineComponent({
     props: popoverProps,
     emits: ['show', 'hide', 'update:show', 'border:reached'],
     setup(props, { slots, attrs, expose, emit }) {
-        const { trigger, placement, destroyWhenHide, zIndex, show, disabled, withArrow, showDelay, hideDelay, offset, wrapBoundary, matchTrigger, autoSync, title } = toRefs(props);
+        const { trigger, placement, destroyWhenHide, zIndex, show, disabled, withArrow, showDelay, hideDelay, offset, wrapBoundary, matchTrigger, autoSync, title, content } = toRefs(props);
         const showRef = trigger.value === 'manual' ? show : ref(!!props.show);
         const followerRef = ref(null);
         const followX = ref(0);
@@ -160,8 +160,8 @@ export default defineComponent({
                 ...contentHoverControl.value
             });
             const tempVNode = createVNode('div', mergedProps, [
-                title?.value ? createVNode('div', { class: 'mc-popover__title' }, [title.value]) : null,
-                renderSlot(slots, 'content'),
+                title.value ? createVNode('div', { class: 'mc-popover__title' }, [title.value]) : null,
+                slots.content ? renderSlot(slots, 'content') : content.value ? (typeof content.value === 'string' ? createTextVNode(content.value) : content.value()) : null,
                 withArrow.value ? createVNode('div', { class: 'mc-popover__arrow' }) : null
             ]);
 

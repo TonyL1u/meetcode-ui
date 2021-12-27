@@ -1,8 +1,8 @@
-import { defineComponent, provide, toRefs, ref, createVNode, useSlots, renderSlot, nextTick, onUnmounted, watch, computed, PropType } from 'vue';
-import { useVModels, useEventBus, EventBusKey } from '@vueuse/core';
-import McCheckbox from './Checkbox.vue';
+import { defineComponent, provide, toRefs, ref, createVNode, renderSlot, nextTick, onUnmounted, watch, computed, PropType } from 'vue';
+import { useEventBus, EventBusKey } from '@vueuse/core';
+import McCheckbox from './Checkbox';
 import { flatten } from '../_utils_';
-import { checkboxGroupInjectionKey, CheckboxValue, CheckboxGroupOptions, CheckboxGroupStatus, checkboxIKey, CheckboxGroupProps } from './interface';
+import { checkboxGroupInjectionKey, CheckboxValue, CheckboxGroupStatus, checkboxIKey, CheckboxGroupProps } from './interface';
 
 export default defineComponent({
     props: {

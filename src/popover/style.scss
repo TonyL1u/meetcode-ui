@@ -130,7 +130,7 @@
     bottom: var(--popover-offset-bottom);
     left: var(--popover-offset-left);
     box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
-    transition: all 0.2s ease;
+    transition: all 0.1s linear;
 
     &__title {
         font-weight: bold;
@@ -148,16 +148,6 @@
         display: inline-block;
     }
 }
-
-// .mc-popover-fade-enter-active,
-// .mc-popover-fade-leave-active {
-//     transition: opacity 0.1s ease;
-// }
-
-// .mc-popover-fade-enter-from,
-// .mc-popover-fade-leave-to {
-//     opacity: 0;
-// }
 
 .mc-popover-fade-enter-from,
 .mc-popover-fade-leave-to {

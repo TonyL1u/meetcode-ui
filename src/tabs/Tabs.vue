@@ -5,7 +5,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { ref, toRefs, useSlots, computed, watch, mergeProps, provide, createVNode, createTextVNode, createCommentVNode, nextTick, VNode, CSSProperties } from 'vue';
+import { ref, toRefs, useSlots, computed, watch, mergeProps, provide, createVNode, createTextVNode, createCommentVNode, nextTick, VNode, CSSProperties, CustomVNodeTypes } from 'vue';
 import { flatten, getSlotFirstVNode, kebabCaseEscape, SpecificVNode } from '../_utils_';
 import { useVModels, useElementBounding, throttledWatch } from '@vueuse/core';
 import McTab from './Tab.vue';
@@ -140,7 +140,7 @@ provide(tabsInjectionKey, activeTabName);
 const getTabVNode = (maybeTabPane: SpecificVNode<MaybeTabPaneProps>) => {
     const { children, props, type } = maybeTabPane;
     const { name, tabLabel = '', tabStyle = '', tabClass = '', disabled = false } = kebabCaseEscape<MaybeTabPaneProps>(props) ?? {};
-    const isTab = (<any>type).iKey === tabIKey;
+    const isTab = (type as CustomVNodeTypes).iKey === tabIKey;
     const isActive = activeTabName.value === name;
     const isDisabled = typeof disabled === 'boolean' ? disabled : disabled === '';
     const tabVNode = createVNode(

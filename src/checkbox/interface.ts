@@ -31,14 +31,6 @@ export interface CheckboxGroupOptions {
     label?: string | (() => VNodeChild);
     disabled?: boolean;
 }
-
-export interface CheckboxGroupProps {
-    value?: CheckboxValue[];
-    options?: CheckboxGroupOptions[];
-    max?: number;
-    disabled: boolean;
-    checkedColor: string;
-}
 export interface CheckboxProps {
     value?: CheckboxValue;
     label?: string;
@@ -48,6 +40,13 @@ export interface CheckboxProps {
     disabled: boolean;
     indeterminate: boolean;
     checkedColor?: string;
+}
+export interface CheckboxGroupProps {
+    value?: CheckboxValue[];
+    options?: CheckboxGroupOptions[];
+    max?: number;
+    disabled: boolean;
+    checkedColor: string;
 }
 export interface CheckboxGroupExposeInstance {
     selectAll: (selectDisabled?: boolean) => void;
