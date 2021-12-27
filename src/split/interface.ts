@@ -7,10 +7,16 @@ declare module 'csstype' {
         '--split-pane-initial-width'?: string;
     }
 }
+export interface ResizeBusArgs {
+    dragSize: number;
+    prevPaneKey?: string;
+    nextPaneKey?: string;
+}
 
 export interface SplitInjection {
     parentWidth: Ref<number>;
-    BusResize: UseEventBusReturn<number>;
+    splitPaneInitialWidth: Ref<string>;
+    BusResize: UseEventBusReturn<ResizeBusArgs>;
 }
 export const splitInjectionKey: InjectionKey<SplitInjection> = Symbol();
 export const SplitIKey = Symbol('Split');

@@ -26,7 +26,7 @@ const handleSelectAll = (value: CheckboxValue) => {
     }
 };
 
-const handleUpdateValue = (groupValue: CheckboxValue[]) => {
+const handleUpdateValue = () => {
     const { selectAll, indeterminate } = checkboxGroup.value?.status! ?? {};
     isSelect.value = selectAll || indeterminate;
     isIndeterminate.value = indeterminate;

@@ -1,27 +1,48 @@
 <script lang="ts" setup>
-import { provide, toRefs, ref, createVNode, useSlots, renderSlot, nextTick, onUnmounted, watch, computed } from 'vue';
-import { useVModels, useEventBus } from '@vueuse/core';
+import { provide, toRefs, ref, createVNode, useSlots, renderSlot, nextTick, onUnmounted, watch, computed, PropType } from 'vue';
+import { useVModels, useEventBus, EventBusKey } from '@vueuse/core';
 import McCheckbox from './Checkbox.vue';
-import { flatten, createKey } from '../_utils_';
+import { flatten } from '../_utils_';
 import { checkboxGroupInjectionKey, CheckboxValue, CheckboxGroupOptions, CheckboxGroupStatus, checkboxIKey } from './interface';
 
-interface Props {
-    value?: CheckboxValue[];
-    options?: CheckboxGroupOptions[];
-    max?: number;
-    disabled?: boolean;
-    checkedColor?: string;
-}
-const props = withDefaults(defineProps<Props>(), {
-    disabled: false,
-    checkedColor: '#10b981'
+// interface Props {
+//     value?: CheckboxValue[];
+//     options?: CheckboxGroupOptions[];
+//     max?: number;
+//     disabled?: boolean;
+//     checkedColor?: string;
+// }
+// const props = withDefaults(defineProps<Props>(), {
+//     disabled: false,
+//     checkedColor: '#10b981'
+// });
+const props = defineProps({
+    value: {
+        type: Array as PropType<CheckboxValue[]>,
+        default: undefined
+    },
+    options: {
+        type: Array as PropType<CheckboxGroupOptions[]>,
+        default: undefined
+    },
+    max: {
+        type: Number,
+        default: undefined
+    },
+    disabled: {
+        type: Boolean,
+        default: false
+    },
+    checkedColor: {
+        type: String,
+        default: '#10b981'
+    }
 });
 const emit = defineEmits<{
     (e: 'update:value', groupValue?: CheckboxValue[], value?: CheckboxValue): void;
 }>();
 
 const slots = useSlots();
-const key = createKey('checkbox-group');
 const { options, checkedColor, max, disabled } = toRefs(props);
 const { value: valueVM } = useVModels(props, emit);
 const checkboxGroupElRef = ref<HTMLElement>();
@@ -51,9 +72,9 @@ if (valueVM?.value && max?.value) {
         () => {
             void nextTick(() => {
                 if (valueVM.value?.length === max.value) {
-                    BusUpdateDisabled.emit(true);
+                    BusMaxControl.emit(true);
                 } else {
-                    BusUpdateDisabled.emit(false);
+                    BusMaxControl.emit(false);
                 }
             });
         },
@@ -75,8 +96,10 @@ const updateGroupValue = (value?: CheckboxValue, call: boolean = true) => {
     }
 };
 
-const BusSelectAll = useEventBus<boolean>(key + 'select-all');
-const BusUpdateDisabled = useEventBus<boolean>(key + 'update-internal-disabled');
+const SelectAllEventBusKey: EventBusKey<boolean> = Symbol();
+const MaxControlEventBusKey: EventBusKey<boolean> = Symbol();
+const BusSelectAll = useEventBus<boolean>(SelectAllEventBusKey);
+const BusMaxControl = useEventBus<boolean>(MaxControlEventBusKey);
 
 provide(checkboxGroupInjectionKey, {
     groupValue: valueVM,
@@ -84,7 +107,7 @@ provide(checkboxGroupInjectionKey, {
     groupDisabled: disabled,
     updateGroupValue,
     BusSelectAll,
-    BusUpdateDisabled
+    BusMaxControl
 });
 
 const Render = () => {
@@ -125,7 +148,7 @@ defineExpose({
 });
 
 onUnmounted(() => {
-    BusUpdateDisabled.reset();
+    BusMaxControl.reset();
     BusSelectAll.reset();
 });
 </script>

@@ -9,12 +9,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, createVNode } from 'vue';
+import { ref, createVNode, reactive } from 'vue';
 import { NButton } from 'naive-ui';
 import { McCheckboxGroup, McCheckbox, McTooltip, McPopselect } from 'meetcode-ui';
 
 const groupValue = ref(['apple']);
-const options = [
+const options = reactive([
     {
         value: 'apple',
         label: 'Apple',
@@ -30,5 +30,5 @@ const options = [
         value: 'banana',
         label: 'Banana'
     }
-];
+]);
 </script>

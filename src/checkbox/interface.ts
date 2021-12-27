@@ -16,7 +16,7 @@ export interface CheckboxGroupInjection {
     groupDisabled: Ref<boolean>;
     updateGroupValue: (value?: CheckboxValue, call?: boolean) => void;
     BusSelectAll: UseEventBusReturn<boolean>;
-    BusUpdateDisabled: UseEventBusReturn<boolean>;
+    BusMaxControl: UseEventBusReturn<boolean>;
 }
 export const checkboxGroupInjectionKey: InjectionKey<CheckboxGroupInjection> = Symbol();
 export const checkboxIKey = Symbol('checkbox');
@@ -36,17 +36,17 @@ export interface CheckboxGroupProps {
     value?: CheckboxValue[];
     options?: CheckboxGroupOptions[];
     max?: number;
-    disabled?: boolean;
-    checkedColor?: string;
+    disabled: boolean;
+    checkedColor: string;
 }
 export interface CheckboxProps {
     value?: CheckboxValue;
     label?: string;
-    size?: CheckboxSize;
-    checkedValue?: CheckboxValue;
-    uncheckedValue?: CheckboxValue;
-    disabled?: boolean;
-    indeterminate?: boolean;
+    size: CheckboxSize;
+    checkedValue: CheckboxValue;
+    uncheckedValue: CheckboxValue;
+    disabled: boolean;
+    indeterminate: boolean;
     checkedColor?: string;
 }
 export interface CheckboxGroupExposeInstance {

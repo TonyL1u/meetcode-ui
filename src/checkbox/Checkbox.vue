@@ -40,7 +40,7 @@ const slots = useSlots();
 const attrs = useAttrs();
 const key = createKey('checkbox');
 const { label, size, checkedValue, uncheckedValue, disabled, indeterminate, checkedColor } = toRefs(props);
-const { groupValue, groupCheckedColor, groupDisabled, updateGroupValue, BusSelectAll, BusUpdateDisabled } = inject(checkboxGroupInjectionKey, null) ?? {};
+const { groupValue, groupCheckedColor, groupDisabled, updateGroupValue, BusSelectAll, BusMaxControl } = inject(checkboxGroupInjectionKey, null) ?? {};
 const { value: valueVM } = useVModels(props, emit);
 const checkboxElRef = ref<HTMLElement>();
 const internalDisabled = ref(false);
@@ -88,8 +88,8 @@ const handleChange = () => {
     }
 };
 
-if (BusUpdateDisabled && BusSelectAll) {
-    BusUpdateDisabled.on(updateInternalDisabled);
+if (BusMaxControl && BusSelectAll) {
+    BusMaxControl.on(updateInternalDisabled);
     BusSelectAll.on((selectDisabled: boolean) => {
         if (!mergedChecked.value) {
             if (!selectDisabled) {

@@ -102,3 +102,7 @@
 2021-12-15
 
 -   CheckboxGroup 向下提供了一个更新 internalDisabled 属性的 bus 用于更新 max 可选数量，如果这个时候新增了一个 Checkbox，
+
+2021-12-27
+
+-   使用 vue script setup 语法来写组件的话存在两个问题：1.因为在 script setup 中使用了类型声明来定义 props，导致打包时的类型推断不准确；2.在 `.vue` 文件中写组件， props 提示缺失

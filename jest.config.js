@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 const esModules = ['lodash-es'].map(pkg => {
-    if (fs.pathExistsSync('node_modules/.pnpm')) {
-        return `.pnpm/${pkg}`;
+    if (fs.pathExistsSync('node_modules/.npm')) {
+        return `.npm/${pkg}`;
     } else {
         return pkg;
     }
@@ -29,7 +29,7 @@ module.exports = {
     testEnvironment: 'jest-environment-jsdom',
     testMatch: ['<rootDir>/src/**/*.(spec|test).(ts|tsx)'],
     testPathIgnorePatterns: ['/node_modules/'],
-    testURL: 'http://localhost',
+    testURL: 'http://localhost:3001',
     transform: {
         '^.+\\.vue$': 'vue-jest',
         '^.+\\.(jsx|js)?$': 'babel-jest',

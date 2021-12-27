@@ -19,7 +19,7 @@ const groupValue = ref([]);
 const handleUpdateValue = (value: CheckboxValue) => {
     value ? McMessage.success(value.toString()) : McMessage.error(value.toString());
 };
-const handleUpdateGroupValue = (groupValue: CheckboxValue[]) => {
+const handleUpdateGroupValue = (groupValue?: CheckboxValue[]) => {
     McMessage.text(JSON.stringify(groupValue));
 };
 </script>
