@@ -1,15 +1,23 @@
-import { defineComponent, ref, toRefs, renderSlot, createVNode, createTextVNode, Fragment, mergeProps } from 'vue';
+import { defineComponent, ref, toRefs, renderSlot, createVNode, Fragment, mergeProps, PropType } from 'vue';
 import { NButton, NIcon } from 'naive-ui';
-import { getSlotFirstVNode } from '../_utils_';
+import { getSlotFirstVNode, propsMergeSlots } from '../_utils_';
+import { omit } from 'lodash-es';
 import { AlertCircle as IconAlert } from '@vicons/ionicons5';
-import { McPopover, PopoverExposeInstance } from '../popover';
-import { popconfirmProps } from './interface';
+import { McPopover, PopoverExposeInstance, popoverProps, PopoverTrigger } from '../popover';
+import { PopconfirmMergedProps, popconfirmProps } from './interface';
 
 export default defineComponent({
     name: 'Popconfirm',
-    props: popconfirmProps,
+    props: {
+        ...popoverProps,
+        ...popconfirmProps,
+        trigger: {
+            type: String as PropType<PopoverTrigger>,
+            default: 'click'
+        }
+    },
     setup(props, { slots }) {
-        const { content, cancelText, cancelDisabled, confirmText, confirmDisabled, hideIcon, onCancel, onConfirm } = toRefs(props);
+        const { cancelText, cancelDisabled, confirmText, confirmDisabled, hideIcon, onCancel, onConfirm } = toRefs(props);
         const popoverRef = ref<PopoverExposeInstance>();
 
         const handleCancel = async () => {
@@ -63,7 +71,7 @@ export default defineComponent({
 
         return () => {
             const iconVNode = hideIcon.value ? null : getSlotFirstVNode(slots.icon) || createVNode(NIcon, { size: 22, color: '#f59e0b', style: { 'margin-right': '8px' } }, { default: () => createVNode(IconAlert) });
-            const mergedProps = mergeProps(props, {
+            const mergedProps = mergeProps(omit(props, Object.keys(popconfirmProps)), {
                 ref: popoverRef,
                 class: 'mc-popconfirm'
             });
@@ -78,7 +86,7 @@ export default defineComponent({
                             {
                                 class: 'mc-popconfirm__content'
                             },
-                            [iconVNode, content.value ? (typeof content.value === 'string' ? createTextVNode(content.value) : content.value()) : null]
+                            [iconVNode, propsMergeSlots<PopconfirmMergedProps, 'content'>(props, slots, 'content')]
                         ),
                         getActionVNode()
                     ])

@@ -9,7 +9,7 @@ export type PopoverOffset = {
     bottom?: string;
     left?: string;
 };
-export interface PopoverBaseProps {
+export interface PopoverProps {
     trigger: PopoverTrigger;
     placement: PopoverPlacement;
     destroyWhenHide: boolean;
@@ -34,63 +34,63 @@ export interface PopoverExposeInstance {
 }
 export const popoverProps = {
     trigger: {
-        type: String as PropType<PopoverBaseProps['trigger']>,
+        type: String as PropType<PopoverProps['trigger']>,
         default: 'hover'
     },
     placement: {
-        type: String as PropType<PopoverBaseProps['placement']>,
+        type: String as PropType<PopoverProps['placement']>,
         default: 'top'
     },
     destroyWhenHide: {
-        type: Boolean as PropType<PopoverBaseProps['destroyWhenHide']>,
+        type: Boolean as PropType<PopoverProps['destroyWhenHide']>,
         default: true
     },
     zIndex: {
-        type: Number as PropType<PopoverBaseProps['zIndex']>,
+        type: Number as PropType<PopoverProps['zIndex']>,
         default: undefined
     },
     show: {
-        type: Boolean as PropType<PopoverBaseProps['show']>,
+        type: Boolean as PropType<PopoverProps['show']>,
         default: false
     },
     disabled: {
-        type: Boolean as PropType<PopoverBaseProps['disabled']>,
+        type: Boolean as PropType<PopoverProps['disabled']>,
         default: false
     },
     withArrow: {
-        type: Boolean as PropType<PopoverBaseProps['withArrow']>,
+        type: Boolean as PropType<PopoverProps['withArrow']>,
         default: true
     },
     showDelay: {
-        type: Number as PropType<PopoverBaseProps['showDelay']>,
+        type: Number as PropType<PopoverProps['showDelay']>,
         default: 100
     },
     hideDelay: {
-        type: Number as PropType<PopoverBaseProps['hideDelay']>,
+        type: Number as PropType<PopoverProps['hideDelay']>,
         default: 100
     },
     offset: {
-        type: Object as PropType<PopoverBaseProps['offset']>,
+        type: Object as PropType<PopoverProps['offset']>,
         default: undefined
     },
     wrapBoundary: {
-        type: Boolean as PropType<PopoverBaseProps['wrapBoundary']>,
+        type: Boolean as PropType<PopoverProps['wrapBoundary']>,
         default: false
     },
     matchTrigger: {
-        type: Boolean as PropType<PopoverBaseProps['matchTrigger']>,
+        type: Boolean as PropType<PopoverProps['matchTrigger']>,
         default: false
     },
     autoSync: {
-        type: Boolean as PropType<PopoverBaseProps['autoSync']>,
+        type: Boolean as PropType<PopoverProps['autoSync']>,
         default: true
     },
     title: {
-        type: String as PropType<PopoverBaseProps['title']>,
+        type: String as PropType<PopoverProps['title']>,
         default: undefined
     },
     content: {
-        type: [String, Function] as PropType<PopoverBaseProps['content']>,
+        type: [String, Function] as PropType<PopoverProps['content']>,
         default: undefined
     }
 };

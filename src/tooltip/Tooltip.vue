@@ -6,9 +6,9 @@ export default {
 
 <script lang="ts" setup>
 import { toRefs, useSlots, useAttrs, renderSlot, createVNode, createTextVNode, mergeProps } from 'vue';
-import { McPopover, PopoverBaseProps } from '../popover';
+import { McPopover, PopoverProps } from '../popover';
 
-interface Props extends PopoverBaseProps {
+interface Props extends PopoverProps {
     content?: string;
 }
 const props = withDefaults(defineProps<Props>(), {

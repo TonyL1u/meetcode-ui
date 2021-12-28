@@ -1,11 +1,11 @@
 <template>
-    <McPopselect v-model:value="value" :options="options">
+    <McPopselect v-model:value="value" :options="options" @update:value="handleUpdateValue">
         <NButton type="primary" ghost>{{ value || '请选择' }}</NButton>
     </McPopselect>
 </template>
 
 <script lang="ts" setup>
-import { ref, createVNode } from 'vue';
+import { ref } from 'vue';
 import { NButton } from 'naive-ui';
 import { McPopselect } from 'meetcode-ui';
 
@@ -25,4 +25,9 @@ const options = ref([
         value: 'test3'
     }
 ]);
+
+const handleUpdateValue = (value, option) => {
+    console.log(value, option);
+    // option.label = '123456';
+};
 </script>

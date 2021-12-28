@@ -9,10 +9,10 @@ import { ref, toRefs, useSlots, useAttrs, renderSlot, createVNode, createTextVNo
 import { NButton, NIcon } from 'naive-ui';
 import { getSlotFirstVNode } from '../_utils_';
 import { AlertCircle as IconAlert } from '@vicons/ionicons5';
-import { McPopover, PopoverBaseProps, PopoverExposeInstance } from '../popover';
+import { McPopover, PopoverProps, PopoverExposeInstance } from '../popover';
 import type { OnCancelImpl, OnConfirmImpl } from './interface';
 
-interface Props extends PopoverBaseProps {
+interface Props extends PopoverProps {
     content?: string;
     cancelText?: string;
     confirmText?: string;

@@ -5,7 +5,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { ref, toRefs, useSlots, computed, watch, mergeProps, provide, createVNode, createTextVNode, createCommentVNode, nextTick, VNode, CSSProperties, CustomVNodeTypes } from 'vue';
+import { ref, toRefs, useSlots, computed, watch, mergeProps, provide, createVNode, createTextVNode, createCommentVNode, nextTick, VNode, CSSProperties, Slots, CustomVNodeTypes } from 'vue';
 import { flatten, getSlotFirstVNode, kebabCaseEscape, SpecificVNode } from '../_utils_';
 import { useVModels, useElementBounding, throttledWatch } from '@vueuse/core';
 import McTab from './Tab.vue';
@@ -155,11 +155,9 @@ const getTabVNode = (maybeTabPane: SpecificVNode<MaybeTabPaneProps>) => {
         {
             default: () => {
                 if (isTab) {
-                    // @ts-ignore
-                    return children?.default() ?? null;
+                    return (children as Slots)?.default?.() ?? null;
                 } else {
-                    // @ts-ignore
-                    return children?.tab ? children?.tab() : [createVNode('span', { class: 'mc-tabs-tab__label' }, [typeof tabLabel === 'string' ? createTextVNode(tabLabel) : tabLabel()])];
+                    return (children as Slots)?.tab?.() ?? [createVNode('span', { class: 'mc-tabs-tab__label' }, [typeof tabLabel === 'string' ? createTextVNode(tabLabel) : tabLabel()])];
                 }
             }
         }

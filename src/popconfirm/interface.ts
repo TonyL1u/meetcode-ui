@@ -1,9 +1,9 @@
 import { PropType } from 'vue';
-import { PopoverTrigger, PopoverBaseProps, popoverProps } from '../popover';
+import { PopoverProps } from '../popover';
 
 export type OnCancelImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
 export type OnConfirmImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
-export interface PopconfirmProps extends PopoverBaseProps {
+export interface PopconfirmProps {
     cancelText: string | null;
     confirmText: string | null;
     cancelDisabled: boolean;
@@ -14,11 +14,6 @@ export interface PopconfirmProps extends PopoverBaseProps {
 }
 
 export const popconfirmProps = {
-    ...popoverProps,
-    trigger: {
-        type: String as PropType<PopoverTrigger>,
-        default: 'click'
-    },
     cancelText: {
         type: [String, Object] as PropType<PopconfirmProps['cancelText']>,
         default: '取消'
@@ -48,3 +43,5 @@ export const popconfirmProps = {
         default: undefined
     }
 };
+
+export type PopconfirmMergedProps = PopconfirmProps & PopoverProps;

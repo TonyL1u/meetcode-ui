@@ -1,8 +1,8 @@
-import { ref, createVNode, createTextVNode, Text, cloneVNode, computed, renderSlot, withDirectives, vShow, watch, toRefs, nextTick, Transition, mergeProps, defineComponent } from 'vue';
-import { getSlotFirstVNode } from '../_utils_';
+import { ref, createVNode, Text, cloneVNode, computed, withDirectives, vShow, watch, toRefs, nextTick, Transition, mergeProps, defineComponent } from 'vue';
+import { getSlotFirstVNode, propsMergeSlots } from '../_utils_';
 import { VBinder, VTarget, VFollower } from 'vueuc';
 import { useElementBounding, useMouseInElement } from '@vueuse/core';
-import { PopoverTriggerBorder, popoverProps } from './interface';
+import { PopoverTriggerBorder, PopoverProps, popoverProps } from './interface';
 
 export default defineComponent({
     name: 'Popover',
@@ -161,7 +161,7 @@ export default defineComponent({
             });
             const tempVNode = createVNode('div', mergedProps, [
                 title.value ? createVNode('div', { class: 'mc-popover__title' }, [title.value]) : null,
-                slots.content ? renderSlot(slots, 'content') : content.value ? (typeof content.value === 'string' ? createTextVNode(content.value) : content.value()) : null,
+                propsMergeSlots<PopoverProps, 'content'>(props, slots, 'content'),
                 withArrow.value ? createVNode('div', { class: 'mc-popover__arrow' }) : null
             ]);
 
