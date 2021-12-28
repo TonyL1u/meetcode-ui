@@ -6,15 +6,19 @@ import { AlertCircle as IconAlert } from '@vicons/ionicons5';
 import { McPopover, PopoverExposeInstance, popoverProps, PopoverTrigger } from '../popover';
 import { PopconfirmMergedProps, popconfirmProps } from './interface';
 
+const defaultPropsOverride = {
+    trigger: {
+        type: String as PropType<PopoverTrigger>,
+        default: 'click'
+    }
+};
+
 export default defineComponent({
     name: 'Popconfirm',
     props: {
         ...popoverProps,
         ...popconfirmProps,
-        trigger: {
-            type: String as PropType<PopoverTrigger>,
-            default: 'click'
-        }
+        ...defaultPropsOverride
     },
     setup(props, { slots }) {
         const { cancelText, cancelDisabled, confirmText, confirmDisabled, hideIcon, onCancel, onConfirm } = toRefs(props);
@@ -75,7 +79,6 @@ export default defineComponent({
                 ref: popoverRef,
                 class: 'mc-popconfirm'
             });
-            console.log(mergedProps);
 
             return createVNode(McPopover, mergedProps, {
                 default: () => renderSlot(slots, 'default'),

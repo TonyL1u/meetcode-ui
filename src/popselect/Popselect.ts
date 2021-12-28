@@ -1,20 +1,28 @@
-import { ref, toRefs, createVNode, nextTick, renderSlot, mergeProps, defineComponent } from 'vue';
+import { ref, toRefs, createVNode, nextTick, renderSlot, mergeProps, defineComponent, toRaw, PropType } from 'vue';
 import { NIcon } from 'naive-ui';
 import { CheckmarkSharp as IconCheck } from '@vicons/ionicons5';
-import { useVModels, useVirtualList } from '@vueuse/core';
+import { useVirtualList } from '@vueuse/core';
 import { omit } from 'lodash-es';
-import { McPopover, PopoverProps, PopoverExposeInstance, popoverProps } from '../popover';
-import { PopselectValue, PopselectOption, popselectProps } from './interface';
+import { McPopover, PopoverExposeInstance, PopoverProps, popoverProps } from '../popover';
+import { PopselectOption, popselectProps } from './interface';
+
+const defaultPropsOverride = {
+    placement: {
+        type: String as PropType<PopoverProps['placement']>,
+        default: 'bottom'
+    }
+};
 
 export default defineComponent({
     name: 'Popselect',
     props: {
         ...popoverProps,
-        ...popselectProps
+        ...popselectProps,
+        ...defaultPropsOverride
     },
     emits: ['update:value'],
     setup(props, { slots, attrs, emit }) {
-        const { value: valueVM, options, multiple, maxHeight } = toRefs(props);
+        const { value: valueVM, options, multiple, maxHeight, autoClose } = toRefs(props);
         const popoverRef = ref<PopoverExposeInstance>();
         let scrollToOption: (index: number) => void;
 
@@ -25,12 +33,20 @@ export default defineComponent({
             });
         };
 
+        const handleHide = () => {
+            if ((autoClose.value === undefined && !multiple.value) || autoClose.value) {
+                requestAnimationFrame(() => {
+                    popoverRef?.value?.hide();
+                });
+            }
+        };
+
         const getOptionVNode = (data: PopselectOption) => {
             const { label, value, disabled } = data;
             const isDisabled = !!disabled;
             const isSelected = multiple.value ? (valueVM.value as (string | number)[]).includes(value) : valueVM.value === value;
             const checkVNode = multiple.value && isSelected ? createVNode(NIcon, { size: 16 }, { default: () => createVNode(IconCheck) }) : null;
-            const option = options.value.find(e => e.value === value);
+            const option = toRaw(options.value.find(e => e.value === value));
             const handleClick = multiple.value
                 ? () => {
                       const index = (valueVM.value as (string | number)[]).indexOf(value);
@@ -39,20 +55,21 @@ export default defineComponent({
                       } else {
                           (valueVM.value as (string | number)[]).splice(index, 1);
                       }
-                      emit('update:value', valueVM.value, option);
+                      emit('update:value', toRaw(valueVM.value), option);
                   }
                 : () => {
                       emit('update:value', value, option);
-                      requestAnimationFrame(() => {
-                          popoverRef?.value?.hide();
-                      });
                   };
 
             return createVNode(
                 'div',
                 {
                     class: ['mc-popselect-option', { 'mc-popselect-option--selected': isSelected, 'mc-popselect-option--disabled': isDisabled }],
-                    onClick: isDisabled ? null : handleClick
+                    onClick: () => {
+                        if (isDisabled) return;
+                        handleClick();
+                        handleHide();
+                    }
                 },
                 [
                     createVNode(
@@ -77,8 +94,7 @@ export default defineComponent({
 
             const mergedProps = mergeProps(omit(props, Object.keys(popselectProps)), {
                 ref: popoverRef,
-                class: 'mc-popselect',
-                placement: 'bottom'
+                class: 'mc-popselect'
             });
 
             return createVNode(

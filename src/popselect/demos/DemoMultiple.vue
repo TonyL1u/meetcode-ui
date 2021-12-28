@@ -1,5 +1,5 @@
 <template>
-    <McPopselect v-model:value="value" :options="options" trigger="click" multiple @update:value="handleUpdateValue">
+    <McPopselect v-model:value="value" :options="options" trigger="click" multiple>
         <NButton type="primary" ghost>{{ value }}</NButton>
     </McPopselect>
 </template>
@@ -24,8 +24,4 @@ const options = ref([
         value: 'test3'
     }
 ]);
-
-const handleUpdateValue = (value, option) => {
-    console.log(value, option);
-};
 </script>

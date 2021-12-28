@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { ref, createVNode, nextTick } from 'vue';
+import { createVNode, nextTick } from 'vue';
 import { CheckboxGroupProps } from '../interface';
 import { McCheckboxGroup, McCheckbox } from '../index';
 
