@@ -1,5 +1,5 @@
-import { mount, VueWrapper } from '@vue/test-utils';
-import { createVNode, nextTick } from 'vue';
+import { mount } from '@vue/test-utils';
+import { createVNode, defineComponent, ref } from 'vue';
 import { McPopover, PopoverTrigger, PopoverProps, PopoverExposeInstance } from '../index';
 
 const Wrapper = (trigger: PopoverTrigger, props?: PopoverProps & Record<string, unknown>) => {
@@ -20,6 +20,15 @@ const Wrapper = (trigger: PopoverTrigger, props?: PopoverProps & Record<string, 
     const contentSelector = `.${trigger}-test-content`;
 
     return { wrapper, triggerWrapper, contentSelector };
+};
+
+const _mount = (template: string, data?: () => unknown, args?: Record<string, unknown>) => {
+    return mount({
+        components: { McPopover },
+        template,
+        data,
+        ...args
+    });
 };
 
 const sleep = (ms: number) => {
@@ -57,6 +66,33 @@ describe('mc-popover', () => {
         wrapper2.unmount();
     });
 
+    it('manual', async () => {
+        const wrapper = _mount(
+            `
+        <McPopover trigger="manual" :show="show">
+            <button class="manual-test-trigger" @click="show = !show"></button>
+            <template #content>
+                <div class="manual-test-content"></div>
+            </template>
+        </McPopover>`,
+            () => {
+                return {
+                    show: false
+                };
+            }
+        );
+
+        const triggerWrapper = wrapper.find('.manual-test-trigger');
+        await triggerWrapper.trigger('click');
+        await sleep(50);
+        expect(document.querySelector('.manual-test-content')).not.toBe(null);
+
+        await triggerWrapper.trigger('click');
+        await sleep(50);
+        expect(document.querySelector('.manual-test-content')).toBe(null);
+        wrapper.unmount();
+    });
+
     it('destroy-when-hide', async () => {
         const { wrapper, triggerWrapper, contentSelector } = Wrapper('click', {
             destroyWhenHide: false
@@ -76,12 +112,44 @@ describe('mc-popover', () => {
     it('content-style', async () => {
         const { wrapper, triggerWrapper } = Wrapper('click', {
             class: 'mc-bg-red-500',
-            style: { 'font-size': '20px', padding: '0px' }
+            style: { 'font-size': '20px', padding: '0px' },
+            withArrow: false
         });
 
         await triggerWrapper.trigger('click');
         await sleep(50);
         expect(document.querySelector('.mc-popover')?.className).toContain('mc-bg-red-500');
         expect((document.querySelector('.mc-popover') as HTMLElement).style).toMatchObject({ 'font-size': '20px', padding: '0px' });
+        expect(document.querySelector('.mc-popover__arrow')).toBe(null);
+        wrapper.unmount();
+    });
+
+    it('delay', async () => {
+        const wrapper = mount(McPopover, {
+            props: {
+                trigger: 'click',
+                showDelay: 300,
+                hideDelay: 300
+            },
+            slots: {
+                default: () => createVNode('button', { class: 'test-trigger' }),
+                content: () => createVNode('div', { class: 'test-content' })
+            }
+        });
+
+        const triggerWrapper = wrapper.find('.test-trigger');
+        await triggerWrapper.trigger('click');
+        await sleep(150);
+        expect(document.querySelector('.test-content')).toBe(null);
+
+        await sleep(300);
+        expect(document.querySelector('.test-content')).not.toBe(null);
+
+        await triggerWrapper.trigger('click');
+        await sleep(150);
+        expect(document.querySelector('.test-content')).not.toBe(null);
+
+        await sleep(300);
+        expect(document.querySelector('.test-content')).toBe(null);
     });
 });
