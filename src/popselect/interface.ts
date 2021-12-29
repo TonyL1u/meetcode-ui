@@ -13,6 +13,7 @@ export interface PopselectProps {
     multiple: boolean;
     maxHeight: number;
     autoClose?: boolean;
+    autoScroll: boolean;
 }
 
 export const popselectProps = {
@@ -35,5 +36,9 @@ export const popselectProps = {
     autoClose: {
         type: Boolean as PropType<PopselectProps['autoClose']>,
         default: undefined
+    },
+    autoScroll: {
+        type: Boolean as PropType<PopselectProps['autoScroll']>,
+        default: true
     }
 };

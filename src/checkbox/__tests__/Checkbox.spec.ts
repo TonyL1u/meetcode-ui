@@ -27,7 +27,7 @@ describe('mc-checkbox', () => {
 
         const checkboxInput = wrapper.find('input[type=checkbox]');
         await checkboxInput.setValue();
-        expect((wrapper.vm as CheckboxProps).value).toBe(true);
+        expect((wrapper.vm as unknown as CheckboxProps).value).toBe(true);
         wrapper.unmount();
     });
 
@@ -73,7 +73,7 @@ describe('mc-checkbox', () => {
 
         const checkboxInput = wrapper.find('input[type=checkbox]');
         await checkboxInput.setValue();
-        expect((wrapper.vm as CheckboxProps).value).toBe('yes');
+        expect((wrapper.vm as unknown as CheckboxProps).value).toBe('yes');
         wrapper.unmount();
     });
 
@@ -87,7 +87,7 @@ describe('mc-checkbox', () => {
         expect(wrapper.classes()).toContain('mc-checkbox--disabled');
         const checkboxInput = wrapper.find('input[type=checkbox]');
         await checkboxInput.setValue();
-        expect((wrapper.vm as CheckboxProps).value).toBe(false);
+        expect((wrapper.vm as unknown as CheckboxProps).value).toBe(false);
         wrapper.unmount();
     });
 

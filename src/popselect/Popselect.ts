@@ -22,7 +22,7 @@ export default defineComponent({
     },
     emits: ['update:value'],
     setup(props, { slots, attrs, emit }) {
-        const { value: valueVM, options, multiple, maxHeight, autoClose } = toRefs(props);
+        const { value: valueVM, options, multiple, maxHeight, autoClose, autoScroll } = toRefs(props);
         const popoverRef = ref<PopoverExposeInstance>();
         let scrollToOption: (index: number) => void;
 
@@ -102,7 +102,7 @@ export default defineComponent({
                 {
                     ...mergedProps,
                     onShow: (...args: Array<unknown>) => {
-                        handleShow();
+                        autoScroll.value && handleShow();
                         attrs.show && (attrs as any).onShow(...args);
                     }
                 },

@@ -1,15 +1,15 @@
 <template>
     <NSpace>
-        <McPopover title="标题" content="这是测试内容" trigger="hover">
+        <McPopover title="标题" trigger="hover" content="这是测试内容">
             <NButton type="primary" ghost>悬浮</NButton>
         </McPopover>
 
-        <McPopover title="标题" trigger="click" placement="bottom">
+        <McPopover title="标题" trigger="click">
             <NButton type="primary" ghost>点击</NButton>
             <template #content>这是测试内容</template>
         </McPopover>
 
-        <McPopover title="标题" trigger="manual" placement="right" :show="show">
+        <McPopover title="标题" trigger="manual" :show="show">
             <NButton type="primary" ghost @click="show = !show">手动</NButton>
             <template #content>这是测试内容</template>
         </McPopover>

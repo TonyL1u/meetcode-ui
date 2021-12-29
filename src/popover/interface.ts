@@ -10,19 +10,19 @@ export type PopoverOffset = {
     left?: string;
 };
 export interface PopoverProps {
-    trigger: PopoverTrigger;
-    placement: PopoverPlacement;
-    destroyWhenHide: boolean;
+    trigger?: PopoverTrigger;
+    placement?: PopoverPlacement;
+    destroyWhenHide?: boolean;
     zIndex?: number;
-    show: boolean;
-    disabled: boolean;
-    withArrow: boolean;
-    showDelay: number;
-    hideDelay: number;
+    show?: boolean;
+    disabled?: boolean;
+    withArrow?: boolean;
+    showDelay?: number;
+    hideDelay?: number;
     offset?: PopoverOffset;
-    wrapBoundary: boolean;
-    matchTrigger: boolean;
-    autoSync: boolean;
+    wrapBoundary?: boolean;
+    matchTrigger?: boolean;
+    autoSync?: boolean;
     title?: string;
     content?: string | (() => VNodeChild);
 }
