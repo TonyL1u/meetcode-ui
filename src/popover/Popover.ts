@@ -173,10 +173,10 @@ export default defineComponent({
             }
         });
         const triggerEl = computed(() => {
-            return <HTMLElement>triggerVNode.value?.el || null;
+            return (triggerVNode.value?.el as HTMLElement) || null;
         });
         const contentEl = computed(() => {
-            return <HTMLElement>contentVNode.value?.el || null;
+            return (contentVNode.value?.el as HTMLElement) || null;
         });
 
         void nextTick(() => {
@@ -193,9 +193,10 @@ export default defineComponent({
             // follow control
             if (trigger.value === 'follow') {
                 const { x, y, isOutside, elementHeight, elementWidth, elementX, elementY } = useMouseInElement(triggerEl.value);
-                // 首次进入不做检测
+                // No detection for the first entry
                 let isFirstEnter = true;
 
+                // boundary detection
                 watch([x, y, isOutside], () => {
                     showRef.value = !isOutside.value && mouseInFollowTrigger.value;
                     callUpdateShow();
@@ -218,28 +219,28 @@ export default defineComponent({
                                 const cursorOffsetX = contentX - x.value;
                                 const cursorOffsetY = contentY - y.value;
 
-                                // 上边界检测
+                                // top boundary detection
                                 if (cursorOffsetY < 0 && Math.abs(cursorOffsetY) > elementY.value) {
                                     followY.value += Math.abs(cursorOffsetY);
                                     isReachBorder = true;
                                     reachedDir.push('top');
                                 }
 
-                                // 右边界检测
+                                // right boundary detection
                                 if (elementX.value + width + cursorOffsetX >= elementWidth.value) {
                                     followX.value -= width + cursorOffsetX;
                                     isReachBorder = true;
                                     reachedDir.push('right');
                                 }
 
-                                // 下边界检测
+                                // bottom boundary detection
                                 if (elementY.value + height + cursorOffsetY >= elementHeight.value) {
                                     followY.value -= height + cursorOffsetY;
                                     isReachBorder = true;
                                     reachedDir.push('bottom');
                                 }
 
-                                // 左边界检测
+                                // left boundary detection
                                 if (cursorOffsetX < 0 && Math.abs(cursorOffsetX) > elementX.value) {
                                     followX.value += Math.abs(cursorOffsetX);
                                     isReachBorder = true;

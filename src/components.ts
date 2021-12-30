@@ -5,7 +5,6 @@ export * from './popover';
 export * from './popselect';
 export * from './text-link';
 export * from './tooltip';
-export * from './navigation';
 export * from './tabs';
 export * from './message';
 export * from './checkbox';

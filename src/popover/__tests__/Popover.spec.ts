@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { createVNode, defineComponent, ref } from 'vue';
+import { createVNode } from 'vue';
 import { McPopover, PopoverTrigger, PopoverProps, PopoverExposeInstance } from '../index';
 
 const Wrapper = (trigger: PopoverTrigger, props?: PopoverProps & Record<string, unknown>) => {

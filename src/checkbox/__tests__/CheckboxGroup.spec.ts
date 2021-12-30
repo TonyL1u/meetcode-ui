@@ -52,7 +52,7 @@ describe('mc-checkbox-group', () => {
             const checkboxInput = checkbox.find('input[type=checkbox]');
             await checkboxInput.setValue();
         });
-        expect((wrapper.vm as unknown as CheckboxGroupProps).value).toEqual(['apple', 'orange', 'banana']);
+        expect((wrapper.vm as any).value).toEqual(['apple', 'orange', 'banana']);
         wrapper.unmount();
     });
 
