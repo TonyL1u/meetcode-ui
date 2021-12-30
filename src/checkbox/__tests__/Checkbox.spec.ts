@@ -1,5 +1,4 @@
 import { mount } from '@vue/test-utils';
-import { CheckboxProps } from '../interface';
 import { McCheckbox } from '../index';
 
 const _mount = (template: string, data?: () => unknown, args?: Record<string, unknown>) => {
@@ -92,12 +91,11 @@ describe('mc-checkbox', () => {
     });
 
     it('event', async () => {
-        const onUpdateValue = jest.fn();
-        const wrapper = mount(McCheckbox, { props: { 'onUpdate:value': onUpdateValue } });
+        const wrapper = mount(McCheckbox);
 
         const checkboxInput = wrapper.find('input[type=checkbox]');
         await checkboxInput.setValue();
-        expect(onUpdateValue).toBeCalled();
+        expect(wrapper.emitted()).toHaveProperty('update:value');
         wrapper.unmount();
     });
 });

@@ -1,6 +1,5 @@
 import { mount } from '@vue/test-utils';
 import { createVNode, nextTick } from 'vue';
-import { CheckboxGroupProps } from '../interface';
 import { McCheckboxGroup, McCheckbox } from '../index';
 
 const _mount = (template: string, data?: () => unknown, args?: Record<string, unknown>) => {
@@ -74,15 +73,12 @@ describe('mc-checkbox-group', () => {
     it('disabled', () => {
         const wrapper = mount(McCheckboxGroup, { props: { options, disabled: true } });
 
-        expect(wrapper.findAll('.mc-checkbox--disabled').length).toBe(3);
+        expect(wrapper.findAll('.mc-checkbox--disabled')).toHaveLength(3);
         wrapper.unmount();
     });
 
     it('event', () => {
-        const onUpdateValue = jest.fn();
-        const wrapper = mount(McCheckboxGroup, {
-            props: { 'onUpdate:value': onUpdateValue, options }
-        });
+        const wrapper = mount(McCheckboxGroup, { props: { options } });
 
         wrapper.findAllComponents(McCheckbox).forEach(async checkbox => {
             const checkboxInput = checkbox.find('input[type=checkbox]');
@@ -90,7 +86,7 @@ describe('mc-checkbox-group', () => {
         });
 
         void nextTick(() => {
-            expect(onUpdateValue).toHaveBeenCalledTimes(3);
+            expect(wrapper.emitted('update:value')).toHaveLength(3);
             wrapper.unmount();
         });
     });

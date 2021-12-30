@@ -32,8 +32,8 @@ describe('mc-tabs', () => {
     it('basic', async () => {
         const wrapper = Wrapper();
 
-        expect(wrapper.findAllComponents(McTab).length).toBe(4);
-        expect(wrapper.findAllComponents(McTabPane).length).toBe(4);
+        expect(wrapper.findAllComponents(McTab)).toHaveLength(4);
+        expect(wrapper.findAllComponents(McTabPane)).toHaveLength(4);
 
         const [firstTab, secondTab] = wrapper.findAllComponents(McTab);
         expect(firstTab.classes()).toContain('mc-tabs-tab--active');
@@ -87,8 +87,8 @@ describe('mc-tabs', () => {
             }
         });
 
-        expect(wrapper.findAllComponents(McTab).length).toBe(4);
-        expect(wrapper.findAllComponents(McTabPane).length).toBe(1);
+        expect(wrapper.findAllComponents(McTab)).toHaveLength(4);
+        expect(wrapper.findAllComponents(McTabPane)).toHaveLength(1);
         expect(() => wrapper.get('.mc-tab-pane')).toThrowError();
         wrapper.unmount();
     });
@@ -101,7 +101,7 @@ describe('mc-tabs', () => {
         });
         const [firstTab, secondTab, thirdTab] = wrapper.findAllComponents(McTab);
         const [firstTabPane, secondTabPane, thirdTabPane] = wrapper.findAllComponents(McTabPane);
-        expect(wrapper.findAll('.mc-tab-pane').length).toBe(2);
+        expect(wrapper.findAll('.mc-tab-pane')).toHaveLength(2);
 
         expect(firstTabPane.html()).not.toBe('');
         expect(secondTabPane.attributes('style')).toBe('display: none;');
@@ -111,29 +111,41 @@ describe('mc-tabs', () => {
         expect(firstTabPane.html()).toBe('');
 
         await firstTab.trigger('click');
-        expect(wrapper.findAll('.mc-tab-pane').length).toBe(3);
+        expect(wrapper.findAll('.mc-tab-pane')).toHaveLength(3);
         expect(thirdTabPane.attributes('style')).toBe('display: none;');
         wrapper.unmount();
     });
 
     it('event', async () => {
-        const onTabClick = jest.fn();
-        const onTabSwitch = jest.fn();
-
-        const wrapper = Wrapper({
-            'onTab:click': onTabClick,
-            'onTab:switch': onTabSwitch
-        });
+        const wrapper = Wrapper();
 
         const [firstTab, secondTab] = wrapper.findAllComponents(McTab);
         await secondTab.trigger('click');
         await secondTab.trigger('click');
-        console.log(wrapper.emitted());
 
-        expect(onTabClick).toBeCalledTimes(2);
-        expect(onTabSwitch).toBeCalledTimes(1);
+        expect(wrapper.emitted('update:value')).toHaveLength(1);
+        expect(wrapper.emitted('tab:switch')).toHaveLength(1);
+        expect(wrapper.emitted('tab:click')).toHaveLength(2);
         wrapper.unmount();
     });
 
-    it('before tab switch', () => {});
+    it('before tab switch', async () => {
+        const onBeforeTabSwitch = jest.fn();
+        const wrapper = Wrapper({ onBeforeTabSwitch });
+
+        const [firstTab, secondTab] = wrapper.findAllComponents(McTab);
+        await secondTab.trigger('click');
+        expect(onBeforeTabSwitch).toBeCalled();
+        wrapper.unmount();
+    });
+
+    it('switch to', async () => {
+        const wrapper = Wrapper();
+
+        const { switchTo } = wrapper.vm as any;
+        const [firstTab, secondTab] = wrapper.findAllComponents(McTab);
+        await switchTo('tab2');
+        expect(secondTab.classes()).toContain('mc-tabs-tab--active');
+        wrapper.unmount();
+    });
 });

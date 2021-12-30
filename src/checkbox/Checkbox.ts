@@ -121,7 +121,7 @@ export default defineComponent({
             const mergedProps = mergeProps(
                 {
                     ref: checkboxElRef,
-                    class: ['mc-checkbox', { 'mc-checkbox--disabled': mergedDisabled.value }],
+                    class: ['mc-checkbox', { 'mc-checkbox-checked': mergedChecked.value, 'mc-checkbox--disabled': mergedDisabled.value }],
                     style: cssVars.value
                 },
                 attrs
