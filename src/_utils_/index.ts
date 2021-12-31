@@ -6,3 +6,4 @@ export { kebabCaseEscape } from './kebabCaseEscape';
 export { propsMergeSlots } from './propsMergeSlots';
 export { reactiveOmit } from './reactiveOmit';
 export { responsiveTarget } from './responsiveTarget';
+export { sleep } from './sleep';

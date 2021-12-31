@@ -18,7 +18,7 @@ describe('mc-message', () => {
         closable: true
     };
 
-    it('basic', () => {
+    it('basic', async () => {
         const wrapper = mount(MessageEnvironment);
         McMessage(options);
         McMessage.text(apiOptions);
@@ -27,13 +27,12 @@ describe('mc-message', () => {
         McMessage.info('info', apiOptions);
         McMessage.error();
 
-        void nextTick(() => {
-            expect(wrapper.findAllComponents(Message).length).toBe(6);
+        await nextTick();
+        expect(wrapper.findAllComponents(Message).length).toBe(6);
 
-            // reset
-            wrapper.unmount();
-            MessageReactiveList.length = 0;
-        });
+        // reset
+        wrapper.unmount();
+        MessageReactiveList.length = 0;
     });
 
     it('duration', done => {
@@ -47,6 +46,7 @@ describe('mc-message', () => {
             setTimeout(() => {
                 expect(wrapper.findAllComponents(Message).length).toBe(1);
             }, 500);
+
             setTimeout(() => {
                 expect(wrapper.findAllComponents(Message).length).toBe(0);
 
@@ -58,23 +58,20 @@ describe('mc-message', () => {
         });
     });
 
-    it('closable', done => {
+    it('closable', async () => {
         const wrapper = mount(MessageEnvironment);
         const message = McMessage(options);
 
-        void nextTick(() => {
-            expect(wrapper.findAllComponents(Message).length).toBe(1);
-            message.close();
+        await nextTick();
+        expect(wrapper.findAllComponents(Message).length).toBe(1);
+        message.close();
 
-            void nextTick(() => {
-                expect(wrapper.findAllComponents(Message).length).toBe(0);
+        await nextTick();
+        expect(wrapper.findAllComponents(Message).length).toBe(0);
 
-                // reset
-                wrapper.unmount();
-                MessageReactiveList.length = 0;
-                done();
-            });
-        });
+        // reset
+        wrapper.unmount();
+        MessageReactiveList.length = 0;
     });
 
     it('raw-options', () => {

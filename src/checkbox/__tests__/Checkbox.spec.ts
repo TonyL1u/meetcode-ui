@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils';
-import { McCheckbox } from '../index';
+import { ref } from 'vue';
+import { McCheckbox, CheckboxProps } from '../index';
 
 const _mount = (template: string, data?: () => unknown, args?: Record<string, unknown>) => {
     return mount({

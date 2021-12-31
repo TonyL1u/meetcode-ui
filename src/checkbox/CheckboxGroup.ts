@@ -1,32 +1,12 @@
-import { defineComponent, provide, toRefs, ref, createVNode, renderSlot, nextTick, onUnmounted, watch, computed, PropType } from 'vue';
+import { defineComponent, provide, toRefs, ref, createVNode, renderSlot, nextTick, onUnmounted, watch, computed } from 'vue';
 import { useEventBus, EventBusKey } from '@vueuse/core';
 import McCheckbox from './Checkbox';
 import { flatten } from '../_utils_';
-import { checkboxGroupInjectionKey, CheckboxValue, CheckboxGroupStatus, checkboxIKey, CheckboxGroupProps } from './interface';
+import { checkboxGroupInjectionKey, CheckboxValue, CheckboxGroupStatus, checkboxIKey, checkboxGroupPros } from './interface';
 
 export default defineComponent({
-    props: {
-        value: {
-            type: Array as PropType<CheckboxGroupProps['value']>,
-            default: undefined
-        },
-        options: {
-            type: Array as PropType<CheckboxGroupProps['options']>,
-            default: undefined
-        },
-        max: {
-            type: Number as PropType<CheckboxGroupProps['max']>,
-            default: undefined
-        },
-        disabled: {
-            type: Boolean as PropType<CheckboxGroupProps['disabled']>,
-            default: false
-        },
-        checkedColor: {
-            type: String as PropType<CheckboxGroupProps['checkedColor']>,
-            default: '#10b981'
-        }
-    },
+    name: 'CheckboxGroup',
+    props: checkboxGroupPros,
     emits: ['update:value'],
     setup(props, { slots, emit, expose }) {
         const { value: valueVM, options, checkedColor, max, disabled } = toRefs(props);
@@ -41,13 +21,13 @@ export default defineComponent({
         });
         const status = computed<CheckboxGroupStatus>(() => {
             return {
-                selectAll: checkedCount.value === checkboxCount.value,
+                all: checkedCount.value === checkboxCount.value,
                 indeterminate: checkedCount.value > 0 && checkedCount.value < checkboxCount.value
             };
         });
 
         const callUpdateValue = (value?: CheckboxValue) => {
-            emit('update:value', valueVM!.value!, value);
+            emit('update:value', valueVM.value, value);
         };
 
         // due with max props, some logic...
@@ -70,13 +50,14 @@ export default defineComponent({
         }
 
         const updateGroupValue = (value?: CheckboxValue, call: boolean = true) => {
-            if (valueVM?.value && value !== undefined) {
-                const index = valueVM.value.indexOf(value);
+            if (valueVM.value) {
+                const index = valueVM.value.indexOf(value ?? '');
                 if (index === -1) {
-                    valueVM.value.push(value);
+                    valueVM.value.push(value ?? '');
                 } else {
                     valueVM.value.splice(index, 1);
                 }
+
                 call && callUpdateValue(value);
             }
         };

@@ -1,48 +1,15 @@
-import { defineComponent, ref, createVNode, renderSlot, toRefs, computed, inject, mergeProps, PropType } from 'vue';
+import { defineComponent, ref, createVNode, renderSlot, toRefs, computed, inject, mergeProps } from 'vue';
 import CheckMark from './CheckMark.vue';
 import IndeterminateMark from './IndeterminateMark.vue';
 import { or, and, not } from '@vueuse/core';
 import { createKey } from '../_utils_';
-import { checkboxIKey, checkboxGroupInjectionKey, CheckboxProps } from './interface';
+import { checkboxIKey, checkboxGroupInjectionKey, checkboxProps } from './interface';
 import * as CSS from 'csstype';
 
 export default defineComponent({
     name: 'Checkbox',
     iKey: checkboxIKey,
-    props: {
-        value: {
-            type: [String, Number, Boolean] as PropType<CheckboxProps['value']>,
-            default: undefined
-        },
-        label: {
-            type: String as PropType<CheckboxProps['label']>,
-            default: undefined
-        },
-        size: {
-            type: String as PropType<CheckboxProps['size']>,
-            default: 'medium'
-        },
-        checkedValue: {
-            type: [String, Number, Boolean] as PropType<CheckboxProps['checkedValue']>,
-            default: true
-        },
-        uncheckedValue: {
-            type: [String, Number, Boolean] as PropType<CheckboxProps['uncheckedValue']>,
-            default: false
-        },
-        disabled: {
-            type: Boolean as PropType<CheckboxProps['disabled']>,
-            default: false
-        },
-        indeterminate: {
-            type: Boolean as PropType<CheckboxProps['indeterminate']>,
-            default: false
-        },
-        checkedColor: {
-            type: String as PropType<CheckboxProps['checkedColor']>,
-            default: undefined
-        }
-    },
+    props: checkboxProps,
     emits: ['update:value'],
     setup(props, { slots, attrs, emit }) {
         const key = createKey('checkbox');
@@ -121,7 +88,7 @@ export default defineComponent({
             const mergedProps = mergeProps(
                 {
                     ref: checkboxElRef,
-                    class: ['mc-checkbox', { 'mc-checkbox-checked': mergedChecked.value, 'mc-checkbox--disabled': mergedDisabled.value }],
+                    class: ['mc-checkbox', { 'mc-checkbox--checked': mergedChecked.value, 'mc-checkbox--disabled': mergedDisabled.value }],
                     style: cssVars.value
                 },
                 attrs

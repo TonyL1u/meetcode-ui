@@ -111,3 +111,8 @@
 2021-12-28
 
 -   Popselect 改成 ts 之后，调用 popover 的 hide 方法，必须放在宏任务（sto、rAF）里面才能生效，原因未知
+
+2021-12-31
+
+-   如果组件有 value 双向绑定的功能，应该注意把 emit 和值改变拆开
+-   Checkbox 和 CheckboxGroup 需要新增对异常 value 参数的处理，以及考虑是否在不传 value 的时候也可以出发 emit 事件

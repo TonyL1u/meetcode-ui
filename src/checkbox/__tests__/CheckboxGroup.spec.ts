@@ -1,27 +1,26 @@
 import { mount } from '@vue/test-utils';
 import { createVNode, nextTick } from 'vue';
-import { McCheckboxGroup, McCheckbox } from '../index';
+import { McCheckboxGroup, McCheckbox, CheckboxValue, CheckboxGroupProps } from '../index';
 
-const _mount = (template: string, data?: () => unknown, args?: Record<string, unknown>) => {
-    return mount({
-        components: { McCheckboxGroup, McCheckbox },
-        template,
-        data,
-        ...args
-    });
+const options = [
+    { value: 'apple', label: 'Apple' },
+    { value: 'orange', label: 'Orange' },
+    { value: 'banana', label: 'Banana' }
+];
+
+const CheckboxVNode = (value: CheckboxValue) => {
+    return createVNode(McCheckbox, { value });
+};
+
+const Wrapper = (props?: CheckboxGroupProps & Record<string, unknown>) => {
+    return mount(McCheckboxGroup, { props: { options, ...props } });
 };
 
 describe('mc-checkbox-group', () => {
-    const options = [
-        { value: 'apple', label: 'Apple' },
-        { value: 'orange', label: 'Orange' },
-        { value: 'banana', label: 'Banana' }
-    ];
-
     it('basic', () => {
         const wrapper = mount(McCheckboxGroup, {
             slots: {
-                default: () => [createVNode(McCheckbox, { value: 'apple' }, { default: () => 'Apple' }), createVNode(McCheckbox, { value: 'orange' }, { default: () => 'Orange' }), createVNode(McCheckbox, { value: 'banana' }, { default: () => 'Banana' })]
+                default: () => [CheckboxVNode('apple'), CheckboxVNode('orange'), CheckboxVNode('banana')]
             }
         });
 
@@ -32,7 +31,7 @@ describe('mc-checkbox-group', () => {
     it('options', () => {
         const wrapper = mount(McCheckboxGroup, {
             props: { options },
-            slots: { default: () => createVNode(McCheckbox, { value: 'peach' }, { default: () => 'Peach' }) }
+            slots: { default: () => CheckboxVNode('peach') }
         });
 
         expect(wrapper.findAllComponents(McCheckbox).length).toBe(4);
@@ -40,54 +39,58 @@ describe('mc-checkbox-group', () => {
     });
 
     it('value-bind', () => {
-        const wrapper = _mount(`<McCheckboxGroup v-model:value="value" :options="options"></McCheckboxGroup>`, () => {
-            return {
-                value: [],
-                options
-            };
-        });
+        const wrapper = Wrapper({ value: [] });
 
         wrapper.findAllComponents(McCheckbox).forEach(async checkbox => {
             const checkboxInput = checkbox.find('input[type=checkbox]');
             await checkboxInput.setValue();
         });
-        expect((wrapper.vm as any).value).toEqual(['apple', 'orange', 'banana']);
+        expect(wrapper.props().value).toEqual(['apple', 'orange', 'banana']);
         wrapper.unmount();
     });
 
-    it('max', () => {
-        const wrapper = mount(McCheckboxGroup, {
-            props: {
-                options,
-                value: ['apple'],
-                max: 1
-            }
-        });
+    it('max', async () => {
+        const wrapper = Wrapper({ value: ['apple'], max: 1 });
 
-        void nextTick(() => {
-            expect(wrapper.findAll('.mc-checkbox--disabled').length).toBe(2);
-            wrapper.unmount();
-        });
+        await nextTick();
+        expect(wrapper.findAll('.mc-checkbox--disabled').length).toBe(2);
+        wrapper.unmount();
     });
 
     it('disabled', () => {
-        const wrapper = mount(McCheckboxGroup, { props: { options, disabled: true } });
+        const wrapper = Wrapper({ disabled: true });
 
         expect(wrapper.findAll('.mc-checkbox--disabled')).toHaveLength(3);
         wrapper.unmount();
     });
 
     it('event', () => {
-        const wrapper = mount(McCheckboxGroup, { props: { options } });
+        const wrapper = Wrapper({ value: [] });
 
         wrapper.findAllComponents(McCheckbox).forEach(async checkbox => {
             const checkboxInput = checkbox.find('input[type=checkbox]');
             await checkboxInput.setValue();
         });
 
-        void nextTick(() => {
-            expect(wrapper.emitted('update:value')).toHaveLength(3);
-            wrapper.unmount();
-        });
+        expect(wrapper.emitted('update:value')).toHaveLength(3);
+        wrapper.unmount();
+    });
+
+    it('select all & clear', async () => {
+        const wrapper = Wrapper({ value: [] });
+        const { selectAll, clear } = wrapper.vm as any;
+
+        selectAll();
+        await nextTick();
+        expect(wrapper.findAll('.mc-checkbox--checked')).toHaveLength(3);
+        expect((wrapper.vm as any).status.all).toBe(true);
+        expect((wrapper.vm as any).status.indeterminate).toBe(false);
+        console.log(wrapper.props());
+
+        clear();
+        await nextTick();
+        expect(wrapper.findAll('.mc-checkbox--checked')).toHaveLength(0);
+        expect((wrapper.vm as any).status.all).toBe(false);
+        expect((wrapper.vm as any).status.indeterminate).toBe(false);
     });
 });

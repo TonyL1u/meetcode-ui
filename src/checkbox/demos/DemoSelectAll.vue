@@ -27,8 +27,8 @@ const handleSelectAll = (value: CheckboxValue) => {
 };
 
 const handleUpdateValue = () => {
-    const { selectAll, indeterminate } = checkboxGroup.value?.status! ?? {};
-    isSelect.value = selectAll || indeterminate;
+    const { all, indeterminate } = checkboxGroup.value?.status! ?? {};
+    isSelect.value = all || indeterminate;
     isIndeterminate.value = indeterminate;
 };
 </script>

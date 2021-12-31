@@ -1,7 +1,7 @@
 <template>
-    <McCheckbox v-model:value="value" @update:value="handleUpdateValue">Checkbox</McCheckbox>
+    <McCheckbox @update:value="handleUpdateValue">Checkbox</McCheckbox>
 
-    <McCheckboxGroup v-model:value="groupValue" @update:value="handleUpdateGroupValue">
+    <McCheckboxGroup @update:value="handleUpdateGroupValue">
         <McCheckbox value="apple">Apple</McCheckbox>
         <McCheckbox value="orange">Orange</McCheckbox>
         <McCheckbox value="banana">Banana</McCheckbox>
