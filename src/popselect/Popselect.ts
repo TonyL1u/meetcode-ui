@@ -3,12 +3,12 @@ import { NIcon } from 'naive-ui';
 import { CheckmarkSharp as IconCheck } from '@vicons/ionicons5';
 import { useVirtualList } from '@vueuse/core';
 import { omit } from 'lodash-es';
-import { McPopover, PopoverExposeInstance, PopoverProps, popoverProps } from '../popover';
+import { McPopover, PopoverExposeInstance, PopoverPlacement, popoverProps } from '../popover';
 import { PopselectOption, popselectProps } from './interface';
 
 const defaultPropsOverride = {
     placement: {
-        type: String as PropType<PopoverProps['placement']>,
+        type: String as PropType<PopoverPlacement>,
         default: 'bottom'
     }
 };
@@ -28,8 +28,8 @@ export default defineComponent({
 
         const handleShow = () => {
             nextTick(() => {
-                const index = options.value.findIndex(e => e.value === (multiple.value ? (valueVM.value as (string | number)[])[0] : valueVM.value));
-                scrollToOption(index);
+                const index = options.value?.findIndex(e => e.value === (multiple.value ? (valueVM.value as (string | number)[])[0] : valueVM.value));
+                index && scrollToOption(index);
             });
         };
 
@@ -46,7 +46,7 @@ export default defineComponent({
             const isDisabled = !!disabled;
             const isSelected = multiple.value ? (valueVM.value as (string | number)[]).includes(value) : valueVM.value === value;
             const checkVNode = multiple.value && isSelected ? createVNode(NIcon, { size: 16 }, { default: () => createVNode(IconCheck) }) : null;
-            const option = toRaw(options.value.find(e => e.value === value));
+            const option = toRaw(options.value?.find(e => e.value === value));
             const handleClick = multiple.value
                 ? () => {
                       const index = (valueVM.value as (string | number)[]).indexOf(value);
@@ -85,8 +85,8 @@ export default defineComponent({
 
         return () => {
             const itemHeight = 41;
-            const listHeight = Math.min(options.value.length * itemHeight, maxHeight.value);
-            const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(options.value, {
+            const listHeight = options.value ? Math.min(options.value.length * itemHeight, maxHeight.value ?? 0) : 0;
+            const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(options.value ?? [], {
                 // Keep `itemHeight` in sync with the item's row.
                 itemHeight
             });

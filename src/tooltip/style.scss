@@ -1,4 +1,6 @@
 .mc-tooltip {
-    background: black;
-    color: white;
+    &--dark {
+        background: black;
+        color: white;
+    }
 }

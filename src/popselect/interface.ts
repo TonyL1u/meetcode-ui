@@ -1,6 +1,8 @@
 import { PropType, RenderFunction } from 'vue';
+import { PopoverProps } from '../popover';
 
 export type PopselectValue = string | number | Array<string | number>;
+export type PopselectMergedProps = PopselectProps & PopoverProps;
 export interface PopselectOption {
     value: string | number;
     label: string | RenderFunction;
@@ -8,12 +10,12 @@ export interface PopselectOption {
 }
 
 export interface PopselectProps {
-    value: PopselectValue;
-    options: Array<PopselectOption>;
-    multiple: boolean;
-    maxHeight: number;
+    value?: PopselectValue;
+    options?: Array<PopselectOption>;
+    multiple?: boolean;
+    maxHeight?: number;
     autoClose?: boolean;
-    autoScroll: boolean;
+    autoScroll?: boolean;
 }
 
 export const popselectProps = {

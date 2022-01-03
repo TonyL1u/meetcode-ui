@@ -1,2 +1,2 @@
 import './style.scss';
-export { default as McTooltip } from './Tooltip.vue';
+export { default as McTooltip } from './Tooltip';
