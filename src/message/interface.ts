@@ -1,4 +1,4 @@
-import { VNodeChild, CSSProperties, Ref } from 'vue';
+import { VNodeChild, CSSProperties, Ref, PropType } from 'vue';
 import * as CSS from 'csstype';
 
 declare module 'csstype' {
@@ -9,7 +9,12 @@ declare module 'csstype' {
 
 export type MessageCloseImpl = () => void | Promise<void>;
 export type MessageType = 'text' | 'success' | 'warning' | 'info' | 'error' | 'loading';
-
+export type MessageOffset = {
+    top?: string;
+    right?: string;
+    bottom?: string;
+    left?: string;
+};
 export interface MessageOptions {
     type?: MessageType;
     className?: string;
@@ -60,3 +65,54 @@ export interface MessageExposeInstance {
     close: MessageCloseImpl;
     el: HTMLElement;
 }
+
+export interface MessageProps {
+    type?: MessageType;
+    duration?: number;
+    closable?: boolean;
+    hoverAlive?: boolean;
+    html?: string;
+    card?: boolean;
+    offset?: MessageOffset;
+    icon?: () => VNodeChild;
+    action?: () => VNodeChild;
+}
+
+export const messageProps = {
+    type: {
+        type: String as PropType<MessageProps['type']>,
+        default: 'text'
+    },
+    duration: {
+        type: Number as PropType<MessageProps['duration']>,
+        default: 3000
+    },
+    closable: {
+        type: Boolean as PropType<MessageProps['closable']>,
+        default: false
+    },
+    hoverAlive: {
+        type: Boolean as PropType<MessageProps['hoverAlive']>,
+        default: true
+    },
+    html: {
+        type: String as PropType<MessageProps['type']>,
+        default: 'text'
+    },
+    card: {
+        type: Boolean as PropType<MessageProps['card']>,
+        default: false
+    },
+    offset: {
+        type: Object as PropType<MessageProps['offset']>,
+        default: undefined
+    },
+    icon: {
+        type: Function as PropType<MessageProps['icon']>,
+        default: undefined
+    },
+    action: {
+        type: Function as PropType<MessageProps['action']>,
+        default: undefined
+    }
+};

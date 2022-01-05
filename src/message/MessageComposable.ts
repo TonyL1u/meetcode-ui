@@ -1,8 +1,7 @@
 import { reactive, render, createVNode, ref, toRefs } from 'vue';
 import { responsiveTarget, createKey } from '../_utils_';
 import { MessageApiOptions, MaybeMessageApiOptions, MessageType, Message, MessageApiInstance } from './interface';
-import MessageEnvironment from './MessageEnvironment.vue';
-import * as CSS from '@vue/runtime-dom/node_modules/csstype';
+import MessageEnvironment from './MessageEnvironment';
 
 const containerMounted = ref(false);
 const MessageReactiveList: Message[] = reactive([]);
