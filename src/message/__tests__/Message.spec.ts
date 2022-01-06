@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { reactive, isReactive, nextTick } from 'vue';
-import MessageEnvironment from '../MessageEnvironment.vue';
-import Message from '../Message.vue';
+import MessageEnvironment from '../MessageEnvironment';
+import Message from '../Message';
 import MessageReactiveList from '../MessageComposable';
 import { McMessage, MessageApiOptions, MessageOptions, MessageType } from '../index';
 

@@ -4,9 +4,6 @@ import MessageEntity from './Message.vue';
 import MessageReactiveList, { closeMessage } from './MessageComposable';
 import { MessageExposeInstance, Message } from './interface';
 
-const handleBeforeLeave = (el: HTMLElement) => {};
-const handleAfterLeave = (el: HTMLElement) => {};
-
 const getMessageEntityVNode = (message: Message) => {
     const {
         key,
@@ -50,11 +47,7 @@ const getMessageEntityVNode = (message: Message) => {
 };
 
 const Render = () => {
-    return createVNode(
-        TransitionGroup,
-        { name: 'mc-message-slide-down', appear: true, tag: 'div', class: 'mc-message-global-container', onBeforeLeave: handleBeforeLeave, onAfterLeave: handleAfterLeave },
-        { default: () => MessageReactiveList.map(message => getMessageEntityVNode(message)) }
-    );
+    return createVNode(TransitionGroup, { name: 'mc-message-slide-down', appear: true, tag: 'div', class: 'mc-message-global-container' }, { default: () => MessageReactiveList.map(message => getMessageEntityVNode(message)) });
 };
 </script>
 

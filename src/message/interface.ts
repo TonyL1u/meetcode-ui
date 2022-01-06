@@ -97,7 +97,7 @@ export const messageProps = {
     },
     html: {
         type: String as PropType<MessageProps['type']>,
-        default: 'text'
+        default: undefined
     },
     card: {
         type: Boolean as PropType<MessageProps['card']>,

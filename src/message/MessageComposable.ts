@@ -32,43 +32,31 @@ function ApiConstructor<T extends MessageType>(maybeOptions?: MaybeMessageApiOpt
 function ApiConstructor<T extends MessageType>(maybeOptions?: MaybeMessageApiOptions<T>, options?: MessageApiOptions<T>, type?: MessageType, async?: true): Promise<MessageApiInstance<T>>;
 function ApiConstructor<T extends MessageType>(maybeOptions?: MaybeMessageApiOptions<T>, options: MessageApiOptions<T> = {}, type: MessageType = 'text', async: boolean = false): MessageApiInstance<T> | Promise<MessageApiInstance<T>> {
     const key = createKey('message');
-    let apiOptions: MessageApiOptions<T>;
+    const reactiveOptions = maybeOptions
+        ? typeof maybeOptions === 'string'
+            ? reactive({
+                  message: maybeOptions,
+                  ...options
+              })
+            : responsiveTarget(maybeOptions)
+        : responsiveTarget(options);
+    const apiOptions: MessageApiOptions<T> = reactive(toRefs<MessageApiOptions<T>>(reactiveOptions));
 
-    if (maybeOptions) {
-        if (typeof maybeOptions === 'string') {
-            const reactiveOptions = reactive({
-                message: maybeOptions,
-                ...options
-            });
-            apiOptions = reactive(toRefs<MessageApiOptions<T>>(reactiveOptions));
-        } else {
-            const reactiveOptions = responsiveTarget(maybeOptions);
-            apiOptions = reactive(toRefs<MessageApiOptions<T>>(reactiveOptions));
-        }
-    } else {
-        const reactiveOptions = responsiveTarget(options);
-        apiOptions = reactive(toRefs<MessageApiOptions<T>>(reactiveOptions));
-    }
     createMessage({
         key,
         type,
         options: apiOptions
     });
-    (apiOptions as MessageApiInstance<T>).close = () => {
-        apiOptions.onClose?.();
-        closeMessage(key);
-    };
 
-    if (async) {
-        return new Promise<MessageApiInstance<T>>(resolve => {
-            const originalOnCloseHandler = apiOptions.onClose;
-            apiOptions.onClose = async () => {
-                originalOnCloseHandler && (await originalOnCloseHandler());
-                resolve(apiOptions as MessageApiInstance<T>);
-            };
-        });
-    }
-    return apiOptions as MessageApiInstance<T>;
+    return async
+        ? new Promise<MessageApiInstance<T>>(resolve => {
+              const originalOnCloseHandler = apiOptions.onClose;
+              apiOptions.onClose = async () => {
+                  originalOnCloseHandler && (await originalOnCloseHandler());
+                  resolve(apiOptions as MessageApiInstance<T>);
+              };
+          })
+        : (apiOptions as MessageApiInstance<T>);
 }
 
 export default MessageReactiveList;

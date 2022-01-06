@@ -38,33 +38,34 @@ export default defineComponent({
         }
 
         const iconVNode = computed<VNodeChild | VNode>(() => {
-            return icon?.value
-                ? icon?.value()
-                : createVNode(
-                      NIcon,
-                      {
-                          size: 18,
-                          class: 'mc-message__icon'
-                      },
-                      {
-                          default: () => {
-                              switch (type.value) {
-                                  case 'text':
-                                      return createVNode(IconAlert);
-                                  case 'success':
-                                      return createVNode(IconSuccess);
-                                  case 'warning':
-                                      return createVNode(IconWarning);
-                                  case 'info':
-                                      return createVNode(IconInfo);
-                                  case 'error':
-                                      return createVNode(IconError);
-                                  case 'loading':
-                                      return createVNode('div', { class: 'mc-message__icon-loading' });
-                              }
-                          }
-                      }
-                  );
+            return (
+                icon?.value?.() ??
+                createVNode(
+                    NIcon,
+                    {
+                        size: 18,
+                        class: 'mc-message__icon'
+                    },
+                    {
+                        default: () => {
+                            switch (type.value) {
+                                case 'text':
+                                    return createVNode(IconAlert);
+                                case 'success':
+                                    return createVNode(IconSuccess);
+                                case 'warning':
+                                    return createVNode(IconWarning);
+                                case 'info':
+                                    return createVNode(IconInfo);
+                                case 'error':
+                                    return createVNode(IconError);
+                                case 'loading':
+                                    return createVNode('div', { class: 'mc-message__icon-loading' });
+                            }
+                        }
+                    }
+                )
+            );
         });
 
         const closableVNode = computed<VNode | null>(() => {
@@ -104,7 +105,7 @@ export default defineComponent({
             createVNode(
                 'div',
                 {
-                    // ref: messageElRef,
+                    ref: messageElRef,
                     class: ['mc-message', { 'mc-message--card': card.value }, `mc-message--${type.value}`],
                     style: cssVars.value,
                     onMouseenter() {
