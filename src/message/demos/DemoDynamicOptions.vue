@@ -1,7 +1,7 @@
 <template>
     <NSpace>
         <NButton type="primary" ghost @click="open">打开一个信息</NButton>
-        <McPopselect v-model:value="type" :options="types" @update:value="handleUpdateValue">
+        <McPopselect v-model:value="type" :options="types" :auto-close="false" @update:value="handleUpdateValue">
             <NButton type="primary" ghost>修改类型</NButton>
         </McPopselect>
     </NSpace>

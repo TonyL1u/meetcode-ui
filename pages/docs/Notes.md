@@ -116,3 +116,7 @@
 
 -   如果组件有 value 双向绑定的功能，应该注意把 emit 和值改变拆开
 -   Checkbox 和 CheckboxGroup 需要新增对异常 value 参数的处理，以及考虑是否在不传 value 的时候也可以触发 emit 事件
+
+2022-01-07
+
+-   用 gsap/Flip 来做 message 的动画，会有一个问题：新增 message 的速度过快，会导致新增的 message 样式出现问题

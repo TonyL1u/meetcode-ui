@@ -131,7 +131,7 @@ import SelectAll from '@/checkbox/demos/DemoSelectAll.vue'
 
 | 名称 |     类型      |         说明         |
 | :--: | :-----------: | :------------------: |
-|  el  | `HTMLElement` | Chcekbox 的 Dom 节点 |
+|  el  | `HTMLElement` | Checkbox 的 Dom 节点 |
 
 ### CheckboxGroup
 
@@ -140,7 +140,7 @@ import SelectAll from '@/checkbox/demos/DemoSelectAll.vue'
 | selectAll |     `() => void`      |          全选 Checkbox           |
 |   clear   |     `() => void`      |        取消全选 Checkbox         |
 |  status   | `CheckboxGroupStatus` | CheckboxGroup 内选中复选框的状态 |
-|    el     |     `HTMLElement`     |    ChcekboxGroup 的 Dom 节点     |
+|    el     |     `HTMLElement`     |    CheckboxGroup 的 Dom 节点     |
 
 ## Type Declarations
 
@@ -148,7 +148,7 @@ import SelectAll from '@/checkbox/demos/DemoSelectAll.vue'
 export type CheckboxValue = string | number | boolean;
 
 export type CheckboxGroupStatus = {
-    selectAll: boolean;
+    all: boolean;
     indeterminate: boolean;
 };
 ```

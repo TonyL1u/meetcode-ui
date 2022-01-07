@@ -63,11 +63,11 @@ export const popoverProps = {
     },
     showDelay: {
         type: Number as PropType<PopoverProps['showDelay']>,
-        default: 100
+        default: 75
     },
     hideDelay: {
         type: Number as PropType<PopoverProps['hideDelay']>,
-        default: 100
+        default: 75
     },
     offset: {
         type: Object as PropType<PopoverProps['offset']>,

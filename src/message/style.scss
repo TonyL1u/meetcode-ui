@@ -19,6 +19,7 @@
     align-items: center;
     background: #fff;
     margin-top: 8px;
+    transition: all 0.3s ease;
 
     &--text {
         background: #eff6ff;
@@ -106,6 +107,16 @@
     &.exiting {
         display: none;
     }
+}
+
+.mc-message-slide-down-enter-from,
+.mc-message-slide-down-leave-to {
+    opacity: 0;
+    transform: translateY(-30px);
+}
+
+.mc-message-slide-down-leave-active {
+    position: absolute;
 }
 
 @keyframes mc-message-icon-loading-spin {
