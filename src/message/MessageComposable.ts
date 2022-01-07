@@ -15,8 +15,9 @@ function unmountContainer() {
     const container = document.querySelector('.mc-message-global-container');
     if (container) {
         document.body.removeChild(container);
+        containerMounted.value = false;
+        render(null, document.body);
     }
-    containerMounted.value = false;
 }
 
 function createMessage(message: Message) {

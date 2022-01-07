@@ -1,20 +1,7 @@
 import { VNodeChild, CSSProperties, Ref, PropType } from 'vue';
-import * as CSS from 'csstype';
-
-declare module 'csstype' {
-    interface Properties {
-        '--message-item-gap'?: string;
-    }
-}
 
 export type MessageCloseImpl = () => void | Promise<void>;
 export type MessageType = 'text' | 'success' | 'warning' | 'info' | 'error' | 'loading';
-export type MessageOffset = {
-    top?: string;
-    right?: string;
-    bottom?: string;
-    left?: string;
-};
 export interface MessageOptions {
     type?: MessageType;
     className?: string;
@@ -73,7 +60,6 @@ export interface MessageProps {
     hoverAlive?: boolean;
     html?: string;
     card?: boolean;
-    offset?: MessageOffset;
     icon?: () => VNodeChild;
     action?: () => VNodeChild;
 }
@@ -102,10 +88,6 @@ export const messageProps = {
     card: {
         type: Boolean as PropType<MessageProps['card']>,
         default: false
-    },
-    offset: {
-        type: Object as PropType<MessageProps['offset']>,
-        default: undefined
     },
     icon: {
         type: Function as PropType<MessageProps['icon']>,

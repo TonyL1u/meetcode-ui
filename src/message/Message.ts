@@ -2,7 +2,6 @@ import { ref, computed, renderSlot, createVNode, toRefs, VNode, VNodeChild, defi
 import { messageProps } from './interface';
 import { NIcon } from 'naive-ui';
 import { AlertCircle as IconAlert, CheckmarkCircle as IconSuccess, Warning as IconWarning, InformationCircle as IconInfo, CloseCircleSharp as IconError, CloseOutline as IconClose } from '@vicons/ionicons5';
-import * as CSS from 'csstype';
 
 export default defineComponent({
     name: 'Message',
@@ -13,11 +12,6 @@ export default defineComponent({
         const messageElRef = ref<HTMLElement>();
         const messageCloseTimer = ref();
         const autoClose = computed(() => duration.value ?? 3000 > 0);
-        const cssVars = computed<CSS.Properties>(() => {
-            return {
-                // '--message-item-gap': itemGap.value + 'px'
-            };
-        });
 
         const handleCloseMessage = () => {
             emit('close');
@@ -107,7 +101,6 @@ export default defineComponent({
                 {
                     ref: messageElRef,
                     class: ['mc-message', { 'mc-message--card': card.value }, `mc-message--${type.value}`],
-                    style: cssVars.value,
                     onMouseenter() {
                         hoverAlive.value && autoClose.value && clearCloseTimer();
                     },
