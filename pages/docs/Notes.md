@@ -120,3 +120,8 @@
 2022-01-07
 
 -   用 gsap/Flip 来做 message 的动画，会有一个问题：新增 message 的速度过快，会导致新增的 message 样式出现问题
+
+2022-01-08
+
+-   Popover 的 follow 边界检测不准确，有时候还是有问题
+-   Popover trigger 设置为 follow 并且应用 move 模式时，hide 和 show 事件会触发多次，原因是 watch 没有做节流，导致进入和离开 trigger 时

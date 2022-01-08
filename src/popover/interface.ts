@@ -3,6 +3,7 @@ import { PropType, VNodeChild } from 'vue';
 export type PopoverTrigger = 'hover' | 'click' | 'manual' | 'follow';
 export type PopoverPlacement = 'top' | 'bottom' | 'left' | 'right' | 'top-start' | 'top-end' | 'left-start' | 'left-end' | 'right-start' | 'right-end' | 'bottom-start' | 'bottom-end';
 export type PopoverTriggerBorder = 'top' | 'right' | 'bottom' | 'left';
+export type PopoverFollowType = 'move' | 'click';
 export type PopoverOffset = {
     top?: string;
     right?: string;
@@ -25,6 +26,7 @@ export interface PopoverProps {
     autoSync?: boolean;
     title?: string;
     content?: string | (() => VNodeChild);
+    followType?: PopoverFollowType;
 }
 export interface PopoverExposeInstance {
     syncPosition: () => void;
@@ -92,5 +94,9 @@ export const popoverProps = {
     content: {
         type: [String, Function] as PropType<PopoverProps['content']>,
         default: undefined
+    },
+    followType: {
+        type: String as PropType<PopoverProps['followType']>,
+        default: 'move'
     }
 };

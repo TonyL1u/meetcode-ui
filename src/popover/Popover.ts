@@ -1,8 +1,9 @@
-import { ref, createVNode, Text, cloneVNode, computed, withDirectives, vShow, watch, toRefs, nextTick, Transition, mergeProps, defineComponent } from 'vue';
+import { ref, createVNode, Text, cloneVNode, computed, withDirectives, vShow, watch, toRefs, nextTick, Transition, mergeProps, defineComponent, reactive } from 'vue';
 import { getSlotFirstVNode, propsMergeSlots } from '../_utils_';
 import { VBinder, VTarget, VFollower } from 'vueuc';
-import { useElementBounding, useMouseInElement } from '@vueuse/core';
+import { useElementBounding, useMouseInElement, pausableWatch, useThrottleFn } from '@vueuse/core';
 import { PopoverTriggerBorder, PopoverProps, popoverProps } from './interface';
+import { throttle } from 'lodash-es';
 
 export default defineComponent({
     name: 'Popover',
@@ -10,7 +11,7 @@ export default defineComponent({
     props: popoverProps,
     emits: ['show', 'hide', 'update:show', 'border:reached'],
     setup(props, { slots, attrs, expose, emit }) {
-        const { trigger, placement, destroyWhenHide, zIndex, show, disabled, withArrow, showDelay, hideDelay, offset, wrapBoundary, matchTrigger, autoSync, title, content } = toRefs(props);
+        const { trigger, placement, destroyWhenHide, zIndex, show, disabled, withArrow, showDelay, hideDelay, offset, wrapBoundary, matchTrigger, autoSync, title, followType } = toRefs(props);
         const showRef = trigger.value === 'manual' ? show : ref(!!props.show);
         const followerRef = ref(null);
         const followX = ref(0);
@@ -18,6 +19,8 @@ export default defineComponent({
         const mouseInFollowTrigger = ref(false);
         const contentShowTimer = ref();
         const contentHideTimer = ref();
+        const triggerElRef = ref<HTMLElement>();
+        const contentElRef = ref<HTMLElement>();
 
         // call emits
         const callShow = () => {
@@ -111,9 +114,9 @@ export default defineComponent({
                         mouseInFollowTrigger.value = false;
                     }
                 };
-            } else {
-                return {};
             }
+
+            return {};
         });
 
         // nodes
@@ -150,6 +153,7 @@ export default defineComponent({
 
             const { top = '', right = '', bottom = '', left = '' } = offset?.value ?? {};
             const mergedProps = mergeProps(attrs, {
+                ref: contentElRef,
                 class: ['mc-popover', { 'mc-popover--with-arrow': withArrow.value }],
                 style: {
                     '--popover-offset-top': top,
@@ -182,7 +186,7 @@ export default defineComponent({
         void nextTick(() => {
             if (disabled.value || !triggerEl.value) return;
 
-            // 自动同步位置
+            // auto async popover position
             if (autoSync.value) {
                 const { top, right, bottom, left } = useElementBounding(triggerEl.value);
                 watch([top, right, bottom, left], () => {
@@ -193,28 +197,37 @@ export default defineComponent({
             // follow control
             if (trigger.value === 'follow') {
                 const { x, y, isOutside, elementHeight, elementWidth, elementX, elementY } = useMouseInElement(triggerEl.value);
-                // No detection for the first entry
-                let isFirstEnter = true;
+                const isFirstEnter = ref(true);
+                const enterDelay = () => new Promise<void>(resolve => setTimeout(resolve, 2000));
 
-                // boundary detection
-                watch([x, y, isOutside], () => {
-                    showRef.value = !isOutside.value && mouseInFollowTrigger.value;
-                    callUpdateShow();
-
+                const clickCallEvent = (evt: MouseEvent) => {
                     if (showRef.value) {
-                        callShow();
+                        handleContentHide();
+                    } else {
+                        const { x, y } = evt;
+                        followX.value = x;
+                        followY.value = y;
+                        handleContentShow();
+                    }
+                };
+
+                const moveCallEvent = async () => {
+                    if (!isOutside.value && mouseInFollowTrigger.value) {
                         followX.value = x.value;
                         followY.value = y.value;
+                        handleContentShow();
 
-                        if (isFirstEnter) {
-                            isFirstEnter = false;
+                        // No detection for the first entry
+                        if (isFirstEnter.value) {
+                            isFirstEnter.value = false;
                             return;
                         }
+
                         void nextTick(() => {
-                            if (wrapBoundary.value) {
+                            if (wrapBoundary.value && contentElRef.value) {
                                 let isReachBorder = false;
                                 let reachedDir: Array<PopoverTriggerBorder> = [];
-                                const contentRect = contentEl.value.getBoundingClientRect();
+                                const contentRect = contentElRef.value.getBoundingClientRect();
                                 const { x: contentX, y: contentY, width, height } = contentRect;
                                 const cursorOffsetX = contentX - x.value;
                                 const cursorOffsetY = contentY - y.value;
@@ -251,10 +264,33 @@ export default defineComponent({
                             }
                         });
                     } else {
-                        callHide();
+                        handleContentHide();
                         callBorderReached(false, []);
+                        isFirstEnter.value = true;
                     }
-                });
+                };
+
+                const watchVal = ref([x, y, isOutside]);
+
+                const { pause, resume } = pausableWatch([x, y, isOutside], moveCallEvent);
+
+                watch(
+                    followType,
+                    () => {
+                        nextTick(() => {
+                            if (followType.value === 'move') {
+                                resume();
+                                triggerEl.value.removeEventListener('click', clickCallEvent);
+                            } else {
+                                pause();
+                                triggerEl.value.addEventListener('click', clickCallEvent);
+                            }
+                        });
+                    },
+                    {
+                        immediate: true
+                    }
+                );
             }
         });
 
@@ -262,7 +298,7 @@ export default defineComponent({
             syncPosition,
             show: handleContentShow,
             hide: handleContentHide,
-            el: contentEl
+            el: contentElRef
         });
 
         return () =>

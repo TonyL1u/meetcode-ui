@@ -70,6 +70,7 @@ import Delay from '@/popover/demos/DemoDelay.vue'
 弹出框跟随鼠标移动时，可以限制弹出框的位置不会超出元素内容。
 
 <Boundary />
+
 :::
 
 ::: demo codePreview=Delay
@@ -94,8 +95,8 @@ import Delay from '@/popover/demos/DemoDelay.vue'
 |    with-arrow     |                                                                              `boolean`                                                                               |   `true`    |                是否显示箭头                 |
 |      offset       |                                                                               `object`                                                                               | `undefined` |       弹出框相对于其正常位置的偏移量        |
 |   wrap-boundary   |                                                                              `boolean`                                                                               |   `false`   |            是否进行边界溢出检测             |
-|    show-delay     |                                                                               `number`                                                                               |    `100`    |                延迟显示(ms)                 |
-|    hide-delay     |                                                                               `number`                                                                               |    `100`    |                延迟隐藏(ms)                 |
+|    show-delay     |                                                                               `number`                                                                               |    `75`     |                延迟显示(ms)                 |
+|    hide-delay     |                                                                               `number`                                                                               |    `75`     |                延迟隐藏(ms)                 |
 |   match-trigger   |                                                                              `boolean`                                                                               |   `false`   |       将弹出框宽度设置为触发元素宽度        |
 |     auto-sync     |                                                                              `boolean`                                                                               |   `true`    | 触发元素的大小/位置改变时自动同步弹出框位置 |
 
