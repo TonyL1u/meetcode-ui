@@ -124,4 +124,4 @@
 2022-01-08
 
 -   Popover 的 follow 边界检测不准确，有时候还是有问题
--   Popover trigger 设置为 follow 并且应用 move 模式时，hide 和 show 事件会触发多次，原因是 watch 没有做节流，导致进入和离开 trigger 时
+-   Popover trigger 设置为 follow 并且应用 move 模式时，hide 和 show 事件会触发多次，原因是 watch 时没有做节流，导致进入和离开 trigger 时回调函数被多次执行了

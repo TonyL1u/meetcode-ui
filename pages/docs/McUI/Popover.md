@@ -60,6 +60,8 @@ import Delay from '@/popover/demos/DemoDelay.vue'
 
 设置 `trigger = 'follow'` ，弹出框可以跟随鼠标指针在元素上移动。
 
+提供 `move` 和 `click` 两种模式。
+
 <Follow />
 :::
 
@@ -118,9 +120,9 @@ import Delay from '@/popover/demos/DemoDelay.vue'
 
 ## Expose
 
-|     名称     |     类型      |       说明        |
-| :----------: | :-----------: | :---------------: |
-| syncPosition | `() => void`  |  同步弹出框位置   |
-|     show     | `() => void`  |    显示弹出框     |
-|     hide     | `() => void`  |    隐藏弹出框     |
-|      el      | `HTMLElement` | 弹出框的 Dom 节点 |
+|     名称     |     类型      |            说明            |
+| :----------: | :-----------: | :------------------------: |
+| syncPosition | `() => void`  | 同步弹出框和触发元素的位置 |
+|     show     | `() => void`  |         显示弹出框         |
+|     hide     | `() => void`  |         隐藏弹出框         |
+|      el      | `HTMLElement` |     弹出框的 Dom 节点      |

@@ -1,9 +1,8 @@
 import { ref, createVNode, Text, cloneVNode, computed, withDirectives, vShow, watch, toRefs, nextTick, Transition, mergeProps, defineComponent, reactive } from 'vue';
 import { getSlotFirstVNode, propsMergeSlots } from '../_utils_';
 import { VBinder, VTarget, VFollower } from 'vueuc';
-import { useElementBounding, useMouseInElement, pausableWatch, useThrottleFn } from '@vueuse/core';
+import { useElementBounding, useMouseInElement, pausableWatch } from '@vueuse/core';
 import { PopoverTriggerBorder, PopoverProps, popoverProps } from './interface';
-import { throttle } from 'lodash-es';
 
 export default defineComponent({
     name: 'Popover',
@@ -119,7 +118,7 @@ export default defineComponent({
             return {};
         });
 
-        // nodes
+        // render vnodes
         const triggerVNode = computed(() => {
             const firstDefaultVNode = getSlotFirstVNode(slots.default);
             if (!firstDefaultVNode) return null;
@@ -128,7 +127,7 @@ export default defineComponent({
 
             if (disabled.value) return tempVNode;
 
-            // 事件绑定
+            // event bind
             if (!tempVNode.props) {
                 tempVNode.props = {};
             } else {
@@ -178,9 +177,6 @@ export default defineComponent({
         });
         const triggerEl = computed(() => {
             return (triggerVNode.value?.el as HTMLElement) || null;
-        });
-        const contentEl = computed(() => {
-            return (contentVNode.value?.el as HTMLElement) || null;
         });
 
         void nextTick(() => {
@@ -269,8 +265,6 @@ export default defineComponent({
                         isFirstEnter.value = true;
                     }
                 };
-
-                const watchVal = ref([x, y, isOutside]);
 
                 const { pause, resume } = pausableWatch([x, y, isOutside], moveCallEvent);
 
