@@ -3,7 +3,7 @@ import CheckMark from './CheckMark.vue';
 import IndeterminateMark from './IndeterminateMark.vue';
 import { or, and, not } from '@vueuse/core';
 import { createKey } from '../_utils_';
-import { checkboxIKey, checkboxGroupInjectionKey, checkboxProps } from './interface';
+import { CheckboxValue, checkboxIKey, checkboxGroupInjectionKey, checkboxProps } from './interface';
 import * as CSS from 'csstype';
 
 export default defineComponent({
@@ -16,6 +16,7 @@ export default defineComponent({
         const { value: valueVM, label, size, checkedValue, uncheckedValue, disabled, indeterminate, checkedColor } = toRefs(props);
         const { groupValue, groupCheckedColor, groupDisabled, updateGroupValue, BusSelectAll, BusMaxControl } = inject(checkboxGroupInjectionKey, null) ?? {};
         const checkboxElRef = ref<HTMLElement>();
+        const internalValue = ref<CheckboxValue>(false);
         const internalDisabled = ref(false);
         const scaleRatio = computed(() => {
             switch (size.value) {
@@ -27,12 +28,14 @@ export default defineComponent({
                     return 1;
             }
         });
+        const mergedValue = valueVM.value ? valueVM : internalValue;
         const mergedDisabled = or(groupDisabled, disabled, internalDisabled);
         const mergedChecked = computed(() => {
+            console.log(groupValue?.value);
             if (groupValue?.value) {
-                return groupValue.value.indexOf(valueVM?.value!) > -1;
+                return groupValue.value.indexOf(mergedValue?.value!) > -1;
             }
-            return valueVM?.value === checkedValue.value;
+            return mergedValue?.value === checkedValue.value;
         });
         const mergedCheckedColor = and(groupCheckedColor, not(checkedColor)).value ? groupCheckedColor : checkedColor;
         const cssVars = computed<CSS.Properties>(() => {
@@ -43,6 +46,13 @@ export default defineComponent({
             };
         });
 
+        const callUpdateValue = (value: CheckboxValue) => {
+            if (valueVM.value === undefined) {
+                mergedValue.value = value;
+            }
+            emit('update:value', value);
+        };
+
         const updateInternalDisabled = (reachMax: boolean) => {
             if (reachMax) {
                 !mergedChecked.value && (internalDisabled.value = true);
@@ -52,12 +62,10 @@ export default defineComponent({
         };
 
         const handleChange = () => {
-            if (valueVM) {
-                if (!updateGroupValue) {
-                    emit('update:value', mergedChecked.value ? uncheckedValue.value : checkedValue.value);
-                } else {
-                    updateGroupValue(valueVM.value);
-                }
+            if (updateGroupValue) {
+                updateGroupValue(mergedValue.value);
+            } else {
+                callUpdateValue(mergedChecked.value ? uncheckedValue.value : checkedValue.value);
             }
         };
 
@@ -66,9 +74,9 @@ export default defineComponent({
             BusSelectAll.on((selectDisabled: boolean) => {
                 if (!mergedChecked.value) {
                     if (!selectDisabled) {
-                        !mergedDisabled.value && updateGroupValue?.(valueVM?.value, false);
+                        !mergedDisabled.value && updateGroupValue?.(mergedValue?.value, false);
                     } else {
-                        updateGroupValue?.(valueVM?.value, false);
+                        updateGroupValue?.(mergedValue?.value, false);
                     }
                 }
             });

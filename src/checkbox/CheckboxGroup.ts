@@ -10,6 +10,7 @@ export default defineComponent({
     emits: ['update:value'],
     setup(props, { slots, emit, expose }) {
         const { value: valueVM, options, checkedColor, max, disabled } = toRefs(props);
+        const internalValue = ref<CheckboxValue[]>([]);
         const checkboxGroupElRef = ref<HTMLElement>();
         const checkboxCount = computed(() => {
             const slotsCount = slots.default ? flatten(slots.default(), checkboxIKey).length : 0;
@@ -17,7 +18,7 @@ export default defineComponent({
             return slotsCount + optionsCount;
         });
         const checkedCount = computed(() => {
-            return valueVM?.value?.length ?? 0;
+            return mergedValue?.value?.length ?? 0;
         });
         const status = computed<CheckboxGroupStatus>(() => {
             return {
@@ -25,18 +26,19 @@ export default defineComponent({
                 indeterminate: checkedCount.value > 0 && checkedCount.value < checkboxCount.value
             };
         });
+        const mergedValue = valueVM.value ? valueVM : internalValue;
 
         const callUpdateValue = (value?: CheckboxValue) => {
-            emit('update:value', valueVM.value, value);
+            emit('update:value', mergedValue.value, value);
         };
 
         // due with max props, some logic...
-        if (valueVM?.value && max?.value) {
+        if (mergedValue?.value && max?.value) {
             watch(
                 [checkboxCount, checkedCount, max],
                 () => {
                     void nextTick(() => {
-                        if (valueVM.value?.length === max.value) {
+                        if (mergedValue.value?.length === max.value) {
                             BusMaxControl.emit(true);
                         } else {
                             BusMaxControl.emit(false);
@@ -50,14 +52,16 @@ export default defineComponent({
         }
 
         const updateGroupValue = (value?: CheckboxValue, call: boolean = true) => {
-            if (valueVM.value) {
-                const index = valueVM.value.indexOf(value ?? '');
+            if (mergedValue.value) {
+                const index = mergedValue.value.indexOf(value ?? '');
                 if (index === -1) {
-                    valueVM.value.push(value ?? '');
+                    mergedValue.value.push(value ?? '');
                 } else {
-                    valueVM.value.splice(index, 1);
+                    mergedValue.value.splice(index, 1);
                 }
 
+                call && callUpdateValue(value);
+            } else {
                 call && callUpdateValue(value);
             }
         };
@@ -68,7 +72,7 @@ export default defineComponent({
         const BusMaxControl = useEventBus<boolean>(MaxControlEventBusKey);
 
         provide(checkboxGroupInjectionKey, {
-            groupValue: valueVM,
+            groupValue: mergedValue,
             groupCheckedColor: checkedColor,
             groupDisabled: disabled,
             updateGroupValue,
@@ -79,11 +83,11 @@ export default defineComponent({
         expose({
             selectAll(selectDisabled: boolean = true) {
                 BusSelectAll.emit(selectDisabled);
-                valueVM?.value && callUpdateValue();
+                mergedValue?.value && callUpdateValue();
             },
             clear() {
-                if (valueVM?.value) {
-                    valueVM.value.length = 0;
+                if (mergedValue?.value) {
+                    mergedValue.value.length = 0;
                     callUpdateValue();
                 }
             },

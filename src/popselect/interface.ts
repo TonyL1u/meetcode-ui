@@ -17,7 +17,6 @@ export interface PopselectProps {
     autoClose?: boolean;
     autoScroll?: boolean;
 }
-
 export const popselectProps = {
     value: {
         type: [String, Number, Array] as PropType<PopselectProps['value']>,
@@ -44,3 +43,5 @@ export const popselectProps = {
         default: true
     }
 };
+export const popselectEmits = ['update:value'];
+

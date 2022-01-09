@@ -70,7 +70,7 @@ import SelectAll from '@/checkbox/demos/DemoSelectAll.vue'
 
 ### 全选
 
-`McChekcboxGroup` 暴露出了 `selectAll` 、 `clear` 事件和 `status` 属性。
+`McChekcboxGroup` 提供了 `selectAll` 、 `clear` 事件和 `status` 属性。
 
 `indeterminate` 可以设置半选图标。
 

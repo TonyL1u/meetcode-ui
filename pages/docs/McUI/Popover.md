@@ -101,6 +101,7 @@ import Delay from '@/popover/demos/DemoDelay.vue'
 |    hide-delay     |                                                                               `number`                                                                               |    `75`     |                延迟隐藏(ms)                 |
 |   match-trigger   |                                                                              `boolean`                                                                               |   `false`   |       将弹出框宽度设置为触发元素宽度        |
 |     auto-sync     |                                                                              `boolean`                                                                               |   `true`    | 触发元素的大小/位置改变时自动同步弹出框位置 |
+|    follow-mode    |                                                                         `'move' \| 'click'`                                                                          |  `'move'`   | `trigger` 设置为 `follow` 时，弹出框弹出方式 |
 
 ## Event
 

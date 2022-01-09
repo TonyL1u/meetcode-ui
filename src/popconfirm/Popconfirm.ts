@@ -3,8 +3,8 @@ import { NButton, NIcon } from 'naive-ui';
 import { getSlotFirstVNode, propsMergeSlots } from '../_utils_';
 import { omit } from 'lodash-es';
 import { AlertCircle as IconAlert } from '@vicons/ionicons5';
-import { McPopover, PopoverExposeInstance, popoverProps, PopoverTrigger } from '../popover';
-import { PopconfirmMergedProps, popconfirmProps } from './interface';
+import { McPopover, PopoverExposeInstance, popoverProps, popoverEmits,PopoverTrigger } from '../popover';
+import { PopconfirmMergedProps, popconfirmProps, popconfirmEmits } from './interface';
 
 const defaultPropsOverride = {
     trigger: {
@@ -20,6 +20,7 @@ export default defineComponent({
         ...popconfirmProps,
         ...defaultPropsOverride
     },
+    emits:[...popoverEmits, ...popconfirmEmits],
     setup(props, { slots }) {
         const { cancelText, cancelDisabled, confirmText, confirmDisabled, hideIcon, onCancel, onConfirm } = toRefs(props);
         const popoverRef = ref<PopoverExposeInstance>();

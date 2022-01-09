@@ -1,16 +1,16 @@
-import { ref, createVNode, Text, cloneVNode, computed, withDirectives, vShow, watch, toRefs, nextTick, Transition, mergeProps, defineComponent, reactive } from 'vue';
+import { ref, createVNode, Text, cloneVNode, computed, withDirectives, vShow, watch, toRefs, nextTick, Transition, mergeProps, defineComponent } from 'vue';
 import { getSlotFirstVNode, propsMergeSlots } from '../_utils_';
 import { VBinder, VTarget, VFollower } from 'vueuc';
 import { useElementBounding, useMouseInElement, pausableWatch } from '@vueuse/core';
-import { PopoverTriggerBorder, PopoverProps, popoverProps } from './interface';
+import { PopoverTriggerBorder, PopoverProps, popoverProps, popoverEmits } from './interface';
 
 export default defineComponent({
     name: 'Popover',
     inheritAttrs: false,
     props: popoverProps,
-    emits: ['show', 'hide', 'update:show', 'border:reached'],
+    emits: popoverEmits,
     setup(props, { slots, attrs, expose, emit }) {
-        const { trigger, placement, destroyWhenHide, zIndex, show, disabled, withArrow, showDelay, hideDelay, offset, wrapBoundary, matchTrigger, autoSync, title, followType } = toRefs(props);
+        const { trigger, placement, destroyWhenHide, zIndex, show, disabled, withArrow, showDelay, hideDelay, offset, wrapBoundary, matchTrigger, autoSync, title, followMode } = toRefs(props);
         const showRef = trigger.value === 'manual' ? show : ref(!!props.show);
         const followerRef = ref(null);
         const followX = ref(0);
@@ -269,10 +269,10 @@ export default defineComponent({
                 const { pause, resume } = pausableWatch([x, y, isOutside], moveCallEvent);
 
                 watch(
-                    followType,
+                    followMode,
                     () => {
                         nextTick(() => {
-                            if (followType.value === 'move') {
+                            if (followMode.value === 'move') {
                                 resume();
                                 triggerEl.value.removeEventListener('click', clickCallEvent);
                             } else {

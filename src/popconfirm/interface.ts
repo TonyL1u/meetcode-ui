@@ -44,4 +44,7 @@ export const popconfirmProps = {
     }
 };
 
+export const popconfirmEmits = [];
+
 export type PopconfirmMergedProps = PopconfirmProps & PopoverProps;
+

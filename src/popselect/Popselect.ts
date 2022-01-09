@@ -3,8 +3,8 @@ import { NIcon } from 'naive-ui';
 import { CheckmarkSharp as IconCheck } from '@vicons/ionicons5';
 import { useVirtualList } from '@vueuse/core';
 import { omit } from 'lodash-es';
-import { McPopover, PopoverExposeInstance, PopoverPlacement, popoverProps } from '../popover';
-import { PopselectOption, popselectProps } from './interface';
+import { McPopover, PopoverExposeInstance, PopoverPlacement, popoverProps, popoverEmits } from '../popover';
+import { PopselectOption, popselectProps, popselectEmits } from './interface';
 
 const defaultPropsOverride = {
     placement: {
@@ -20,7 +20,7 @@ export default defineComponent({
         ...popselectProps,
         ...defaultPropsOverride
     },
-    emits: ['update:value'],
+    emits: [...popoverEmits, ...popselectEmits],
     setup(props, { slots, attrs, emit }) {
         const { value: valueVM, options, multiple, maxHeight, autoClose, autoScroll } = toRefs(props);
         const popoverRef = ref<PopoverExposeInstance>();
