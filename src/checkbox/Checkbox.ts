@@ -1,7 +1,7 @@
 import { defineComponent, ref, createVNode, renderSlot, toRefs, computed, inject, mergeProps } from 'vue';
 import CheckMark from './CheckMark.vue';
 import IndeterminateMark from './IndeterminateMark.vue';
-import { or, and, not } from '@vueuse/core';
+import { or, and, not, isDefined } from '@vueuse/core';
 import { createKey } from '../_utils_';
 import { CheckboxValue, checkboxIKey, checkboxGroupInjectionKey, checkboxProps } from './interface';
 import * as CSS from 'csstype';
@@ -28,10 +28,9 @@ export default defineComponent({
                     return 1;
             }
         });
-        const mergedValue = valueVM.value ? valueVM : internalValue;
+        const mergedValue = isDefined(valueVM) ? valueVM : internalValue;
         const mergedDisabled = or(groupDisabled, disabled, internalDisabled);
         const mergedChecked = computed(() => {
-            console.log(groupValue?.value);
             if (groupValue?.value) {
                 return groupValue.value.indexOf(mergedValue?.value!) > -1;
             }
@@ -102,7 +101,7 @@ export default defineComponent({
                 attrs
             );
             return createVNode('div', mergedProps, [
-                createVNode('input', { class: 'checkbox-input', id: key, type: 'checkbox', onChange: handleChange, checked: mergedChecked.value, disabled: mergedDisabled.value }),
+                createVNode('input', { class: 'checkbox-input', value: mergedValue.value, id: key, type: 'checkbox', onChange: handleChange, checked: mergedChecked.value, disabled: mergedDisabled.value }),
                 createVNode('label', { class: 'checkbox', for: key }, [
                     createVNode(
                         'span',

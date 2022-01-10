@@ -108,7 +108,7 @@ export default defineComponent({
                     class: 'mc-checkbox-group'
                 },
                 [
-                    ...(options?.value?.map(option => {
+                    ...(options.value?.map(option => {
                         const { value, label, disabled } = option;
 
                         if (!label || typeof label === 'string') {

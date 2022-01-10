@@ -85,7 +85,6 @@ describe('mc-checkbox-group', () => {
         expect(wrapper.findAll('.mc-checkbox--checked')).toHaveLength(3);
         expect((wrapper.vm as any).status.all).toBe(true);
         expect((wrapper.vm as any).status.indeterminate).toBe(false);
-        console.log(wrapper.props());
 
         clear();
         await nextTick();

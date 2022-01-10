@@ -10,11 +10,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
 import { McCheckboxGroup, McCheckbox, CheckboxValue, McMessage } from 'meetcode-ui';
-
-const value = ref(false);
-const groupValue = ref([]);
 
 const handleUpdateValue = (value: CheckboxValue) => {
     value ? McMessage.success(value.toString()) : McMessage.error(value.toString());

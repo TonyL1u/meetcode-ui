@@ -1,5 +1,5 @@
 <template>
-    <McCheckboxGroup v-model:value="groupValue">
+    <McCheckboxGroup>
         <McGrid :columns="2">
             <McGridItem>
                 <McCheckbox value="apple">Apple</McCheckbox>
@@ -18,8 +18,5 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, createVNode } from 'vue';
 import { McCheckboxGroup, McCheckbox, McGrid, McGridItem } from 'meetcode-ui';
-
-const groupValue = ref([]);
 </script>
