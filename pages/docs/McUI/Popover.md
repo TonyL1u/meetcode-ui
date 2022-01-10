@@ -69,7 +69,7 @@ import Delay from '@/popover/demos/DemoDelay.vue'
 
 ### 边界检测
 
-弹出框跟随鼠标移动时，可以限制弹出框的位置不会超出元素内容。
+弹出框跟随鼠标移动时（ `move` 模式），可以限制弹出框的位置不会超出元素内容。
 
 <Boundary />
 
@@ -84,23 +84,23 @@ import Delay from '@/popover/demos/DemoDelay.vue'
 
 ## Props
 
-|       名称        |                                                                                 类型                                                                                 |   默认值    |                    说明                     |
-| :---------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------: | :-----------------------------------------: |
-|      trigger      |                                                             `'hover' \| 'click' \| 'manual' \| 'follow'`                                                             |  `'hover'`  |            弹出框显示的触发方式             |
-|       title       |                                                                               `string`                                                                               | `undefined` |                 弹出框标题                  |
-|      content      |                                                                    `string \| (() => VNodeChild)`                                                                    | `undefined` |                 弹出框内容                  |
-|     placement     | `'top' \| 'bottom' \| 'left' \| 'right' \| 'top-start' \| 'top-end' \| 'left-start' \| 'left-end' \| 'right-start' \| 'right-end' \| 'bottom-start' \| 'bottom-end'` |   `'top'`   |               弹出框弹出位置                |
-|      z-index      |                                                                               `number`                                                                               | `undefined` |          弹出框弹层的 `z-index` 值          |
-| destroy-when-hide |                                                                              `boolean`                                                                               |   `true`    |    弹出框在消失之后是否直接销毁 Dom 节点    |
-|       show        |                                                                              `boolean`                                                                               |   `false`   |               是否显示弹出框                |
-|     disabled      |                                                                              `boolean`                                                                               |   `false`   |               是否禁用弹出框                |
-|    with-arrow     |                                                                              `boolean`                                                                               |   `true`    |                是否显示箭头                 |
-|      offset       |                                                                               `object`                                                                               | `undefined` |       弹出框相对于其正常位置的偏移量        |
-|   wrap-boundary   |                                                                              `boolean`                                                                               |   `false`   |            是否进行边界溢出检测             |
-|    show-delay     |                                                                               `number`                                                                               |    `75`     |                延迟显示(ms)                 |
-|    hide-delay     |                                                                               `number`                                                                               |    `75`     |                延迟隐藏(ms)                 |
-|   match-trigger   |                                                                              `boolean`                                                                               |   `false`   |       将弹出框宽度设置为触发元素宽度        |
-|     auto-sync     |                                                                              `boolean`                                                                               |   `true`    | 触发元素的大小/位置改变时自动同步弹出框位置 |
+|       名称        |                                                                                 类型                                                                                 |   默认值    |                     说明                     |
+| :---------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------: | :------------------------------------------: |
+|      trigger      |                                                             `'hover' \| 'click' \| 'manual' \| 'follow'`                                                             |  `'hover'`  |             弹出框显示的触发方式             |
+|       title       |                                                                               `string`                                                                               | `undefined` |                  弹出框标题                  |
+|      content      |                                                                    `string \| (() => VNodeChild)`                                                                    | `undefined` |                  弹出框内容                  |
+|     placement     | `'top' \| 'bottom' \| 'left' \| 'right' \| 'top-start' \| 'top-end' \| 'left-start' \| 'left-end' \| 'right-start' \| 'right-end' \| 'bottom-start' \| 'bottom-end'` |   `'top'`   |                弹出框弹出位置                |
+|      z-index      |                                                                               `number`                                                                               | `undefined` |          弹出框弹层的 `z-index` 值           |
+| destroy-when-hide |                                                                              `boolean`                                                                               |   `true`    |    弹出框在消失之后是否直接销毁 Dom 节点     |
+|       show        |                                                                              `boolean`                                                                               |   `false`   |                是否显示弹出框                |
+|     disabled      |                                                                              `boolean`                                                                               |   `false`   |                是否禁用弹出框                |
+|    with-arrow     |                                                                              `boolean`                                                                               |   `true`    |                 是否显示箭头                 |
+|      offset       |                                                                               `object`                                                                               | `undefined` |        弹出框相对于其正常位置的偏移量        |
+|   wrap-boundary   |                                                                              `boolean`                                                                               |   `false`   |             是否进行边界溢出检测             |
+|    show-delay     |                                                                               `number`                                                                               |    `75`     |                 延迟显示(ms)                 |
+|    hide-delay     |                                                                               `number`                                                                               |    `75`     |                 延迟隐藏(ms)                 |
+|   match-trigger   |                                                                              `boolean`                                                                               |   `false`   |        将弹出框宽度设置为触发元素宽度        |
+|     auto-sync     |                                                                              `boolean`                                                                               |   `true`    | 触发元素的大小/位置改变时自动同步弹出框位置  |
 |    follow-mode    |                                                                         `'move' \| 'click'`                                                                          |  `'move'`   | `trigger` 设置为 `follow` 时，弹出框弹出方式 |
 
 ## Event

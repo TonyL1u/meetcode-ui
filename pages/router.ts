@@ -18,4 +18,10 @@ const router = createRouter({
     ]
 });
 
+router.afterEach((to, from) => {
+    // scroll to top
+    const scrollContent = document.querySelector('.main-content > .n-layout-scroll-container');
+    if (scrollContent) scrollContent.scrollTop = 0;
+});
+
 export default router;
