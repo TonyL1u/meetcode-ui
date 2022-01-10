@@ -27,6 +27,8 @@ export interface PopoverProps {
     title?: string;
     content?: string | (() => VNodeChild);
     followMode?: PopoverFollowMode;
+    x?: number;
+    y?: number;
 }
 export interface PopoverExposeInstance {
     syncPosition: () => void;
@@ -98,6 +100,14 @@ export const popoverProps = {
     followMode: {
         type: String as PropType<PopoverProps['followMode']>,
         default: 'move'
+    },
+    x: {
+        type: Number as PropType<PopoverProps['x']>,
+        default: undefined
+    },
+    y: {
+        type: Number as PropType<PopoverProps['y']>,
+        default: undefined
     }
 };
 export const popoverEmits = ['show', 'hide', 'update:show', 'border:reached'];

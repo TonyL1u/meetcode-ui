@@ -1,17 +1,17 @@
 <template>
     <NSpace>
         <McPopover @show="handleShow">
-            <NButton type="primary" ghost>捕获显示事件</NButton>
+            <NButton type="primary" ghost>显示</NButton>
             <template #content>这是测试内容</template>
         </McPopover>
 
         <McPopover @hide="handleHide">
-            <NButton type="primary" ghost>捕获隐藏事件</NButton>
+            <NButton type="primary" ghost>隐藏</NButton>
             <template #content>这是测试内容</template>
         </McPopover>
 
         <McPopover trigger="click" @update:show="handleUpdateShow">
-            <NButton type="primary" ghost>一起捕获</NButton>
+            <NButton type="primary" ghost>显示 & 隐藏</NButton>
             <template #content>这是测试内容</template>
         </McPopover>
     </NSpace>

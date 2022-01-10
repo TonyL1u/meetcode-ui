@@ -17,6 +17,8 @@ import Delay from '@/popover/demos/DemoDelay.vue'
 
 ### 基础用法
 
+设置为 `manual` 时，可以通过显式传入 `x` 和 `y` 属性控制弹出框位置，如果不传，弹出框会跟随触发元素。
+
 <Basic />
 :::
 
@@ -102,6 +104,8 @@ import Delay from '@/popover/demos/DemoDelay.vue'
 |   match-trigger   |                                                                              `boolean`                                                                               |   `false`   |        将弹出框宽度设置为触发元素宽度        |
 |     auto-sync     |                                                                              `boolean`                                                                               |   `true`    | 触发元素的大小/位置改变时自动同步弹出框位置  |
 |    follow-mode    |                                                                         `'move' \| 'click'`                                                                          |  `'move'`   | `trigger` 设置为 `follow` 时，弹出框弹出方式 |
+|         x         |                                                                               `number`                                                                               | `undefined` |            弹出框在 x 方向的位置             |
+|         y         |                                                                               `number`                                                                               | `undefined` |            弹出框在 y 方向的位置             |
 
 ## Event
 

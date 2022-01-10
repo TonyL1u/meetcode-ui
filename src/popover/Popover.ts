@@ -10,7 +10,7 @@ export default defineComponent({
     props: popoverProps,
     emits: popoverEmits,
     setup(props, { slots, attrs, expose, emit }) {
-        const { trigger, placement, destroyWhenHide, zIndex, show, disabled, withArrow, showDelay, hideDelay, offset, wrapBoundary, matchTrigger, autoSync, title, followMode } = toRefs(props);
+        const { trigger, placement, destroyWhenHide, zIndex, show, disabled, withArrow, showDelay, hideDelay, offset, wrapBoundary, matchTrigger, autoSync, title, followMode, x, y } = toRefs(props);
         const showRef = trigger.value === 'manual' ? show : ref(!!props.show);
         const followerRef = ref(null);
         const followX = ref(0);
@@ -18,8 +18,27 @@ export default defineComponent({
         const mouseInFollowTrigger = ref(false);
         const contentShowTimer = ref();
         const contentHideTimer = ref();
-        const triggerElRef = ref<HTMLElement>();
         const contentElRef = ref<HTMLElement>();
+        const mergedX = computed(() => {
+            switch (trigger.value) {
+                case 'manual':
+                    return x.value;
+                case 'follow':
+                    return followX.value;
+                default:
+                    return;
+            }
+        });
+        const mergedY = computed(() => {
+            switch (trigger.value) {
+                case 'manual':
+                    return y.value;
+                case 'follow':
+                    return followY.value;
+                default:
+                    return;
+            }
+        });
 
         // call emits
         const callShow = () => {
@@ -304,8 +323,8 @@ export default defineComponent({
                             VFollower,
                             {
                                 ref: followerRef,
-                                x: trigger.value === 'follow' ? followX.value : undefined,
-                                y: trigger.value === 'follow' ? followY.value : undefined,
+                                x: mergedX.value,
+                                y: mergedY.value,
                                 zIndex: zIndex?.value,
                                 show: showRef.value,
                                 enabled: showRef.value,

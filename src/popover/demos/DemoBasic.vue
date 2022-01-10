@@ -13,6 +13,11 @@
             <NButton type="primary" ghost @click="show = !show">手动</NButton>
             <template #content>这是测试内容</template>
         </McPopover>
+
+        <McPopover title="标题" trigger="manual" :show="show" :x="200" :y="200">
+            <NButton type="primary" ghost @click="show = !show">手动，显式控制</NButton>
+            <template #content>这是测试内容</template>
+        </McPopover>
     </NSpace>
 </template>
 
