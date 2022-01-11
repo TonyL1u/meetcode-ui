@@ -4,11 +4,11 @@
             <slot></slot>
         </div>
         <div class="code-preview-box" v-if="codePreviewVisible">
-            <NTabs type="line" :default-value="tabIndex" :tab-pad="36" :content-style="{ 'padding-top': 0 }" @update:value="handleUpdateTab">
-                <NTabPane v-for="(code, index) in codes" :name="index" :tab="code.name + '.vue'" style="padding-top: 0; overflow: auto">
+            <McTabs v-model:value="tabIndex" :tab-gap="36" :content-style="{ 'padding-top': 0 }">
+                <McTabPane v-for="(code, index) in codes" :name="index" :tab-label="code.name + '.vue'">
                     <pre class="code-preview language-html" v-html="highlighted(code.importSource)"></pre>
-                </NTabPane>
-            </NTabs>
+                </McTabPane>
+            </McTabs>
         </div>
         <div v-if="showToolbox" class="tool-box" :class="!codePreviewVisible ? 'mc-mt-3.5' : ''">
             <NSpace justify="center">
@@ -48,7 +48,7 @@
 import { ref, computed } from 'vue';
 import hljs from 'highlight.js';
 import { NButton, NCard, NIcon, NSpace, NModal, useNotification, NTabs, NTabPane } from 'naive-ui';
-import { McTooltip } from 'meetcode-ui';
+import { McTooltip, McTabs, McTabPane } from 'meetcode-ui';
 import { Code as IconCode, CopyOutline as IconCopy, CubeOutline as IconEdit } from '@vicons/ionicons5';
 import { useClipboard } from '@vueuse/core';
 import Playground from '@playground/Playground.vue';
@@ -66,9 +66,6 @@ const { copy } = useClipboard();
 const showToolbox = computed(() => {
     return codes.value.length > 0;
 });
-const handleUpdateTab = (val: string | number) => {
-    tabIndex.value = <number>val;
-};
 const handleShowModal = () => {
     setTimeout(() => {
         loadInitialState(codes.value[tabIndex.value].compressedSource);

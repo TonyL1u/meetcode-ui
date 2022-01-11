@@ -16,11 +16,11 @@ export default defineComponent({
         const isActive = computed(() => {
             return name?.value === valueRef?.value;
         });
-        const hasShown = ref(isActive.value);
+        const hasRendered = ref(isActive.value);
 
-        if (lazy.value && !hasShown.value) {
+        if (lazy.value && !hasRendered.value) {
             watchOnce(isActive, () => {
-                hasShown.value = true;
+                hasRendered.value = true;
             });
         }
 
@@ -30,7 +30,7 @@ export default defineComponent({
                 return withDirectives(tabPaneVNode, [[vShow, isActive.value]]);
             } else {
                 if (lazy.value) {
-                    return hasShown.value ? withDirectives(tabPaneVNode, [[vShow, isActive.value]]) : createCommentVNode('v-if', true);
+                    return hasRendered.value ? withDirectives(tabPaneVNode, [[vShow, isActive.value]]) : createCommentVNode('v-if', true);
                 } else {
                     return isActive.value ? tabPaneVNode : createCommentVNode('v-if', true);
                 }

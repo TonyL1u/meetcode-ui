@@ -113,7 +113,7 @@ export default defineComponent({
                     class: [{ 'mc-tabs-tab--active': isActive, 'mc-tabs-tab--disabled': isDisabled }, tabClass],
                     onClick: () => {
                         if (isDisabled) return;
-                        name && handleTabClick(name);
+                        name !== undefined && handleTabClick(name);
                     }
                 }),
                 {
