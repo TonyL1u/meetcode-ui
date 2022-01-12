@@ -1,10 +1,10 @@
 <template>
-    <div style="border: 1px solid #000">
-        <McButton @click="handleClick">按钮</McButton>
-        <!-- <NButton class="mc-ml-2">按钮</NButton> -->
-    </div>
+    <!-- <div style="border: 1px solid #000"> -->
+    <McButton @click="handleClick">Default</McButton>
+    <!-- <NButton class="mc-ml-2">按钮</NButton> -->
+    <!-- </div> -->
 
-    <div class="test-div mc-h-10 mc-w-10"></div>
+    <!-- <div class="test-div mc-h-10 mc-w-10"></div> -->
     <!-- <button class="btn btn-pink btn-bubbles">Click Me</button> -->
 </template>
 

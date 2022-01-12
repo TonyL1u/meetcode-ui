@@ -5,14 +5,12 @@
     display: inline-flex;
     padding: 0 12px;
     height: 32px;
+    justify-content: center;
     align-items: center;
-    // vertical-align: middle;
-    // transform: perspective(1px) translateZ(0);
-    // box-shadow: 0 0 1px rgba(0, 0, 0, 0);
     position: relative;
-    // border: 1px solid rgb(224, 224, 230);
     vertical-align: top;
-    transition: transform ease-in 0.1s, background-color ease-in 0.1s, box-shadow ease-in 0.25s;
+    font-family: v-sans;
+    border-radius: 2px;
 
     &::before,
     &::after {
@@ -22,40 +20,36 @@
         right: 0;
         bottom: 0;
         left: 0;
-        border-radius: 2px;
+        border-radius: inherit;
         box-sizing: border-box;
         border: 1px solid rgb(224, 224, 230);
     }
 
     &::after {
-        transition: border-color 0.3s ease-out;
+        transition: border-color 0.3s;
     }
 
     &:hover::after {
         border-color: #10b981;
     }
 
-    &:hover::before {
-        border-color: #10b981;
-        // animation: hvr-ripple-out 0.6s;
+    &:hover .mc-button__inner {
+        color: #059669;
     }
 
-    &:active {
-        transform: scale(0.95);
-
-        &::before {
-            background: #10b981;
-            animation: bubble-out 0.1s;
-        }
-    }
+    // &--waving::before {
+    //     border-color: #10b981;
+    //     animation: ripple-out 0.6s;
+    // }
 
     &__inner {
+        transition: color 0.3s;
         font-size: 14px;
         line-height: 1;
     }
 }
 
-@keyframes hvr-ripple-out {
+@keyframes ripple-out {
     from {
         box-shadow: 0 0 0.5px 0 #10b981;
     }
