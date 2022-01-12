@@ -21,12 +21,7 @@ export interface TextLinkProps {
     raw?: boolean;
 }
 
-export type TextLinkColorMap = {
-    [k in TextLinkType]: {
-        color: string;
-        hoverColor: string;
-    };
-};
+export type TextLinkColorMap = Record<TextLinkType, { color: string; hoverColor: string }>;
 
 export const textLinkProps = {
     type: {

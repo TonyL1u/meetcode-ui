@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { Ref, ref } from 'vue';
 import type { MenuOption, TreeSelectOption } from 'naive-ui';
 import * as CSS from '@vue/runtime-dom/node_modules/csstype';
 
@@ -11,7 +11,7 @@ const rootFolder: TreeSelectOption = {
 };
 
 const routes = ref<Array<any>>([]);
-const menuTree = ref<Array<MenuOption>>([]);
+const menuTree: Ref<Array<MenuOption>> = ref([]);
 const folderTree = ref<Array<TreeSelectOption>>([rootFolder]);
 const menuBlackList = ['./Bugs/Tabs.md', './Issues/Common.md', './Issues/Tabs.md', './McUI/Split.md'];
 

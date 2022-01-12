@@ -1,0 +1,79 @@
+.mc-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    padding: 0 12px;
+    height: 32px;
+    align-items: center;
+    // vertical-align: middle;
+    // transform: perspective(1px) translateZ(0);
+    // box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    position: relative;
+    // border: 1px solid rgb(224, 224, 230);
+    vertical-align: top;
+    transition: transform ease-in 0.1s, background-color ease-in 0.1s, box-shadow ease-in 0.25s;
+
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        border-radius: 2px;
+        box-sizing: border-box;
+        border: 1px solid rgb(224, 224, 230);
+    }
+
+    &::after {
+        transition: border-color 0.3s ease-out;
+    }
+
+    &:hover::after {
+        border-color: #10b981;
+    }
+
+    &:hover::before {
+        border-color: #10b981;
+        // animation: hvr-ripple-out 0.6s;
+    }
+
+    &:active {
+        transform: scale(0.95);
+
+        &::before {
+            background: #10b981;
+            animation: bubble-out 0.1s;
+        }
+    }
+
+    &__inner {
+        font-size: 14px;
+        line-height: 1;
+    }
+}
+
+@keyframes hvr-ripple-out {
+    from {
+        box-shadow: 0 0 0.5px 0 #10b981;
+    }
+
+    to {
+        // don't use exact 5px since chrome will display the animation with glitches
+        box-shadow: 0 0 0.5px 4.5px #10b981;
+        opacity: 0;
+    }
+}
+
+@keyframes bubble-out {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(1);
+    }
+}

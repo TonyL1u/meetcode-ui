@@ -127,7 +127,11 @@
 -   Popover trigger 设置为 follow 并且应用 move 模式时，hide 和 show 事件会触发多次，原因是 watch 时没有做节流，导致进入和离开 trigger 时回调函数被多次执行了
 -   CheckboxGroup 的 clear 事件有点问题，不生效
 
-2022-01-09
+2022-01-11
 
--   Popover 的触发元素太小，会导致箭头位置无法与触发元素对齐
+-   Popover 的触发元素太小，导致箭头位置无法与触发元素对齐
 -   Popover 内容样式设置了 `overflow: hidden` 后，箭头会消失
+
+2022-01-12
+
+-   Popover 的 trigger 元素设置为 button，并且禁用该 button（设置 disable）的话，由于无法触发 button 相关事件导致 Popover 无法正常显示
