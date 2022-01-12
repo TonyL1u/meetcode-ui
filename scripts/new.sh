@@ -9,10 +9,11 @@ function component() {
     echo "export * from './$1';" >> components.ts
     cd $1
     mkdir demos
-    touch $file.vue
+    touch $file.ts
     touch style.scss
+    echo "import { defineComponent } from 'vue';\nexport default defineComponent({})" > $file.ts
     echo "import './style.scss';" > index.ts
-    echo "export { default as Mc$file } from './$file.vue';" > index.ts
+    echo "export { default as Mc$file } from './$file';" > index.ts
 }
 
 function doc() {
@@ -35,5 +36,4 @@ do
         doc $NAME
         exit
     fi
-    # echo $NAME
 done

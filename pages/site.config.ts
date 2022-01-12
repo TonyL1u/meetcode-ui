@@ -6,6 +6,5 @@ const isProduction = process.env.NODE_ENV === 'production';
 // true - 'dark', false - 'light'
 // const siteTheme = ref(osThemeRef.value === 'dark');
 const siteTheme = ref(false);
-// const DOCS_STATIC_PATH = isProduction ? '/var/lib/jenkins/workspace/ComponentDocs/src/docs' : '/Users/liuyiming/Desktop/component-docs/src/docs';
 
 export { siteTheme };

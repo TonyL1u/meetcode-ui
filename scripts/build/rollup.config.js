@@ -5,7 +5,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import postcss from 'rollup-plugin-postcss';
 import postcssImport from 'postcss-import';
 import tailwindcss from 'tailwindcss';
-import { name } from '../package.json';
+import { name } from '../../package.json';
 
 const extensions = ['.js', '.ts', '.tsx'];
 // 输出打包后的文件名称type 1.esm 2.umd
