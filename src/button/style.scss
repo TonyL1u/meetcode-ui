@@ -8,9 +8,9 @@
     justify-content: center;
     align-items: center;
     position: relative;
-    vertical-align: top;
     font-family: v-sans;
-    border-radius: 2px;
+    border-radius: 3px;
+    color: var(--button-default-color);
 
     &::before,
     &::after {
@@ -22,19 +22,20 @@
         left: 0;
         border-radius: inherit;
         box-sizing: border-box;
-        border: 1px solid rgb(224, 224, 230);
+        border: 1px solid var(--button-default-border-color);
     }
 
     &::after {
-        transition: border-color 0.3s;
+        background: var(--button-default-background-color);
+        transition: border-color 0.3s, background-color 0.3s;
     }
 
-    &:hover::after {
-        border-color: #10b981;
-    }
-
-    &:hover .mc-button__inner {
-        color: #059669;
+    &:hover {
+        color: var(--button-hover-color);
+        &::after {
+            border-color: var(--button-hover-border-color);
+            background: var(--button-hover-background-color);
+        }
     }
 
     // &--waving::before {
@@ -46,6 +47,7 @@
         transition: color 0.3s;
         font-size: 14px;
         line-height: 1;
+        z-index: 2;
     }
 }
 

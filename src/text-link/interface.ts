@@ -9,6 +9,7 @@ declare module 'csstype' {
 }
 
 export type TextLinkType = 'primary' | 'success' | 'warning' | 'danger' | 'info';
+export type TextLinkColorMap = Record<TextLinkType, { color: string; hoverColor: string }>;
 
 export interface TextLinkProps {
     type?: TextLinkType;
@@ -20,8 +21,6 @@ export interface TextLinkProps {
     hoverColor?: string;
     raw?: boolean;
 }
-
-export type TextLinkColorMap = Record<TextLinkType, { color: string; hoverColor: string }>;
 
 export const textLinkProps = {
     type: {

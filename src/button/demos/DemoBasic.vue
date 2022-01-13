@@ -1,6 +1,7 @@
 <template>
     <!-- <div style="border: 1px solid #000"> -->
     <McButton @click="handleClick">Default</McButton>
+    <McButton type="success" @click="handleClick">Success</McButton>
     <!-- <NButton class="mc-ml-2">按钮</NButton> -->
     <!-- </div> -->
 
