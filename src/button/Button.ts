@@ -8,8 +8,12 @@ const TYPE_MAP: ButtonColorMap = {
         hover: { color: '#059669', borderColor: '#10b981', backgroundColor: 'transparent' }
     },
     success: {
-        default: { color: '#fff', borderColor: '#10b981', backgroundColor: '#10b981' },
-        hover: { color: '#fff', borderColor: '#34d399', backgroundColor: '#34d399' }
+        default: { color: '#fff', borderColor: '#16A34A', backgroundColor: '#16A34A' },
+        hover: { color: '#fff', borderColor: '#10B981', backgroundColor: '#10B981' }
+    },
+    danger: {
+        default: { color: '#fff', borderColor: '#DC2626', backgroundColor: '#DC2626' },
+        hover: { color: '#fff', borderColor: '#EF4444', backgroundColor: '#EF4444' }
     }
 };
 export default defineComponent({
