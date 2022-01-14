@@ -1,8 +1,10 @@
 <template>
     <!-- <div style="border: 1px solid #000"> -->
     <McButton @click="handleClick">Default</McButton>
+    <McButton type="primary" @click="handleClick">Primary</McButton>
     <McButton type="success" @click="handleClick">Success</McButton>
-    <McButton type="danger" @click="handleClick">Danger</McButton>
+    <McButton type="danger" @click="handleClick">Error</McButton>
+    <McButton type="warning" @click="handleClick">Warning</McButton>
     <!-- <NButton class="mc-ml-2">按钮</NButton> -->
     <!-- </div> -->
 

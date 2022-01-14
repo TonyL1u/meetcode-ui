@@ -17,7 +17,7 @@ export interface ButtonColorSet {
     borderColor: string;
     backgroundColor: string;
 }
-export type ButtonType = 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info';
+export type ButtonType = 'default' | 'primary' | 'success' | 'warning' | 'danger';
 export type ButtonColorMap = Record<ButtonType, Record<ButtonStatus, ButtonColorSet>>;
 
 export interface ButtonProps {

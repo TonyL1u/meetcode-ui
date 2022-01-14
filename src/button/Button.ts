@@ -7,13 +7,21 @@ const TYPE_MAP: ButtonColorMap = {
         default: { color: '#000', borderColor: '#e0e0e6', backgroundColor: 'transparent' },
         hover: { color: '#059669', borderColor: '#10b981', backgroundColor: 'transparent' }
     },
+    primary: {
+        default: { color: '#fff', borderColor: '#3b82f6', backgroundColor: '#3b82f6' },
+        hover: { color: '#fff', borderColor: '#4098fc', backgroundColor: '#4098fc' }
+    },
     success: {
-        default: { color: '#fff', borderColor: '#16A34A', backgroundColor: '#16A34A' },
-        hover: { color: '#fff', borderColor: '#10B981', backgroundColor: '#10B981' }
+        default: { color: '#fff', borderColor: '#16a34a', backgroundColor: '#16a34a' },
+        hover: { color: '#fff', borderColor: '#36ad6a', backgroundColor: '#36ad6a' }
+    },
+    warning: {
+        default: { color: '#fff', borderColor: '#fb923c', backgroundColor: '#fb923c' },
+        hover: { color: '#fff', borderColor: '#eab308', backgroundColor: '#eab308' }
     },
     danger: {
-        default: { color: '#fff', borderColor: '#DC2626', backgroundColor: '#DC2626' },
-        hover: { color: '#fff', borderColor: '#EF4444', backgroundColor: '#EF4444' }
+        default: { color: '#fff', borderColor: '#dc2626', backgroundColor: '#dc2626' },
+        hover: { color: '#fff', borderColor: '#ea580c', backgroundColor: '#ea580c' }
     }
 };
 export default defineComponent({

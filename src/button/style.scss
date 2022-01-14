@@ -38,6 +38,13 @@
         }
     }
 
+    &:active {
+        &::after {
+            border-color: #000;
+            background: #000;
+        }
+    }
+
     // &--waving::before {
     //     border-color: #10b981;
     //     animation: ripple-out 0.6s;
