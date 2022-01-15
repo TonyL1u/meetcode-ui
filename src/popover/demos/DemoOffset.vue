@@ -1,5 +1,5 @@
 <template>
-    <NSpace>
+    <McSpace>
         <McPopover>
             <NButton type="primary" ghost>正常</NButton>
             <template #content>这是测试内容</template>
@@ -8,10 +8,10 @@
             <NButton type="primary" ghost>偏移</NButton>
             <template #content>这是测试内容</template>
         </McPopover>
-    </NSpace>
+    </McSpace>
 </template>
 
 <script lang="ts" setup>
-import { NButton, NSpace } from 'naive-ui';
-import { McPopover } from 'meetcode-ui';
+import { NButton } from 'naive-ui';
+import { McPopover, McSpace } from 'meetcode-ui';
 </script>

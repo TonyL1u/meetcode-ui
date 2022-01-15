@@ -1,30 +1,29 @@
 <template>
-    <NSpace>
+    <McSpace>
         <McPopover title="标题" trigger="hover" content="这是测试内容">
-            <NButton type="primary" ghost>悬浮</NButton>
+            <McButton ghost>悬浮</McButton>
         </McPopover>
 
         <McPopover title="标题" trigger="click">
-            <NButton type="primary" ghost>点击</NButton>
+            <McButton ghost>点击</McButton>
             <template #content>这是测试内容</template>
         </McPopover>
 
         <McPopover title="标题" trigger="manual" :show="show">
-            <NButton type="primary" ghost @click="show = !show">手动</NButton>
+            <McButton ghost @click="show = !show">手动</McButton>
             <template #content>这是测试内容</template>
         </McPopover>
 
         <McPopover title="标题" trigger="manual" :show="show" :x="200" :y="200">
-            <NButton type="primary" ghost @click="show = !show">手动，显式控制</NButton>
+            <McButton ghost @click="show = !show">手动，显式控制</McButton>
             <template #content>这是测试内容</template>
         </McPopover>
-    </NSpace>
+    </McSpace>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { NButton, NSpace } from 'naive-ui';
-import { McPopover } from 'meetcode-ui';
+import { McButton, McSpace, McPopover } from 'meetcode-ui';
 
 const show = ref(false);
 </script>

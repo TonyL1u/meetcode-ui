@@ -11,7 +11,7 @@ function component() {
     mkdir demos
     touch $file.ts
     touch style.scss
-    echo "import { defineComponent } from 'vue';\nexport default defineComponent({})" > $file.ts
+    echo "import { defineComponent } from 'vue';\n export default defineComponent({})" > $file.ts
     echo "import './style.scss';" > index.ts
     echo "export { default as Mc$file } from './$file';" > index.ts
 }

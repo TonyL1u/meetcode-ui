@@ -1,23 +1,29 @@
 <template>
     <!-- <div style="border: 1px solid #000"> -->
-    <McButton @click="handleClick">Default</McButton>
-    <McButton type="primary" @click="handleClick">Primary</McButton>
-    <McButton type="success" @click="handleClick">Success</McButton>
-    <McButton type="danger" @click="handleClick">Error</McButton>
-    <McButton type="warning" @click="handleClick">Warning</McButton>
-    <!-- <NButton class="mc-ml-2">按钮</NButton> -->
-    <!-- </div> -->
+    <McSpace>
+        <McButton @click="handleClick">Default</McButton>
+        <McButton type="primary" @click="handleClick" ghost>Primary</McButton>
+        <McButton type="success" @click="handleClick" ghost>Success</McButton>
+        <McButton type="danger" @click="handleClick" ghost>Error</McButton>
+        <McButton type="warning" disabled @click="handleClick" ghost>Warning</McButton>
+    </McSpace>
+    <NButton type="primary" dashed ghost>按钮</NButton>
+    <NButton disabled>按钮</NButton>
 
     <!-- <div class="test-div mc-h-10 mc-w-10"></div> -->
     <!-- <button class="btn btn-pink btn-bubbles">Click Me</button> -->
 </template>
 
 <script lang="ts" setup>
-import { McButton } from 'meetcode-ui';
+import { ref } from 'vue';
+import { McButton, McSpace } from 'meetcode-ui';
 import { NButton } from 'naive-ui';
+
+const count = ref(0);
 
 const handleClick = () => {
     console.log(123456);
+    count.value++;
 };
 </script>
 

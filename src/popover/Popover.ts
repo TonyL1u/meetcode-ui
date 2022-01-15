@@ -1,7 +1,7 @@
 import { ref, createVNode, Text, cloneVNode, computed, withDirectives, vShow, watch, toRefs, nextTick, Transition, mergeProps, defineComponent } from 'vue';
 import { getSlotFirstVNode, propsMergeSlots } from '../_utils_';
 import { VBinder, VTarget, VFollower } from 'vueuc';
-import { useElementBounding, useMouseInElement, pausableWatch } from '@vueuse/core';
+import { useElementBounding, useMouseInElement, useThrottleFn, pausableWatch } from '@vueuse/core';
 import { PopoverTriggerBorder, PopoverProps, popoverProps, popoverEmits } from './interface';
 
 export default defineComponent({
@@ -39,6 +39,9 @@ export default defineComponent({
                     return;
             }
         });
+        const emitThrottled = computed(() => {
+            return trigger.value === 'follow' && followMode.value === 'move';
+        });
 
         // call emits
         const callShow = () => {
@@ -53,6 +56,9 @@ export default defineComponent({
         const callBorderReached = (flag: boolean, dirs: Array<PopoverTriggerBorder>) => {
             emit('border:reached', flag, dirs);
         };
+        const throttleCallShow = useThrottleFn(callShow, 100, false);
+        const throttleCallHide = useThrottleFn(callHide, 100, false);
+        const throttleCallUpdateShow = useThrottleFn(callUpdateShow, 100, false);
 
         // visible control
         const clearShowTimer = () => {
@@ -68,8 +74,8 @@ export default defineComponent({
             if (showRef.value) return;
             contentShowTimer.value = window.setTimeout(() => {
                 showRef.value = true;
-                callShow();
-                callUpdateShow();
+                emitThrottled.value ? throttleCallShow() : callShow();
+                emitThrottled.value ? throttleCallUpdateShow() : callUpdateShow();
                 trigger.value === 'click' && window.addEventListener('click', handleClickInside);
             }, showDelay.value);
         };
@@ -78,8 +84,8 @@ export default defineComponent({
             if (!showRef.value) return;
             contentHideTimer.value = window.setTimeout(() => {
                 showRef.value = false;
-                callHide();
-                callUpdateShow();
+                emitThrottled.value ? throttleCallHide() : callHide();
+                emitThrottled.value ? throttleCallUpdateShow() : callUpdateShow();
                 trigger.value === 'click' && window.removeEventListener('click', handleClickInside);
             }, hideDelay.value);
         };
@@ -226,7 +232,7 @@ export default defineComponent({
                     }
                 };
 
-                const moveCallEvent = async () => {
+                const moveCallEvent = () => {
                     if (!isOutside.value && mouseInFollowTrigger.value) {
                         followX.value = x.value;
                         followY.value = y.value;

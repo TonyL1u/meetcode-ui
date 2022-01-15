@@ -41,8 +41,8 @@ import { McTextLink } from 'meetcode-ui'
 |   options   | `Array<PopselectOption>` |    `[]`     |                             选项                              |
 |  multiple   |        `boolean`         |   `false`   |                           是否多选                            |
 | max-height  |         `number`         |    `300`    |                     弹出框的最大高度(px)                      |
-| auto-close  |        `boolean`         | `undefined` |     选择后自动关闭弹出框。（单选默认开启，多选默认关闭）      |
-| auto-scroll |        `boolean`         |   `true`    | 弹出框出现后，已选择的选项滚动到最上方（多选默认选择第 1 个） |
+| auto-close  |        `boolean`         | `undefined` |     选择后自动关闭弹出框。单选默认开启，多选默认关闭      |
+| auto-scroll |        `boolean`         |   `true`    | 弹出框出现后，已选择的选项滚动到最上方。多选默认选择第 1 个 |
 
 更多 Props 请参考 <McTextLink to="Popover#props">Popover Props</McTextLink> 。
 

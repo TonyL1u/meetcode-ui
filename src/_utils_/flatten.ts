@@ -1,5 +1,5 @@
 import { Fragment, Comment, CustomVNodeTypes } from 'vue';
-import { SpecificVNode } from './tsutils';
+import { SpecificVNode, FlattenOptions } from './tsutils';
 /**
  *
  * @param vNodes flatten target
@@ -8,7 +8,8 @@ import { SpecificVNode } from './tsutils';
  * @param result
  * @returns
  */
-export function flatten<T = Record<string, unknown>>(vNodes: Array<SpecificVNode<T>>, identificationKey?: Symbol | Symbol[], mode = false, result: Array<SpecificVNode<T>> = []) {
+export function flatten<T = Record<string, unknown>>(vNodes?: Array<SpecificVNode<T>>, identificationKey?: Symbol | Symbol[], mode = false, result: Array<SpecificVNode<T>> = []) {
+    if (!vNodes) return result;
     const filterVNodes = identificationKey
         ? vNodes.filter(vNode => {
               const { iKey } = vNode.type as CustomVNodeTypes;
@@ -26,4 +27,11 @@ export function flatten<T = Record<string, unknown>>(vNodes: Array<SpecificVNode
     }
 
     return result;
+}
+
+export function flattenWithOptions<T = Record<string, unknown>>(options: FlattenOptions, result: Array<SpecificVNode<T>> = []) {
+    const { slots, name, identificationKey, mode } = options;
+    if (!slots?.[name || 'default']) return result;
+
+    return flatten<T>(slots[name || 'default']?.() as Array<SpecificVNode<T>>, identificationKey, mode, result);
 }

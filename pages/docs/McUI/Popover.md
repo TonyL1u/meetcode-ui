@@ -17,7 +17,7 @@ import Delay from '@/popover/demos/DemoDelay.vue'
 
 ### 基础用法
 
-设置为 `manual` 时，可以通过显式传入 `x` 和 `y` 属性控制弹出框位置，如果不传，弹出框会跟随触发元素。
+设置为 `manual` 时，可以通过显式传入 `x` 和 `y` 属性控制弹出框位置；如果不传，弹出框会跟随触发元素。
 
 <Basic />
 :::

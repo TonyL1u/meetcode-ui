@@ -135,3 +135,7 @@
 2022-01-12
 
 -   Popover 的 trigger 元素设置为 button，并且禁用该 button（设置 disable）的话，由于无法触发 button 相关事件导致 Popover 无法正常显示
+
+2022-01-15
+
+-   Popover follow 的 move 模式，鼠标在元素内部快速移动时，偶尔会重复触发 show 和 hide 事件，原因暂时未知

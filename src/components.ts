@@ -11,3 +11,4 @@ export * from './checkbox';
 export * from './split';
 export * from './button';
 export * from './icon';
+export * from './space';

@@ -1,17 +1,17 @@
 <template>
-    <NSpace>
+    <McSpace>
         <NButton type="primary" ghost @click="customIcon">图标</NButton>
         <NButton type="primary" ghost @click="customStyle">样式</NButton>
         <NButton type="primary" ghost @click="customMessage">内容</NButton>
         <NButton type="primary" ghost @click="customMessageWithHTML">HTML</NButton>
         <NButton type="primary" ghost @click="customAction">操作</NButton>
-    </NSpace>
+    </McSpace>
 </template>
 
 <script lang="ts" setup>
 import { createVNode } from 'vue';
 import { NSpace, NButton, NIcon } from 'naive-ui';
-import { McMessage, McLoading, McTextLink } from 'meetcode-ui';
+import { McMessage, McLoading, McTextLink, McSpace } from 'meetcode-ui';
 import { HourglassOutline as IconHourglass } from '@vicons/ionicons5';
 
 const customIcon = () => {
@@ -36,7 +36,7 @@ const customStyle = () => {
 const customMessage = () => {
     McMessage({
         type: 'success',
-        message: () => createVNode('div', { class: 'mc-flex mc-items-center' }, [createVNode(McLoading, { type: 'ripple', size: 'small', style: 'margin-right: 6px' }), '内容可以传入VNode']),
+        message: () => createVNode('div', { class: 'mc-flex mc-items-center' }, [createVNode(McLoading, { type: 'ripple', size: 'small', style: 'margin-right: 6px' }), '内容可以传入 VNode']),
         icon: () => null
     });
 };

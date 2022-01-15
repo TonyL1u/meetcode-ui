@@ -1,5 +1,6 @@
 <script setup>
 import Basic from '@/button/demos/DemoBasic.vue'
+import Size from '@/button/demos/DemoSize.vue'
 </script>
 
 # Button 按钮
@@ -11,5 +12,13 @@ import Basic from '@/button/demos/DemoBasic.vue'
 ### 基础用法
 
 <Basic />
+
+:::
+
+::: demo codePreview=Size
+
+### 尺寸
+
+<Size />
 
 :::

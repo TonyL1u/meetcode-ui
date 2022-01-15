@@ -1,9 +1,10 @@
 import { defineComponent, ref, toRefs, renderSlot, createVNode, Fragment, mergeProps, PropType } from 'vue';
-import { NButton, NIcon } from 'naive-ui';
+import { NIcon } from 'naive-ui';
 import { getSlotFirstVNode, propsMergeSlots } from '../_utils_';
 import { omit } from 'lodash-es';
 import { AlertCircle as IconAlert } from '@vicons/ionicons5';
 import { McPopover, PopoverExposeInstance, popoverProps, popoverEmits, PopoverTrigger } from '../popover';
+import { McButton } from '../button';
 import { PopconfirmMergedProps, popconfirmProps, popconfirmEmits } from './interface';
 
 const defaultPropsOverride = {
@@ -66,8 +67,8 @@ export default defineComponent({
                           hasActionSlot
                               ? renderSlot(slots, 'action')
                               : createVNode(Fragment, null, [
-                                    showCancel ? createVNode(NButton, { size: 'small', disabled: cancelDisabled.value, onClick: handleCancel }, { default: () => cancelText.value }) : null,
-                                    showConfirm ? createVNode(NButton, { size: 'small', type: 'primary', disabled: confirmDisabled.value, style: { 'margin-left': '8px' }, onClick: handleConfirm }, { default: () => confirmText.value }) : null
+                                    showCancel ? createVNode(McButton, { size: 'small', disabled: cancelDisabled.value, onClick: handleCancel }, { default: () => cancelText.value }) : null,
+                                    showConfirm ? createVNode(McButton, { size: 'small', type: 'success', disabled: confirmDisabled.value, style: { 'margin-left': '8px' }, onClick: handleConfirm }, { default: () => confirmText.value }) : null
                                 ])
                       ]
                   )

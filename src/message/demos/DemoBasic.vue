@@ -1,17 +1,17 @@
 <template>
-    <NSpace>
+    <McSpace>
         <NButton type="primary" ghost @click="text">文本</NButton>
         <NButton type="primary" ghost @click="success">成功</NButton>
         <NButton type="primary" ghost @click="warning">警告</NButton>
         <NButton type="primary" ghost @click="info">信息</NButton>
         <NButton type="primary" ghost @click="error">错误</NButton>
         <NButton type="primary" ghost @click="loading">加载</NButton>
-    </NSpace>
+    </McSpace>
 </template>
 
 <script lang="ts" setup>
 import { NSpace, NButton } from 'naive-ui';
-import { McMessage } from 'meetcode-ui';
+import { McMessage, McSpace } from 'meetcode-ui';
 
 const text = () => {
     McMessage.text('这是一个文本 Message');

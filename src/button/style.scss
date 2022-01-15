@@ -3,8 +3,8 @@
     border: none;
     cursor: pointer;
     display: inline-flex;
-    padding: 0 12px;
-    height: 32px;
+    padding: var(--button-padding);
+    height: var(--button-height);
     justify-content: center;
     align-items: center;
     position: relative;
@@ -38,21 +38,34 @@
         }
     }
 
-    &:active {
+    &:focus {
+        color: var(--button-hover-color);
         &::after {
-            border-color: #000;
-            background: #000;
+            border-color: var(--button-hover-border-color);
+            background: var(--button-hover-background-color);
         }
     }
 
-    // &--waving::before {
-    //     border-color: #10b981;
-    //     animation: ripple-out 0.6s;
-    // }
+    &:active {
+        color: var(--button-active-color);
+        &::after {
+            border-color: var(--button-active-border-color);
+            background: var(--button-active-background-color);
+        }
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        color: var(--button-disabled-color);
+        &::after {
+            border-color: var(--button-disabled-border-color);
+            background: var(--button-disabled-background-color);
+        }
+    }
 
     &__inner {
         transition: color 0.3s;
-        font-size: 14px;
+        font-size: var(--button-font-size);
         line-height: 1;
         z-index: 2;
     }
