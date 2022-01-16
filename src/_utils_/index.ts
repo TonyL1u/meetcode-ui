@@ -1,4 +1,5 @@
 export * from './tsutils';
+export { createHoverColor, createActiveColor } from './color';
 export { createKey } from './createKey';
 export { flatten, flattenWithOptions } from './flatten';
 export { getSlotFirstVNode } from './getSlotFirstVNode';
@@ -7,3 +8,5 @@ export { propsMergeSlots } from './propsMergeSlots';
 export { reactiveOmit } from './reactiveOmit';
 export { responsiveTarget } from './responsiveTarget';
 export { sleep } from './sleep';
+
+export type { FlattenOptions } from './flatten';

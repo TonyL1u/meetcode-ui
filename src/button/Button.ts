@@ -1,5 +1,8 @@
 import { defineComponent, createVNode, renderSlot, ref, computed, toRefs } from 'vue';
 import { ButtonColorSet, ButtonColorMap, ButtonSizeSet, ButtonSizeMap, buttonProps } from './interface';
+import { or, and } from '@vueuse/core';
+import { McIcon } from '../icon';
+import { createHoverColor, createActiveColor } from '../_utils_';
 import * as CSS from 'csstype';
 
 const COLOR_MAP: ButtonColorMap = {
@@ -38,29 +41,38 @@ const SIZE_MAP: ButtonSizeMap = {
     mini: {
         height: '20px',
         padding: '0 4px',
-        fontSize: '12px'
+        fontSize: '12px',
+        iconSize: '14px',
+        iconMargin: '2px'
     },
     small: {
         height: '26px',
         padding: '0 8px',
-        fontSize: '14px'
+        fontSize: '13px',
+        iconSize: '16px',
+        iconMargin: '3px'
     },
     medium: {
         height: '32px',
         padding: '0 12px',
-        fontSize: '14px'
+        fontSize: '14px',
+        iconSize: '18px',
+        iconMargin: '4px'
     },
     large: {
         height: '38px',
         padding: '0 16px',
-        fontSize: '16px'
+        fontSize: '16px',
+        iconSize: '20px',
+        iconMargin: '5px'
     }
 };
 export default defineComponent({
     name: 'Button',
     props: buttonProps,
     setup(props, { slots }) {
-        const { type, size, disabled, ghost } = toRefs(props);
+        const { type, size, disabled, ghost, dashed, render, round, circle, block, color } = toRefs(props);
+        console.log(createHoverColor('#16a34a'));
         const cssVars = computed<CSS.Properties>(() => {
             const defaultColorSet: ButtonColorSet = COLOR_MAP[type.value!].default;
             const hoverColorSet: ButtonColorSet = COLOR_MAP[type.value!].hover;
@@ -69,33 +81,51 @@ export default defineComponent({
             const buttonSizeSet: ButtonSizeSet = SIZE_MAP[size.value!];
 
             return {
-                '--button-default-color': ghost.value ? defaultColorSet.borderColor : defaultColorSet.color,
-                '--button-default-border-color': defaultColorSet.borderColor,
-                '--button-default-background-color': ghost.value ? 'transparent' : defaultColorSet.backgroundColor,
-                '--button-hover-color': ghost.value ? hoverColorSet.borderColor : hoverColorSet.color,
-                '--button-hover-border-color': hoverColorSet.borderColor,
-                '--button-hover-background-color': ghost.value ? 'transparent' : hoverColorSet.backgroundColor,
-                '--button-active-color': ghost.value ? activeColorSet.borderColor : activeColorSet.color,
-                '--button-active-border-color': activeColorSet.borderColor,
-                '--button-active-background-color': ghost.value ? 'transparent' : activeColorSet.backgroundColor,
-                '--button-disabled-color': ghost.value ? disabledColorSet.borderColor : disabledColorSet.color,
-                '--button-disabled-border-color': disabledColorSet.borderColor,
-                '--button-disabled-background-color': ghost.value ? 'transparent' : disabledColorSet.backgroundColor,
+                '--button-default-color': and(or(ghost, dashed, render.value !== 'normal'), type.value !== 'default').value ? defaultColorSet.borderColor : defaultColorSet.color,
+                '--button-default-border-color': render.value !== 'normal' ? 'transparent' : defaultColorSet.borderColor,
+                '--button-default-background-color': or(ghost, dashed, render.value !== 'normal').value ? 'transparent' : defaultColorSet.backgroundColor,
+                '--button-hover-color': or(ghost, dashed, render.value !== 'normal').value ? hoverColorSet.borderColor : hoverColorSet.color,
+                '--button-hover-border-color': render.value !== 'normal' ? 'transparent' : hoverColorSet.borderColor,
+                '--button-hover-background-color': or(ghost, dashed, render.value !== 'normal').value ? 'transparent' : hoverColorSet.backgroundColor,
+                '--button-active-color': or(ghost, dashed, render.value !== 'normal').value ? activeColorSet.borderColor : activeColorSet.color,
+                '--button-active-border-color': render.value !== 'normal' ? 'transparent' : activeColorSet.borderColor,
+                '--button-active-background-color': or(ghost, dashed, render.value !== 'normal').value ? 'transparent' : activeColorSet.backgroundColor,
+                '--button-disabled-color': or(ghost, dashed, render.value !== 'normal').value ? disabledColorSet.borderColor : disabledColorSet.color,
+                '--button-disabled-border-color': render.value !== 'normal' ? 'transparent' : disabledColorSet.borderColor,
+                '--button-disabled-background-color': or(ghost, dashed, render.value !== 'normal').value ? 'transparent' : disabledColorSet.backgroundColor,
+                '--button-width': circle.value ? buttonSizeSet.height : 'initial',
                 '--button-height': buttonSizeSet.height,
                 '--button-padding': buttonSizeSet.padding,
-                '--button-font-size': buttonSizeSet.fontSize
+                '--button-font-size': buttonSizeSet.fontSize,
+                '--button-icon-size': buttonSizeSet.iconSize,
+                '--button-icon-margin': buttonSizeSet.iconMargin,
+                '--button-raduis': circle.value ? '50%' : round.value ? buttonSizeSet.height : '3px'
             };
+        });
+
+        const iconVNode = computed(() => {
+            return slots.icon ? createVNode('span', { class: 'mc-button__icon' }, [renderSlot(slots, 'icon')]) : null;
+        });
+
+        const contentVNode = computed(() => {
+            return slots.default ? createVNode('span', { class: 'mc-button__content' }, [renderSlot(slots, 'default')]) : null;
         });
 
         return () =>
             createVNode(
                 'button',
                 {
-                    class: ['mc-button', `mc-button--${type.value}`, `mc-button--${size.value}`, { 'mc-button--disabled': disabled.value, 'mc-button--ghost': ghost.value }],
+                    class: [
+                        'mc-button',
+                        `mc-button--${render.value}`,
+                        `mc-button--${type.value}`,
+                        `mc-button--${size.value}`,
+                        { 'mc-button--block': block.value, 'mc-button--disabled': disabled.value, 'mc-button--ghost': ghost.value, 'mc-button--dashed': dashed.value, 'mc-button--round': round.value, 'mc-button--circle': circle.value }
+                    ],
                     disabled: disabled.value,
                     style: cssVars.value
                 },
-                [createVNode('span', { class: 'mc-button__inner' }, [renderSlot(slots, 'default')])]
+                [iconVNode.value, contentVNode.value]
             );
     }
 });

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref, watch, onMounted } from 'vue';
 import { useMonaco } from './logic/useMonaco';
 

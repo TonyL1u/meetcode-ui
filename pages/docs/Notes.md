@@ -139,3 +139,7 @@
 2022-01-15
 
 -   Popover follow 的 move 模式，鼠标在元素内部快速移动时，偶尔会重复触发 show 和 hide 事件，原因暂时未知
+
+2022-01-16
+
+-   Button 自定义颜色的时候，怎么自动生成 hover 和 active 的颜色

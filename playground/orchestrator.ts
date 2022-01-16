@@ -34,7 +34,7 @@ export class OrchestratorFile {
 
     get code() {
         return `
-      <script setup lang="ts">
+      <script lang="ts" setup>
         ${this.script}
       </script>
       <template>

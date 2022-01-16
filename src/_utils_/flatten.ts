@@ -1,5 +1,5 @@
-import { Fragment, Comment, CustomVNodeTypes } from 'vue';
-import { SpecificVNode, FlattenOptions } from './tsutils';
+import { Fragment, Comment, CustomVNodeTypes, Slots } from 'vue';
+import { SpecificVNode } from './tsutils';
 /**
  *
  * @param vNodes flatten target
@@ -34,4 +34,11 @@ export function flattenWithOptions<T = Record<string, unknown>>(options: Flatten
     if (!slots?.[name || 'default']) return result;
 
     return flatten<T>(slots[name || 'default']?.() as Array<SpecificVNode<T>>, identificationKey, mode, result);
+}
+
+export interface FlattenOptions {
+    slots?: Slots;
+    name?: string;
+    identificationKey?: Symbol | Symbol[];
+    mode?: boolean;
 }

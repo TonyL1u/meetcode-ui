@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref, onMounted, onUnmounted, watchEffect, watch } from 'vue';
 import type { WatchStopHandle } from 'vue';
 // import { useElementSize, useCssVar } from '@vueuse/core'

@@ -2,13 +2,14 @@
     <!-- <div style="border: 1px solid #000"> -->
     <McSpace>
         <McButton @click="handleClick">Default</McButton>
-        <McButton type="primary" @click="handleClick" ghost>Primary</McButton>
-        <McButton type="success" @click="handleClick" ghost>Success</McButton>
-        <McButton type="danger" @click="handleClick" ghost>Error</McButton>
-        <McButton type="warning" disabled @click="handleClick" ghost>Warning</McButton>
+        <McButton type="primary" @click="handleClick">Primary</McButton>
+        <McButton type="success" @click="handleClick">Success</McButton>
+        <McButton type="danger" @click="handleClick">Danger</McButton>
+        <McButton type="warning" @click="handleClick">Warning</McButton>
     </McSpace>
-    <NButton type="primary" dashed ghost>按钮</NButton>
-    <NButton disabled>按钮</NButton>
+
+    <!-- <NButton type="primary" dashed ghost>按钮</NButton>
+    <NButton disabled>按钮</NButton> -->
 
     <!-- <div class="test-div mc-h-10 mc-w-10"></div> -->
     <!-- <button class="btn btn-pink btn-bubbles">Click Me</button> -->
@@ -16,7 +17,8 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { McButton, McSpace } from 'meetcode-ui';
+import { McButton, McSpace, McIcon } from 'meetcode-ui';
+import { Add as IconAdd } from '@vicons/ionicons5';
 import { NButton } from 'naive-ui';
 
 const count = ref(0);

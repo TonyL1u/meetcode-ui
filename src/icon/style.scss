@@ -1,0 +1,23 @@
+.mc-icon {
+    height: 1em;
+    width: 1em;
+    line-height: 1em;
+    text-align: center;
+    display: inline-block;
+    position: relative;
+    fill: currentColor;
+    transform: translateZ(0);
+
+    &--spinning {
+        animation: mc-icon-spinning 1.2s linear infinite;
+    }
+}
+
+@keyframes mc-icon-spinning {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

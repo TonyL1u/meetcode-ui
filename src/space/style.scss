@@ -1,9 +1,10 @@
 .mc-space {
     display: flex;
+    flex-direction: var(--space-direction);
     align-items: center;
     flex-wrap: wrap;
 
-    .mc-space-item:not(:last-child) {
-        margin-right: 12px;
+    &-item:not(:last-child) {
+        margin: var(--space-item-gap);
     }
 }

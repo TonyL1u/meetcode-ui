@@ -4,13 +4,15 @@
     cursor: pointer;
     display: inline-flex;
     padding: var(--button-padding);
+    width: var(--button-width);
     height: var(--button-height);
     justify-content: center;
     align-items: center;
     position: relative;
     font-family: v-sans;
-    border-radius: 3px;
+    border-radius: var(--button-raduis);
     color: var(--button-default-color);
+    font-size: var(--button-font-size);
 
     &::before,
     &::after {
@@ -63,14 +65,43 @@
         }
     }
 
-    &__inner {
+    &__icon,
+    &__content {
         transition: color 0.3s;
-        font-size: var(--button-font-size);
+        font-size: inherit;
         line-height: 1;
         z-index: 2;
     }
+
+    &__icon {
+        display: flex;
+        font-size: var(--button-icon-size);
+    }
+
+    & > span:not(:last-child) {
+        margin-right: var(--button-icon-margin);
+    }
 }
 
+.mc-button--dashed {
+    &::before,
+    &::after {
+        border-style: dashed;
+    }
+}
+
+.mc-button--block {
+    width: 100%;
+}
+
+.mc-button--text {
+    &:hover,
+    &:focus {
+        &::after {
+            background: rgba(0, 0, 0, 0.02);
+        }
+    }
+}
 @keyframes ripple-out {
     from {
         box-shadow: 0 0 0.5px 0 #10b981;
