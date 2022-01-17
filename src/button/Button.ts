@@ -99,7 +99,7 @@ export default defineComponent({
                 '--button-font-size': buttonSizeSet.fontSize,
                 '--button-icon-size': buttonSizeSet.iconSize,
                 '--button-icon-margin': buttonSizeSet.iconMargin,
-                '--button-raduis': circle.value ? '50%' : round.value ? buttonSizeSet.height : '3px'
+                '--button-radius': circle.value ? '50%' : round.value ? buttonSizeSet.height : '3px'
             };
         });
 

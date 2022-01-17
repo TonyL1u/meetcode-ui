@@ -21,7 +21,7 @@ declare module 'csstype' {
         '--button-font-size'?: string;
         '--button-icon-size'?: string;
         '--button-icon-margin'?: string;
-        '--button-raduis'?: string;
+        '--button-radius'?: string;
     }
 }
 
