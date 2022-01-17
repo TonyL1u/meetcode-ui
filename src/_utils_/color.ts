@@ -185,3 +185,7 @@ export function createHoverColor(rgb: string): string {
 export function createActiveColor(rgb: string): string {
     return composite(rgb, [0, 0, 0, 0.12]);
 }
+
+export function createDisabledColor(rgb: string): string {
+    return composite(rgb, [255, 255, 255, 0.6]);
+}

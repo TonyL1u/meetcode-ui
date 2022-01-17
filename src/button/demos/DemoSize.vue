@@ -17,21 +17,21 @@
             </template>
             small
         </McButton>
-        <McButton size="medium" type="danger">
-            <template #icon>
-                <McIcon>
-                    <IconBag />
-                </McIcon>
-            </template>
-            medium
-        </McButton>
-        <McButton size="large" type="warning">
+        <McButton size="medium" type="warning">
             <template #icon>
                 <McIcon>
                     <IconBag />
                 </McIcon>
             </template>
             large
+        </McButton>
+        <McButton size="large" type="danger">
+            <template #icon>
+                <McIcon>
+                    <IconBag />
+                </McIcon>
+            </template>
+            medium
         </McButton>
     </McSpace>
 </template>

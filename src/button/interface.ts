@@ -42,7 +42,8 @@ export type ButtonStatus = 'default' | 'hover' | 'active' | 'disabled';
 export type ButtonSize = 'mini' | 'small' | 'medium' | 'large';
 export type ButtonType = 'default' | 'primary' | 'success' | 'warning' | 'danger';
 export type ButtonRender = 'normal' | 'text' | 'link';
-export type ButtonColorMap = Record<ButtonType, Record<ButtonStatus, ButtonColorSet>>;
+export type ButtonColorRecord = Record<ButtonStatus, ButtonColorSet>;
+export type ButtonColorMap = Record<ButtonType, ButtonColorRecord>;
 export type ButtonSizeMap = Record<ButtonSize, ButtonSizeSet>;
 
 export interface ButtonProps {

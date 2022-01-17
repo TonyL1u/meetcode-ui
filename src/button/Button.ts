@@ -1,8 +1,8 @@
 import { defineComponent, createVNode, renderSlot, ref, computed, toRefs } from 'vue';
-import { ButtonColorSet, ButtonColorMap, ButtonSizeSet, ButtonSizeMap, buttonProps } from './interface';
+import { ButtonColorSet, ButtonColorMap, ButtonSizeSet, ButtonSizeMap, ButtonStatus, ButtonType, ButtonColorRecord, ButtonTypeInterface, buttonProps } from './interface';
 import { or, and } from '@vueuse/core';
 import { McIcon } from '../icon';
-import { createHoverColor, createActiveColor } from '../_utils_';
+import { createHoverColor, createActiveColor, createDisabledColor, UnionOmit } from '../_utils_';
 import * as CSS from 'csstype';
 
 const COLOR_MAP: ButtonColorMap = {
@@ -32,9 +32,38 @@ const COLOR_MAP: ButtonColorMap = {
     },
     danger: {
         default: { color: '#fff', borderColor: '#dc2626', backgroundColor: '#dc2626' },
-        hover: { color: '#fff', borderColor: '#ea580c', backgroundColor: '#ea580c' },
+        hover: { color: '#fff', borderColor: '#d97706', backgroundColor: '#d97706' },
         active: { color: '#fff', borderColor: '#c2410c', backgroundColor: '#c2410c' },
         disabled: { color: '#fff', borderColor: '#fca5a5', backgroundColor: '#fca5a5' }
+    }
+};
+const defaultColorMap: ButtonColorRecord = {
+    default: { color: '#000', borderColor: '#e0e0e6', backgroundColor: '#fff' },
+    hover: { color: '#059669', borderColor: '#10b981', backgroundColor: '#fff' },
+    active: { color: '#15803d', borderColor: '#15803d', backgroundColor: '#fff' },
+    disabled: { color: '#aaa', borderColor: '#eee', backgroundColor: '#fff' }
+};
+const colorMap: Record<UnionOmit<ButtonType, 'default'>, ButtonColorRecord> = {};
+const newMap = {
+    default: {
+        color: '#e0e0e6',
+        textColor: '#000'
+    },
+    primary: {
+        color: '#3b82f6',
+        textColor: '#fff'
+    },
+    success: {
+        color: '#16a34a',
+        textColor: '#fff'
+    },
+    warning: {
+        color: '#fb923c',
+        textColor: '#fff'
+    },
+    danger: {
+        color: '#dc2626',
+        textColor: '#fff'
     }
 };
 const SIZE_MAP: ButtonSizeMap = {
@@ -74,11 +103,13 @@ export default defineComponent({
         const { type, size, disabled, ghost, dashed, render, round, circle, block, color } = toRefs(props);
         console.log(createHoverColor('#16a34a'));
         const cssVars = computed<CSS.Properties>(() => {
-            const defaultColorSet: ButtonColorSet = COLOR_MAP[type.value!].default;
-            const hoverColorSet: ButtonColorSet = COLOR_MAP[type.value!].hover;
-            const activeColorSet: ButtonColorSet = COLOR_MAP[type.value!].active;
-            const disabledColorSet: ButtonColorSet = COLOR_MAP[type.value!].disabled;
+            const colorData = type.value === 'default' ? COLOR_MAP.default : colorFactory(newMap[type.value!]);
+            const defaultColorSet: ButtonColorSet = colorData.default;
+            const hoverColorSet: ButtonColorSet = colorData.hover;
+            const activeColorSet: ButtonColorSet = colorData.active;
+            const disabledColorSet: ButtonColorSet = colorData.disabled;
             const buttonSizeSet: ButtonSizeSet = SIZE_MAP[size.value!];
+            console.log(colorFactory(newMap[type.value!]));
 
             return {
                 '--button-default-color': and(or(ghost, dashed, render.value !== 'normal'), type.value !== 'default').value ? defaultColorSet.borderColor : defaultColorSet.color,
@@ -102,6 +133,18 @@ export default defineComponent({
                 '--button-radius': circle.value ? '50%' : round.value ? buttonSizeSet.height : '3px'
             };
         });
+
+        const colorFactory = ({ color, textColor }: { color: string; textColor: string }): Record<ButtonStatus, ButtonColorSet> => {
+            const hoverColor = createHoverColor(color);
+            const activeColor = createActiveColor(color);
+            const disabledColor = createDisabledColor(color);
+            return {
+                default: { color: textColor, borderColor: color, backgroundColor: color },
+                hover: { color: textColor, borderColor: hoverColor, backgroundColor: hoverColor },
+                active: { color: textColor, borderColor: activeColor, backgroundColor: activeColor },
+                disabled: { color: textColor, borderColor: disabledColor, backgroundColor: disabledColor }
+            };
+        };
 
         const iconVNode = computed(() => {
             return slots.icon ? createVNode('span', { class: 'mc-button__icon' }, [renderSlot(slots, 'icon')]) : null;

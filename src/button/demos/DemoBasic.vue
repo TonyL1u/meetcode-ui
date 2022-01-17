@@ -4,8 +4,8 @@
         <McButton @click="handleClick">Default</McButton>
         <McButton type="primary" @click="handleClick">Primary</McButton>
         <McButton type="success" @click="handleClick">Success</McButton>
-        <McButton type="danger" @click="handleClick">Danger</McButton>
         <McButton type="warning" @click="handleClick">Warning</McButton>
+        <McButton type="danger" @click="handleClick">Danger</McButton>
     </McSpace>
 
     <!-- <NButton type="primary" dashed ghost>按钮</NButton>
