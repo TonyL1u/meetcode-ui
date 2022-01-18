@@ -4,6 +4,10 @@
     align-items: center;
     flex-wrap: wrap;
 
+    &-item {
+        padding: 4px 0;
+    }
+
     &-item:not(:last-child) {
         margin: var(--space-item-gap);
     }

@@ -1,31 +1,14 @@
 <template>
     <McSpace>
-        <McButton type="custom" color="#c026d3">
-            <template #icon>
-                <McIcon>
-                    <IconColor />
-                </McIcon>
-            </template>
-            #c026d3
-        </McButton>
-        <McButton type="custom" color="#c026d3" text-color="red" ghost>
-            <template #icon>
-                <McIcon>
-                    <IconColor />
-                </McIcon>
-            </template>
-            #c026d3
-        </McButton>
-        <McButton type="custom" color="#cdaf95" dashed>
-            <template #icon>
-                <McIcon>
-                    <IconColor />
-                </McIcon>
-            </template>
-            #cdaf95
-        </McButton>
+        <McButton type="custom">#c026d3</McButton>
+        <McButton type="custom" color="#c026d3">#c026d3</McButton>
+        <!-- <McButton type="custom" text-color="#c026d3">#c026d3</McButton>
+        <McButton type="custom" border-color="#c026d3">#c026d3</McButton> -->
 
-        <n-button ghost color="#ff69b4" text-color="red"> #ff69b4 </n-button>
+        <McButton type="custom" ghost>#c026d3</McButton>
+        <!-- <McButton type="custom" color="#c026d3" text-color="#cdaf95" border-color="#000" ghost>#c026d3</McButton>
+        <McButton type="custom" text-color="#cdaf95" ghost> #cdaf95</McButton>
+        <McButton type="custom" border-color="#cdaf95" ghost> #cdaf95</McButton> -->
     </McSpace>
 </template>
 

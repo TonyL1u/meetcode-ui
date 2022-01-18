@@ -2,6 +2,8 @@
     <McSpace>
         <McButton @click="handleClick">正常</McButton>
         <McButton @click="handleClick" disabled>禁用</McButton>
+        <McButton type="danger" disabled>禁用</McButton>
+        <McButton type="success" disabled dashed>禁用</McButton>
     </McSpace>
 </template>
 
