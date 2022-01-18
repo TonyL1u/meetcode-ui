@@ -1,4 +1,5 @@
 import { PropType } from 'vue';
+import { UIColorAttrs } from '../_utils_';
 import * as CSS from 'csstype';
 
 declare module 'csstype' {
@@ -9,6 +10,7 @@ declare module 'csstype' {
 }
 
 export type TextLinkType = 'primary' | 'success' | 'warning' | 'danger' | 'info';
+export type TextLinkColorSet = Pick<UIColorAttrs, 'color'>;
 export type TextLinkColorMap = Record<TextLinkType, { color: string; hoverColor: string }>;
 
 export interface TextLinkProps {

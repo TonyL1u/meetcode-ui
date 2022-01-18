@@ -1,3 +1,5 @@
+import { Key, UIStatus, UIColorAttrs } from './tsutils';
+
 const baseColors: Record<string, string> = {
     black: '#000',
     silver: '#C0C0C0',
@@ -15,7 +17,8 @@ const baseColors: Record<string, string> = {
     blue: '#00F',
     teal: '#008080',
     aqua: '#0FF',
-    transparent: '#0000'
+    transparent: '#0000',
+    pink: '#ffc0cb'
 };
 const prefix = '^\\s*';
 const suffix = '\\s*$';
@@ -36,6 +39,17 @@ export type HSLA = [number, number, number, number];
 export type HSVA = [number, number, number, number];
 export type HSL = [number, number, number];
 export type HSV = [number, number, number];
+interface ColorFactoryConfig<E extends string, P extends Key> {
+    color: string;
+    borderColor: string;
+    backgroundColor: string;
+
+    colorSet?: Partial<Record<E, string>>;
+    borderColorSet?: Partial<Record<E, string>>;
+    backgroundColorSet?: Partial<Record<E, string>>;
+
+    attrs?: P | P[];
+}
 /**
  * @param h 360
  * @param s 100
@@ -187,5 +201,29 @@ export function createActiveColor(rgb: string): string {
 }
 
 export function createDisabledColor(rgb: string): string {
-    return composite(rgb, [255, 255, 255, 0.6]);
+    return composite(rgb, [255, 255, 255, 0.64]);
+}
+
+export function useColorFactory<S extends UIColorAttrs>(colorFactoryConfig: ColorFactoryConfig<UIStatus, keyof S>): Record<UIStatus, S> {
+    const { color, borderColor, backgroundColor, colorSet, borderColorSet, backgroundColorSet, attrs } = colorFactoryConfig;
+    const { default: defaultColor = color, hover: hoverColor = createHoverColor(color), active: activeColor = createActiveColor(color), disabled: disabledColor = createDisabledColor(color) } = colorSet ?? {};
+    const {
+        default: defaultBorderColor = borderColor,
+        hover: hoverBorderColor = createHoverColor(borderColor),
+        active: activeBorderColor = createActiveColor(borderColor),
+        disabled: disabledBorderColor = createDisabledColor(borderColor)
+    } = borderColorSet ?? {};
+    const {
+        default: defaultBackgroundColor = backgroundColor,
+        hover: hoverBackgroundColor = createHoverColor(backgroundColor),
+        active: activeBackgroundColor = createActiveColor(backgroundColor),
+        disabled: disabledBackgroundColor = createDisabledColor(backgroundColor)
+    } = backgroundColorSet ?? {};
+
+    return {
+        default: { color: defaultColor, borderColor: defaultBorderColor, backgroundColor: defaultBackgroundColor } as S,
+        hover: { color: hoverColor, borderColor: hoverBorderColor, backgroundColor: hoverBackgroundColor } as S,
+        active: { color: activeColor, borderColor: activeBorderColor, backgroundColor: activeBackgroundColor } as S,
+        disabled: { color: disabledColor, borderColor: disabledBorderColor, backgroundColor: disabledBackgroundColor } as S
+    };
 }

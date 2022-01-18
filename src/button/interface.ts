@@ -1,4 +1,5 @@
 import { PropType } from 'vue';
+import { UIStatus, UISize, UIColorAttrs } from '../_utils_';
 import * as CSS from 'csstype';
 
 declare module 'csstype' {
@@ -25,11 +26,7 @@ declare module 'csstype' {
     }
 }
 
-export interface ButtonColorSet {
-    color: string;
-    borderColor: string;
-    backgroundColor: string;
-}
+export interface ButtonColorSet extends UIColorAttrs {}
 export interface ButtonSizeSet {
     height: string;
     padding: string;
@@ -38,17 +35,13 @@ export interface ButtonSizeSet {
     iconMargin: string;
 }
 
-export type ButtonStatus = 'default' | 'hover' | 'active' | 'disabled';
-export type ButtonSize = 'mini' | 'small' | 'medium' | 'large';
-export type ButtonType = 'default' | 'primary' | 'success' | 'warning' | 'danger';
+export type ButtonType = 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'custom';
 export type ButtonRender = 'normal' | 'text' | 'link';
-export type ButtonColorRecord = Record<ButtonStatus, ButtonColorSet>;
-export type ButtonColorMap = Record<ButtonType, ButtonColorRecord>;
-export type ButtonSizeMap = Record<ButtonSize, ButtonSizeSet>;
+export type ButtonSizeMap = Record<UISize, ButtonSizeSet>;
 
 export interface ButtonProps {
     type?: ButtonType;
-    size?: ButtonSize;
+    size?: UISize;
     disabled?: boolean;
     ghost?: boolean;
     dashed?: boolean;
@@ -57,6 +50,11 @@ export interface ButtonProps {
     circle?: boolean;
     block?: boolean;
     color?: string;
+    textColor?: string;
+    borderColor?: string;
+    colorSet?: Partial<Record<UIStatus, string>>;
+    borderColorSet: Partial<Record<UIStatus, string>>;
+    backgroundColorSet: Partial<Record<UIStatus, string>>;
 }
 
 export const buttonProps = {
@@ -98,6 +96,14 @@ export const buttonProps = {
     },
     color: {
         type: String as PropType<ButtonProps['color']>,
+        default: undefined
+    },
+    textColor: {
+        type: String as PropType<ButtonProps['textColor']>,
+        default: undefined
+    },
+    borderColor: {
+        type: String as PropType<ButtonProps['borderColor']>,
         default: undefined
     }
 };

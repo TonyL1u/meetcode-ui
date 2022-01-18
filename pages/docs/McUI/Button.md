@@ -8,6 +8,7 @@ import Icon from '@/button/demos/DemoIcon.vue'
 import Size from '@/button/demos/DemoSize.vue'
 import Shape from '@/button/demos/DemoShape.vue'
 import Block from '@/button/demos/DemoBlock.vue'
+import Color from '@/button/demos/DemoColor.vue'
 </script>
 
 # Button 按钮
@@ -85,5 +86,15 @@ import Block from '@/button/demos/DemoBlock.vue'
 设置 `block` 属性，可以将按钮显示为块级。
 
 <Block />
+
+:::
+
+::: demo codePreview=Color
+
+### 自定义颜色
+
+设置 `type = custom` 时，可以自定义按钮颜色。
+
+<Color />
 
 :::
