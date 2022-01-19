@@ -9,6 +9,7 @@ import Size from '@/button/demos/DemoSize.vue'
 import Shape from '@/button/demos/DemoShape.vue'
 import Block from '@/button/demos/DemoBlock.vue'
 import Color from '@/button/demos/DemoColor.vue'
+import ColorSet from '@/button/demos/DemoColorSet.vue'
 </script>
 
 # Button 按钮
@@ -89,12 +90,16 @@ import Color from '@/button/demos/DemoColor.vue'
 
 :::
 
-::: demo codePreview=Color
+::: demo codePreview=Color,ColorSet
 
 ### 自定义颜色
 
 设置 `type = custom` 时，可以自定义按钮颜色。
 
 <Color />
+
+ `color-set` 属性可以修改按钮在不同状态下的颜色。
+
+ <ColorSet />
 
 :::
