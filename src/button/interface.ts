@@ -52,8 +52,8 @@ export interface ButtonProps {
     textColor?: string;
     borderColor?: string;
     colorSet?: Partial<Record<UIStatus, string>>;
+    textColorSet: Partial<Record<UIStatus, string>>;
     borderColorSet: Partial<Record<UIStatus, string>>;
-    backgroundColorSet: Partial<Record<UIStatus, string>>;
 }
 
 export const buttonProps = {
@@ -103,6 +103,18 @@ export const buttonProps = {
     },
     borderColor: {
         type: String as PropType<ButtonProps['borderColor']>,
+        default: undefined
+    },
+    colorSet: {
+        type: Object as PropType<ButtonProps['colorSet']>,
+        default: undefined
+    },
+    textColorSet: {
+        type: Object as PropType<ButtonProps['textColorSet']>,
+        default: undefined
+    },
+    borderColorSet: {
+        type: Object as PropType<ButtonProps['borderColorSet']>,
         default: undefined
     }
 };

@@ -71,7 +71,7 @@ export default defineComponent({
     name: 'Button',
     props: buttonProps,
     setup(props, { slots }) {
-        const { type, size, disabled, ghost, dashed, render, round, circle, block, color, textColor, borderColor } = toRefs(props);
+        const { type, size, disabled, ghost, dashed, render, round, circle, block, color, textColor, borderColor, colorSet, textColorSet, borderColorSet } = toRefs(props);
 
         const isDefault = computed(() => type.value === 'default');
         const isCustom = computed(() => type.value === 'custom');
@@ -111,21 +111,21 @@ export default defineComponent({
 
             const colorVars: CSS.Properties = isCustom.value
                 ? {
-                      '--button-default-color': useDefaultColor.value ? '#000' : or(textColor, isTransparent).value ? defaultColorSet.color : '#fff',
-                      '--button-default-border-color': isNotNormal.value ? 'transparent' : useDefaultBorderColor.value ? '#e0e0e6' : defaultColorSet.borderColor,
-                      '--button-default-background-color': isTransparent.value ? 'transparent' : useDefaultBackgroundColor.value ? '#fff' : defaultColorSet.backgroundColor,
+                      '--button-default-color': textColorSet.value?.default ?? (useDefaultColor.value ? '#000' : or(textColor, isTransparent).value ? defaultColorSet.color : '#fff'),
+                      '--button-default-border-color': borderColorSet.value?.default ?? (isNotNormal.value ? 'transparent' : useDefaultBorderColor.value ? '#e0e0e6' : defaultColorSet.borderColor),
+                      '--button-default-background-color': colorSet.value?.default ?? (isTransparent.value ? 'transparent' : useDefaultBackgroundColor.value ? '#fff' : defaultColorSet.backgroundColor),
 
-                      '--button-hover-color': useDefaultColor.value ? '#059669' : or(textColor, isTransparent).value ? hoverColorSet.color : '#fff',
-                      '--button-hover-border-color': isNotNormal.value ? 'transparent' : useDefaultBorderColor.value ? '#10b981' : hoverColorSet.borderColor,
-                      '--button-hover-background-color': isTransparent.value ? 'transparent' : useDefaultBackgroundColor.value ? '#fff' : hoverColorSet.backgroundColor,
+                      '--button-hover-color': textColorSet.value?.hover ?? (useDefaultColor.value ? '#059669' : or(textColor, isTransparent).value ? hoverColorSet.color : '#fff'),
+                      '--button-hover-border-color': borderColorSet.value?.hover ?? (isNotNormal.value ? 'transparent' : useDefaultBorderColor.value ? '#10b981' : hoverColorSet.borderColor),
+                      '--button-hover-background-color': colorSet.value?.hover ?? (isTransparent.value ? 'transparent' : useDefaultBackgroundColor.value ? '#fff' : hoverColorSet.backgroundColor),
 
-                      '--button-active-color': useDefaultColor.value ? '#15803d' : or(textColor, isTransparent).value ? activeColorSet.color : '#fff',
-                      '--button-active-border-color': isNotNormal.value ? 'transparent' : useDefaultBorderColor.value ? '#15803d' : activeColorSet.borderColor,
-                      '--button-active-background-color': isTransparent.value ? 'transparent' : useDefaultBackgroundColor.value ? '#fff' : activeColorSet.backgroundColor,
+                      '--button-active-color': textColorSet.value?.active ?? (useDefaultColor.value ? '#15803d' : or(textColor, isTransparent).value ? activeColorSet.color : '#fff'),
+                      '--button-active-border-color': borderColorSet.value?.active ?? (isNotNormal.value ? 'transparent' : useDefaultBorderColor.value ? '#15803d' : activeColorSet.borderColor),
+                      '--button-active-background-color': colorSet.value?.active ?? (isTransparent.value ? 'transparent' : useDefaultBackgroundColor.value ? '#fff' : activeColorSet.backgroundColor),
 
-                      '--button-disabled-color': useDefaultColor.value ? '#aaa' : or(textColor, isTransparent).value ? disabledColorSet.color : '#fff',
-                      '--button-disabled-border-color': isNotNormal.value ? 'transparent' : useDefaultBorderColor.value ? '#eee' : disabledColorSet.borderColor,
-                      '--button-disabled-background-color': isTransparent.value ? 'transparent' : useDefaultBackgroundColor.value ? '#fff' : disabledColorSet.backgroundColor
+                      '--button-disabled-color': textColorSet.value?.disabled ?? (useDefaultColor.value ? '#aaa' : or(textColor, isTransparent).value ? disabledColorSet.color : '#fff'),
+                      '--button-disabled-border-color': borderColorSet.value?.disabled ?? (isNotNormal.value ? 'transparent' : useDefaultBorderColor.value ? '#eee' : disabledColorSet.borderColor),
+                      '--button-disabled-background-color': colorSet.value?.disabled ?? (isTransparent.value ? 'transparent' : useDefaultBackgroundColor.value ? '#fff' : disabledColorSet.backgroundColor)
                   }
                 : {
                       '--button-default-color': isDefault.value ? '#000' : isTransparent.value ? defaultColorSet.color : '#fff',

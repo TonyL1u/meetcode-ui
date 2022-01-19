@@ -7,6 +7,8 @@
     position: relative;
     fill: currentColor;
     transform: translateZ(0);
+    color: var(--icon-color);
+    font-size: var(--icon-font-size);
 
     &--spinning {
         animation: mc-icon-spinning 1.2s linear infinite;

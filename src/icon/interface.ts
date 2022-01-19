@@ -1,4 +1,12 @@
 import { PropType } from 'vue';
+import * as CSS from 'csstype';
+
+declare module 'csstype' {
+    interface Properties {
+        '--icon-color'?: string;
+        '--icon-font-size'?: string;
+    }
+}
 
 export interface IconProps {
     size?: number;
@@ -13,7 +21,7 @@ export const iconProps = {
     },
     color: {
         type: String as PropType<IconProps['color']>,
-        default: 'inherit'
+        default: undefined
     },
     spin: {
         type: Boolean as PropType<IconProps['spin']>,
