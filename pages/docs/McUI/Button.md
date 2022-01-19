@@ -33,14 +33,6 @@ import Color from '@/button/demos/DemoColor.vue'
 
 :::
 
-::: demo codePreview=Disabled
-
-### 禁用
-
-<Disabled />
-
-:::
-
 ::: demo codePreview=Render
 
 ### 渲染模式
@@ -48,6 +40,14 @@ import Color from '@/button/demos/DemoColor.vue'
 提供 3 种渲染模式 `normal`（默认）、 `text` 和 `link` ，可以将按钮渲染成不同的样式。
 
 <Render />
+
+:::
+
+::: demo codePreview=Disabled
+
+### 禁用
+
+<Disabled />
 
 :::
 

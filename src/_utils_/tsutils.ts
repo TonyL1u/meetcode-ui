@@ -23,13 +23,13 @@ export type Key = string | number | symbol;
 export type SpecificVNode<T> = VNode<RendererNode, RendererElement, T>;
 
 /**
- * UI Type
+ * UI
  */
 export type UIStatus = 'default' | 'hover' | 'active' | 'disabled';
 
 export type UISize = 'mini' | 'small' | 'medium' | 'large';
 
-export interface UIColorAttrs {
+export interface UIColorAttrs extends Record<string, string> {
     color: string;
     borderColor: string;
     backgroundColor: string;

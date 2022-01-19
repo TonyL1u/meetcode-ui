@@ -1,6 +1,6 @@
 import { computed, toRefs, renderSlot, createVNode, defineComponent } from 'vue';
-import { getSlotFirstVNode } from '../_utils_';
-import { TextLinkColorMap, textLinkProps } from './interface';
+import { getSlotFirstVNode, useColorFactory } from '../_utils_';
+import { TextLinkColorMap, TextLinkColorSet, textLinkProps } from './interface';
 import * as CSS from 'csstype';
 
 export default defineComponent({
@@ -10,19 +10,19 @@ export default defineComponent({
         const { type, to, underline, trigger, color, hoverColor, block, raw } = toRefs(props);
         const typeMap: TextLinkColorMap = {
             primary: {
-                color: '#3B82F6',
+                color: '#3b82f6',
                 hoverColor: '#2563EB'
             },
             success: {
-                color: '#10B981',
+                color: '#16a34a',
                 hoverColor: '#059669'
             },
             warning: {
-                color: '#F59E0B',
+                color: '#fb923c',
                 hoverColor: '#D97706'
             },
             danger: {
-                color: '#EF4444',
+                color: '#dc2626',
                 hoverColor: '#DC2626'
             },
             info: {
@@ -46,9 +46,23 @@ export default defineComponent({
             }
         });
         const cssVars = computed<CSS.Properties>(() => {
+            const compositeInputColor: TextLinkColorSet = {
+                color: color.value || typeMap[type.value!].color
+            };
+            const {
+                default: defaultColorSet,
+                hover: hoverColorSet,
+                active: activeColorSet,
+                disabled: disabledColorSet
+            } = useColorFactory<TextLinkColorSet>(compositeInputColor, {
+                hover: [0, 0, 0, 0.12]
+            });
+
             return {
-                '--text-link-default-color': textColor,
-                '--text-link-hover-color': textHoverColor
+                '--text-link-default-color': defaultColorSet.color,
+                '--text-link-hover-color': hoverColorSet.color,
+                '--text-link-active-color': activeColorSet.color,
+                '--text-link-disabled-color': disabledColorSet.color
             };
         });
 

@@ -17,7 +17,7 @@ export default defineComponent({
 
         return () => {
             const spaceItems = flattenWithOptions({ slots });
-            console.log(spaceItems);
+
             return createVNode(
                 'div',
                 { class: 'mc-space', style: cssVars.value },

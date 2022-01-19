@@ -1,4 +1,4 @@
-import { Key, UIStatus, UIColorAttrs } from './tsutils';
+import { UnionOmit, UIStatus, UIColorAttrs } from './tsutils';
 
 const baseColors: Record<string, string> = {
     black: '#000',
@@ -39,17 +39,7 @@ export type HSLA = [number, number, number, number];
 export type HSVA = [number, number, number, number];
 export type HSL = [number, number, number];
 export type HSV = [number, number, number];
-interface ColorFactoryConfig<E extends string, P extends Key> {
-    color: string;
-    borderColor: string;
-    backgroundColor: string;
 
-    colorSet?: Partial<Record<E, string>>;
-    borderColorSet?: Partial<Record<E, string>>;
-    backgroundColorSet?: Partial<Record<E, string>>;
-
-    attrs?: P | P[];
-}
 /**
  * @param h 360
  * @param s 100
@@ -192,38 +182,31 @@ export function composite(background: string | RGB | RGBA, overlay: string | RGB
     return stringifyRgba(compositeChannel(background[0], a1, overlay[0], a2, alpha), compositeChannel(background[1], a1, overlay[1], a2, alpha), compositeChannel(background[2], a1, overlay[2], a2, alpha), alpha);
 }
 
-export function createHoverColor(rgb: string): string {
-    return composite(rgb, [255, 255, 255, 0.16]);
+export function createHoverColor(rgb: string, mix: number | RGBA = 0.16): string {
+    return composite(rgb, typeof mix === 'number' ? [255, 255, 255, mix] : mix);
 }
 
-export function createActiveColor(rgb: string): string {
-    return composite(rgb, [0, 0, 0, 0.12]);
+export function createActiveColor(rgb: string, mix: number | RGBA = 0.12): string {
+    return composite(rgb, typeof mix === 'number' ? [0, 0, 0, mix] : mix);
 }
 
-export function createDisabledColor(rgb: string): string {
-    return composite(rgb, [255, 255, 255, 0.64]);
+export function createDisabledColor(rgb: string, mix: number | RGBA = 0.64): string {
+    return composite(rgb, typeof mix === 'number' ? [255, 255, 255, mix] : mix);
 }
 
-export function useColorFactory<S extends UIColorAttrs>(colorFactoryConfig: ColorFactoryConfig<UIStatus, keyof S>): Record<UIStatus, S> {
-    const { color, borderColor, backgroundColor, colorSet, borderColorSet, backgroundColorSet, attrs } = colorFactoryConfig;
-    const { default: defaultColor = color, hover: hoverColor = createHoverColor(color), active: activeColor = createActiveColor(color), disabled: disabledColor = createDisabledColor(color) } = colorSet ?? {};
-    const {
-        default: defaultBorderColor = borderColor,
-        hover: hoverBorderColor = createHoverColor(borderColor),
-        active: activeBorderColor = createActiveColor(borderColor),
-        disabled: disabledBorderColor = createDisabledColor(borderColor)
-    } = borderColorSet ?? {};
-    const {
-        default: defaultBackgroundColor = backgroundColor,
-        hover: hoverBackgroundColor = createHoverColor(backgroundColor),
-        active: activeBackgroundColor = createActiveColor(backgroundColor),
-        disabled: disabledBackgroundColor = createDisabledColor(backgroundColor)
-    } = backgroundColorSet ?? {};
-
-    return {
-        default: { color: defaultColor, borderColor: defaultBorderColor, backgroundColor: defaultBackgroundColor } as S,
-        hover: { color: hoverColor, borderColor: hoverBorderColor, backgroundColor: hoverBackgroundColor } as S,
-        active: { color: activeColor, borderColor: activeBorderColor, backgroundColor: activeBackgroundColor } as S,
-        disabled: { color: disabledColor, borderColor: disabledBorderColor, backgroundColor: disabledBackgroundColor } as S
+export function useColorFactory<S extends Partial<UIColorAttrs>>(inputColor: S, customMix?: Partial<Record<UnionOmit<UIStatus, 'default'>, number | RGBA>>): Record<UIStatus, S> {
+    const colorSet: Record<UIStatus, Partial<UIColorAttrs>> = {
+        default: {},
+        hover: {},
+        active: {},
+        disabled: {}
     };
+    Object.keys(inputColor).forEach(attr => {
+        colorSet.default[attr] = inputColor[attr];
+        colorSet.hover[attr] = createHoverColor(inputColor[attr]!, customMix?.hover);
+        colorSet.active[attr] = createActiveColor(inputColor[attr]!, customMix?.active);
+        colorSet.disabled[attr] = createDisabledColor(inputColor[attr]!, customMix?.disabled);
+    });
+
+    return colorSet as Record<UIStatus, S>;
 }

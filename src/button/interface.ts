@@ -26,7 +26,6 @@ declare module 'csstype' {
     }
 }
 
-export interface ButtonColorSet extends UIColorAttrs {}
 export interface ButtonSizeSet {
     height: string;
     padding: string;
@@ -34,9 +33,9 @@ export interface ButtonSizeSet {
     iconSize: string;
     iconMargin: string;
 }
-
 export type ButtonType = 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'custom';
 export type ButtonRender = 'normal' | 'text' | 'link';
+export type ButtonColorSet = Pick<UIColorAttrs, 'color' | 'borderColor' | 'backgroundColor'>;
 export type ButtonSizeMap = Record<UISize, ButtonSizeSet>;
 
 export interface ButtonProps {

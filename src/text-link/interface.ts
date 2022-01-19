@@ -6,6 +6,8 @@ declare module 'csstype' {
     interface Properties {
         '--text-link-default-color'?: string;
         '--text-link-hover-color'?: string;
+        '--text-link-active-color'?: string;
+        '--text-link-disabled-color'?: string;
     }
 }
 

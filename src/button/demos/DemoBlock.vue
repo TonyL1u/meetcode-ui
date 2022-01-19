@@ -1,9 +1,7 @@
 <template>
-    <McSpace vertical :item-style="{ width: '100%' }">
-        <McButton dashed block>我是</McButton>
-        <McButton type="primary" render="text" block>块级</McButton>
-        <McButton type="success" render="link" block>按钮</McButton>
-    </McSpace>
+    <McButton class="mc-mb-3" dashed block>我是</McButton>
+    <McButton class="mc-mb-3" type="primary" render="text" block>块级</McButton>
+    <McButton type="success" render="link" block>按钮</McButton>
 </template>
 
 <script lang="ts" setup>

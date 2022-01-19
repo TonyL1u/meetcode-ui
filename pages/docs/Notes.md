@@ -143,3 +143,7 @@
 2022-01-16
 
 -   Button 自定义颜色的时候，怎么自动生成 hover 和 active 的颜色
+
+2022-01-19
+
+-   useColorFactory 的类型逻辑有问题

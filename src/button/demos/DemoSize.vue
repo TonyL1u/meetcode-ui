@@ -23,7 +23,7 @@
                     <IconBag />
                 </McIcon>
             </template>
-            large
+            medium
         </McButton>
         <McButton size="large" type="danger">
             <template #icon>
@@ -31,7 +31,7 @@
                     <IconBag />
                 </McIcon>
             </template>
-            medium
+            large
         </McButton>
     </McSpace>
 </template>
