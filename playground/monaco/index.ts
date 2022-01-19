@@ -57,15 +57,6 @@ const setup = createSingletonPromise(async () => {
         'ts:meetcode-ui'
     );
 
-    monaco.languages.typescript.javascriptDefaults.addExtraLib(
-        `
-        declare module 'naive-ui' { 
-            export { NButton }
-        }
-      `,
-        'ts:naive-ui'
-    );
-
     watch(
         () => orchestrator.packages,
         () => {

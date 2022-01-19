@@ -1,23 +1,22 @@
 <template>
     <McSpace>
-        <NButton type="primary" ghost @click="customIcon">图标</NButton>
-        <NButton type="primary" ghost @click="customStyle">样式</NButton>
-        <NButton type="primary" ghost @click="customMessage">内容</NButton>
-        <NButton type="primary" ghost @click="customMessageWithHTML">HTML</NButton>
-        <NButton type="primary" ghost @click="customAction">操作</NButton>
+        <McButton type="success" ghost @click="customIcon">图标</McButton>
+        <McButton type="success" ghost @click="customStyle">样式</McButton>
+        <McButton type="success" ghost @click="customMessage">内容</McButton>
+        <McButton type="success" ghost @click="customMessageWithHTML">HTML</McButton>
+        <McButton type="success" ghost @click="customAction">操作</McButton>
     </McSpace>
 </template>
 
 <script lang="ts" setup>
 import { createVNode } from 'vue';
-import { NSpace, NButton, NIcon } from 'naive-ui';
-import { McMessage, McLoading, McTextLink, McSpace } from 'meetcode-ui';
+import { McMessage, McLoading, McTextLink, McSpace, McButton, McIcon } from 'meetcode-ui';
 import { HourglassOutline as IconHourglass } from '@vicons/ionicons5';
 
 const customIcon = () => {
     McMessage.warning({
         message: '加载中...',
-        icon: () => createVNode(NIcon, { style: 'margin-right: 6px', color: '#f59e0b' }, { default: () => createVNode(IconHourglass) })
+        icon: () => createVNode(McIcon, { style: 'margin-right: 6px', color: '#f59e0b' }, { default: () => createVNode(IconHourglass) })
     });
 };
 

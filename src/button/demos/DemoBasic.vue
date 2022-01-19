@@ -1,5 +1,4 @@
 <template>
-    <!-- <div style="border: 1px solid #000"> -->
     <McSpace>
         <McButton @click="handleClick">Default</McButton>
         <McButton type="primary" @click="handleClick">Primary</McButton>
@@ -7,19 +6,11 @@
         <McButton type="warning" @click="handleClick">Warning</McButton>
         <McButton type="danger" @click="handleClick">Danger</McButton>
     </McSpace>
-
-    <!-- <NButton type="primary" dashed ghost>按钮</NButton>
-    <NButton disabled>按钮</NButton> -->
-
-    <!-- <div class="test-div mc-h-10 mc-w-10"></div> -->
-    <!-- <button class="btn btn-pink btn-bubbles">Click Me</button> -->
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { McButton, McSpace, McIcon } from 'meetcode-ui';
-import { Add as IconAdd } from '@vicons/ionicons5';
-import { NButton } from 'naive-ui';
+import { McButton, McSpace, McIcon, ButtonType } from 'meetcode-ui';
 
 const count = ref(0);
 

@@ -1,13 +1,12 @@
 <template>
     <McPopselect v-model:value="value" :options="options" trigger="click" multiple>
-        <NButton type="primary" ghost>{{ value }}</NButton>
+        <McButton type="success" ghost>{{ value }}</McButton>
     </McPopselect>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { NButton } from 'naive-ui';
-import { McPopselect } from 'meetcode-ui';
+import { McPopselect, McButton } from 'meetcode-ui';
 
 const value = ref(['test2']);
 const options = ref([

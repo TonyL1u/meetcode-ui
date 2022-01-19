@@ -1,6 +1,7 @@
 import { ref, computed, renderSlot, createVNode, toRefs, VNode, VNodeChild, defineComponent } from 'vue';
 import { messageProps } from './interface';
 import { NIcon } from 'naive-ui';
+import { McIcon } from '../icon';
 import { AlertCircle as IconAlert, CheckmarkCircle as IconSuccess, Warning as IconWarning, InformationCircle as IconInfo, CloseCircleSharp as IconError, CloseOutline as IconClose } from '@vicons/ionicons5';
 
 export default defineComponent({
@@ -35,7 +36,7 @@ export default defineComponent({
             return icon?.value
                 ? icon?.value()
                 : createVNode(
-                      NIcon,
+                      McIcon,
                       {
                           size: 18,
                           class: 'mc-message__icon'

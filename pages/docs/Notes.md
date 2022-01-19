@@ -147,3 +147,4 @@
 2022-01-19
 
 -   useColorFactory 的类型逻辑有问题
+-   Icon 在类上添加的颜色会被 inherit 覆盖

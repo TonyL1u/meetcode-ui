@@ -1,13 +1,12 @@
 <template>
     <McSpace>
-        <NButton type="primary" ghost @click="open1">10s 后关闭</NButton>
-        <NButton type="primary" ghost @click="open2">不会关闭</NButton>
+        <McButton type="success" ghost @click="open1">10s 后关闭</McButton>
+        <McButton type="success" ghost @click="open2">不会关闭</McButton>
     </McSpace>
 </template>
 
 <script lang="ts" setup>
-import { NSpace, NButton } from 'naive-ui';
-import { McMessage, McSpace } from 'meetcode-ui';
+import { McMessage, McSpace, McButton } from 'meetcode-ui';
 
 const open1 = () => {
     let countDown = 10;

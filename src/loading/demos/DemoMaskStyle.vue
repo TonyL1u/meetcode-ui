@@ -4,13 +4,12 @@
         <template #description>加载中...</template>
     </McLoading>
 
-    <NButton class="mc-mt-5" type="primary" @click="show = !show" ghost>点我加载</NButton>
+    <McButton class="mc-mt-5" type="success" @click="show = !show" ghost>点我加载</McButton>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { NButton } from 'naive-ui';
-import { McLoading } from 'meetcode-ui';
+import { McLoading, McButton } from 'meetcode-ui';
 
 const show = ref(false);
 </script>

@@ -4,14 +4,13 @@
     </McCheckboxGroup>
 
     <McPopselect v-model:value="groupValue" :options="options" multiple>
-        <NButton class="mc-mt-3" type="primary" ghost>已选择：{{ groupValue }}</NButton>
+        <McButton class="mc-mt-3" type="success" ghost>已选择：{{ groupValue }}</McButton>
     </McPopselect>
 </template>
 
 <script lang="ts" setup>
 import { ref, createVNode, reactive } from 'vue';
-import { NButton } from 'naive-ui';
-import { McCheckboxGroup, McCheckbox, McTooltip, McPopselect } from 'meetcode-ui';
+import { McCheckboxGroup, McCheckbox, McButton, McTooltip, McPopselect } from 'meetcode-ui';
 
 const groupValue = ref(['apple']);
 const options = reactive([

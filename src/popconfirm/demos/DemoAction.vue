@@ -1,16 +1,15 @@
 <template>
     <McPopconfirm :content="`点击了 ${count} 次`">
-        <NButton type="primary" ghost>点击</NButton>
+        <McButton type="success" ghost>点击</McButton>
         <template #action>
-            <NButton size="small" type="info" @click="count++">确定</NButton>
+            <McButton size="small" type="primary" @click="count++">确定</McButton>
         </template>
     </McPopconfirm>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { NButton } from 'naive-ui';
-import { McPopconfirm } from 'meetcode-ui';
+import { McPopconfirm, McButton } from 'meetcode-ui';
 
 const count = ref(0);
 </script>

@@ -1,10 +1,10 @@
 import { defineComponent, ref, toRefs, renderSlot, createVNode, Fragment, mergeProps, PropType } from 'vue';
-import { NIcon } from 'naive-ui';
 import { getSlotFirstVNode, propsMergeSlots } from '../_utils_';
 import { omit } from 'lodash-es';
 import { AlertCircle as IconAlert } from '@vicons/ionicons5';
 import { McPopover, PopoverExposeInstance, popoverProps, popoverEmits, PopoverTrigger } from '../popover';
 import { McButton } from '../button';
+import { McIcon } from '../icon';
 import { PopconfirmMergedProps, popconfirmProps, popconfirmEmits } from './interface';
 
 const defaultPropsOverride = {
@@ -76,7 +76,7 @@ export default defineComponent({
         };
 
         return () => {
-            const iconVNode = hideIcon.value ? null : getSlotFirstVNode(slots.icon) || createVNode(NIcon, { size: 22, color: '#f59e0b', style: { 'margin-right': '8px' } }, { default: () => createVNode(IconAlert) });
+            const iconVNode = hideIcon.value ? null : getSlotFirstVNode(slots.icon) || createVNode(McIcon, { size: 22, color: '#f59e0b', style: { 'margin-right': '8px' } }, { default: () => createVNode(IconAlert) });
             const mergedProps = mergeProps(omit(props, Object.keys(popconfirmProps)), {
                 ref: popoverRef,
                 class: 'mc-popconfirm'

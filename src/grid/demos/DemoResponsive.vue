@@ -1,5 +1,5 @@
 <template>
-    <NButton class="mc-mb-3" type="primary" ghost @click="items++">点击添加</NButton>
+    <McButton class="mc-mb-3" type="success" ghost @click="items++">点击添加</McButton>
     <McGrid auto-columns="100px" :gap="12">
         <McGridItem v-for="item in items" class="demo-grid-item" />
     </McGrid>
@@ -7,8 +7,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { NButton } from 'naive-ui';
-import { McGrid, McGridItem } from 'meetcode-ui';
+import { McGrid, McGridItem, McButton } from 'meetcode-ui';
 
 const items = ref(4);
 </script>

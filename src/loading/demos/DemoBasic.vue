@@ -1,12 +1,11 @@
 <template>
-    <NSpace>
+    <McSpace>
         <McLoading size="small" />
         <McLoading size="medium" />
         <McLoading size="large" />
-    </NSpace>
+    </McSpace>
 </template>
 
 <script lang="ts" setup>
-import { NSpace } from 'naive-ui';
-import { McLoading } from 'meetcode-ui';
+import { McLoading, McSpace } from 'meetcode-ui';
 </script>

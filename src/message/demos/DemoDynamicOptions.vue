@@ -1,16 +1,15 @@
 <template>
     <McSpace>
-        <NButton type="primary" ghost @click="open">打开一个信息</NButton>
+        <McButton type="success" ghost @click="open">打开一个信息</McButton>
         <McPopselect v-model:value="type" :options="types" :auto-close="false" @update:value="handleUpdateValue">
-            <NButton type="primary" ghost>修改类型</NButton>
+            <McButton type="success" ghost>修改类型</McButton>
         </McPopselect>
     </McSpace>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue';
-import { NSpace, NButton } from 'naive-ui';
-import { McSpace, McMessage, MessageInstance, MessageType, MessageOptions, McPopselect, PopselectValue, PopselectOption } from 'meetcode-ui';
+import { reactive, ref } from 'vue';
+import { McSpace, McMessage, McButton, MessageInstance, MessageType, MessageOptions, McPopselect, PopselectValue, PopselectOption } from 'meetcode-ui';
 
 const type = ref<MessageType>('text');
 const types = ref<PopselectOption[]>([

@@ -1,6 +1,6 @@
 <template>
     <McPopselect v-model:value="value" :options="options" trigger="click">
-        <NButton type="primary" ghost>当前选择的tab：{{ value }}</NButton>
+        <McButton type="success" ghost>当前选择的tab：{{ value }}</McButton>
     </McPopselect>
 
     <McTabs :default-tab="value" center>
@@ -20,8 +20,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { NButton } from 'naive-ui';
-import { McTabs, McTabPane, McPopselect } from 'meetcode-ui';
+import { McTabs, McTabPane, McPopselect, McButton } from 'meetcode-ui';
 
 const value = ref('tab2');
 const options = ref([

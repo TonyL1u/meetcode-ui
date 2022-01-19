@@ -162,10 +162,6 @@ const initialPackages = [
         url: import.meta.env.PROD ? '/assets/meetcode-ui.esm.js' : '/lib/meetcode-ui.esm.js'
     },
     {
-        name: 'naive-ui',
-        url: '/playground/source/naive-ui-dev-proxy'
-    },
-    {
         name: '@vicons/ionicons5',
         url: '/playground/source/icon-dev-proxy'
     }
