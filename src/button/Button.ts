@@ -1,5 +1,5 @@
 import { defineComponent, createVNode, renderSlot, ref, computed, toRefs } from 'vue';
-import { ButtonColorSet, ButtonSizeSet, ButtonSizeMap, ButtonType, buttonProps } from './interface';
+import { ButtonColorSet, ButtonSizeSet, ButtonSizeMap, ButtonType, buttonProps, buttonIKey } from './interface';
 import { or, and, not } from '@vueuse/core';
 import { McIcon } from '../icon';
 import { useColorFactory } from '../_utils_';
@@ -69,9 +69,10 @@ const SIZE_MAP: ButtonSizeMap = {
 };
 export default defineComponent({
     name: 'Button',
+    iKey: buttonIKey,
     props: buttonProps,
     setup(props, { slots }) {
-        const { type, size, disabled, ghost, dashed, render, round, circle, block, color, textColor, borderColor, colorSet, textColorSet, borderColorSet } = toRefs(props);
+        const { type, size, disabled, ghost, dashed, render, round, circle, block, loading, color, textColor, borderColor, colorSet, textColorSet, borderColorSet } = toRefs(props);
 
         const isDefault = computed(() => type.value === 'default');
         const isCustom = computed(() => type.value === 'custom');
@@ -152,7 +153,7 @@ export default defineComponent({
         });
 
         const iconVNode = computed(() => {
-            return slots.icon ? createVNode('span', { class: 'mc-button__icon' }, [renderSlot(slots, 'icon')]) : null;
+            return loading.value ? createVNode('span', { class: 'mc-button__icon-loading' }) : slots.icon ? createVNode('span', { class: 'mc-button__icon' }, [renderSlot(slots, 'icon')]) : null;
         });
 
         const contentVNode = computed(() => {

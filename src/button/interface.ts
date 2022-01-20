@@ -1,4 +1,4 @@
-import { PropType } from 'vue';
+import { Prop, PropType } from 'vue';
 import { UIStatus, UISize, UIColorAttrs } from '../_utils_';
 import * as CSS from 'csstype';
 
@@ -33,6 +33,7 @@ export interface ButtonSizeSet {
     iconSize: string;
     iconMargin: string;
 }
+export const buttonIKey = Symbol('button');
 export type ButtonType = 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'custom';
 export type ButtonRender = 'normal' | 'text' | 'link';
 export type ButtonColorSet = Pick<UIColorAttrs, 'color' | 'borderColor' | 'backgroundColor'>;
@@ -48,12 +49,17 @@ export interface ButtonProps {
     round?: boolean;
     circle?: boolean;
     block?: boolean;
+    loading?: boolean;
     color?: string;
     textColor?: string;
     borderColor?: string;
     colorSet?: Partial<Record<UIStatus, string>>;
     textColorSet: Partial<Record<UIStatus, string>>;
     borderColorSet: Partial<Record<UIStatus, string>>;
+}
+
+export interface ButtonGroupProps {
+    size?: UISize;
 }
 
 export const buttonProps = {
@@ -89,6 +95,10 @@ export const buttonProps = {
         type: Boolean as PropType<ButtonProps['circle']>,
         default: false
     },
+    loading: {
+        type: Boolean as PropType<ButtonProps['loading']>,
+        default: false
+    },
     block: {
         type: Boolean as PropType<ButtonProps['block']>,
         default: false
@@ -116,5 +126,12 @@ export const buttonProps = {
     borderColorSet: {
         type: Object as PropType<ButtonProps['borderColorSet']>,
         default: undefined
+    }
+};
+
+export const buttonGroupProps = {
+    size: {
+        type: String as PropType<ButtonGroupProps['size']>,
+        default: 'medium'
     }
 };

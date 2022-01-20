@@ -5,11 +5,13 @@ import Dashed from '@/button/demos/DemoDashed.vue'
 import Disabled from '@/button/demos/DemoDisabled.vue'
 import Render from '@/button/demos/DemoRender.vue'
 import Icon from '@/button/demos/DemoIcon.vue'
+import Loading from '@/button/demos/DemoLoading.vue'
 import Size from '@/button/demos/DemoSize.vue'
 import Shape from '@/button/demos/DemoShape.vue'
 import Block from '@/button/demos/DemoBlock.vue'
 import Color from '@/button/demos/DemoColor.vue'
 import ColorSet from '@/button/demos/DemoColorSet.vue'
+import ButtonGroup from '@/button/demos/DemoButtonGroup.vue'
 </script>
 
 # Button 按钮
@@ -62,6 +64,16 @@ import ColorSet from '@/button/demos/DemoColorSet.vue'
 
 :::
 
+::: demo codePreview=Loading
+
+### 加载中
+
+设置 `loading = true` 为按钮添加加载状态。
+
+<Loading />
+
+:::
+
 ::: demo codePreview=Size
 
 ### 尺寸
@@ -98,8 +110,16 @@ import ColorSet from '@/button/demos/DemoColorSet.vue'
 
 <Color />
 
- `color-set` 属性可以修改按钮在不同状态下的颜色。
+`color-set` 属性可以修改按钮在不同状态下的颜色。
 
  <ColorSet />
+
+:::
+
+::: demo codePreview=ButtonGroup
+
+### 按钮组
+
+<ButtonGroup />
 
 :::

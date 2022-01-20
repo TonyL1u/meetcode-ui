@@ -148,3 +148,7 @@
 
 -   useColorFactory 的类型逻辑有问题
 -   Icon 在类上添加的颜色会被 inherit 覆盖
+
+2022-01-20
+
+-   在 Button 的宽度发生变化时，怎么给它添加一个动画？考虑抽离 transition 组件
