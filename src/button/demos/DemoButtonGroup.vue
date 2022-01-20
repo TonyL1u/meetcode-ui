@@ -1,16 +1,17 @@
 <template>
-    <McButtonGroup>
-        <McButton>111</McButton>
-        <McButton>111</McButton>
+    <McButtonGroup :size="size">
+        <McButton @click="handleClick('mini')">Mini</McButton>
+        <McButton @click="handleClick('small')">Small</McButton>
+        <McButton @click="handleClick('medium')">Medium</McButton>
+        <McButton @click="handleClick('large')">Large</McButton>
     </McButtonGroup>
-
-    <n-button-group>
-        <n-button type="success"> 活着 </n-button>
-        <n-button type="success"> 其实 </n-button>
-        <n-button type="success"> 很好 </n-button>
-    </n-button-group>
 </template>
 <script lang="ts" setup>
-import { McButtonGroup, McButton } from 'meetcode-ui';
-import { NButton, NButtonGroup } from 'naive-ui';
+import { ref } from 'vue';
+import { McButtonGroup, McButton, UISize } from 'meetcode-ui';
+
+const size = ref<UISize>('medium');
+const handleClick = (value: UISize) => {
+    size.value = value;
+};
 </script>

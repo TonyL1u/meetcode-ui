@@ -6,7 +6,7 @@ export default defineComponent({
     name: 'ButtonGroup',
     props: buttonGroupProps,
     setup(props, { slots }) {
-        const { size } = toRefs(props);
+        const { type, size, disabled, ghost, dashed, render } = toRefs(props);
         return () => {
             const buttons = flattenWithOptions<ButtonProps>({ slots, identificationKey: buttonIKey });
 
@@ -15,7 +15,12 @@ export default defineComponent({
                 { class: 'mc-button-group', role: 'group' },
                 buttons.map(button => {
                     return createVNode(button, {
-                        size: size.value
+                        type: type.value,
+                        size: size.value,
+                        disabled: disabled.value,
+                        ghost: ghost.value,
+                        dashed: dashed.value,
+                        render: render.value
                     });
                 })
             );

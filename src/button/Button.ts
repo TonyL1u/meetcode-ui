@@ -1,7 +1,6 @@
 import { defineComponent, createVNode, renderSlot, ref, computed, toRefs } from 'vue';
 import { ButtonColorSet, ButtonSizeSet, ButtonSizeMap, ButtonType, buttonProps, buttonIKey } from './interface';
 import { or, and, not } from '@vueuse/core';
-import { McIcon } from '../icon';
 import { useColorFactory } from '../_utils_';
 import * as CSS from 'csstype';
 
@@ -101,7 +100,7 @@ export default defineComponent({
             const buttonSizeSet: ButtonSizeSet = SIZE_MAP[size.value!];
 
             const sizeVars: CSS.Properties = {
-                '--button-width': circle.value ? buttonSizeSet.height : 'initial',
+                '--button-width': circle.value ? buttonSizeSet.height : block.value ? '100%' : 'initial',
                 '--button-height': buttonSizeSet.height,
                 '--button-padding': buttonSizeSet.padding,
                 '--button-font-size': buttonSizeSet.fontSize,

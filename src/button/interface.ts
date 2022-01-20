@@ -59,7 +59,12 @@ export interface ButtonProps {
 }
 
 export interface ButtonGroupProps {
+    type?: ButtonType;
     size?: UISize;
+    disabled?: boolean;
+    ghost?: boolean;
+    dashed?: boolean;
+    render?: ButtonRender;
 }
 
 export const buttonProps = {
@@ -130,8 +135,28 @@ export const buttonProps = {
 };
 
 export const buttonGroupProps = {
+    type: {
+        type: String as PropType<ButtonGroupProps['type']>,
+        default: 'default'
+    },
     size: {
         type: String as PropType<ButtonGroupProps['size']>,
         default: 'medium'
+    },
+    disabled: {
+        type: Boolean as PropType<ButtonGroupProps['disabled']>,
+        default: false
+    },
+    ghost: {
+        type: Boolean as PropType<ButtonGroupProps['ghost']>,
+        default: false
+    },
+    dashed: {
+        type: Boolean as PropType<ButtonGroupProps['dashed']>,
+        default: false
+    },
+    render: {
+        type: String as PropType<ButtonGroupProps['render']>,
+        default: 'normal'
     }
 };

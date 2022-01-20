@@ -1,22 +1,3 @@
-.mc-button--dashed {
-    &::before,
-    &::after {
-        border-style: dashed;
-    }
-}
-
-.mc-button--block {
-    width: 100%;
-}
-
-.mc-button--text {
-    &.mc-button--disabled,
-    &:hover,
-    &:focus {
-        background: rgba(0, 0, 0, 0.02);
-    }
-}
-
 .mc-button-group {
     .mc-button--default::after {
         border-color: transparent;
@@ -160,6 +141,21 @@
         .mc-button__icon-loading {
             border-left-color: var(--button-disabled-color);
         }
+    }
+}
+
+.mc-button--dashed {
+    &::before,
+    &::after {
+        border-style: dashed;
+    }
+}
+
+.mc-button--text {
+    &.mc-button--disabled,
+    &:hover,
+    &:focus {
+        background: rgba(0, 0, 0, 0.02);
     }
 }
 
