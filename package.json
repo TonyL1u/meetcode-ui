@@ -46,7 +46,7 @@
         "windicss": "^3.2.1"
     },
     "peerDependencies": {
-        "vue": "^3.2.x"
+        "vue": "^3.0.0"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.16.4",
