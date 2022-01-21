@@ -20,7 +20,7 @@ export default defineComponent({
 
             return createVNode(
                 'div',
-                { class: 'mc-space', style: cssVars.value },
+                { class: ['mc-space', { 'mc-space--vertical': vertical.value }], style: cssVars.value },
                 spaceItems.map(item => {
                     return createVNode('div', { class: 'mc-space-item', style: itemStyle.value }, [item]);
                 })

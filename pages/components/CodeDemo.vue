@@ -26,22 +26,22 @@
                         </NIcon>
                     </NButton>
                 </McTooltip>
-                <McTooltip content="在线运行">
+                <!-- <McTooltip content="在线运行">
                     <NButton text class="toolbox-btn" @click="handleShowModal">
                         <NIcon>
                             <IconEdit />
                         </NIcon>
                     </NButton>
-                </McTooltip>
+                </McTooltip> -->
             </NSpace>
         </div>
     </div>
 
-    <NModal v-model:show="showModal">
+    <!-- <NModal v-model:show="showModal">
         <NCard style="width: 75%; height: 75vh; min-width: 1280px; min-height: 768px" :bordered="false" :content-style="{ height: '100%' }">
             <Playground />
         </NCard>
-    </NModal>
+    </NModal> -->
 </template>
 
 <script lang="ts" setup>
@@ -51,11 +51,10 @@ import { NButton, NCard, NIcon, NSpace, NModal, useNotification, NTabs, NTabPane
 import { McTooltip, McTabs, McTabPane } from 'meetcode-ui';
 import { Code as IconCode, CopyOutline as IconCopy, CubeOutline as IconEdit } from '@vicons/ionicons5';
 import { useClipboard } from '@vueuse/core';
-import Playground from '@playground/Playground.vue';
-import { loadInitialState } from '@playground/orchestrator';
+// import Playground from '@playground/Playground.vue';
+// import { loadInitialState } from '@playground/orchestrator';
 
 const props = defineProps<{ codeSources: string }>();
-
 const codes = ref<Array<any>>(JSON.parse(props.codeSources) || []);
 const codePreviewVisible = ref(false);
 const showModal = ref(false);
@@ -66,12 +65,12 @@ const { copy } = useClipboard();
 const showToolbox = computed(() => {
     return codes.value.length > 0;
 });
-const handleShowModal = () => {
-    setTimeout(() => {
-        loadInitialState(codes.value[tabIndex.value].compressedSource);
-        showModal.value = true;
-    }, 0);
-};
+// const handleShowModal = () => {
+//     setTimeout(() => {
+//         loadInitialState(codes.value[tabIndex.value].compressedSource);
+//         showModal.value = true;
+//     }, 0);
+// };
 const highlighted = (content: string) => {
     return hljs.highlight(content, { language: 'html' }).value;
 };

@@ -7,6 +7,7 @@ import vueuseTypes from '@vueuse/core/index.d.ts?raw';
 import vueTypes from '@vue/runtime-core/dist/runtime-core.d.ts?raw';
 import meetcodeuiTypes from '@lib/index.d.ts?raw';
 import naiveuiTypes from 'naive-ui/lib/index.d.ts?raw';
+import iconTypes from '@vicons/ionicons5/index.d.ts?raw';
 
 import { orchestrator } from '../orchestrator';
 
@@ -55,6 +56,13 @@ const setup = createSingletonPromise(async () => {
         }
       `,
         'ts:meetcode-ui'
+    );
+
+    monaco.languages.typescript.javascriptDefaults.addExtraLib(
+        `
+        declare module '@vicons/ionicons5' { ${iconTypes} }
+      `,
+        'ts:vicons'
     );
 
     watch(

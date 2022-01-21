@@ -45,7 +45,7 @@ export type MessageAsyncApi = {
     warning: (maybeOptions?: MaybeMessageApiOptions<'warning'>, options?: MessageApiOptions<'warning'>) => Promise<MessageApiInstance<'warning'>>;
     info: (maybeOptions?: MaybeMessageApiOptions<'info'>, options?: MessageApiOptions<'info'>) => Promise<MessageApiInstance<'info'>>;
     error: (maybeOptions?: MaybeMessageApiOptions<'error'>, options?: MessageApiOptions<'error'>) => Promise<MessageApiInstance<'error'>>;
-    loading: (maybeOptions?: MaybeMessageApiOptions<'error'>, options?: MessageApiOptions<'error'>) => Promise<MessageApiInstance<'loading'>>;
+    loading: (maybeOptions?: MaybeMessageApiOptions<'loading'>, options?: MessageApiOptions<'loading'>) => Promise<MessageApiInstance<'loading'>>;
 };
 
 export interface MessageExposeInstance {

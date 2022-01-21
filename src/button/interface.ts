@@ -34,14 +34,15 @@ export interface ButtonSizeSet {
     iconMargin: string;
 }
 export const buttonIKey = Symbol('button');
+export type ButtonSize = UISize;
 export type ButtonType = 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'custom';
 export type ButtonRender = 'normal' | 'text' | 'link';
 export type ButtonColorSet = Pick<UIColorAttrs, 'color' | 'borderColor' | 'backgroundColor'>;
-export type ButtonSizeMap = Record<UISize, ButtonSizeSet>;
+export type ButtonSizeMap = Record<ButtonSize, ButtonSizeSet>;
 
 export interface ButtonProps {
     type?: ButtonType;
-    size?: UISize;
+    size?: ButtonSize;
     disabled?: boolean;
     ghost?: boolean;
     dashed?: boolean;
@@ -60,11 +61,12 @@ export interface ButtonProps {
 
 export interface ButtonGroupProps {
     type?: ButtonType;
-    size?: UISize;
+    size?: ButtonSize;
     disabled?: boolean;
     ghost?: boolean;
     dashed?: boolean;
     render?: ButtonRender;
+    vertical?: boolean;
 }
 
 export const buttonProps = {
@@ -158,5 +160,9 @@ export const buttonGroupProps = {
     render: {
         type: String as PropType<ButtonGroupProps['render']>,
         default: 'normal'
+    },
+    vertical: {
+        type: Boolean as PropType<ButtonGroupProps['vertical']>,
+        default: false
     }
 };

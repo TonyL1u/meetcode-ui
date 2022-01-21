@@ -6,13 +6,13 @@ export default defineComponent({
     name: 'ButtonGroup',
     props: buttonGroupProps,
     setup(props, { slots }) {
-        const { type, size, disabled, ghost, dashed, render } = toRefs(props);
+        const { type, size, disabled, ghost, dashed, render, vertical } = toRefs(props);
         return () => {
             const buttons = flattenWithOptions<ButtonProps>({ slots, identificationKey: buttonIKey });
 
             return createVNode(
                 'div',
-                { class: 'mc-button-group', role: 'group' },
+                { class: ['mc-button-group', { 'mc-button-group--vertical': vertical.value }], role: 'group' },
                 buttons.map(button => {
                     return createVNode(button, {
                         type: type.value,

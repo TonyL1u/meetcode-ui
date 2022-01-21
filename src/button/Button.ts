@@ -70,9 +70,9 @@ export default defineComponent({
     name: 'Button',
     iKey: buttonIKey,
     props: buttonProps,
-    setup(props, { slots }) {
+    setup(props, { slots, expose }) {
         const { type, size, disabled, ghost, dashed, render, round, circle, block, loading, color, textColor, borderColor, colorSet, textColorSet, borderColorSet } = toRefs(props);
-
+        const buttonElRef = ref<HTMLElement>();
         const isDefault = computed(() => type.value === 'default');
         const isCustom = computed(() => type.value === 'custom');
         const isNotNormal = computed(() => render.value !== 'normal');
@@ -159,10 +159,15 @@ export default defineComponent({
             return slots.default ? createVNode('span', { class: 'mc-button__content' }, [renderSlot(slots, 'default')]) : null;
         });
 
+        expose({
+            el: buttonElRef
+        });
+
         return () =>
             createVNode(
                 'button',
                 {
+                    ref: buttonElRef,
                     class: [
                         'mc-button',
                         `mc-button--${render.value}`,
