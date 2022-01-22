@@ -125,6 +125,10 @@
         background: var(--button-hover-background-color);
 
         &::after {
+            animation: ripple-out 0.6s;
+        }
+
+        &::after {
             border-color: var(--button-hover-border-color);
         }
 
@@ -192,12 +196,12 @@
 
 @keyframes ripple-out {
     from {
-        box-shadow: 0 0 0.5px 0 #10b981;
+        box-shadow: 0 0 0.5px 0 var(--button-active-border-color);
     }
 
     to {
         // don't use exact 5px since chrome will display the animation with glitches
-        box-shadow: 0 0 0.5px 4.5px #10b981;
+        box-shadow: 0 0 0.5px 4.5px var(--button-active-border-color);
         opacity: 0;
     }
 }

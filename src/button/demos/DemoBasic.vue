@@ -21,17 +21,6 @@ const handleClick = () => {
 </script>
 
 <style lang="scss" scoped>
-.test-div {
-    transition: 1s;
-    display: inline-flex;
-    box-sizing: border-box;
-    border: 1px solid #000;
-
-    &:hover {
-        transform: scale(1.4);
-    }
-}
-
 @function sample($list) {
     @return nth($list, random(length($list)));
 }
