@@ -17,6 +17,28 @@ export type UnionOmit<T extends string | number | symbol, K extends T> = keyof O
 
 export type Key = string | number | symbol;
 
+export type TypeOf<T, U> = T extends U ? true : false;
+
+export type IsNumber<T> = TypeOf<T, number>;
+
+export type IsString<T> = TypeOf<T, string>;
+
+export type IsBoolean<T> = TypeOf<T, boolean>;
+
+export type IsArray<T> = TypeOf<T, Array<unknown>>;
+
+export type IsSymbol<T> = TypeOf<T, Symbol>;
+
+export type IsNull<T> = TypeOf<T, null>;
+
+export type IsUndefined<T> = TypeOf<T, undefined>;
+
+export type IsObject<T> = TypeOf<T, object>;
+
+export type CreateArray<L, E, A extends E[] = []> = A['length'] extends L ? A : CreateArray<L, E, [...A, E]>;
+
+export type Add<X extends number, Y extends number> = [...CreateArray<X, 1>, ...CreateArray<Y, 1>]['length'];
+
 /**
  * VNode Util
  */

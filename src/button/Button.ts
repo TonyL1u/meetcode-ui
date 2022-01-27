@@ -1,7 +1,7 @@
 import { defineComponent, createVNode, renderSlot, ref, computed, toRefs } from 'vue';
 import { ButtonColorSet, ButtonSizeSet, ButtonSizeMap, ButtonType, buttonProps, buttonIKey } from './interface';
 import { or, and, not } from '@vueuse/core';
-import { useColorFactory } from '../_utils_';
+import { useColorFactory, setColorAlpha } from '../_utils_';
 import * as CSS from 'csstype';
 
 const BASE_COLOR_MAP: Record<ButtonType, ButtonColorSet> = {
@@ -73,6 +73,7 @@ export default defineComponent({
     setup(props, { slots, expose }) {
         const { type, size, disabled, ghost, dashed, render, round, circle, block, loading, color, textColor, borderColor, colorSet, textColorSet, borderColorSet } = toRefs(props);
         const buttonElRef = ref<HTMLElement>();
+        const isRippling = ref(false);
         const isDefault = computed(() => type.value === 'default');
         const isCustom = computed(() => type.value === 'custom');
         const isNotNormal = computed(() => render.value !== 'normal');
@@ -147,7 +148,8 @@ export default defineComponent({
 
             return {
                 ...colorVars,
-                ...sizeVars
+                ...sizeVars,
+                '--button-ripple-color': setColorAlpha(colorVars['--button-active-border-color']!, 0)
             };
         });
 
@@ -173,10 +175,29 @@ export default defineComponent({
                         `mc-button--${render.value}`,
                         `mc-button--${type.value}`,
                         `mc-button--${size.value}`,
-                        { 'mc-button--block': block.value, 'mc-button--disabled': disabled.value, 'mc-button--ghost': ghost.value, 'mc-button--dashed': dashed.value, 'mc-button--round': round.value, 'mc-button--circle': circle.value }
+                        {
+                            'mc-button--block': block.value,
+                            'mc-button--disabled': disabled.value,
+                            'mc-button--ghost': ghost.value,
+                            'mc-button--dashed': dashed.value,
+                            'mc-button--round': round.value,
+                            'mc-button--circle': circle.value,
+                            'mc-button--rippling': isRippling.value
+                        }
                     ],
                     disabled: disabled.value,
-                    style: cssVars.value
+                    style: cssVars.value,
+                    onMousedown() {
+                        if (isRippling.value) isRippling.value = false;
+                    },
+                    onClick() {
+                        isRippling.value = true;
+                    },
+                    onAnimationend(e: AnimationEvent) {
+                        if (e.animationName === 'mc-button-border-ripple-out') {
+                            isRippling.value = false;
+                        }
+                    }
                 },
                 [iconVNode.value, contentVNode.value]
             );

@@ -1,5 +1,5 @@
 export * from './tsutils';
-export { createHoverColor, createActiveColor, createDisabledColor, useColorFactory } from './color';
+export { createHoverColor, createActiveColor, createDisabledColor, useColorFactory, setColorAlpha } from './color';
 export { createKey } from './createKey';
 export { flatten, flattenWithOptions } from './flatten';
 export { getSlotFirstVNode } from './getSlotFirstVNode';

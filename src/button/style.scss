@@ -103,6 +103,10 @@
         margin-right: var(--button-icon-margin);
     }
 
+    &--rippling::after {
+        animation: mc-button-border-ripple-out 0.5s;
+    }
+
     &::before,
     &::after {
         content: '';
@@ -123,10 +127,6 @@
     &:hover {
         color: var(--button-hover-color);
         background: var(--button-hover-background-color);
-
-        &::after {
-            animation: ripple-out 0.6s;
-        }
 
         &::after {
             border-color: var(--button-hover-border-color);
@@ -194,26 +194,14 @@
     }
 }
 
-@keyframes ripple-out {
+@keyframes mc-button-border-ripple-out {
     from {
         box-shadow: 0 0 0.5px 0 var(--button-active-border-color);
     }
 
     to {
         // don't use exact 5px since chrome will display the animation with glitches
-        box-shadow: 0 0 0.5px 4.5px var(--button-active-border-color);
-        opacity: 0;
-    }
-}
-
-@keyframes bubble-out {
-    from {
-        transform: scale(0);
-    }
-
-    to {
-        opacity: 0;
-        transform: scale(1);
+        box-shadow: 0 0 0.5px 4px var(--button-ripple-color);
     }
 }
 

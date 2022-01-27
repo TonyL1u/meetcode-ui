@@ -23,6 +23,7 @@ declare module 'csstype' {
         '--button-icon-size'?: string;
         '--button-icon-margin'?: string;
         '--button-radius'?: string;
+        '--button-ripple-color'?: string;
     }
 }
 
@@ -35,6 +36,7 @@ export interface ButtonSizeSet {
 }
 export const buttonIKey = Symbol('button');
 export type ButtonSize = UISize;
+export type ButtonStatus = UIStatus;
 export type ButtonType = 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'custom';
 export type ButtonRender = 'normal' | 'text' | 'link';
 export type ButtonColorSet = Pick<UIColorAttrs, 'color' | 'borderColor' | 'backgroundColor'>;
@@ -54,9 +56,9 @@ export interface ButtonProps {
     color?: string;
     textColor?: string;
     borderColor?: string;
-    colorSet?: Partial<Record<UIStatus, string>>;
-    textColorSet: Partial<Record<UIStatus, string>>;
-    borderColorSet: Partial<Record<UIStatus, string>>;
+    colorSet?: Partial<Record<ButtonStatus, string>>;
+    textColorSet: Partial<Record<ButtonStatus, string>>;
+    borderColorSet: Partial<Record<ButtonStatus, string>>;
 }
 
 export interface ButtonGroupProps {

@@ -1,14 +1,13 @@
 <template>
-    <NSpace>
-        <NButton>Default</NButton>
-        <NButton type="primary">Primary</NButton>
-        <NButton type="info">Info</NButton>
-        <NButton type="success">Success</NButton>
-        <NButton type="warning">Warning</NButton>
-        <NButton type="error">Error</NButton>
-    </NSpace>
+    <McSpace>
+        <McButton>Default</McButton>
+        <McButton type="primary">Primary</McButton>
+        <McButton type="success">Success</McButton>
+        <McButton type="warning">Warning</McButton>
+        <McButton type="danger">Danger</McButton>
+    </McSpace>
 </template>
 
 <script lang="ts" setup>
-import { NSpace, NButton } from 'naive-ui';
+import { McButton, McSpace } from 'meetcode-ui';
 </script>

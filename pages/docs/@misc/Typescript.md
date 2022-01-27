@@ -4,17 +4,8 @@
 
 ```ts
 type Pick<T, K extends keyof T> = {
-    [key in K]: T[key]
-}
-
-// Usage
-interface A {
-    a: string;
-    b: number;
-    c: string
-}
-
-interface B = Pick<A, 'a'>
+    [key in K]: T[key];
+};
 ```
 
 # Readonly
