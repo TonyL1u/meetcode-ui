@@ -1,7 +1,8 @@
 import { VNode, RendererNode, RendererElement } from 'vue';
+import * as CSS from 'csstype';
 
 /**
- * Ts Bridge
+ * Ts Utils
  */
 export type Pick<T, K extends keyof T> = {
     [key in K]: T[key];
@@ -40,12 +41,12 @@ export type CreateArray<L, E, A extends E[] = []> = A['length'] extends L ? A : 
 export type Add<X extends number, Y extends number> = [...CreateArray<X, 1>, ...CreateArray<Y, 1>]['length'];
 
 /**
- * VNode Util
+ * VNode Utils
  */
 export type SpecificVNode<T> = VNode<RendererNode, RendererElement, T>;
 
 /**
- * UI
+ * UI Utils
  */
 export type UIStatus = 'default' | 'hover' | 'active' | 'disabled';
 
@@ -56,3 +57,8 @@ export interface UIColorAttrs extends Record<string, string> {
     borderColor: string;
     backgroundColor: string;
 }
+
+/**
+ * Jest Utils
+ */
+export type JestComputedStyle = CSSStyleDeclaration & Array<keyof (CSSStyleDeclaration & CSS.Properties)> & { _values: CSS.Properties; _importants: CSS.Properties };
