@@ -146,15 +146,15 @@ import ButtonGroup from '@/button/demos/DemoButtonGroup.vue'
 
 ### ButtonGroup
 
-|   名称   |                              类型                              |   默认值    |     说明     |
-| :------: | :------------------------------------------------------------: | :---------: | :----------: |
-|   type   | `'default' \| 'primary' \| 'success' \| 'warning' \| 'danger'` | `'default'` |   按钮类型   |
-|   size   |           `'mini' \| 'small' \| 'medium' \| 'large'`           | `'medium'`  |   按钮尺寸   |
-| disabled |                           `boolean`                            |   `false`   | 是否禁用按钮 |
-|  ghost   |                           `boolean`                            |   `false`   |   透明背景   |
-|  dashed  |                           `boolean`                            |   `false`   |   虚线边框   |
-|  render  |                 `'normal' \| 'text' \| 'link'`                 | `'normal'`  |   渲染模式   |
-| vertical |                           `boolean`                            |   `false`   | 纵向排列按钮 |
+|   名称   |                              类型                              |   默认值    |       说明       |
+| :------: | :------------------------------------------------------------: | :---------: | :--------------: |
+|   type   | `'default' \| 'primary' \| 'success' \| 'warning' \| 'danger'` | `'default'` |     按钮类型     |
+|   size   |           `'mini' \| 'small' \| 'medium' \| 'large'`           | `'medium'`  |     按钮尺寸     |
+| disabled |                           `boolean`                            |   `false`   | 是否禁用所有按钮 |
+|  ghost   |                           `boolean`                            |   `false`   |     透明背景     |
+|  dashed  |                           `boolean`                            |   `false`   |     虚线边框     |
+|  render  |                 `'normal' \| 'text' \| 'link'`                 | `'normal'`  |     渲染模式     |
+| vertical |                           `boolean`                            |   `false`   |     纵向排列     |
 
 ## Slot
 

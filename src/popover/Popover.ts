@@ -76,7 +76,7 @@ export default defineComponent({
                 showRef.value = true;
                 emitThrottled.value ? throttleCallShow() : callShow();
                 emitThrottled.value ? throttleCallUpdateShow() : callUpdateShow();
-                trigger.value === 'click' && window.addEventListener('click', handleClickInside);
+                trigger.value === 'click' && window.addEventListener('click', handleClickOutside);
             }, showDelay.value);
         };
         const handleContentHide = () => {
@@ -86,10 +86,10 @@ export default defineComponent({
                 showRef.value = false;
                 emitThrottled.value ? throttleCallHide() : callHide();
                 emitThrottled.value ? throttleCallUpdateShow() : callUpdateShow();
-                trigger.value === 'click' && window.removeEventListener('click', handleClickInside);
+                trigger.value === 'click' && window.removeEventListener('click', handleClickOutside);
             }, hideDelay.value);
         };
-        const handleClickInside = (e: MouseEvent) => {
+        const handleClickOutside = (e: MouseEvent) => {
             const isClickContent = contentVNode.value?.el?.contains(e.target);
             const isClickTrigger = triggerVNode.value?.el?.contains(e.target);
             if (!isClickContent && !isClickTrigger) {

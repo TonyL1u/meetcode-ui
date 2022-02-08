@@ -1,22 +1,22 @@
 .mc-grid {
     display: grid;
 
-    grid-template-columns: var(--columns-template);
-    grid-template-rows: var(--rows-template);
+    grid-template-columns: var(--grid-columns-template);
+    grid-template-rows: var(--grid-rows-template);
     gap: var(--grid-gap);
 }
 
 .mc-grid-item {
     display: flex;
 
-    grid-column-start: var(--column-start);
-    grid-row-start: var(--row-start);
-    grid-column-end: var(--column-end);
-    grid-row-end: var(--row-end);
+    grid-column-start: var(--grid-item-column-start);
+    grid-row-start: var(--grid-item-row-start);
+    grid-column-end: var(--grid-item-column-end);
+    grid-row-end: var(--grid-item-row-end);
 
-    justify-self: var(--item-justify);
-    align-self: var(--item-align);
+    justify-content: var(--grid-justify);
+    align-items: var(--grid-align);
 
-    justify-content: var(--justify-content);
-    align-items: var(--align-items);
+    justify-self: var(--grid-item-justify);
+    align-self: var(--grid-item-align);
 }
