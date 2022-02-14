@@ -29,16 +29,15 @@ export function flatten<T = Record<string, unknown>>(vNodes?: Array<SpecificVNod
     return result;
 }
 
-export function flattenWithOptions<T = Record<string, unknown>>(options: FlattenOptions, result: Array<SpecificVNode<T>> = []) {
-    const { slots, name, identificationKey, mode } = options;
+export function flattenWithOptions<T = Record<string, unknown>>(options: FlattenOptions, mode = false, result: Array<SpecificVNode<T>> = []) {
+    const { slots, name, key } = options;
     if (!slots?.[name || 'default']) return result;
 
-    return flatten<T>(slots[name || 'default']?.() as Array<SpecificVNode<T>>, identificationKey, mode, result);
+    return flatten<T>(slots[name || 'default']?.() as Array<SpecificVNode<T>>, key, mode, result);
 }
 
 export interface FlattenOptions {
     slots?: Slots;
     name?: string;
-    identificationKey?: Symbol | Symbol[];
-    mode?: boolean;
+    key?: Symbol | Symbol[];
 }

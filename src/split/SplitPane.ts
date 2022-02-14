@@ -16,12 +16,11 @@ export default defineComponent({
 
             let calSize: number = 0;
             if (key === prevPaneKey) {
-                calSize = (dragSize * 35) / parentWidth.value;
+                calSize = (dragSize * 5) / parentWidth.value;
             } else if (key === nextPaneKey) {
-                calSize = (-dragSize * 35) / parentWidth.value;
+                calSize = (-dragSize * 5) / parentWidth.value;
             }
-            console.log(dragSize);
-            console.log(calSize);
+
             widthPercentage.value = (+(widthPercentage.value || 0) + calSize).toString();
         };
 

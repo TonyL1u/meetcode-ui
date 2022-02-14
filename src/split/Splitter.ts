@@ -27,6 +27,7 @@ export default defineComponent({
 
             const move = (moveEvent: MouseEvent) => {
                 const { clientX: curX, clientY: curY } = moveEvent;
+                console.log(curX - startX);
                 BusResize?.emit({
                     dragSize: curX - startX,
                     prevPaneKey,
@@ -35,12 +36,12 @@ export default defineComponent({
             };
 
             const up = (upEvent: MouseEvent) => {
-                splitterElRef.value?.removeEventListener('mousemove', move);
-                splitterElRef.value?.removeEventListener('mouseup', up);
+                document.removeEventListener('mousemove', move);
+                document.removeEventListener('mouseup', up);
             };
 
-            splitterElRef.value?.addEventListener('mousemove', move);
-            splitterElRef.value?.addEventListener('mouseup', up);
+            document.addEventListener('mousemove', move);
+            document.addEventListener('mouseup', up);
         };
 
         const splitterMarkerVNode = computed(() => {
