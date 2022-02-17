@@ -1,38 +1,32 @@
 import { computed, toRefs, renderSlot, createVNode, defineComponent } from 'vue';
 import { getSlotFirstVNode, useColorFactory } from '../_utils_';
-import { TextLinkColorMap, TextLinkColorSet, textLinkProps } from './interface';
+import { TextLinkType, TextLinkColorSet, textLinkProps } from './interface';
 import * as CSS from 'csstype';
+
+const BASE_COLOR_MAP: Record<TextLinkType, TextLinkColorSet> = {
+    primary: {
+        color: '#3b82f6'
+    },
+    success: {
+        color: '#16a34a'
+    },
+    warning: {
+        color: '#fb923c'
+    },
+    danger: {
+        color: '#dc2626'
+    },
+    info: {
+        color: '#6B7280'
+    }
+};
 
 export default defineComponent({
     name: 'TextLink',
     props: textLinkProps,
     setup(props, { slots }) {
         const { type, to, underline, trigger, color, hoverColor, block, raw } = toRefs(props);
-        const typeMap: TextLinkColorMap = {
-            primary: {
-                color: '#3b82f6',
-                hoverColor: '#2563EB'
-            },
-            success: {
-                color: '#16a34a',
-                hoverColor: '#059669'
-            },
-            warning: {
-                color: '#fb923c',
-                hoverColor: '#D97706'
-            },
-            danger: {
-                color: '#dc2626',
-                hoverColor: '#DC2626'
-            },
-            info: {
-                color: '#6B7280',
-                hoverColor: '#4B5563'
-            }
-        };
 
-        const textColor: string = color?.value ?? typeMap[type.value!].color;
-        const textHoverColor: string = hoverColor?.value ?? typeMap[type.value!].hoverColor;
         const showUnderline = computed(() => {
             if (!underline.value) return '';
 
@@ -47,7 +41,7 @@ export default defineComponent({
         });
         const cssVars = computed<CSS.Properties>(() => {
             const compositeInputColor: TextLinkColorSet = {
-                color: color.value || typeMap[type.value!].color
+                color: color.value || BASE_COLOR_MAP[type.value!].color
             };
             const {
                 default: defaultColorSet,
@@ -59,8 +53,8 @@ export default defineComponent({
             });
 
             return {
-                '--text-link-default-color': defaultColorSet.color,
-                '--text-link-hover-color': hoverColorSet.color,
+                '--text-link-default-color': color.value || defaultColorSet.color,
+                '--text-link-hover-color': hoverColor.value || hoverColorSet.color,
                 '--text-link-active-color': activeColorSet.color,
                 '--text-link-disabled-color': disabledColorSet.color
             };
