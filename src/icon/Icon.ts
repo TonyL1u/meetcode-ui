@@ -7,12 +7,26 @@ export default defineComponent({
     name: 'Icon',
     props: iconProps,
     setup(props, { slots, attrs }) {
-        const { size, color, spin } = toRefs(props);
+        const { size, color, spin, speed } = toRefs(props);
+
+        const spinningSpeed = computed(() => {
+            switch (speed.value) {
+                case 'slow':
+                    return '2s';
+                case 'normal':
+                    return '1.6s';
+                case 'fast':
+                    return '1.2s';
+                default:
+                    return '1.6s';
+            }
+        });
 
         const cssVars = computed<CSS.Properties>(() => {
             return {
                 '--icon-color': color.value ?? 'initial',
-                '--icon-font-size': size.value ? `${size.value}px` : 'initial'
+                '--icon-font-size': size.value ? `${size.value}px` : 'initial',
+                '--icon-spinning-speed': spinningSpeed.value
             };
         });
         return () => {

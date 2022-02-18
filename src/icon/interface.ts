@@ -5,6 +5,7 @@ declare module 'csstype' {
     interface Properties {
         '--icon-color'?: string;
         '--icon-font-size'?: string;
+        '--icon-spinning-speed'?: string;
     }
 }
 
@@ -12,6 +13,7 @@ export interface IconProps {
     size?: number;
     color?: string;
     spin?: boolean;
+    speed?: 'slow' | 'normal' | 'fast';
 }
 
 export const iconProps = {
@@ -26,5 +28,9 @@ export const iconProps = {
     spin: {
         type: Boolean as PropType<IconProps['spin']>,
         default: false
+    },
+    speed: {
+        type: String as PropType<IconProps['speed']>,
+        default: 'normal'
     }
 };

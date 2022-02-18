@@ -88,11 +88,11 @@ import AsyncMessage from '@/message/demos/DemoAsyncMessage.vue'
 | :---------------: | :--------------------------------------------------------------------: | :------------------: |
 |     McMessage     |                      `(options: MessageOptions)`                       |  `MessageInstance`   |
 |  McMessage.text   | `(message?: string \| MessageApiOptions, options?: MessageApiOptions)` | `MessageApiInstance` |
-| McMessage.success | `(message?: string\| MessageApiOptions, options?: MessageApiOptions)`  | `MessageApiInstance` |
-| McMessage.warning | `(message?: string\| MessageApiOptions, options?: MessageApiOptions)`  | `MessageApiInstance` |
-|  McMessage.info   | `(message?: string\| MessageApiOptions, options?: MessageApiOptions)`  | `MessageApiInstance` |
-|  McMessage.error  | `(message?: string\| MessageApiOptions, options?: MessageApiOptions)`  | `MessageApiInstance` |
-| McMessage.loading | `(message?: string\| MessageApiOptions, options?: MessageApiOptions)`  | `MessageApiInstance` |
+| McMessage.success | `(message?: string \| MessageApiOptions, options?: MessageApiOptions)`  | `MessageApiInstance` |
+| McMessage.warning | `(message?: string \| MessageApiOptions, options?: MessageApiOptions)`  | `MessageApiInstance` |
+|  McMessage.info   | `(message?: string \| MessageApiOptions, options?: MessageApiOptions)`  | `MessageApiInstance` |
+|  McMessage.error  | `(message?: string \| MessageApiOptions, options?: MessageApiOptions)`  | `MessageApiInstance` |
+| McMessage.loading | `(message?: string \| MessageApiOptions, options?: MessageApiOptions)`  | `MessageApiInstance` |
 
 ## Options
 
