@@ -69,7 +69,7 @@ export default defineComponent({
                 {
                     class: ['mc-text-link', { 'mc-text-link--block': block.value }, showUnderline.value],
                     style: cssVars.value,
-                    href: to.value || (!raw.value && isEmail ? `mailto:${textContent}` : '#')
+                    href: isEmail ? (!raw.value ? `mailto:${textContent}` : '#') : to.value
                 },
                 [renderSlot(slots, 'default')]
             );

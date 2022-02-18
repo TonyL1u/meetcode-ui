@@ -37,6 +37,12 @@ import { McTabs, McTabPane, McIcon } from 'meetcode-ui';
 import { HomeOutline as IconHome, ChatbubbleOutline as IconChat, SettingsOutline as IconSetting, PersonOutline as IconUser } from '@vicons/ionicons5';
 
 const tabLabelVNode = () => {
-    return createVNode('div', { class: 'mc-flex mc-justify-evenly mc-items-center' }, [createVNode(McIcon, { style: 'margin-right: 8px' }, { default: () => createVNode(IconSetting) }), createTextVNode('Setting')]);
+    return createVNode(
+        'div',
+        {
+            class: 'mc-flex mc-justify-evenly mc-items-center'
+        },
+        [createVNode(McIcon, { style: 'margin-right: 8px' }, { default: () => createVNode(IconSetting) }), createTextVNode('Setting')]
+    );
 };
 </script>

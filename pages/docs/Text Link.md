@@ -45,3 +45,5 @@ import EmailRaw from '@/text-link/demos/DemoEmailRaw.vue'
 |    color    |                          `string`                           | `'#10b981'` |                                          链接的默认颜色                                           |
 | hover-color |                          `string`                           | `'#047857'` |                                        链接的鼠标悬浮颜色                                         |
 |     raw     |                          `boolean`                          |   `false`   |                                         是否显示为纯文本                                          |
+
+兼容原生 HTML `<a>` 元素属性，详细查看 [MDN](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/a) 。
