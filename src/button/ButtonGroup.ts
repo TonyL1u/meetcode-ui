@@ -8,7 +8,7 @@ export default defineComponent({
     setup(props, { slots }) {
         const { type, size, disabled, ghost, dashed, render, vertical } = toRefs(props);
         return () => {
-            const buttons = flattenWithOptions<ButtonProps>({ slots, identificationKey: buttonIKey });
+            const buttons = flattenWithOptions<ButtonProps>({ slots, key: buttonIKey });
 
             return createVNode(
                 'div',
