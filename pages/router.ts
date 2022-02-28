@@ -9,7 +9,7 @@ const router = createRouter({
         ...routes.value,
         {
             path: '/',
-            redirect: encodeURI('/起步')
+            redirect: encodeURI('/@misc/起步')
         },
         {
             path: '/:catchAll(.*)',

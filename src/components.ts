@@ -12,3 +12,5 @@ export * from './split';
 export * from './button';
 export * from './icon';
 export * from './space';
+export * from './popup';
+export * from './modal';

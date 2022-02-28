@@ -156,3 +156,11 @@
 2022-02-20
 
 -   Button Group 应该添加一个组的点击事件
+
+2022-02-21
+
+-   Popover 里面如果嵌套了 Popover（Popconfirm、Popselect）并且外层 Popover 的 trigger 设置为 click，在点击内层的 Popover 内容时，外层的 Popover 会被关闭
+
+2022-02-24
+
+-   Gird 组件，如果不指定 rows 属性，会默认为 `repeat(1, 1fr)`，这样写会存在 bug

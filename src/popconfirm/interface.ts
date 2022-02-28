@@ -11,6 +11,7 @@ export interface PopconfirmProps {
     hideIcon: boolean;
     onCancel?: OnCancelImpl;
     onConfirm?: OnConfirmImpl;
+    contentStyle?: string | CSSStyleDeclaration;
 }
 
 export const popconfirmProps = {
@@ -41,10 +42,13 @@ export const popconfirmProps = {
     onConfirm: {
         type: Function as PropType<PopconfirmProps['onConfirm']>,
         default: undefined
+    },
+    contentStye: {
+        type: [String, Object] as PropType<PopconfirmProps['contentStyle']>,
+        default: undefined
     }
 };
 
 export const popconfirmEmits = [];
 
 export type PopconfirmMergedProps = PopconfirmProps & PopoverProps;
-

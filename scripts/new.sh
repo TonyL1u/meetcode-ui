@@ -9,6 +9,7 @@ function component() {
     echo "export * from './$1';" >> components.ts
     cd $1
     mkdir demos
+    touch interface.ts
     touch $file.ts
     touch style.scss
     echo "import { defineComponent } from 'vue';\n export default defineComponent({})" > $file.ts
@@ -17,7 +18,7 @@ function component() {
 }
 
 function doc() {
-    cd ../../pages/docs/McUI
+    cd ../../pages/docs
     echo "<script setup></script>" > $file.md
 }
 

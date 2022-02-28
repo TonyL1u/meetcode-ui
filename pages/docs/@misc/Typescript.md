@@ -17,3 +17,9 @@ type Readonly<T> = {
     readonly [key in keyof T]: T[key];
 };
 ```
+
+# PopArray
+
+```ts
+type PopArray<T extends unknown[]> = T extends [] ? [] : T extends [...infer rest, unknown] ? rest : never;
+```
