@@ -1,9 +1,10 @@
-import { defineComponent, createVNode, toRefs, Teleport, computed, renderSlot, ref, Transition, withDirectives, vShow, toRaw, watch, createTextVNode } from 'vue';
-import { onClickOutside, useMouse, useMagicKeys } from '@vueuse/core';
+import { defineComponent, createVNode, toRefs, Teleport, computed, renderSlot, ref, Transition, withDirectives, vShow, toRaw, watch, createTextVNode, CSSProperties, nextTick } from 'vue';
+import { onClickOutside, useMouse, useMagicKeys, pausableWatch } from '@vueuse/core';
 import { VLazyTeleport } from 'vueuc';
 import { createKey } from '../_utils_';
 import { modalProps } from './interface';
 import { McIcon } from '../icon';
+import { McButton } from '../button';
 import { modalStack } from './shared';
 import { Close as IconClose } from '@vicons/ionicons5';
 import * as CSS from 'csstype';
@@ -13,14 +14,35 @@ export default defineComponent({
     props: modalProps,
     emits: ['update:show', 'wrapper-click', 'shortcut-stroke', 'after-enter', 'after-leave'],
     setup(props, { slots, emit, expose }) {
-        const { show, width, height, appearFromCursor, wrapperClosable, closeShortcutKey, closeOnShortcut, closable, bodyStyle, title, showHeader } = toRefs(props);
+        const {
+            show,
+            width,
+            height,
+            appearFromCursor,
+            wrapperClosable,
+            closeShortcutKey,
+            closeOnShortcut,
+            closable,
+            headerStyle,
+            bodyStyle,
+            footerStyle,
+            title,
+            showHeader,
+            showFooter,
+            cancelText,
+            confirmText,
+            pure,
+            position,
+            onBeforeEnter,
+            onBeforeLeave
+        } = toRefs(props);
         const key = createKey('modal');
         const modalContainerElRef = ref<HTMLElement>();
         const modalElRef = ref<HTMLElement>();
         const modalAppearXRef = ref(0);
         const modalAppearYRef = ref(0);
         const modalTransformOrigin = computed(() => (appearFromCursor.value ? `${modalAppearXRef.value}px ${modalAppearYRef.value}px` : 'center center'));
-        const isTopModal = computed(() => modalStack[modalStack.length - 1] === key);
+        const isTopModal = computed(() => modalStack.length > 0 && modalStack[modalStack.length - 1] === key);
         const { x, y } = useMouse();
         const magicKeys = useMagicKeys();
 
@@ -28,32 +50,63 @@ export default defineComponent({
             show,
             () => {
                 if (show.value) {
-                    modalStack.push(key);
                     callUpdateShow(true);
                     modalAppearXRef.value = x.value;
                     modalAppearYRef.value = y.value;
-                } else {
-                    modalStack.pop();
                 }
             },
             { immediate: true }
         );
 
-        watch(magicKeys[closeShortcutKey.value!], v => {
+        const { stop, pause, resume } = pausableWatch(magicKeys[closeShortcutKey.value!], async v => {
+            // console.log(v, show.value, isTopModal.value, key);
+            // if (!v) return;
+            // if (v) {
+            // const callback = await onBeforeLeave.value?.();
+            // if (callback) return;
+            // }
+
             if (v && show.value && closeOnShortcut.value && isTopModal.value) {
-                callUpdateShow(false);
                 callShortcutStroke();
-            }
-        });
-
-        onClickOutside(modalElRef, event => {
-            if (wrapperClosable.value && isTopModal.value) {
                 callUpdateShow(false);
-                callWrapperClick(event);
             }
         });
 
-        const callUpdateShow = (val: boolean) => {
+        watch(
+            isTopModal,
+            () => {
+                if (!isTopModal.value) {
+                    pause();
+                } else {
+                    resume();
+                }
+            },
+            { immediate: true }
+        );
+
+        onClickOutside(
+            modalElRef,
+            event => {
+                console.log(event);
+                if (wrapperClosable.value && isTopModal.value) {
+                    callWrapperClick(event);
+                    callUpdateShow(false);
+                }
+            },
+            {
+                ignore: []
+            }
+        );
+
+        const callUpdateShow = async (val: boolean) => {
+            // const callback = await (val ? onBeforeEnter.value?.() : onBeforeLeave.value?.());
+            // if (callback) return;
+            if (val) {
+                modalStack.push(key);
+            } else {
+                modalStack.pop();
+            }
+
             emit('update:show', val);
         };
 
@@ -73,6 +126,25 @@ export default defineComponent({
             emit('after-leave');
         };
 
+        const handleCancel = () => {
+            callUpdateShow(false);
+        };
+
+        const handleConfirm = () => {
+            callUpdateShow(false);
+        };
+
+        const modalPosition = computed<CSSProperties>(() => {
+            const { top, right, bottom, left } = position.value || {};
+
+            return {
+                marginTop: top ? (typeof top === 'number' ? `${top}px` : top) : 'auto',
+                marginRight: right ? (typeof right === 'number' ? `${right}px` : right) : 'auto',
+                marginBottom: bottom ? (typeof bottom === 'number' ? `${bottom}px` : bottom) : 'auto',
+                marginLeft: left ? (typeof left === 'number' ? `${left}px` : left) : 'auto'
+            };
+        });
+
         const cssVars = computed<CSS.Properties>(() => {
             return {
                 '--modal-width': typeof width.value === 'number' ? `${width.value}px` : width.value,
@@ -85,10 +157,21 @@ export default defineComponent({
             const closeIconVNode = closable.value ? createVNode(McIcon, { color: '#666', size: 20, class: 'mc-modal-close-icon', onClick: () => callUpdateShow(false) }, { default: () => createVNode(IconClose) }) : null;
 
             return createVNode('div', { class: 'mc-modal-wrapper', style: `transform-origin: ${modalTransformOrigin.value}` }, [
-                createVNode('div', { ref: modalElRef, class: 'mc-modal', style: cssVars.value }, [
-                    showHeader.value ? createVNode('div', { class: 'mc-modal__header' }, [titleVNode, closeIconVNode]) : null,
-                    createVNode('div', { class: 'mc-modal__body', style: bodyStyle.value }, [renderSlot(slots, 'default')]),
-                    createVNode('div', { class: 'mc-modal__footer' })
+                createVNode('div', { ref: modalElRef, class: 'mc-modal', style: { ...cssVars.value, ...modalPosition.value } }, [
+                    !pure.value && showHeader.value ? createVNode('div', { class: 'mc-modal__header', style: headerStyle.value }, [slots.header ? renderSlot(slots, 'header') : titleVNode, closeIconVNode]) : null,
+                    createVNode('div', { class: pure.value ? '' : 'mc-modal__body', style: bodyStyle.value }, [renderSlot(slots, 'default')]),
+                    !pure.value && showFooter.value
+                        ? createVNode(
+                              'div',
+                              { class: 'mc-modal__footer', style: footerStyle.value },
+                              slots.footer
+                                  ? [renderSlot(slots, 'footer')]
+                                  : [
+                                        cancelText.value !== null ? createVNode(McButton, { class: 'mc-modal__footer-button', onClick: handleCancel }, { default: () => cancelText.value }) : null,
+                                        confirmText.value !== null ? createVNode(McButton, { class: 'mc-modal__footer-button', onClick: handleConfirm, type: 'success' }, { default: () => confirmText.value }) : null
+                                    ]
+                          )
+                        : null
                 ])
             ]);
         });

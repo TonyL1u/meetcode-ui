@@ -27,7 +27,7 @@ export default defineComponent({
         const popoverRef = ref<PopoverExposeInstance>();
 
         const handleCancel = async () => {
-            if (onCancel?.value) {
+            if (onCancel.value) {
                 const { value: cancel } = onCancel;
                 const callback = await cancel();
 
@@ -39,7 +39,7 @@ export default defineComponent({
             }
         };
         const handleConfirm = async () => {
-            if (onConfirm?.value) {
+            if (onConfirm.value) {
                 const { value: confirm } = onConfirm;
                 const callback = await confirm();
 

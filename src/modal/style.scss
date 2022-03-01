@@ -10,8 +10,7 @@
 
 .mc-modal-wrapper {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    overflow: auto;
 }
 
 .mc-modal-mask,
@@ -23,17 +22,19 @@
     left: 0;
     transition-property: all;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 400ms;
+    transition-duration: 300ms;
 }
 
 .mc-modal {
+    display: flex;
+    flex-direction: column;
     width: var(--modal-width);
     height: var(--modal-height);
     background: #fff;
     border-radius: 2px;
+    align-self: center;
 
     &-title {
-        flex: 1;
         font-size: 18px;
         font-weight: 500;
     }
@@ -44,12 +45,25 @@
 
     &__header {
         display: flex;
+        justify-content: space-between;
         align-items: center;
         padding: 12px 20px;
     }
 
     &__body {
         padding: 20px;
+        flex: 1;
+    }
+
+    &__footer {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 12px 20px;
+
+        &-button:nth-child(1) {
+            margin-right: 16px;
+        }
     }
 }
 

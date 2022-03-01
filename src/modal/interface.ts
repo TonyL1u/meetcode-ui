@@ -8,6 +8,15 @@ declare module 'csstype' {
     }
 }
 
+export type OnBeforeLeaveImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
+export type OnBeforeEnterImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
+export interface ModalPosition {
+    top?: number | string;
+    right?: number | string;
+    bottom?: number | string;
+    left?: number | string;
+}
+
 export interface ModalProps {
     show?: boolean;
     width?: number | string;
@@ -17,9 +26,19 @@ export interface ModalProps {
     closeShortcutKey?: string;
     closeOnShortcut?: boolean;
     closable?: boolean;
+    headerStyle?: string | CSSStyleDeclaration;
     bodyStyle?: string | CSSStyleDeclaration;
+    footerStyle?: string | CSSStyleDeclaration;
+    maskStyle?: string | CSSStyleDeclaration;
     title?: string | (() => VNodeChild);
     showHeader?: boolean;
+    showFooter?: boolean;
+    cancelText?: string | null;
+    confirmText?: string | null;
+    pure?: boolean;
+    position?: ModalPosition;
+    onBeforeEnter?: OnBeforeEnterImpl;
+    onBeforeLeave?: OnBeforeLeaveImpl;
 }
 
 export const modalProps = {
@@ -55,8 +74,16 @@ export const modalProps = {
         type: Boolean as PropType<ModalProps['closable']>,
         default: true
     },
+    headerStyle: {
+        type: [String, Object] as PropType<ModalProps['headerStyle']>,
+        default: undefined
+    },
     bodyStyle: {
         type: [String, Object] as PropType<ModalProps['bodyStyle']>,
+        default: undefined
+    },
+    footerStyle: {
+        type: [String, Object] as PropType<ModalProps['footerStyle']>,
         default: undefined
     },
     title: {
@@ -66,5 +93,33 @@ export const modalProps = {
     showHeader: {
         type: Boolean as PropType<ModalProps['showHeader']>,
         default: true
+    },
+    showFooter: {
+        type: Boolean as PropType<ModalProps['showFooter']>,
+        default: true
+    },
+    cancelText: {
+        type: [String, Object] as PropType<ModalProps['cancelText']>,
+        default: '取消'
+    },
+    confirmText: {
+        type: [String, Object] as PropType<ModalProps['confirmText']>,
+        default: '确定'
+    },
+    pure: {
+        type: Boolean as PropType<ModalProps['pure']>,
+        default: false
+    },
+    position: {
+        type: Object as PropType<ModalProps['position']>,
+        default: undefined
+    },
+    onBeforeEnter: {
+        type: Function as PropType<ModalProps['onBeforeEnter']>,
+        default: undefined
+    },
+    onBeforeLeave: {
+        type: Function as PropType<ModalProps['onBeforeLeave']>,
+        default: undefined
     }
 };
