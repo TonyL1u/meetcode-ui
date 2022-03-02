@@ -5,11 +5,13 @@ import path from 'path';
 import Markdown from 'vite-plugin-md';
 import MarkdownConfig from './markdown.config';
 
+const isProduction = process.env.NODE_ENV === 'production';
 const prefix = 'monaco-editor/esm/vs';
 const resolve = (dir: string) => path.join(__dirname, dir);
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    base: isProduction ? '/public/meetcode-ui/' : '/',
     resolve: {
         alias: {
             'meetcode-ui': resolve('src'),
