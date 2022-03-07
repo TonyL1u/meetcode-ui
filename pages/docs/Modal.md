@@ -1,5 +1,6 @@
 <script setup>
 import Basic from '@/modal/demos/DemoBasic.vue'
+import WrapperClick from '@/modal/demos/DemoWrapperClick.vue'
 </script>
 
 # Modal 模态框
@@ -11,6 +12,18 @@ import Basic from '@/modal/demos/DemoBasic.vue'
 ### 基础用法
 
 <Basic />
+
+:::
+
+::: demo codePreview=WrapperClick
+
+### 遮罩事件
+
+通过 `on-wrapper-click` 事件来处理点击遮罩层的回调。
+
+设置 `wrapper-closable = false` 可以关闭遮罩层的点击事件。
+
+<WrapperClick />
 
 :::
 

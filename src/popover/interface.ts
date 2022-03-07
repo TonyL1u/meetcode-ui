@@ -110,4 +110,4 @@ export const popoverProps = {
         default: undefined
     }
 };
-export const popoverEmits = ['show', 'hide', 'update:show', 'border:reached'];
+export const popoverEmits = ['show', 'hide', 'update:show', 'border-reached'];

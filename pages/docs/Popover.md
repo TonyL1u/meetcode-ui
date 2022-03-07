@@ -114,7 +114,7 @@ import Delay from '@/popover/demos/DemoDelay.vue'
 |      on-show      |                             `(value: true) => void`                             |      显示时触发      |
 |      on-hide      |                            `(value: false) => void`                             |      隐藏时触发      |
 |  on-update:show   |                           `(value: boolean) => void`                            |    状态改变时触发    |
-| on-border:reached | `(value: boolean, dirs: Array<'top' \| 'right' \| 'bottom' \| 'left'>) => void` | 弹出框溢出元素时触发 |
+| on-border-reached | `(value: boolean, dirs: Array<'top' \| 'right' \| 'bottom' \| 'left'>) => void` | 弹出框溢出元素时触发 |
 
 ## Slot
 

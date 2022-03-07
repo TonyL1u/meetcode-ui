@@ -13,7 +13,7 @@ const rootFolder: TreeSelectOption = {
 const routes = ref<Array<any>>([]);
 const menuTree: Ref<Array<MenuOption>> = ref([]);
 const folderTree = ref<Array<TreeSelectOption>>([rootFolder]);
-const menuBlackList = ['./Split.md', './Modal.md'];
+const menuBlackList = ['./Split.md'];
 
 for (const path in markdownModules) {
     if (menuBlackList.includes(path)) continue;

@@ -54,7 +54,7 @@ export default defineComponent({
             emit('update:show', showRef.value);
         };
         const callBorderReached = (flag: boolean, dirs: Array<PopoverTriggerBorder>) => {
-            emit('border:reached', flag, dirs);
+            emit('border-reached', flag, dirs);
         };
         const throttleCallShow = useThrottleFn(callShow, 100, false);
         const throttleCallHide = useThrottleFn(callHide, 100, false);

@@ -8,8 +8,11 @@ declare module 'csstype' {
     }
 }
 
-export type OnBeforeLeaveImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
+export type OnBeforeLeaveImpl = (action: ModalCloseAction) => Promise<boolean | undefined | void> | boolean | undefined | void;
 export type OnBeforeEnterImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
+export type OnCancelImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
+export type OnConfirmImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
+export type ModalCloseAction = 'manual' | 'wrapper' | 'close' | 'shortcut' | 'cancel' | 'confirm';
 export interface ModalPosition {
     top?: number | string;
     right?: number | string;
@@ -37,7 +40,6 @@ export interface ModalProps {
     confirmText?: string | null;
     pure?: boolean;
     position?: ModalPosition;
-    onBeforeEnter?: OnBeforeEnterImpl;
     onBeforeLeave?: OnBeforeLeaveImpl;
 }
 
@@ -112,10 +114,6 @@ export const modalProps = {
     },
     position: {
         type: Object as PropType<ModalProps['position']>,
-        default: undefined
-    },
-    onBeforeEnter: {
-        type: Function as PropType<ModalProps['onBeforeEnter']>,
         default: undefined
     },
     onBeforeLeave: {
