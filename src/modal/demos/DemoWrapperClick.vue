@@ -1,7 +1,7 @@
 <template>
     <McSpace>
-        <McButton type="success" ghost @click="show1 = true">打开1</McButton>
-        <McButton type="success" ghost @click="show2 = true">打开2</McButton>
+        <McButton type="success" ghost @click="show1 = true">打开</McButton>
+        <McButton type="success" ghost @click="show2 = true">无遮罩点击事件</McButton>
     </McSpace>
 
     <McModal v-model:show="show1" title="模态框" @wrapper-click="handleWrapperClick">内容</McModal>

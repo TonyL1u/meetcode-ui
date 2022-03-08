@@ -58,6 +58,8 @@ export interface UIColorAttrs extends Record<string, string> {
     backgroundColor: string;
 }
 
+export type ElementClassSet = string | Record<string, boolean> | ElementClassSet[];
+
 /**
  * Jest Utils
  */

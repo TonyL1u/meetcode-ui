@@ -1,4 +1,5 @@
 import { PropType, VNodeChild } from 'vue';
+import { ElementClassSet } from '../_utils_';
 import * as CSS from 'csstype';
 
 declare module 'csstype' {
@@ -12,7 +13,7 @@ export type OnBeforeLeaveImpl = (action: ModalCloseAction) => Promise<boolean | 
 export type OnBeforeEnterImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
 export type OnCancelImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
 export type OnConfirmImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
-export type ModalCloseAction = 'manual' | 'wrapper' | 'close' | 'shortcut' | 'cancel' | 'confirm';
+export type ModalCloseAction = 'wrapper' | 'close' | 'shortcut' | 'cancel' | 'confirm';
 export interface ModalPosition {
     top?: number | string;
     right?: number | string;
@@ -26,13 +27,16 @@ export interface ModalProps {
     height?: number | string;
     appearFromCursor?: boolean;
     wrapperClosable?: boolean;
-    closeShortcutKey?: string;
+    shortcutKey?: string;
     closeOnShortcut?: boolean;
     closable?: boolean;
     headerStyle?: string | CSSStyleDeclaration;
     bodyStyle?: string | CSSStyleDeclaration;
     footerStyle?: string | CSSStyleDeclaration;
     maskStyle?: string | CSSStyleDeclaration;
+    headerClass?: ElementClassSet;
+    bodyClass?: ElementClassSet;
+    footerClass?: ElementClassSet;
     title?: string | (() => VNodeChild);
     showHeader?: boolean;
     showFooter?: boolean;
@@ -40,6 +44,7 @@ export interface ModalProps {
     confirmText?: string | null;
     pure?: boolean;
     position?: ModalPosition;
+    animation?: 'scale' | 'slide';
     onBeforeLeave?: OnBeforeLeaveImpl;
 }
 
@@ -64,8 +69,8 @@ export const modalProps = {
         type: Boolean as PropType<ModalProps['wrapperClosable']>,
         default: true
     },
-    closeShortcutKey: {
-        type: String as PropType<ModalProps['closeShortcutKey']>,
+    shortcutKey: {
+        type: String as PropType<ModalProps['shortcutKey']>,
         default: 'Escape'
     },
     closeOnShortcut: {
@@ -86,6 +91,18 @@ export const modalProps = {
     },
     footerStyle: {
         type: [String, Object] as PropType<ModalProps['footerStyle']>,
+        default: undefined
+    },
+    headerClass: {
+        type: [String, Object, Array] as PropType<ModalProps['headerClass']>,
+        default: undefined
+    },
+    bodyClass: {
+        type: [String, Object, Array] as PropType<ModalProps['bodyClass']>,
+        default: undefined
+    },
+    footerClass: {
+        type: [String, Object, Array] as PropType<ModalProps['footerClass']>,
         default: undefined
     },
     title: {
@@ -115,6 +132,10 @@ export const modalProps = {
     position: {
         type: Object as PropType<ModalProps['position']>,
         default: undefined
+    },
+    animation: {
+        type: String as PropType<ModalProps['animation']>,
+        default: 'scale'
     },
     onBeforeLeave: {
         type: Function as PropType<ModalProps['onBeforeLeave']>,

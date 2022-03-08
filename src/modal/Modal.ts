@@ -1,4 +1,4 @@
-import { defineComponent, createVNode, toRefs, Teleport, computed, renderSlot, ref, Transition, withDirectives, vShow, toRaw, watch, createTextVNode, CSSProperties, nextTick } from 'vue';
+import { defineComponent, createVNode, toRefs, computed, renderSlot, ref, Transition, watch, createTextVNode, CSSProperties, nextTick } from 'vue';
 import { onClickOutside, useMouse, useMagicKeys, pausableWatch } from '@vueuse/core';
 import { VLazyTeleport } from 'vueuc';
 import { createKey } from '../_utils_';
@@ -14,14 +14,38 @@ export default defineComponent({
     props: modalProps,
     emits: ['update:show', 'wrapper-click', 'shortcut-stroke', 'after-enter', 'after-leave', 'before-enter', 'cancel', 'confirm'],
     setup(props, { slots, emit, expose }) {
-        const { show, width, height, appearFromCursor, wrapperClosable, closeShortcutKey, closeOnShortcut, closable, headerStyle, bodyStyle, footerStyle, title, showHeader, showFooter, cancelText, confirmText, pure, position, onBeforeLeave } =
-            toRefs(props);
+        const {
+            show,
+            width,
+            height,
+            appearFromCursor,
+            wrapperClosable,
+            shortcutKey,
+            closeOnShortcut,
+            closable,
+            headerStyle,
+            bodyStyle,
+            footerStyle,
+            headerClass,
+            bodyClass,
+            footerClass,
+            title,
+            showHeader,
+            showFooter,
+            cancelText,
+            confirmText,
+            pure,
+            position,
+            animation,
+            onBeforeLeave
+        } = toRefs(props);
         const key = createKey('modal');
         const modalContainerElRef = ref<HTMLElement>();
         const modalElRef = ref<HTMLElement>();
         const modalAppearXRef = ref(0);
         const modalAppearYRef = ref(0);
         const modalTransformOrigin = computed(() => (appearFromCursor.value ? `${modalAppearXRef.value}px ${modalAppearYRef.value}px` : 'center center'));
+        const modalTransitionName = computed(() => (appearFromCursor.value ? 'mc-modal-scale' : ['scale', 'slide'].includes(animation.value!) ? `mc-modal-${animation.value}` : 'mc-modal-scale'));
         const isTopModal = computed(() => modalStack.length > 0 && modalStack[modalStack.length - 1] === key);
         const { x, y } = useMouse();
         const magicKeys = useMagicKeys({
@@ -31,7 +55,7 @@ export default defineComponent({
                 isTopModal.value && event.stopImmediatePropagation();
             }
         });
-        let closeAction: ModalCloseAction = 'manual';
+        let closeAction: ModalCloseAction;
 
         watch(
             show,
@@ -45,7 +69,7 @@ export default defineComponent({
             { immediate: true }
         );
 
-        const { pause, resume } = pausableWatch(magicKeys[closeShortcutKey.value!], v => {
+        const { pause, resume } = pausableWatch(magicKeys[shortcutKey.value!], v => {
             if (v && show.value && closeOnShortcut.value && isTopModal.value) {
                 callShortcutStroke();
                 callUpdateShow(false);
@@ -162,13 +186,13 @@ export default defineComponent({
                 : null;
 
             return createVNode('div', { class: 'mc-modal-wrapper', style: `transform-origin: ${modalTransformOrigin.value}` }, [
-                createVNode('div', { ref: modalElRef, class: 'mc-modal', style: { ...cssVars.value, ...modalPosition.value } }, [
-                    !pure.value && showHeader.value ? createVNode('div', { class: 'mc-modal__header', style: headerStyle.value }, [slots.header ? renderSlot(slots, 'header') : titleVNode, closeIconVNode]) : null,
-                    createVNode('div', { class: pure.value ? '' : 'mc-modal__body', style: bodyStyle.value }, [renderSlot(slots, 'default')]),
+                createVNode('div', { ref: modalElRef, class: ['mc-modal', pure.value ? 'mc-modal--pure' : ''], style: { ...cssVars.value, ...modalPosition.value } }, [
+                    !pure.value && showHeader.value ? createVNode('div', { class: ['mc-modal__header', headerClass.value], style: headerStyle.value }, [slots.header ? renderSlot(slots, 'header') : titleVNode, closeIconVNode]) : null,
+                    createVNode('div', { class: ['mc-modal__body', bodyClass.value], style: bodyStyle.value }, [renderSlot(slots, 'default')]),
                     !pure.value && showFooter.value
                         ? createVNode(
                               'div',
-                              { class: 'mc-modal__footer', style: footerStyle.value },
+                              { class: ['mc-modal__footer', footerClass.value], style: footerStyle.value },
                               slots.footer
                                   ? [renderSlot(slots, 'footer')]
                                   : [
@@ -198,7 +222,7 @@ export default defineComponent({
                     ),
                     createVNode(
                         Transition,
-                        { name: 'mc-modal-scale', appear: true, onBeforeEnter: callBeforeEnter, onAfterEnter: callAfterEnter, onAfterLeave: callAfterLeave },
+                        { name: modalTransitionName.value, appear: true, onBeforeEnter: callBeforeEnter, onAfterEnter: callAfterEnter, onAfterLeave: callAfterLeave },
                         {
                             default: () => (show.value ? modalVNode.value : null)
                         }
