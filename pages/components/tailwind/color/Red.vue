@@ -1,11 +1,8 @@
 <template>
-    <NMessageProvider>
-        <Color :colors="colors" />
-    </NMessageProvider>
+    <Color :colors="colors" />
 </template>
 
 <script lang="ts" setup>
-import { NMessageProvider } from 'naive-ui';
 import Color from './Color.vue';
 
 const colors = [

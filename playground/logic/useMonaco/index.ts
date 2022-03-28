@@ -1,5 +1,5 @@
 import { watch, Ref, unref, ref } from 'vue';
-import { until, createEventHook, tryOnUnmounted } from '@vueuse/core';
+import { until, createEventHook, EventHookOn, tryOnUnmounted } from '@vueuse/core';
 import darktheme from 'theme-vitesse/themes/vitesse-dark.json';
 import lightTheme from 'theme-vitesse/themes/vitesse-light.json';
 import type { editor as Editor } from 'monaco-editor';
@@ -78,7 +78,7 @@ export function useMonaco(target: Ref, options: any) {
     });
 
     return {
-        onChange: changeEventHook.on,
+        onChange: <EventHookOn>changeEventHook.on,
         setContent
     };
 }

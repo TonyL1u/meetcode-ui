@@ -1,0 +1,89 @@
+.mc-split {
+    display: flex;
+}
+
+.mc-split-pane {
+    padding: 6px;
+    border: 1px solid #000;
+    border-radius: 4px;
+}
+
+.mc-splitter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover .mc-splitter__marker {
+        background: #ddd;
+    }
+
+    &__marker {
+        background: #bbb;
+        position: relative;
+        transition: 0.3s;
+
+        &::before,
+        &::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: inherit;
+        }
+    }
+}
+
+.mc-split--vertical > .mc-split-pane {
+    // width: var(--split-pane-initial-width);
+}
+
+.mc-split--vertical > .mc-splitter {
+    padding: 0 5px;
+    cursor: col-resize;
+}
+
+.mc-split--vertical > .mc-splitter > .mc-splitter__marker {
+    width: 3px;
+    height: 56px;
+
+    &::before,
+    &::after {
+        left: 0px;
+    }
+
+    &::before {
+        top: -1.5px;
+    }
+
+    &::after {
+        bottom: -1.5px;
+    }
+}
+
+.mc-split--horizontal {
+    flex-direction: column;
+
+    > .mc-splitter {
+        padding: 5px 0;
+        cursor: row-resize;
+    }
+}
+
+.mc-split--horizontal > .mc-splitter > .mc-splitter__marker {
+    width: 56px;
+    height: 3px;
+
+    &::before,
+    &::after {
+        top: 0;
+    }
+
+    &::before {
+        left: -1.5px;
+    }
+
+    &::after {
+        right: -1.5px;
+    }
+}

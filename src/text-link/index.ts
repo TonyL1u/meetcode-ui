@@ -1,1 +1,2 @@
-export { default as McTextLink } from './TextLink.vue';
+import './style.scss';
+export { default as McTextLink } from './TextLink';

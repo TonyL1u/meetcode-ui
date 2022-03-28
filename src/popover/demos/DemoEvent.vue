@@ -1,33 +1,35 @@
 <template>
-    <NSpace>
+    <McSpace>
         <McPopover @show="handleShow">
-            <NButton type="primary" ghost>捕获显示事件</NButton>
+            <McButton type="success" ghost>显示</McButton>
             <template #content>这是测试内容</template>
         </McPopover>
 
         <McPopover @hide="handleHide">
-            <NButton type="primary" ghost>捕获隐藏事件</NButton>
+            <McButton type="success" ghost>隐藏</McButton>
             <template #content>这是测试内容</template>
         </McPopover>
 
         <McPopover trigger="click" @update:show="handleUpdateShow">
-            <NButton type="primary" ghost>一起捕获</NButton>
+            <McButton type="success" ghost>显示 & 隐藏</McButton>
             <template #content>这是测试内容</template>
         </McPopover>
-    </NSpace>
+    </McSpace>
 </template>
 
 <script lang="ts" setup>
-import { NButton, NSpace } from 'naive-ui';
-import { McPopover } from 'meetcode-ui';
+import { McPopover, McMessage, McSpace, McButton } from 'meetcode-ui';
 
 const handleShow = (val: boolean) => {
-    console.log(val);
+    McMessage.text('Popover Show');
 };
 const handleHide = (val: boolean) => {
-    console.log(val);
+    McMessage.warning('Popover Hide');
 };
 const handleUpdateShow = (val: boolean) => {
-    console.log(val);
+    McMessage({
+        type: val ? 'success' : 'error',
+        message: val ? 'Popover Show' : 'Popover Hide'
+    });
 };
 </script>

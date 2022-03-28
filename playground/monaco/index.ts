@@ -1,13 +1,28 @@
 import { getCurrentInstance, onMounted, watch } from 'vue';
 import * as monaco from 'monaco-editor';
 import { createSingletonPromise } from '@antfu/utils';
-/* __imports__ */
+import { orchestrator } from '../orchestrator';
 
+/* __imports__ */
 import vueuseTypes from '@vueuse/core/index.d.ts?raw';
 import vueTypes from '@vue/runtime-core/dist/runtime-core.d.ts?raw';
-import meetcodeuiTypes from '@dist/index.d.ts?raw';
+import iconTypes from '@vicons/ionicons5/index.d.ts?raw';
+import McUiComponents from '@lib/components.d.ts?raw';
 
-import { orchestrator } from '../orchestrator';
+async function getAllMeetcodeTypes() {
+    const exportDeclares = McUiComponents.split('\r\n');
+    let allTypes = '';
+
+    for (const declare of exportDeclares) {
+        const name = declare.slice(17, -2);
+        if (name) {
+            const types = (await import(`../../lib/${name}/index.d.ts?raw`)).default;
+            types && (allTypes = `${allTypes}\n${types}`);
+        }
+    }
+
+    return allTypes;
+}
 
 const setup = createSingletonPromise(async () => {
     // validation settings
@@ -31,7 +46,7 @@ const setup = createSingletonPromise(async () => {
         typeRoots: ['node_modules/@types']
     });
 
-    const registered: string[] = ['vue', '@vueuse/core', 'meetcode-ui'];
+    const registered: string[] = ['vue', '@vueuse/core', 'meetcode-ui', '@vicons/ionicons5'];
 
     monaco.languages.typescript.javascriptDefaults.addExtraLib(
         `
@@ -49,9 +64,16 @@ const setup = createSingletonPromise(async () => {
 
     monaco.languages.typescript.javascriptDefaults.addExtraLib(
         `
-    declare module 'meetcode-ui' { ${meetcodeuiTypes} }
-  `,
+        declare module 'meetcode-ui' { ${await getAllMeetcodeTypes()} }
+      `,
         'ts:meetcode-ui'
+    );
+
+    monaco.languages.typescript.javascriptDefaults.addExtraLib(
+        `
+        declare module '@vicons/ionicons5' { ${iconTypes} }
+      `,
+        'ts:vicons'
     );
 
     watch(
@@ -68,7 +90,7 @@ const setup = createSingletonPromise(async () => {
           export = x;
         }
       `,
-                    pack.name
+                    `ts:${pack.name}`
                 );
             });
         },
@@ -80,8 +102,8 @@ const setup = createSingletonPromise(async () => {
         (async () => {
             const [{ default: EditorWorker }, { default: HtmlWorker }, { default: TsWorker }] = await Promise.all([
                 import('monaco-editor/esm/vs/editor/editor.worker?worker'),
-                import('monaco-editor/esm/vs/language/html/html.worker?worker'),
-                // import('./languages/html/html.worker?worker'),
+                // import('monaco-editor/esm/vs/language/html/html.worker?worker'),
+                import('./languages/html/html.worker?worker'),
                 import('monaco-editor/esm/vs/language/typescript/ts.worker?worker')
             ]);
 

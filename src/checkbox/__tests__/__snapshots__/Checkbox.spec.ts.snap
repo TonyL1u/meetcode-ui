@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mc-checkbox size 1`] = `"--checkbox-checked-color: #10b981; --checkbox-hover-color: #10b9810f; --checkbox-scale-size: scale(0.8);"`;
+
+exports[`mc-checkbox size 2`] = `"--checkbox-checked-color: #10b981; --checkbox-hover-color: #10b9810f; --checkbox-scale-size: scale(0.9);"`;
+
+exports[`mc-checkbox size 3`] = `"--checkbox-checked-color: #10b981; --checkbox-hover-color: #10b9810f; --checkbox-scale-size: scale(1);"`;

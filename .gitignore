@@ -1,7 +1,10 @@
+coverage
 node_modules
 .DS_Store
 .vscode
 dist
 dist-ssr
+lib
+lib-ssr
 *.local
 package-lock.json

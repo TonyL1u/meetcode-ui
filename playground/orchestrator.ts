@@ -1,10 +1,8 @@
 import { reactive, watch, watchEffect } from 'vue';
-// import { parse } from '@vue/compiler-sfc'
-import { createEventHook } from '@vueuse/core';
-// import lz from 'lz-string';
+import { createEventHook, EventHookOn } from '@vueuse/core';
 import { compileFile } from './compiler/sfcCompiler';
-// const demos = import.meta.glob('../demos/**/*.(vue|json)')
-import InitialCode from './source/demoInitialCode';
+import lz from 'lz-string';
+import beautify from 'js-beautify';
 
 const shouldUpdateContent = createEventHook();
 
@@ -37,7 +35,7 @@ export class OrchestratorFile {
 
     get code() {
         return `
-      <script setup lang="ts">
+      <script lang="ts" setup>
         ${this.script}
       </script>
       <template>
@@ -93,7 +91,6 @@ export const orchestrator: Orchestrator = reactive({
 /**
  * Setup Watchers
  */
-
 watchEffect(() => {
     if (orchestrator.activeFile) compileFile(orchestrator.activeFile);
 });
@@ -104,20 +101,6 @@ watch(
         shouldUpdateContent.trigger(null);
     }
 );
-
-// export function exportState() {
-//     const files = Object.entries(orchestrator.files).reduce((acc: any, [name, { template, script }]) => {
-//         acc[name] = { template, script };
-//         return acc;
-//     }, {});
-
-//     return lz.compressToEncodedURIComponent(
-//         JSON.stringify({
-//             packages: orchestrator.packages,
-//             files
-//         })
-//     );
-// }
 
 /**
  * Add a file to the orchestrator
@@ -154,51 +137,7 @@ export function removeAllFiles() {
     orchestrator.files = {};
 }
 
-/**
- * Load a demo folder
- *
- * @param name Name of demo to open
- */
-// export async function openDemo(name: string) {
-//   // Get all modules from demo
-//   const modules = (await Promise.all(Object.entries(demos)
-//     .filter(([path]) => path.split('demos/')[1].split('/')[0] === name)
-//     .filter(([path]) => path.includes('.vue') || path.includes('.json'))
-//     .map(async([path]) => ([path, (await import(`${path}?raw`)).default]))))
-
-//   console.log(modules)
-
-//   const packages = (await Promise.all(Object.entries(demos)
-//     .filter(([path]) => path.split('demos/')[1].split('/')[0] === name)
-//     .filter(([path]) => path.includes('.json'))
-//     .map(async([path, imp]) => ([path, (await imp()).default]))))
-//     .find(([path]) => path.includes('packages.json'))
-
-//   if (packages)
-//     orchestrator.packages = packages[1]
-
-//   removeAllFiles()
-
-//   // Load Vue Files
-//   modules
-//     .filter(([path]) => path.includes('.vue'))
-//     .map(([path, content]) => {
-//       const { descriptor: { template, scriptSetup } } = parse(content)
-//       return {
-//         filename: path.split(`${name}/`)[1],
-//         script: scriptSetup?.content.trim(),
-//         template: template?.content.trim(),
-//       }
-//     })
-//     .forEach(({ filename, script, template }) => {
-//       addFile(new OrchestratorFile(filename, template, script))
-//     })
-
-//   setActiveFile('App.vue')
-//   shouldUpdateContent.trigger(null)
-// }
-
-export const onShouldUpdateContent = shouldUpdateContent.on;
+export const onShouldUpdateContent: EventHookOn = shouldUpdateContent.on;
 
 const initialPackages = [
     // {
@@ -221,20 +160,26 @@ const initialPackages = [
     },
     {
         name: 'meetcode-ui',
-        url: '/src/playground/source/meetcode-ui.esm.js'
+        url: import.meta.env.PROD ? '/assets/meetcode-ui.esm.js' : '/lib/meetcode-ui.esm.js'
+    },
+    {
+        name: '@vicons/ionicons5',
+        url: '/playground/source/icon-dev-proxy'
     }
 ];
 
-export function loadInitialState() {
+export async function loadInitialState(fileSourceString: string = '') {
     removeAllFiles();
-    const params = new URLSearchParams(location.search);
-    const code = <string>params.get('code');
-    if (!code) return;
+    const demoFile = lz.decompressFromEncodedURIComponent(fileSourceString);
 
-    const { script = '', template = '' } = InitialCode[code];
+    queueMicrotask(() => {
+        const [templateStartIndex, templateEndIndex] = [demoFile!.indexOf('<template>'), demoFile!.lastIndexOf('</template>')];
+        const template = demoFile!.slice(templateStartIndex + 10, templateEndIndex);
+        const script = demoFile!.match(/<script lang="ts" setup>([\s\S]*?)<\/script>/)?.[1] ?? '';
 
-    orchestrator.packages = initialPackages;
-    addFile(new OrchestratorFile('App.vue', template.trim(), script.trim()));
-    setActiveFile('App.vue');
-    shouldUpdateContent.trigger(null);
+        orchestrator.packages = initialPackages;
+        addFile(new OrchestratorFile('App.vue', beautify.html(template).trim(), script.trim()));
+        setActiveFile('App.vue');
+        shouldUpdateContent.trigger(null);
+    });
 }

@@ -10,8 +10,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-import { McGrid, McGridItem } from 'meetcode-ui';
+import { McGrid, McGridItem, McMessage } from 'meetcode-ui';
 import { useClipboard } from '@vueuse/core';
 
 interface Color {
@@ -22,17 +21,17 @@ interface Color {
 defineProps<{ colors: Array<Color> }>();
 
 const { copy } = useClipboard();
-const message = useMessage();
 const handleClick = (value: string) => {
     copy(value);
-    message.success(`${value} 已复制`, {
-        duration: 1500
+    McMessage.success(`${value} 已复制`, {
+        duration: 1500,
+        card: true
     });
 };
 </script>
 
 <style lang="scss" scoped>
-#meetcode-ui .color-item {
+.color-item {
     &:hover .copy-wrapper {
         display: flex;
         animation: slide-up 0.2s ease-in-out forwards;

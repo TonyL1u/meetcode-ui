@@ -6,7 +6,7 @@
         <McGridItem class="demo-grid-item" />
     </McGrid>
 
-    <McGrid class="mc-mt-3" :auto-columns="['100px', '1fr']" :gap="12" autofill>
+    <McGrid class="mc-mt-3" :auto-columns="['100px', '1fr']" :gap="12" fill-mode="auto-fill">
         <McGridItem class="demo-grid-item" />
         <McGridItem class="demo-grid-item" />
         <McGridItem class="demo-grid-item" />

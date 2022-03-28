@@ -1,17 +1,16 @@
 <template>
-    <NSpace>
+    <McSpace>
         <McPopover>
-            <NButton type="primary" ghost>正常</NButton>
+            <McButton type="success" ghost>正常</McButton>
             <template #content>这是测试内容</template>
         </McPopover>
         <McPopover :offset="{ bottom: '12px', left: '24px' }">
-            <NButton type="primary" ghost>偏移</NButton>
+            <McButton type="success" ghost>偏移</McButton>
             <template #content>这是测试内容</template>
         </McPopover>
-    </NSpace>
+    </McSpace>
 </template>
 
 <script lang="ts" setup>
-import { NButton, NSpace } from 'naive-ui';
-import { McPopover } from 'meetcode-ui';
+import { McPopover, McSpace, McButton } from 'meetcode-ui';
 </script>

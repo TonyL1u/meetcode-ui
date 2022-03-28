@@ -1,0 +1,10 @@
+.mc-popconfirm {
+    &__content {
+        @apply mc-flex mc-items-center mc-text-gray-700;
+        min-width: 110px;
+    }
+
+    &__action {
+        @apply mc-flex mc-justify-end mc-mt-2;
+    }
+}

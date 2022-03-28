@@ -2,73 +2,73 @@
     <McGrid class="mc-w-3/4 mc-m-auto" :rows="5" :columns="5" :gap="12">
         <McGridItem :x="2" :y="1">
             <McPopover class="mc-w-40 mc-h-20" placement="top-start">
-                <NButton class="mc-w-full" type="primary" ghost>top-start</NButton>
+                <McButton class="mc-w-full" type="success" ghost>top-start</McButton>
                 <template #content>这是测试内容</template>
             </McPopover>
         </McGridItem>
         <McGridItem :x="3" :y="1">
             <McPopover class="mc-w-40 mc-h-20" placement="top">
-                <NButton class="mc-w-full" type="primary" ghost>top</NButton>
+                <McButton class="mc-w-full" type="success" ghost>top</McButton>
                 <template #content>这是测试内容</template>
             </McPopover>
         </McGridItem>
         <McGridItem :x="4" :y="1">
             <McPopover class="mc-w-40 mc-h-20" placement="top-end">
-                <NButton class="mc-w-full" type="primary" ghost>top-end</NButton>
+                <McButton class="mc-w-full" type="success" ghost>top-end</McButton>
                 <template #content>这是测试内容</template>
             </McPopover>
         </McGridItem>
         <McGridItem :x="1" :y="2">
             <McPopover class="mc-w-40 mc-h-20" placement="left-start">
-                <NButton class="mc-w-full" type="primary" ghost>left-start</NButton>
+                <McButton class="mc-w-full" type="success" ghost>left-start</McButton>
                 <template #content>这是测试内容</template>
             </McPopover>
         </McGridItem>
         <McGridItem :x="5" :y="2">
             <McPopover class="mc-w-40 mc-h-20" placement="right-start">
-                <NButton class="mc-w-full" type="primary" ghost>right-start</NButton>
+                <McButton class="mc-w-full" type="success" ghost>right-start</McButton>
                 <template #content>这是测试内容</template>
             </McPopover>
         </McGridItem>
         <McGridItem :x="1" :y="3">
             <McPopover class="mc-w-40 mc-h-20" placement="left">
-                <NButton class="mc-w-full" type="primary" ghost>left</NButton>
+                <McButton class="mc-w-full" type="success" ghost>left</McButton>
                 <template #content>这是测试内容</template>
             </McPopover>
         </McGridItem>
         <McGridItem :x="5" :y="3">
             <McPopover class="mc-w-40 mc-h-20" placement="right">
-                <NButton class="mc-w-full" type="primary" ghost>right</NButton>
+                <McButton class="mc-w-full" type="success" ghost>right</McButton>
                 <template #content>这是测试内容</template>
             </McPopover>
         </McGridItem>
         <McGridItem :x="1" :y="4">
             <McPopover class="mc-w-40 mc-h-20" placement="left-end">
-                <NButton class="mc-w-full" type="primary" ghost>left-end</NButton>
+                <McButton class="mc-w-full" type="success" ghost>left-end</McButton>
                 <template #content>这是测试内容</template>
             </McPopover>
         </McGridItem>
         <McGridItem :x="5" :y="4">
             <McPopover class="mc-w-40 mc-h-20" placement="right-end">
-                <NButton class="mc-w-full" type="primary" ghost>right-end</NButton>
+                <McButton class="mc-w-full" type="success" ghost>right-end</McButton>
                 <template #content>这是测试内容</template>
             </McPopover>
         </McGridItem>
         <McGridItem :x="2" :y="5">
             <McPopover class="mc-w-40 mc-h-20" placement="bottom-start">
-                <NButton class="mc-w-full" type="primary" ghost>bottom-start</NButton>
+                <McButton class="mc-w-full" type="success" ghost>bottom-start</McButton>
                 <template #content>这是测试内容</template>
             </McPopover>
         </McGridItem>
         <McGridItem :x="3" :y="5">
             <McPopover class="mc-w-40 mc-h-20" placement="bottom">
-                <NButton class="mc-w-full" type="primary" ghost>bottom</NButton>
+                <McButton class="mc-w-full" type="success" ghost>bottom</McButton>
                 <template #content>这是测试内容</template>
             </McPopover>
         </McGridItem>
         <McGridItem :x="4" :y="5">
             <McPopover class="mc-w-40 mc-h-20" placement="bottom-end">
-                <NButton class="mc-w-full" type="primary" ghost>bottom-end</NButton>
+                <McButton class="mc-w-full" type="success" ghost>bottom-end</McButton>
                 <template #content>这是测试内容</template>
             </McPopover>
         </McGridItem>
@@ -76,6 +76,5 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton } from 'naive-ui';
-import { McPopover, McGrid, McGridItem } from 'meetcode-ui';
+import { McPopover, McGrid, McGridItem, McButton } from 'meetcode-ui';
 </script>

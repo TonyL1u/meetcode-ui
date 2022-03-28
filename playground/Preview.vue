@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref, onMounted, onUnmounted, watchEffect, watch } from 'vue';
 import type { WatchStopHandle } from 'vue';
 // import { useElementSize, useCssVar } from '@vueuse/core'
@@ -82,6 +82,7 @@ function createSandbox() {
         },
         on_error: (event: any) => {
             const msg = event.value instanceof Error ? event.value.message : event.value;
+            if (!msg) return;
             if (msg.includes('Failed to resolve module specifier') || msg.includes('Error resolving module specifier')) {
                 runtimeError.value = `${msg.replace(/\. Relative references must.*$/, '')}.\nTip: add an "import-map.json" file to specify import paths for dependencies.`;
             } else {

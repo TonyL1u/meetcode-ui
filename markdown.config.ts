@@ -5,6 +5,7 @@ import MarkdownItHljs from 'markdown-it-highlightjs';
 import MarkdownItAnchor from 'markdown-it-anchor';
 import fs from 'fs';
 import path from 'path';
+import lz from 'lz-string';
 
 const fileSourceMap: any = {
     '@pages': 'pages',
@@ -48,10 +49,12 @@ export default {
                         const rootDir = fileSourceMap[root];
                         const importPath = path.join(__dirname, `${rootDir}/${rest.join('/')}`);
                         const importSource = fs.readFileSync(importPath, 'utf-8').trim();
+                        const compressedSource = lz.compressToEncodedURIComponent(importSource);
 
                         return {
                             name,
-                            importSource
+                            importSource,
+                            compressedSource
                         };
                     });
 

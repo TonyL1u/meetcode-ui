@@ -1,17 +1,16 @@
 <template>
-    <NSpace>
+    <McSpace>
         <McPopover trigger="click" :show-delay="1000">
-            <NButton type="primary" ghost>点击，延迟1s显示</NButton>
+            <McButton type="success" ghost>点击，延迟1s显示</McButton>
             <template #content>这是测试内容</template>
         </McPopover>
 
         <McPopover :hide-delay="1000">
-            <NButton type="primary" ghost>悬浮，延迟1s隐藏</NButton>
+            <McButton type="success" ghost>悬浮，延迟1s隐藏</McButton>
             <template #content>这是测试内容</template>
         </McPopover>
-    </NSpace>
+    </McSpace>
 </template>
 <script lang="ts" setup>
-import { NButton, NSpace } from 'naive-ui';
-import { McPopover } from 'meetcode-ui';
+import { McPopover, McSpace, McButton } from 'meetcode-ui';
 </script>

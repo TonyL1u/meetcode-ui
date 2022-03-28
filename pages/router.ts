@@ -9,18 +9,19 @@ const router = createRouter({
         ...routes.value,
         {
             path: '/',
-            redirect: encodeURI('/起步')
-            // component: () => import('./home/404.vue')
+            redirect: encodeURI('/@misc/起步')
         },
         {
             path: '/:catchAll(.*)',
             component: () => import('./home/404.vue')
         }
-        // {
-        //     path: '/Playground',
-        //     component: () => import('./playground/Playground.vue')
-        // }
     ]
+});
+
+router.afterEach((to, from) => {
+    // scroll to top
+    const scrollContent = document.querySelector('.main-content > .n-layout-scroll-container');
+    if (scrollContent) scrollContent.scrollTop = 0;
 });
 
 export default router;

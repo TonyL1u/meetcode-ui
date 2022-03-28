@@ -1,0 +1,42 @@
+.mc-popselect {
+    padding: 0px;
+    min-width: 110px;
+}
+
+.mc-popselect-option {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+
+    &:not(:last-child) {
+        margin-bottom: 4px;
+    }
+
+    &:not(&--disabled):hover {
+        background: #f2fcf8;
+    }
+
+    &--selected {
+        background: #f2fcf8;
+        color: #10b981;
+    }
+
+    &--disabled {
+        color: #bbb;
+        background: rgba(0, 0, 0, 0.02);
+        cursor: not-allowed;
+    }
+
+    &__inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        div {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 200px;
+        }
+    }
+}

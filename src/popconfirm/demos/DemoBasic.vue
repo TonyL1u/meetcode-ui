@@ -1,20 +1,19 @@
 <template>
-    <NSpace>
+    <McSpace>
         <McPopconfirm content="这是一段内容确定删除吗？">
-            <NButton type="primary" ghost>点击</NButton>
+            <McButton type="success" ghost>点击</McButton>
         </McPopconfirm>
 
-        <McPopconfirm content="这是一段内容确定删除吗？" cancel-text="我要删除">
-            <NButton type="primary" ghost>确认</NButton>
+        <McPopconfirm content="这是一段内容确定删除吗？" cancel-text="我要删除" confirm-disabled>
+            <McButton type="success" ghost>确定</McButton>
         </McPopconfirm>
 
         <McPopconfirm content="这是一段内容确定删除吗？" :confirm-text="null">
-            <NButton type="primary" ghost>取消</NButton>
+            <McButton type="success" ghost>取消</McButton>
         </McPopconfirm>
-    </NSpace>
+    </McSpace>
 </template>
 
 <script lang="ts" setup>
-import { NButton, NSpace } from 'naive-ui';
-import { McPopconfirm } from 'meetcode-ui';
+import { McPopconfirm, McButton, McSpace } from 'meetcode-ui';
 </script>

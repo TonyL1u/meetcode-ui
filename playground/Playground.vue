@@ -8,16 +8,17 @@ export default {
 import Editor from './Editor.vue';
 import Preview from './Preview.vue';
 import { Splitpanes, Pane } from 'splitpanes';
-import { orchestrator } from './orchestrator';
+import { onShouldUpdateContent, orchestrator } from './orchestrator';
 import { ref } from 'vue';
-import { useRoute } from 'vue-router';
-import InitialCode from './source/demoInitialCode';
 
-const route = useRoute();
-const code = <string>route.query.code;
-const { script, template } = InitialCode[code || 'test'];
-const initialScript = ref(script);
-const initialTemplate = ref(template);
+const initialScript = ref('');
+const initialTemplate = ref('');
+onShouldUpdateContent(() => {
+    if (orchestrator.activeFile) {
+        initialScript.value = orchestrator.activeFile?.script;
+        initialTemplate.value = orchestrator.activeFile?.template;
+    }
+});
 
 const onContentChanged = (source: string, content: string) => {
     if (orchestrator.activeFile) {
