@@ -1,15 +1,28 @@
 import { getCurrentInstance, onMounted, watch } from 'vue';
 import * as monaco from 'monaco-editor';
 import { createSingletonPromise } from '@antfu/utils';
-/* __imports__ */
+import { orchestrator } from '../orchestrator';
 
+/* __imports__ */
 import vueuseTypes from '@vueuse/core/index.d.ts?raw';
 import vueTypes from '@vue/runtime-core/dist/runtime-core.d.ts?raw';
-import meetcodeuiTypes from '@lib/index.d.ts?raw';
-import naiveuiTypes from 'naive-ui/lib/index.d.ts?raw';
 import iconTypes from '@vicons/ionicons5/index.d.ts?raw';
+import McUiComponents from '@lib/components.d.ts?raw';
 
-import { orchestrator } from '../orchestrator';
+async function getAllMeetcodeTypes() {
+    const exportDeclares = McUiComponents.split('\r\n');
+    let allTypes = '';
+
+    for (const declare of exportDeclares) {
+        const name = declare.slice(17, -2);
+        if (name) {
+            const types = (await import(`../../lib/${name}/index.d.ts?raw`)).default;
+            types && (allTypes = `${allTypes}\n${types}`);
+        }
+    }
+
+    return allTypes;
+}
 
 const setup = createSingletonPromise(async () => {
     // validation settings
@@ -33,7 +46,7 @@ const setup = createSingletonPromise(async () => {
         typeRoots: ['node_modules/@types']
     });
 
-    const registered: string[] = ['vue', '@vueuse/core', 'meetcode-ui', 'naive-ui'];
+    const registered: string[] = ['vue', '@vueuse/core', 'meetcode-ui', '@vicons/ionicons5'];
 
     monaco.languages.typescript.javascriptDefaults.addExtraLib(
         `
@@ -51,9 +64,7 @@ const setup = createSingletonPromise(async () => {
 
     monaco.languages.typescript.javascriptDefaults.addExtraLib(
         `
-        declare module 'meetcode-ui' { 
-            export { McGrid, McGridItem, McLoading, McPopconfirm, McPopover, McPopselect, McTabs, McTabPane, McTab, McTextLink, McTooltip };
-        }
+        declare module 'meetcode-ui' { ${await getAllMeetcodeTypes()} }
       `,
         'ts:meetcode-ui'
     );

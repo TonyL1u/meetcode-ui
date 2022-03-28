@@ -4,6 +4,7 @@ import * as CSS from 'csstype';
 declare module 'csstype' {
     interface Properties {
         '--space-direction'?: string;
+        '--space-justify'?: string;
         '--space-item-gap'?: string;
     }
 }
@@ -12,6 +13,7 @@ export interface SpaceProps {
     vertical?: boolean;
     gap?: number;
     itemStyle?: string | Partial<CSSStyleDeclaration>;
+    justify?: 'flex-start' | 'flex-end' | 'center' | 'space-round' | 'space-between' | 'space-evenly';
 }
 
 export const spaceProps = {
@@ -26,5 +28,9 @@ export const spaceProps = {
     itemStyle: {
         type: [String, Object] as PropType<SpaceProps['itemStyle']>,
         default: undefined
+    },
+    justify: {
+        type: String as PropType<SpaceProps['justify']>,
+        default: 'flex-start'
     }
 };

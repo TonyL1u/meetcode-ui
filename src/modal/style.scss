@@ -30,6 +30,7 @@
     height: var(--modal-height);
     background: #fff;
     align-self: center;
+    min-width: max-content;
 
     &:not(.mc-modal--pure) {
         display: flex;

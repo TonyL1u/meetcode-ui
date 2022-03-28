@@ -1,5 +1,5 @@
 <template>
-    <McPopconfirm content="这是一段内容确定删除吗？" :confirm-text="countDown ? `${countDown}秒后关闭` : '确认'" :confirm-disabled="!!countDown" @cancel="handleCancel" @confirm="handleConfirm">
+    <McPopconfirm content="这是一段内容确定删除吗？" :confirm-text="countDown ? `${countDown}秒后关闭` : '确定'" :confirm-disabled="!!countDown" @cancel="handleCancel" @confirm="handleConfirm">
         <McButton type="success" ghost>点击</McButton>
     </McPopconfirm>
 </template>

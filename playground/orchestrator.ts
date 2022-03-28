@@ -2,6 +2,7 @@ import { reactive, watch, watchEffect } from 'vue';
 import { createEventHook, EventHookOn } from '@vueuse/core';
 import { compileFile } from './compiler/sfcCompiler';
 import lz from 'lz-string';
+import beautify from 'js-beautify';
 
 const shouldUpdateContent = createEventHook();
 
@@ -177,7 +178,7 @@ export async function loadInitialState(fileSourceString: string = '') {
         const script = demoFile!.match(/<script lang="ts" setup>([\s\S]*?)<\/script>/)?.[1] ?? '';
 
         orchestrator.packages = initialPackages;
-        addFile(new OrchestratorFile('App.vue', template.trim(), script.trim()));
+        addFile(new OrchestratorFile('App.vue', beautify.html(template).trim(), script.trim()));
         setActiveFile('App.vue');
         shouldUpdateContent.trigger(null);
     });

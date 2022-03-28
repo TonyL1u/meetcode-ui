@@ -1,6 +1,7 @@
 .mc-space {
     display: flex;
     flex-direction: var(--space-direction);
+    justify-content: var(--space-justify);
     align-items: center;
     flex-wrap: wrap;
 

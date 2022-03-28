@@ -51,10 +51,10 @@ export default defineComponent({
         const magicKeys = useMagicKeys({
             passive: false,
             onEventFired(event: Event) {
-                event.preventDefault();
                 isTopModal.value && event.stopImmediatePropagation();
             }
         });
+        const keys = computed(() => Array.from(magicKeys.current));
         let closeAction: ModalCloseAction;
 
         watch(
@@ -114,7 +114,7 @@ export default defineComponent({
 
         const callShortcutStroke = () => {
             closeAction = 'shortcut';
-            emit('shortcut-stroke');
+            emit('shortcut-stroke', keys.value);
         };
 
         const callAfterEnter = () => {
@@ -167,7 +167,7 @@ export default defineComponent({
             };
         });
 
-        const modalVNode = computed(() => {
+        const headerVNode = computed(() => {
             const titleVNode = createVNode('div', { class: 'mc-modal-title' }, [typeof title.value === 'string' ? createTextVNode(title.value) : title.value?.()]);
             const closeIconVNode = closable.value
                 ? createVNode(
@@ -185,22 +185,30 @@ export default defineComponent({
                   )
                 : null;
 
+            return !pure.value && showHeader.value ? createVNode('div', { class: ['mc-modal__header', headerClass.value], style: headerStyle.value }, [slots.header ? renderSlot(slots, 'header') : titleVNode, closeIconVNode]) : null;
+        });
+
+        const footerVNode = computed(() => {
+            return !pure.value && showFooter.value
+                ? createVNode(
+                      'div',
+                      { class: ['mc-modal__footer', footerClass.value], style: footerStyle.value },
+                      slots.footer
+                          ? [renderSlot(slots, 'footer')]
+                          : [
+                                cancelText.value !== null ? createVNode(McButton, { class: 'mc-modal__footer-button', onClick: handleCancel }, { default: () => cancelText.value }) : null,
+                                confirmText.value !== null ? createVNode(McButton, { class: 'mc-modal__footer-button', onClick: handleConfirm, type: 'success' }, { default: () => confirmText.value }) : null
+                            ]
+                  )
+                : null;
+        });
+
+        const modalVNode = computed(() => {
             return createVNode('div', { class: 'mc-modal-wrapper', style: `transform-origin: ${modalTransformOrigin.value}` }, [
                 createVNode('div', { ref: modalElRef, class: ['mc-modal', pure.value ? 'mc-modal--pure' : ''], style: { ...cssVars.value, ...modalPosition.value } }, [
-                    !pure.value && showHeader.value ? createVNode('div', { class: ['mc-modal__header', headerClass.value], style: headerStyle.value }, [slots.header ? renderSlot(slots, 'header') : titleVNode, closeIconVNode]) : null,
+                    headerVNode.value,
                     createVNode('div', { class: ['mc-modal__body', bodyClass.value], style: bodyStyle.value }, [renderSlot(slots, 'default')]),
-                    !pure.value && showFooter.value
-                        ? createVNode(
-                              'div',
-                              { class: ['mc-modal__footer', footerClass.value], style: footerStyle.value },
-                              slots.footer
-                                  ? [renderSlot(slots, 'footer')]
-                                  : [
-                                        cancelText.value !== null ? createVNode(McButton, { class: 'mc-modal__footer-button', onClick: handleCancel }, { default: () => cancelText.value }) : null,
-                                        confirmText.value !== null ? createVNode(McButton, { class: 'mc-modal__footer-button', onClick: handleConfirm, type: 'success' }, { default: () => confirmText.value }) : null
-                                    ]
-                          )
-                        : null
+                    footerVNode.value
                 ])
             ]);
         });

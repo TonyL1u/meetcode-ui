@@ -30,10 +30,10 @@ export interface ModalProps {
     shortcutKey?: string;
     closeOnShortcut?: boolean;
     closable?: boolean;
-    headerStyle?: string | CSSStyleDeclaration;
-    bodyStyle?: string | CSSStyleDeclaration;
-    footerStyle?: string | CSSStyleDeclaration;
-    maskStyle?: string | CSSStyleDeclaration;
+    headerStyle?: string | Partial<CSSStyleDeclaration>;
+    bodyStyle?: string | Partial<CSSStyleDeclaration>;
+    footerStyle?: string | Partial<CSSStyleDeclaration>;
+    maskStyle?: string | Partial<CSSStyleDeclaration>;
     headerClass?: ElementClassSet;
     bodyClass?: ElementClassSet;
     footerClass?: ElementClassSet;

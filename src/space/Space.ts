@@ -7,10 +7,11 @@ export default defineComponent({
     name: 'Space',
     props: spaceProps,
     setup(props, { slots }) {
-        const { vertical, gap, itemStyle } = toRefs(props);
+        const { vertical, gap, itemStyle, justify } = toRefs(props);
         const cssVars = computed<CSS.Properties>(() => {
             return {
                 '--space-direction': vertical.value ? 'column' : 'row',
+                '--space-justify': justify.value,
                 '--space-item-gap': vertical.value ? `0 0 ${gap.value}px 0` : `0 ${gap.value}px 0 0`
             };
         });

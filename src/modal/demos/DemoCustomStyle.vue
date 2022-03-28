@@ -1,8 +1,8 @@
 <template>
     <McSpace>
         <McButton type="success" ghost @click="show1 = true">默认</McButton>
-        <McButton type="success" ghost @click="show2 = true">无 Header</McButton>
-        <McButton type="success" ghost @click="show3 = true">无 Footer</McButton>
+        <McButton type="success" ghost @click="show2 = true">无 header</McButton>
+        <McButton type="success" ghost @click="show3 = true">无 footer</McButton>
         <McButton type="success" ghost @click="show4 = true">无样式</McButton>
     </McSpace>
 

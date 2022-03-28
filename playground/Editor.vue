@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 import { useMonaco } from './logic/useMonaco';
 
 const emit = defineEmits<(e: 'change', content: string) => void>();

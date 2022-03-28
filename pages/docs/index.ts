@@ -1,9 +1,7 @@
 import { Ref, ref } from 'vue';
 import type { MenuOption, TreeSelectOption } from 'naive-ui';
-import * as CSS from '@vue/runtime-dom/node_modules/csstype';
 
 const markdownModules = import.meta.glob('./**/*.md');
-
 const rootFolder: TreeSelectOption = {
     label: 'docs',
     key: '',
@@ -13,7 +11,7 @@ const rootFolder: TreeSelectOption = {
 const routes = ref<Array<any>>([]);
 const menuTree: Ref<Array<MenuOption>> = ref([]);
 const folderTree = ref<Array<TreeSelectOption>>([rootFolder]);
-const menuBlackList = ['./Split.md'];
+const menuBlackList = ['./Split.md', './Popup.md'];
 
 for (const path in markdownModules) {
     if (menuBlackList.includes(path)) continue;

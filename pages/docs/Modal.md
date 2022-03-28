@@ -89,7 +89,7 @@ import { McTextLink } from 'meetcode-ui'
 
 `cancel` ：点击取消按钮关闭。
 
-`confirm` ：点击确认按钮关闭。
+`confirm` ：点击确定按钮关闭。
 
 返回值为 `true` 时，会阻止模态框关闭。支持异步调用。
 
@@ -99,9 +99,49 @@ import { McTextLink } from 'meetcode-ui'
 
 ## Props
 
-| 名称  |              类型              |   默认值    |     说明     |
-| :---: | :----------------------------: | :---------: | :----------: |
-| size  |            `number`            | `undefined` |   图标尺寸   |
-| color |            `string`            | `undefined` |     颜色     |
-| spin  |           `boolean`            |   `false`   | 是否开启旋转 |
-| speed | `'slow' \| 'normal' \| 'fast'` | `'normal'`  |   旋转速度   |
+|       名称        |              类型               |   默认值    |                 说明                 |
+| :---------------: | :-----------------------------: | :---------: | :----------------------------------: |
+|   (v-model)show   |            `boolean`            |   `false`   |            是否展示 Modal            |
+|       width       |       `number \| string`        |    `600`    |              模态框宽度              |
+|      height       |        `number\|string`         | `'initial'` |              模态框高度              |
+| wrapper-closable  |            `boolean`            |   `true`    |         点击遮罩是否触发事件         |
+|   shortcut-key    |            `string`             | `'Escape'`  |           模态框关闭快捷键           |
+| close-on-shortcut |            `boolean`            |   `true`    |       是否允许快捷键关闭模态框       |
+|     closable      |            `boolean`            |   `true`    |        是否显示右上角关闭按钮        |
+|   header-style    | `string \| CSSStyleDeclaration` | `undefined` |             header 样式              |
+|    body-style     | `string \| CSSStyleDeclaration` | `undefined` |              body 样式               |
+|   footer-style    | `string \| CSSStyleDeclaration` | `undefined` |             footer 样式              |
+|    mask-style     | `string \| CSSStyleDeclaration` | `undefined` |              遮罩层样式              |
+|   header-class    |        `string \| Array`        | `undefined` |             header 类名              |
+|    body-class     |        `string \| Array`        | `undefined` |              body 类名               |
+|   footer-class    |        `string \| Array`        | `undefined` |             footer 类名              |
+|       title       | `string \| (() => VNodeChild)`  | `undefined` |                 标题                 |
+|    show-header    |            `boolean`            |   `true`    |           是否显示 header            |
+|    show-footer    |            `boolean`            |   `true`    |           是否显示 footer            |
+|    cancel-text    |        `string \| null`         |  `'取消'`   | 取消按钮文字，设置为 `null` 隐藏按钮 |
+|   confirm-text    |        `string \| null`         |  `'确定'`   | 确定按钮文字，设置为 `null` 隐藏按钮 |
+|       pure        |            `boolean`            |   `false`   |               旋转速度               |
+|     position      |            `object`             | `undefined` |            模态框出现位置            |
+|     animation     |      `'scale' \| 'slide'`       |  `'scale'`  |            模态框出现动画            |
+
+## Event
+
+|        名称        |                                     类型                                      |          说明          |
+| :----------------: | :---------------------------------------------------------------------------: | :--------------------: |
+|   on-update:show   |                          `(value: boolean) => void`                           | 模态框显示或隐藏时触发 |
+|  on-wrapper-click  |                                 `() => void`                                  |  点击遮罩层的回调事件  |
+| on-shortcut-stroke |                          `(keys: string[]) => void`                           | 快捷键关闭模态框时触发 |
+|   on-after-enter   |                          `(value: boolean) => void`                           |   模态框显示后的回调   |
+|   on-after-leave   |                          `(value: boolean) => void`                           |   模态框隐藏后的回调   |
+|  on-before-enter   |                          `(value: boolean) => void`                           |   模态框显示前的回调   |
+|  on-before-leave   | `() => Promise<boolean \| undefined \| void> \| boolean \| undefined \| void` |   模态框隐藏前的回调   |
+|     on-cancel      |                          `(value: boolean) => void`                           |   点击取消按钮的回调   |
+|     on-confirm     |                          `(value: boolean) => void`                           |   点击确定按钮的回调   |
+
+## Slot
+
+|  名称   | 参数 |        说明        |
+| :-----: | :--: | :----------------: |
+| default | `()` |   模态框主体内容   |
+| header  | `()` | 模态框 header 内容 |
+| footer  | `()` | 模态框 footer 内容 |

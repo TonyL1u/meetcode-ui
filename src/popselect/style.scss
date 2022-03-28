@@ -1,10 +1,16 @@
 .mc-popselect {
-    @apply mc-p-0;
+    padding: 0px;
     min-width: 110px;
 }
 
 .mc-popselect-option {
-    @apply mc-px-3 mc-py-2 mc-cursor-pointer mc-rounded mc-mb-1;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+
+    &:not(:last-child) {
+        margin-bottom: 4px;
+    }
 
     &:not(&--disabled):hover {
         background: #f2fcf8;
@@ -22,10 +28,14 @@
     }
 
     &__inner {
-        @apply mc-flex mc-justify-between mc-items-center;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
         div {
-            @apply mc-truncate;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
             max-width: 200px;
         }
     }

@@ -21,7 +21,7 @@ export const popconfirmProps = {
     },
     confirmText: {
         type: [String, Object] as PropType<PopconfirmProps['confirmText']>,
-        default: '确认'
+        default: '确定'
     },
     cancelDisabled: {
         type: Boolean as PropType<PopconfirmProps['cancelDisabled']>,

@@ -5,7 +5,7 @@
         </McPopconfirm>
 
         <McPopconfirm content="这是一段内容确定删除吗？" cancel-text="我要删除" confirm-disabled>
-            <McButton type="success" ghost>确认</McButton>
+            <McButton type="success" ghost>确定</McButton>
         </McPopconfirm>
 
         <McPopconfirm content="这是一段内容确定删除吗？" :confirm-text="null">
