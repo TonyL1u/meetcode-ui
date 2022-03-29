@@ -1,6 +1,12 @@
 import { Ref, ref } from 'vue';
 import type { MenuOption, TreeSelectOption } from 'naive-ui';
 
+interface Route {
+    path: string;
+    component: () => Promise<{
+        [key: string]: any;
+    }>;
+}
 const markdownModules = import.meta.glob('./**/*.md');
 const rootFolder: TreeSelectOption = {
     label: 'docs',
@@ -8,7 +14,7 @@ const rootFolder: TreeSelectOption = {
     children: []
 };
 
-const routes = ref<Array<any>>([]);
+const routes = ref<Array<Route>>([]);
 const menuTree: Ref<Array<MenuOption>> = ref([]);
 const folderTree = ref<Array<TreeSelectOption>>([rootFolder]);
 const menuBlackList = ['./Split.md', './Popup.md'];
@@ -29,9 +35,9 @@ for (const path in markdownModules) {
             key: encodeURI(path.slice(1, -3))
         };
 
-        const isHasFolder = (<TreeSelectOption[]>rootFolder.children).findIndex((opt: TreeSelectOption) => opt.key === subMenuName.slice(1)) > -1;
+        const isHasFolder = (rootFolder.children as TreeSelectOption[]).findIndex((opt: TreeSelectOption) => opt.key === subMenuName.slice(1)) > -1;
         if (!isHasFolder) {
-            (<TreeSelectOption[]>rootFolder.children).push({
+            (rootFolder.children as TreeSelectOption[]).push({
                 label: subMenuName.slice(1),
                 key: subMenuName.slice(1)
             });
