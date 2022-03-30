@@ -47,7 +47,6 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
 import hljs from 'highlight.js';
-import { useNotification } from 'naive-ui';
 import { McTooltip, McTabs, McTabPane, McModal, McButton, McIcon, McSpace, McMessage } from 'meetcode-ui';
 import { Code as IconCode, CopyOutline as IconCopy, CubeOutline as IconEdit } from '@vicons/ionicons5';
 import { useClipboard } from '@vueuse/core';
@@ -59,7 +58,6 @@ const codes = ref<Array<any>>(JSON.parse(props.codeSources) || []);
 const codePreviewVisible = ref(false);
 const showModal = ref(false);
 const tabIndex = ref(0);
-const notification = useNotification();
 const { copy } = useClipboard();
 
 const showToolbox = computed(() => {
@@ -78,12 +76,6 @@ const copyCode = () => {
     const code = codes.value[tabIndex.value];
     copy(code.importSource);
     McMessage.success(`${code.name}.vue代码已复制到剪贴板`, { card: true });
-    notification.success({
-        content: '复制成功',
-        meta: `${code.name}.vue代码已复制`,
-        duration: 2000,
-        closable: true
-    });
 };
 </script>
 

@@ -86,6 +86,10 @@
     &__icon {
         display: flex;
         font-size: var(--button-icon-size);
+
+        .mc-icon {
+            color: var(--button-default-color);
+        }
     }
 
     &__icon-loading {

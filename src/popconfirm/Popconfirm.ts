@@ -1,11 +1,12 @@
 import { defineComponent, ref, toRefs, renderSlot, createVNode, Fragment, mergeProps, PropType } from 'vue';
-import { getSlotFirstVNode, propsMergeSlots } from '../_utils_';
+import { getSlotFirstVNode, propsMergeSlots, useThemeRegister } from '../_utils_';
 import { omit } from 'lodash-es';
 import { AlertCircle as IconAlert } from '@vicons/ionicons5';
 import { McPopover, PopoverExposeInstance, popoverProps, popoverEmits, PopoverTrigger } from '../popover';
 import { McButton } from '../button';
 import { McIcon } from '../icon';
 import { PopconfirmMergedProps, popconfirmProps, popconfirmEmits } from './interface';
+import { mainCssr } from './styles';
 
 const defaultPropsOverride = {
     trigger: {
@@ -23,6 +24,12 @@ export default defineComponent({
     },
     emits: [...popoverEmits, ...popconfirmEmits],
     setup(props, { slots }) {
+        // theme register
+        useThemeRegister({
+            key: 'McPopconfirm',
+            main: mainCssr
+        });
+
         const { cancelText, cancelDisabled, confirmText, confirmDisabled, hideIcon, onCancel, onConfirm } = toRefs(props);
         const popoverRef = ref<PopoverExposeInstance>();
 

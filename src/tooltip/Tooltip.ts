@@ -1,7 +1,8 @@
-import { defineComponent, toRefs, renderSlot, mergeProps, createVNode } from 'vue';
-import { propsMergeSlots } from '../_utils_';
+import { defineComponent, renderSlot, createVNode } from 'vue';
+import { propsMergeSlots, useThemeRegister } from '../_utils_';
 import { McPopover, popoverProps } from '../popover';
 import { TooltipMergedProps, tooltipProps } from './interface';
+import { lightCssr, darkCssr } from './styles';
 
 export default defineComponent({
     name: 'Tooltip',
@@ -10,17 +11,23 @@ export default defineComponent({
         ...tooltipProps
     },
     setup(props, { slots }) {
-        const { effect } = toRefs(props);
+        // theme register
+        useThemeRegister({
+            key: 'McTooltip',
+            light: lightCssr,
+            dark: darkCssr
+        });
 
-        return () => {
-            const mergedProps = mergeProps(props, {
-                class: ['mc-tooltip', `mc-tooltip--${effect.value}`]
-            });
-
-            return createVNode(McPopover, mergedProps, {
-                default: () => renderSlot(slots, 'default'),
-                content: () => propsMergeSlots<TooltipMergedProps, 'content'>(props, slots, 'content')
-            });
-        };
+        return () =>
+            createVNode(
+                McPopover,
+                {
+                    class: 'mc-tooltip'
+                },
+                {
+                    default: () => renderSlot(slots, 'default'),
+                    content: () => propsMergeSlots<TooltipMergedProps, 'content'>(props, slots, 'content')
+                }
+            );
     }
 });

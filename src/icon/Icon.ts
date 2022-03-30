@@ -1,12 +1,13 @@
-import { defineComponent, toRefs, mergeProps, createVNode, computed } from 'vue';
+import { defineComponent, toRefs, createVNode, computed } from 'vue';
 import { getSlotFirstVNode } from '../_utils_';
 import { iconProps } from './interface';
 import * as CSS from 'csstype';
+import { globalTheme } from '../theme';
 
 export default defineComponent({
     name: 'Icon',
     props: iconProps,
-    setup(props, { slots, attrs }) {
+    setup(props, { slots }) {
         const { size, color, spin, speed } = toRefs(props);
 
         const spinningSpeed = computed(() => {
@@ -29,14 +30,16 @@ export default defineComponent({
                 '--icon-spinning-speed': spinningSpeed.value
             };
         });
-        return () => {
-            const mergedProps = mergeProps(attrs, {
-                role: 'img',
-                class: ['mc-icon', { 'mc-icon--spinning': spin.value }],
-                style: cssVars.value
-            });
 
-            return createVNode('i', mergedProps, [getSlotFirstVNode(slots.default)]);
-        };
+        return () =>
+            createVNode(
+                'i',
+                {
+                    role: 'img',
+                    class: ['mc-icon', { 'mc-icon--spinning': spin.value }],
+                    style: cssVars.value
+                },
+                [getSlotFirstVNode(slots.default)]
+            );
     }
 });

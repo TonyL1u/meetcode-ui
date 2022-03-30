@@ -1,6 +1,5 @@
-import { CssRender } from 'css-render';
+import { c } from '../../_utils_';
 
-const { c } = CssRender();
 export default c([
     c(
         '.mc-icon',

@@ -1,10 +1,12 @@
 import { ref, toRefs, createVNode, nextTick, renderSlot, mergeProps, defineComponent, toRaw, PropType } from 'vue';
+import { useThemeRegister } from '../_utils_';
 import { CheckmarkSharp as IconCheck } from '@vicons/ionicons5';
 import { useVirtualList } from '@vueuse/core';
 import { omit } from 'lodash-es';
 import { McPopover, PopoverExposeInstance, PopoverPlacement, popoverProps, popoverEmits } from '../popover';
 import { McIcon } from '../icon';
 import { PopselectOption, popselectProps, popselectEmits } from './interface';
+import { mainCssr, lightCssr, darkCssr } from './styles';
 
 const defaultPropsOverride = {
     placement: {
@@ -22,6 +24,14 @@ export default defineComponent({
     },
     emits: [...popoverEmits, ...popselectEmits],
     setup(props, { slots, attrs, emit }) {
+        // theme register
+        useThemeRegister({
+            key: 'McPopselect',
+            main: mainCssr,
+            light: lightCssr,
+            dark: darkCssr
+        });
+
         const { value: valueVM, options, multiple, maxHeight, autoClose, autoScroll } = toRefs(props);
         const popoverRef = ref<PopoverExposeInstance>();
         let scrollToOption: (index: number) => void;
@@ -94,7 +104,8 @@ export default defineComponent({
 
             const mergedProps = mergeProps(omit(props, Object.keys(popselectProps)), {
                 ref: popoverRef,
-                class: 'mc-popselect'
+                class: 'mc-popselect',
+                style: 'padding: 0px; min-width: 110px'
             });
 
             return createVNode(

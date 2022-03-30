@@ -58,6 +58,8 @@ watch(
 
 export function useLightTheme(id: string, theme: CNode) {
     const key = `${id}-light`;
+    if (useLight.findIndex(l => l.key === key) > -1) return;
+
     const state: CSSRenderState = {
         key,
         isMounted: false,
@@ -74,6 +76,8 @@ export function useLightTheme(id: string, theme: CNode) {
 
 export function useDarkTheme(id: string, theme: CNode) {
     const key = `${id}-dark`;
+    if (useDark.findIndex(d => d.key === key) > -1) return;
+
     const state: CSSRenderState = {
         key,
         isMounted: false,
@@ -91,20 +95,3 @@ export function useDarkTheme(id: string, theme: CNode) {
 export function setGlobalTheme(theme: 'light' | 'dark') {
     globalTheme.value = theme;
 }
-
-// export function useTheme(config: { light?: CNode; dark?: CNode }) {
-//     const { light, dark } = config;
-//     watch(
-//         globalTheme,
-//         theme => {
-//             if (theme === 'light') {
-//                 dark?.unmount();
-//                 light?.mount();
-//             } else if (theme === 'dark') {
-//                 light?.unmount();
-//                 dark?.mount();
-//             }
-//         },
-//         { immediate: true }
-//     );
-// }
