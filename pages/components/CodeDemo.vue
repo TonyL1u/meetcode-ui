@@ -39,7 +39,7 @@
         </McSpace>
     </div>
 
-    <McModal v-model:show="showModal" :appear-from-cursor="false" pure :body-style="{ height: '75vh', width: '75vw', minWidth: '1280px', minHeight: '768px', padding: '8px', boxSizing: 'border-box' }">
+    <McModal v-model:show="showModal" style="border-radius: 8px" :appear-from-cursor="false" pure :body-style="{ height: '75vh', width: '75vw', minWidth: '1280px', minHeight: '768px', padding: '8px', boxSizing: 'border-box' }">
         <Playground />
     </McModal>
 </template>

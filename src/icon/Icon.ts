@@ -1,13 +1,19 @@
 import { defineComponent, toRefs, createVNode, computed } from 'vue';
-import { getSlotFirstVNode } from '../_utils_';
+import { getSlotFirstVNode, useThemeRegister } from '../_utils_';
 import { iconProps } from './interface';
 import * as CSS from 'csstype';
-import { globalTheme } from '../theme';
+import { mainCssr } from './styles';
 
 export default defineComponent({
     name: 'Icon',
     props: iconProps,
     setup(props, { slots }) {
+        // theme register
+        useThemeRegister({
+            key: 'McIcon',
+            main: mainCssr
+        });
+
         const { size, color, spin, speed } = toRefs(props);
 
         const spinningSpeed = computed(() => {

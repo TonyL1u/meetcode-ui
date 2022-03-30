@@ -5,10 +5,13 @@ import { CNode } from 'css-render';
 interface CSSRenderState {
     key: string;
     isMounted: boolean;
+    isStatic: boolean;
     theme: CNode;
 }
 const useLight = reactive<CSSRenderState[]>([]);
 const useDark = reactive<CSSRenderState[]>([]);
+// const componentsWithLightTheme = reactive<string[]>([]);
+// const componentsWithDarkTheme = reactive<string[]>([]);
 const useGlobalThemeState = createGlobalState(() => useStorage('meetcode-ui-theme-local-storage', 'light'));
 export const globalTheme: RemovableRef<string> = useGlobalThemeState();
 
@@ -63,6 +66,7 @@ export function useLightTheme(id: string, theme: CNode) {
     const state: CSSRenderState = {
         key,
         isMounted: false,
+        isStatic: false,
         theme
     };
 
@@ -81,6 +85,7 @@ export function useDarkTheme(id: string, theme: CNode) {
     const state: CSSRenderState = {
         key,
         isMounted: false,
+        isStatic: false,
         theme
     };
 
@@ -95,3 +100,15 @@ export function useDarkTheme(id: string, theme: CNode) {
 export function setGlobalTheme(theme: 'light' | 'dark') {
     globalTheme.value = theme;
 }
+
+// export function makeStaticTheme(theme: 'light' | 'dark', name: 'string') {
+//     if (theme === 'light') {
+//         const index = componentsWithDarkTheme.findIndex(s => s === name);
+//         index > -1 && componentsWithDarkTheme.splice(index, 1);
+//         componentsWithLightTheme.push(name);
+//     } else if (theme === 'dark') {
+//         const index = componentsWithLightTheme.findIndex(s => s === name);
+//         index > -1 && componentsWithLightTheme.splice(index, 1);
+//         componentsWithDarkTheme.push(name);
+//     }
+// }

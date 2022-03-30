@@ -168,3 +168,7 @@
 2022-03-01
 
 -   通过点击 wrapper 或键盘快捷键关闭当前 Modal 并且在其 onBeforeLeave 事件中打开一个新的 Modal 时会有 bug，导致无法打开新的 Modal
+
+2022-03-30
+
+-   Modal 设置 `show-header` 和 `show-footer` 都为 false 时，内容高度设置 100% 无效

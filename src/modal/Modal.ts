@@ -1,19 +1,28 @@
-import { defineComponent, createVNode, toRefs, computed, renderSlot, ref, Transition, watch, createTextVNode, CSSProperties, nextTick } from 'vue';
+import { defineComponent, createVNode, toRefs, computed, renderSlot, ref, Transition, watch, createTextVNode, CSSProperties, mergeProps } from 'vue';
+import { createKey, useThemeRegister } from '../_utils_';
 import { onClickOutside, useMouse, useMagicKeys, pausableWatch } from '@vueuse/core';
 import { VLazyTeleport } from 'vueuc';
-import { createKey } from '../_utils_';
 import { modalProps, ModalCloseAction } from './interface';
 import { McIcon } from '../icon';
 import { McButton } from '../button';
 import { modalStack, addModal, removeModal } from './shared';
 import { Close as IconClose } from '@vicons/ionicons5';
 import * as CSS from 'csstype';
+import { mainCssr, lightCssr, darkCssr } from './styles';
 
 export default defineComponent({
     name: 'Modal',
     props: modalProps,
     emits: ['update:show', 'wrapper-click', 'shortcut-stroke', 'after-enter', 'after-leave', 'before-enter', 'cancel', 'confirm'],
-    setup(props, { slots, emit, expose }) {
+    setup(props, { slots, attrs, emit, expose }) {
+        // theme register
+        useThemeRegister({
+            key: 'McModal',
+            main: mainCssr,
+            light: lightCssr,
+            dark: darkCssr
+        });
+
         const {
             show,
             width,
@@ -173,7 +182,6 @@ export default defineComponent({
                 ? createVNode(
                       McIcon,
                       {
-                          color: '#666',
                           size: 20,
                           class: 'mc-modal-close-icon',
                           onClick: () => {
@@ -204,12 +212,17 @@ export default defineComponent({
         });
 
         const modalVNode = computed(() => {
+            const mergedProps = mergeProps(
+                {
+                    ref: modalElRef,
+                    class: ['mc-modal', pure.value ? 'mc-modal--pure' : ''],
+                    style: { ...cssVars.value, ...modalPosition.value }
+                },
+                attrs
+            );
+
             return createVNode('div', { class: 'mc-modal-wrapper', style: `transform-origin: ${modalTransformOrigin.value}` }, [
-                createVNode('div', { ref: modalElRef, class: ['mc-modal', pure.value ? 'mc-modal--pure' : ''], style: { ...cssVars.value, ...modalPosition.value } }, [
-                    headerVNode.value,
-                    createVNode('div', { class: ['mc-modal__body', bodyClass.value], style: bodyStyle.value }, [renderSlot(slots, 'default')]),
-                    footerVNode.value
-                ])
+                createVNode('div', mergedProps, [headerVNode.value, createVNode('div', { class: ['mc-modal__body', bodyClass.value], style: bodyStyle.value }, [renderSlot(slots, 'default')]), footerVNode.value])
             ]);
         });
 
