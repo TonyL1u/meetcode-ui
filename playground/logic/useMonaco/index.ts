@@ -5,7 +5,6 @@ import lightTheme from 'theme-vitesse/themes/vitesse-light.json';
 import type { editor as Editor } from 'monaco-editor';
 import { editorPlugins } from '../../monaco/plugins/editor';
 import setupMonaco from '../../monaco';
-import { isDark } from '../dark';
 import { siteTheme } from '@pages/site.config';
 
 export function useMonaco(target: Ref, options: any) {
@@ -52,7 +51,7 @@ export function useMonaco(target: Ref, options: any) {
                 watch(
                     siteTheme,
                     () => {
-                        if (siteTheme.value) monaco.editor.setTheme('vitesse-dark');
+                        if (siteTheme.value === 'dark') monaco.editor.setTheme('vitesse-dark');
                         else monaco.editor.setTheme('vitesse-light');
                     },
                     { immediate: true }

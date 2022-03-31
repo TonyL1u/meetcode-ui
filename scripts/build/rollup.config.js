@@ -13,7 +13,7 @@ const file = type => `lib/${name}.${type}.js`;
 const overrides = {
     // 忽略any
     compilerOptions: { noImplicitAny: false },
-    exclude: ['playground', 'pages', '*.config.ts', 'src/**/__tests__']
+    exclude: ['playground', 'pages', 'scripts', '*.config.ts', 'src/**/__tests__']
 };
 export { name, file };
 export default {

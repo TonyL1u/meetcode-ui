@@ -1,10 +1,14 @@
-import { ref } from 'vue';
-// import { useOsTheme } from 'naive-ui';
+import { ref, watch } from 'vue';
+import { setGlobalTheme } from 'meetcode-ui';
 
-const isProduction = process.env.NODE_ENV === 'production';
-// const osThemeRef = useOsTheme();
-// true - 'dark', false - 'light'
-// const siteTheme = ref(osThemeRef.value === 'dark');
-const siteTheme = ref(false);
+const siteTheme = ref<'light' | 'dark'>('light');
+
+watch(
+    siteTheme,
+    theme => {
+        setGlobalTheme(theme);
+    },
+    { immediate: true }
+);
 
 export { siteTheme };

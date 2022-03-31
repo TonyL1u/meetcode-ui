@@ -34,6 +34,8 @@ export default defineComponent({
         const iconVNode = computed<VNodeChild | VNode>(() => {
             return icon?.value
                 ? icon?.value()
+                : type.value === 'loading'
+                ? createVNode('div', { class: 'mc-message__icon-loading' })
                 : createVNode(
                       McIcon,
                       {
@@ -53,8 +55,6 @@ export default defineComponent({
                                       return createVNode(IconInfo);
                                   case 'error':
                                       return createVNode(IconError);
-                                  case 'loading':
-                                      return createVNode('div', { class: 'mc-message__icon-loading' });
                               }
                           }
                       }

@@ -12,7 +12,7 @@
                     <NLayout has-sider sider-placement="right">
                         <NLayoutContent>
                             <NNotificationProvider>
-                                <router-view :class="siteTheme ? 'dark' : 'light'" />
+                                <router-view :class="siteTheme" />
                             </NNotificationProvider>
                         </NLayoutContent>
                         <NLayoutSider class="sider-navigator" :width="164" content-style="padding-right: 24px">
@@ -35,7 +35,7 @@ import { siteTheme } from './site.config';
 
 // 初始跟随系统主题
 const theme = computed(() => {
-    return siteTheme.value ? darkTheme : null;
+    return siteTheme.value === 'dark' ? darkTheme : null;
 });
 </script>
 

@@ -1,7 +1,7 @@
 <template>
     <McPopconfirm content="这是一段内容确定删除吗？">
         <template #icon>
-            <McIcon :size="22" class="mc-mr-2 mc-text-green-500">
+            <McIcon class="mc-mr-2" color="#16a34a" :size="22">
                 <IconCheck />
             </McIcon>
         </template>

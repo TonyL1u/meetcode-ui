@@ -1,7 +1,9 @@
 import { createVNode, TransitionGroup, FunctionalComponent, nextTick } from 'vue';
+import { useThemeRegister } from '../_utils_';
 import MessageEntity from './Message';
 import MessageReactiveList, { closeMessage, unmountContainer } from './MessageComposable';
 import { MessageExposeInstance, Message } from './interface';
+import { mainCssr, lightCssr, darkCssr } from './styles';
 // import gsap from 'gsap';
 // import Flip from 'gsap/Flip';
 
@@ -99,6 +101,14 @@ function getMessageEntityVNode(message: Message, index: number) {
 }
 
 const MessageEnvironment: FunctionalComponent = () => {
+    // theme register
+    useThemeRegister({
+        key: 'McMessage',
+        main: mainCssr,
+        light: lightCssr,
+        dark: darkCssr
+    });
+
     return createVNode(
         TransitionGroup,
         {
