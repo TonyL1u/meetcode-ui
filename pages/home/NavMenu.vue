@@ -1,8 +1,8 @@
 <template>
     <McPopover trigger="click" placement="bottom-end" :style="{ height: '90vh', padding: 0, width: '300px', overflow: 'auto' }">
-        <NIcon class="nav-menu-trigger" size="24">
+        <McIcon class="nav-menu-trigger" :size="24">
             <IconMenu />
-        </NIcon>
+        </McIcon>
         <template #content>
             <Menu />
         </template>
@@ -10,8 +10,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NIcon } from 'naive-ui';
+import { McPopover, McIcon } from 'meetcode-ui';
 import { MenuOutline as IconMenu } from '@vicons/ionicons5';
-import { McPopover } from 'meetcode-ui';
 import Menu from './Menu.vue';
 </script>
