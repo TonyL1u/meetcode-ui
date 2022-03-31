@@ -9,12 +9,14 @@ import { compileModulesForPreview } from './compiler/moduleCompiler';
 import { orchestrator, orchestrator as store } from './orchestrator';
 import { siteTheme } from '@pages/site.config';
 
+const emit = defineEmits<(e: 'renderFinished') => void>();
 const container = ref();
 const runtimeError = ref();
 const runtimeWarning = ref();
 let sandbox: HTMLIFrameElement;
 let proxy: PreviewProxy;
 let stopUpdateWatcher: WatchStopHandle;
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 watch([runtimeError, runtimeWarning], () => {
     orchestrator.runtimeErrors = [runtimeError.value, runtimeWarning.value].filter(x => x);
@@ -23,7 +25,6 @@ watch([runtimeError, runtimeWarning], () => {
 // create sandbox on mount
 onMounted(createSandbox);
 // reset sandbox when import map changes
-
 watch(
     () => store.importMap,
     (importMap, prev) => {
@@ -132,11 +133,13 @@ async function updatePreview() {
         // eslint-disable-next-line no-console
         console.log(`successfully compiled ${modules.length} modules.`);
         // reset modules
-        await proxy.eval([
-            "window.__modules__ = {};window.__css__ = ''",
-            ...modules,
-            siteTheme.value === 'dark' ? 'document.querySelector("html").classList.add("dark")' : 'document.querySelector("html").classList.remove("dark")',
-            `
+        await Promise.all([
+            sleep(1000),
+            await proxy.eval([
+                "window.__modules__ = {};window.__css__ = ''",
+                ...modules,
+                siteTheme.value === 'dark' ? 'document.querySelector("html").classList.add("dark")' : 'document.querySelector("html").classList.remove("dark")',
+                `
       import { createApp as _createApp } from "vue"
       if (window.__app__) {
         window.__app__.unmount()
@@ -146,7 +149,9 @@ async function updatePreview() {
       const app = window.__app__ = _createApp(__modules__["${MAIN_FILE}"].default)
       app.config.errorHandler = e => console.error(e)
       app.mount('#app')`.trim()
+            ])
         ]);
+        emit('renderFinished');
     } catch (e: any) {
         runtimeError.value = e.message;
     }

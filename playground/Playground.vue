@@ -1,9 +1,3 @@
-<script lang="ts">
-export default {
-    inheritAttrs: false
-};
-</script>
-
 <script lang="ts" setup>
 import Editor from './Editor.vue';
 import Preview from './Preview.vue';
@@ -11,6 +5,7 @@ import { Splitpanes, Pane } from 'splitpanes';
 import { onShouldUpdateContent, orchestrator } from './orchestrator';
 import { ref } from 'vue';
 
+const emit = defineEmits<(e: 'renderFinished') => void>();
 const initialScript = ref('');
 const initialTemplate = ref('');
 onShouldUpdateContent(() => {
@@ -26,6 +21,8 @@ const onContentChanged = (source: string, content: string) => {
         else if (source === 'template') orchestrator.activeFile.template = content;
     }
 };
+
+const handleRenderFinished = () => emit('renderFinished');
 </script>
 
 <template>
@@ -46,7 +43,7 @@ const onContentChanged = (source: string, content: string) => {
         </Pane>
         <Pane class="mc-h-full">
             <div class="container" style="background: #f2f2f2">
-                <Preview />
+                <Preview @render-finished="handleRenderFinished" />
             </div>
         </Pane>
     </Splitpanes>

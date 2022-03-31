@@ -12,6 +12,7 @@ import { mainCssr, lightCssr, darkCssr } from './styles';
 
 export default defineComponent({
     name: 'Modal',
+    inheritAttrs: false,
     props: modalProps,
     emits: ['update:show', 'wrapper-click', 'shortcut-stroke', 'after-enter', 'after-leave', 'before-enter', 'cancel', 'confirm'],
     setup(props, { slots, attrs, emit, expose }) {

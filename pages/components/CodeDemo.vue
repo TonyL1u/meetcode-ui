@@ -39,15 +39,24 @@
         </McSpace>
     </div>
 
-    <McModal v-model:show="showModal" style="border-radius: 8px" :appear-from-cursor="false" pure :body-style="{ height: '75vh', width: '75vw', minWidth: '1280px', minHeight: '768px', padding: '8px', boxSizing: 'border-box' }">
-        <Playground />
+    <McModal
+        v-model:show="showModal"
+        style="border-radius: 8px"
+        :appear-from-cursor="false"
+        pure
+        :body-style="{ height: '75vh', width: '75vw', minWidth: '1280px', minHeight: '768px', padding: '8px', boxSizing: 'border-box' }"
+        @after-leave="isLoading = true"
+    >
+        <McLoading size="large" :show="isLoading" :mask-style="{ background: '#fff' }" :content-style="{ height: '100%' }" style="height: 100%">
+            <Playground @render-finished="isLoading = false" />
+        </McLoading>
     </McModal>
 </template>
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
 import hljs from 'highlight.js';
-import { McTooltip, McTabs, McTabPane, McModal, McButton, McIcon, McSpace, McMessage } from 'meetcode-ui';
+import { McTooltip, McTabs, McTabPane, McModal, McButton, McIcon, McSpace, McMessage, McLoading } from 'meetcode-ui';
 import { Code as IconCode, CopyOutline as IconCopy, CubeOutline as IconEdit } from '@vicons/ionicons5';
 import { useClipboard } from '@vueuse/core';
 import Playground from '@playground/Playground.vue';
@@ -58,6 +67,7 @@ const codes = ref<Array<any>>(JSON.parse(props.codeSources) || []);
 const codePreviewVisible = ref(false);
 const showModal = ref(false);
 const tabIndex = ref(0);
+const isLoading = ref(true);
 const { copy } = useClipboard();
 
 const showToolbox = computed(() => {
