@@ -47,7 +47,7 @@
         :body-style="{ height: '75vh', width: '75vw', minWidth: '1280px', minHeight: '768px', padding: '8px', boxSizing: 'border-box' }"
         @after-leave="isLoading = true"
     >
-        <McLoading size="large" :show="isLoading" :mask-style="{ background: '#fff' }" :content-style="{ height: '100%' }" style="height: 100%">
+        <McLoading size="large" type="ripple" :show="isLoading" :mask-style="{ background: '#fff' }" :content-style="{ height: '100%' }" style="height: 100%">
             <Playground @render-finished="isLoading = false" />
         </McLoading>
     </McModal>

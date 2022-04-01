@@ -1,15 +1,17 @@
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted } from 'vue';
 import { useThemeRegister } from '../_utils_';
 import { mainCssr, lightCssr, darkCssr } from './styles';
 
 export default defineComponent({
     setup() {
         // theme register
-        useThemeRegister({
-            key: 'NAME',
-            main: mainCssr,
-            light: lightCssr,
-            dark: darkCssr
+        onMounted(() => {
+            useThemeRegister({
+                key: 'NAME',
+                main: mainCssr,
+                light: lightCssr,
+                dark: darkCssr
+            });
         });
     }
 });

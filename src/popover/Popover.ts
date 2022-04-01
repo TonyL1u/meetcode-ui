@@ -1,4 +1,4 @@
-import { ref, createVNode, Text, cloneVNode, computed, withDirectives, vShow, watch, toRefs, nextTick, Transition, mergeProps, defineComponent } from 'vue';
+import { ref, createVNode, Text, cloneVNode, computed, withDirectives, vShow, watch, toRefs, nextTick, Transition, mergeProps, defineComponent, onMounted } from 'vue';
 import { getSlotFirstVNode, propsMergeSlots, useThemeRegister } from '../_utils_';
 import { VBinder, VTarget, VFollower } from 'vueuc';
 import { useElementBounding, useMouseInElement, useThrottleFn, pausableWatch } from '@vueuse/core';
@@ -12,11 +12,13 @@ export default defineComponent({
     emits: popoverEmits,
     setup(props, { slots, attrs, expose, emit }) {
         // theme register
-        useThemeRegister({
-            key: 'McPopover',
-            main: mainCssr,
-            light: lightCssr,
-            dark: darkCssr
+        onMounted(() => {
+            useThemeRegister({
+                key: 'McPopover',
+                main: mainCssr,
+                light: lightCssr,
+                dark: darkCssr
+            });
         });
 
         const { trigger, placement, destroyWhenHide, zIndex, show, disabled, withArrow, showDelay, hideDelay, offset, wrapBoundary, matchTrigger, autoSync, title, followMode, x, y } = toRefs(props);

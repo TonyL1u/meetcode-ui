@@ -1,4 +1,4 @@
-import { defineComponent, createVNode, toRefs, computed, renderSlot, ref, Transition, watch, createTextVNode, CSSProperties, mergeProps } from 'vue';
+import { defineComponent, createVNode, toRefs, computed, renderSlot, ref, Transition, watch, createTextVNode, CSSProperties, mergeProps, onMounted } from 'vue';
 import { createKey, useThemeRegister } from '../_utils_';
 import { onClickOutside, useMouse, useMagicKeys, pausableWatch } from '@vueuse/core';
 import { VLazyTeleport } from 'vueuc';
@@ -17,11 +17,13 @@ export default defineComponent({
     emits: ['update:show', 'wrapper-click', 'shortcut-stroke', 'after-enter', 'after-leave', 'before-enter', 'cancel', 'confirm'],
     setup(props, { slots, attrs, emit, expose }) {
         // theme register
-        useThemeRegister({
-            key: 'McModal',
-            main: mainCssr,
-            light: lightCssr,
-            dark: darkCssr
+        onMounted(() => {
+            useThemeRegister({
+                key: 'McModal',
+                main: mainCssr,
+                light: lightCssr,
+                dark: darkCssr
+            });
         });
 
         const {

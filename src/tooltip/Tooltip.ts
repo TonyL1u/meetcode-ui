@@ -1,4 +1,4 @@
-import { defineComponent, renderSlot, createVNode, mergeProps } from 'vue';
+import { defineComponent, renderSlot, createVNode, mergeProps, onMounted } from 'vue';
 import { propsMergeSlots, useThemeRegister } from '../_utils_';
 import { omit } from 'lodash-es';
 import { McPopover, popoverProps } from '../popover';
@@ -13,10 +13,12 @@ export default defineComponent({
     },
     setup(props, { slots }) {
         // theme register
-        useThemeRegister({
-            key: 'McTooltip',
-            light: lightCssr,
-            dark: darkCssr
+        onMounted(() => {
+            useThemeRegister({
+                key: 'McTooltip',
+                light: lightCssr,
+                dark: darkCssr
+            });
         });
 
         return () => {

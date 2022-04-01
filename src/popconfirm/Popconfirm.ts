@@ -1,4 +1,4 @@
-import { defineComponent, ref, toRefs, renderSlot, createVNode, Fragment, mergeProps, PropType } from 'vue';
+import { defineComponent, ref, toRefs, renderSlot, createVNode, Fragment, mergeProps, PropType, onMounted } from 'vue';
 import { getSlotFirstVNode, propsMergeSlots, useThemeRegister } from '../_utils_';
 import { omit } from 'lodash-es';
 import { AlertCircle as IconAlert } from '@vicons/ionicons5';
@@ -25,9 +25,11 @@ export default defineComponent({
     emits: [...popoverEmits, ...popconfirmEmits],
     setup(props, { slots }) {
         // theme register
-        useThemeRegister({
-            key: 'McPopconfirm',
-            main: mainCssr
+        onMounted(() => {
+            useThemeRegister({
+                key: 'McPopconfirm',
+                main: mainCssr
+            });
         });
 
         const { cancelText, cancelDisabled, confirmText, confirmDisabled, hideIcon, onCancel, onConfirm } = toRefs(props);

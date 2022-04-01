@@ -1,4 +1,4 @@
-import { ref, toRefs, createVNode, nextTick, renderSlot, mergeProps, defineComponent, toRaw, PropType } from 'vue';
+import { ref, toRefs, createVNode, nextTick, renderSlot, mergeProps, defineComponent, toRaw, PropType, onMounted } from 'vue';
 import { useThemeRegister } from '../_utils_';
 import { CheckmarkSharp as IconCheck } from '@vicons/ionicons5';
 import { useVirtualList } from '@vueuse/core';
@@ -25,11 +25,13 @@ export default defineComponent({
     emits: [...popoverEmits, ...popselectEmits],
     setup(props, { slots, attrs, emit }) {
         // theme register
-        useThemeRegister({
-            key: 'McPopselect',
-            main: mainCssr,
-            light: lightCssr,
-            dark: darkCssr
+        onMounted(() => {
+            useThemeRegister({
+                key: 'McPopselect',
+                main: mainCssr,
+                light: lightCssr,
+                dark: darkCssr
+            });
         });
 
         const { value: valueVM, options, multiple, maxHeight, autoClose, autoScroll } = toRefs(props);
