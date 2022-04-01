@@ -172,3 +172,9 @@
 2022-03-30
 
 -   Modal 设置 `show-header` 和 `show-footer` 都为 false 时，内容高度设置 100% 无效
+
+2022-04-01
+
+-   Popover 里如果嵌套了另外一个 Popover，当鼠标移到内部嵌套的 Popover 时，两个 Popover 都会消失
+-   所有的弹出类组件都有同一个问题，点击外面判断不准确
+-   有涉及 z-index 弹层的不能写死，需要动态修改

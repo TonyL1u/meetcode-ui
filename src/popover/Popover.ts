@@ -81,6 +81,7 @@ export default defineComponent({
             contentHideTimer.value = null;
         };
         const handleContentShow = () => {
+            trigger.value !== 'follow' && console.log('show');
             clearHideTimer();
             if (showRef.value) return;
             contentShowTimer.value = window.setTimeout(() => {
@@ -91,6 +92,7 @@ export default defineComponent({
             }, showDelay.value);
         };
         const handleContentHide = () => {
+            trigger.value !== 'follow' && console.log('hide');
             clearShowTimer();
             if (!showRef.value) return;
             contentHideTimer.value = window.setTimeout(() => {
@@ -101,6 +103,7 @@ export default defineComponent({
             }, hideDelay.value);
         };
         const handleClickOutside = (e: MouseEvent) => {
+            console.log(e);
             const isClickContent = contentVNode.value?.el?.contains(e.target);
             const isClickTrigger = triggerVNode.value?.el?.contains(e.target);
             if (!isClickContent && !isClickTrigger) {
@@ -119,7 +122,12 @@ export default defineComponent({
 
             return {
                 onMouseenter: handleContentShow,
-                onMouseleave: handleContentHide
+                onMouseleave(e: MouseEvent) {
+                    console.log(e);
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    handleContentHide();
+                }
             };
         });
 
