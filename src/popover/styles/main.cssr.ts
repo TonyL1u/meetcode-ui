@@ -43,10 +43,10 @@ export default c([
             marginBottom: '8px'
         },
         [
-            c('.mc-popover--with-arrow', {
+            c('& > .mc-popover--with-arrow', {
                 marginBottom: '10px'
             }),
-            c('.mc-popover__arrow', {
+            c('& > .mc-popover__arrow', {
                 transform: 'translateX(-50%) rotate(45deg)',
                 bottom: '-4px'
             })
@@ -60,10 +60,10 @@ export default c([
             marginLeft: '8px'
         },
         [
-            c('.mc-popover--with-arrow', {
+            c('& > .mc-popover--with-arrow', {
                 marginLeft: '10px'
             }),
-            c('.mc-popover__arrow', {
+            c('& > .mc-popover__arrow', {
                 transform: 'translateY(-50%) rotate(45deg)',
                 left: '-4px'
             })
@@ -77,10 +77,10 @@ export default c([
             marginTop: '8px'
         },
         [
-            c('.mc-popover--with-arrow', {
+            c('& > .mc-popover--with-arrow', {
                 marginBottom: '10px'
             }),
-            c('.mc-popover__arrow', {
+            c('& > .mc-popover__arrow', {
                 transform: 'translateX(-50%) rotate(45deg)',
                 top: '-4px'
             })
@@ -94,10 +94,10 @@ export default c([
             marginRight: '8px'
         },
         [
-            c('.mc-popover--with-arrow', {
+            c('& > .mc-popover--with-arrow', {
                 marginRight: '10px'
             }),
-            c('.mc-popover__arrow', {
+            c('& > .mc-popover__arrow', {
                 transform: 'translateY(-50%) rotate(45deg)',
                 right: '-4px'
             })
@@ -105,13 +105,13 @@ export default c([
     ),
     c("[v-placement='top-start'], [v-placement='bottom-start']", [
         c(
-            '.mc-popover',
+            '& > .mc-popover',
             {
                 '-ms-transform-origin-x': '15%',
                 '-webkit-transform-origin-x': '15%'
             },
             [
-                c('.mc-popover__arrow', {
+                c('& > .mc-popover__arrow', {
                     left: '15%'
                 })
             ]
@@ -119,13 +119,13 @@ export default c([
     ]),
     c("[v-placement='top'], [v-placement='bottom']", [
         c(
-            '.mc-popover',
+            '& > .mc-popover',
             {
                 '-ms-transform-origin-x': '50%',
                 '-webkit-transform-origin-x': '50%'
             },
             [
-                c('.mc-popover__arrow', {
+                c('& > .mc-popover__arrow', {
                     left: '50%'
                 })
             ]
@@ -133,13 +133,13 @@ export default c([
     ]),
     c("[v-placement='top-end'], [v-placement='bottom-end']", [
         c(
-            '.mc-popover',
+            '& > .mc-popover',
             {
                 '-ms-transform-origin-x': '85%',
                 '-webkit-transform-origin-x': '85%'
             },
             [
-                c('.mc-popover__arrow', {
+                c('& > .mc-popover__arrow', {
                     left: '85%'
                 })
             ]
@@ -147,13 +147,13 @@ export default c([
     ]),
     c("[v-placement='right-start'], [v-placement='left-start']", [
         c(
-            '.mc-popover',
+            '& > .mc-popover',
             {
                 '-ms-transform-origin-y': '15%',
                 '-webkit-transform-origin-y': '15%'
             },
             [
-                c('.mc-popover__arrow', {
+                c('& > .mc-popover__arrow', {
                     top: '15%'
                 })
             ]
@@ -161,13 +161,13 @@ export default c([
     ]),
     c("[v-placement='right'], [v-placement='left']", [
         c(
-            '.mc-popover',
+            '& > .mc-popover',
             {
                 '-ms-transform-origin-y': '50%',
                 '-webkit-transform-origin-y': '50%'
             },
             [
-                c('.mc-popover__arrow', {
+                c('& > .mc-popover__arrow', {
                     top: '50%'
                 })
             ]
@@ -175,13 +175,13 @@ export default c([
     ]),
     c("[v-placement='right-end'], [v-placement='left-end']", [
         c(
-            '.mc-popover',
+            '& > .mc-popover',
             {
                 '-ms-transform-origin-y': '85%',
                 '-webkit-transform-origin-y': '85%'
             },
             [
-                c('.mc-popover__arrow', {
+                c('& > .mc-popover__arrow', {
                     top: '85%'
                 })
             ]

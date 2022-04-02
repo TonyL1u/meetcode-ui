@@ -10,7 +10,7 @@ export default c([
         flexDirection: 'column',
         alignItems: 'center',
         width: '100vw',
-        zIndex: 5000
+        zIndex: 6000
     }),
     c(
         '.mc-message',
@@ -39,7 +39,7 @@ export default c([
                 '&--card',
                 {
                     boxShadow: '0px 1px 4px 0px rgba(0, 0, 0, 0.02), 0px 2px 12px 0px rgba(0, 0, 0, 0.04), 0px 2px 6px 0px rgba(0, 0, 0, 0.02)',
-                    padding: '12px 16px'
+                    padding: '12px'
                 },
                 [
                     c('.mc-message__icon', {

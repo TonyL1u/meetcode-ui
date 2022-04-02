@@ -1,4 +1,4 @@
-import { PropType, VNodeChild } from 'vue';
+import { PropType, VNodeChild, Ref, InjectionKey } from 'vue';
 import { ElementClassSet } from '../_utils_';
 import * as CSS from 'csstype';
 
@@ -14,11 +14,16 @@ export type OnBeforeEnterImpl = () => Promise<boolean | undefined | void> | bool
 export type OnCancelImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
 export type OnConfirmImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
 export type ModalCloseAction = 'wrapper' | 'close' | 'shortcut' | 'cancel' | 'confirm';
+export type ModalInjection = Ref<HTMLElement | null> | null;
 export interface ModalPosition {
     top?: number | string;
     right?: number | string;
     bottom?: number | string;
     left?: number | string;
+}
+export interface ModalExposeInstance {
+    close: () => void;
+    el: HTMLElement;
 }
 
 export interface ModalProps {
@@ -47,7 +52,6 @@ export interface ModalProps {
     animation?: 'scale' | 'slide';
     onBeforeLeave?: OnBeforeLeaveImpl;
 }
-
 export const modalProps = {
     show: {
         type: Boolean as PropType<ModalProps['show']>,
@@ -142,3 +146,4 @@ export const modalProps = {
         default: undefined
     }
 };
+export const modalInjectionKey: InjectionKey<ModalInjection> = Symbol('modalInjectionKey');

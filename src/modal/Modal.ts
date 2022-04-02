@@ -1,8 +1,8 @@
-import { defineComponent, createVNode, toRefs, computed, renderSlot, ref, Transition, watch, createTextVNode, CSSProperties, mergeProps, onMounted } from 'vue';
+import { defineComponent, createVNode, toRefs, computed, renderSlot, ref, Transition, watch, createTextVNode, CSSProperties, mergeProps, onMounted, provide } from 'vue';
 import { createKey, useThemeRegister } from '../_utils_';
 import { onClickOutside, useMouse, useMagicKeys, pausableWatch } from '@vueuse/core';
 import { VLazyTeleport } from 'vueuc';
-import { modalProps, ModalCloseAction } from './interface';
+import { modalProps, ModalCloseAction, modalInjectionKey } from './interface';
 import { McIcon } from '../icon';
 import { McButton } from '../button';
 import { modalStack, addModal, removeModal } from './shared';
@@ -53,7 +53,7 @@ export default defineComponent({
         } = toRefs(props);
         const key = createKey('modal');
         const modalContainerElRef = ref<HTMLElement>();
-        const modalElRef = ref<HTMLElement>();
+        const modalElRef = ref<HTMLElement | null>(null);
         const modalAppearXRef = ref(0);
         const modalAppearYRef = ref(0);
         const modalTransformOrigin = computed(() => (appearFromCursor.value ? `${modalAppearXRef.value}px ${modalAppearYRef.value}px` : 'center center'));
@@ -165,10 +165,10 @@ export default defineComponent({
             const { top, right, bottom, left } = position.value || {};
 
             return {
-                marginTop: top ? (typeof top === 'number' ? `${top}px` : top) : 'auto',
-                marginRight: right ? (typeof right === 'number' ? `${right}px` : right) : 'auto',
-                marginBottom: bottom ? (typeof bottom === 'number' ? `${bottom}px` : bottom) : 'auto',
-                marginLeft: left ? (typeof left === 'number' ? `${left}px` : left) : 'auto'
+                marginTop: top !== undefined ? (typeof top === 'number' ? `${top}px` : top) : 'auto',
+                marginRight: right !== undefined ? (typeof right === 'number' ? `${right}px` : right) : 'auto',
+                marginBottom: bottom !== undefined ? (typeof bottom === 'number' ? `${bottom}px` : bottom) : 'auto',
+                marginLeft: left !== undefined ? (typeof left === 'number' ? `${left}px` : left) : 'auto'
             };
         });
 
@@ -254,6 +254,8 @@ export default defineComponent({
                 ]
             );
         });
+
+        provide(modalInjectionKey, modalElRef);
 
         expose({
             close: callUpdateShow,

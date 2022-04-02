@@ -57,7 +57,7 @@ export default defineComponent({
             const { label, value, disabled } = data;
             const isDisabled = !!disabled;
             const isSelected = multiple.value ? (valueVM.value as (string | number)[]).includes(value) : valueVM.value === value;
-            const checkVNode = multiple.value && isSelected ? createVNode(McIcon, { size: 16 }, { default: () => createVNode(IconCheck) }) : null;
+            const checkIconVNode = multiple.value && isSelected ? createVNode(McIcon, { size: 16 }, { default: () => createVNode(IconCheck) }) : null;
             const option = toRaw(options.value?.find(e => e.value === value));
             const handleClick = multiple.value
                 ? () => {
@@ -89,7 +89,7 @@ export default defineComponent({
                         {
                             class: 'mc-popselect-option__inner'
                         },
-                        [createVNode('div', null, [typeof label === 'string' ? label : label()]), checkVNode]
+                        [createVNode('div', null, [typeof label === 'string' ? label : label()]), checkIconVNode]
                     )
                 ]
             );

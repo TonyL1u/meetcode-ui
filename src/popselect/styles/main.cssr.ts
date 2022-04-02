@@ -23,7 +23,7 @@ export default c('.mc-popselect', [
                     alignItems: 'center'
                 },
                 [
-                    c('div', {
+                    c('& > div', {
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',

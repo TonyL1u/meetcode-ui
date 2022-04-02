@@ -1,8 +1,9 @@
-import { ref, createVNode, Text, cloneVNode, computed, withDirectives, vShow, watch, toRefs, nextTick, Transition, mergeProps, defineComponent, onMounted } from 'vue';
+import { ref, createVNode, Text, cloneVNode, computed, withDirectives, vShow, watch, toRefs, nextTick, Transition, mergeProps, defineComponent, onMounted, provide, inject } from 'vue';
 import { getSlotFirstVNode, propsMergeSlots, useThemeRegister } from '../_utils_';
 import { VBinder, VTarget, VFollower } from 'vueuc';
-import { useElementBounding, useMouseInElement, useThrottleFn, pausableWatch } from '@vueuse/core';
-import { PopoverTriggerBorder, PopoverProps, popoverProps, popoverEmits } from './interface';
+import { useElementBounding, useMouseInElement, useThrottleFn, pausableWatch, onClickOutside } from '@vueuse/core';
+import { PopoverTriggerBorder, PopoverProps, popoverProps, popoverEmits, popoverInjectionKey } from './interface';
+import { modalInjectionKey } from '../modal/interface';
 import { mainCssr, lightCssr, darkCssr } from './styles';
 
 export default defineComponent({
@@ -29,7 +30,7 @@ export default defineComponent({
         const mouseInFollowTrigger = ref(false);
         const contentShowTimer = ref();
         const contentHideTimer = ref();
-        const contentElRef = ref<HTMLElement>();
+        const contentElRef = ref<HTMLElement | null>(null);
         const mergedX = computed(() => {
             switch (trigger.value) {
                 case 'manual':
@@ -52,6 +53,17 @@ export default defineComponent({
         });
         const emitThrottled = computed(() => {
             return trigger.value === 'follow' && followMode.value === 'move';
+        });
+        const teleportDisabled = computed(() => {
+            const popover = inject(popoverInjectionKey, null);
+            const modal = inject(modalInjectionKey, null);
+
+            return !!popover || !!modal;
+        });
+        onClickOutside(contentElRef, (e: MouseEvent) => {
+            if (trigger.value === 'click' && !triggerVNode.value?.el?.contains(e.target)) {
+                handleContentHide();
+            }
         });
 
         // call emits
@@ -81,34 +93,22 @@ export default defineComponent({
             contentHideTimer.value = null;
         };
         const handleContentShow = () => {
-            trigger.value !== 'follow' && console.log('show');
             clearHideTimer();
             if (showRef.value) return;
             contentShowTimer.value = window.setTimeout(() => {
                 showRef.value = true;
                 emitThrottled.value ? throttleCallShow() : callShow();
                 emitThrottled.value ? throttleCallUpdateShow() : callUpdateShow();
-                trigger.value === 'click' && window.addEventListener('click', handleClickOutside);
             }, showDelay.value);
         };
         const handleContentHide = () => {
-            trigger.value !== 'follow' && console.log('hide');
             clearShowTimer();
             if (!showRef.value) return;
             contentHideTimer.value = window.setTimeout(() => {
                 showRef.value = false;
                 emitThrottled.value ? throttleCallHide() : callHide();
                 emitThrottled.value ? throttleCallUpdateShow() : callUpdateShow();
-                trigger.value === 'click' && window.removeEventListener('click', handleClickOutside);
             }, hideDelay.value);
-        };
-        const handleClickOutside = (e: MouseEvent) => {
-            console.log(e);
-            const isClickContent = contentVNode.value?.el?.contains(e.target);
-            const isClickTrigger = triggerVNode.value?.el?.contains(e.target);
-            if (!isClickContent && !isClickTrigger) {
-                handleContentHide();
-            }
         };
         const syncPosition = () => {
             var _a;
@@ -223,7 +223,10 @@ export default defineComponent({
             return (triggerVNode.value?.el as HTMLElement) || null;
         });
 
+        provide(popoverInjectionKey, contentElRef);
+
         void nextTick(() => {
+            // const { top, right, bottom, left, width, height } = useElementBounding(binderElRef);
             if (disabled.value || !triggerEl.value) return;
 
             // auto async popover position
@@ -354,7 +357,8 @@ export default defineComponent({
                                 show: showRef.value,
                                 enabled: showRef.value,
                                 placement: placement.value,
-                                width: matchTrigger.value ? 'target' : undefined
+                                width: matchTrigger.value ? 'target' : undefined,
+                                teleportDisabled: teleportDisabled.value
                             },
                             {
                                 default: () => {

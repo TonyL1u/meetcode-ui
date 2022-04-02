@@ -1,4 +1,4 @@
-import { PropType, VNodeChild } from 'vue';
+import { PropType, VNodeChild, Ref, InjectionKey } from 'vue';
 
 export type PopoverTrigger = 'hover' | 'click' | 'manual' | 'follow';
 export type PopoverPlacement = 'top' | 'bottom' | 'left' | 'right' | 'top-start' | 'top-end' | 'left-start' | 'left-end' | 'right-start' | 'right-end' | 'bottom-start' | 'bottom-end';
@@ -10,6 +10,13 @@ export type PopoverOffset = {
     bottom?: string;
     left?: string;
 };
+export type PopoverInjection = Ref<HTMLElement | null> | null;
+export interface PopoverExposeInstance {
+    syncPosition: () => void;
+    show: () => void;
+    hide: () => void;
+    el: HTMLElement;
+}
 export interface PopoverProps {
     trigger?: PopoverTrigger;
     placement?: PopoverPlacement;
@@ -29,12 +36,6 @@ export interface PopoverProps {
     followMode?: PopoverFollowMode;
     x?: number;
     y?: number;
-}
-export interface PopoverExposeInstance {
-    syncPosition: () => void;
-    show: () => void;
-    hide: () => void;
-    el: HTMLElement;
 }
 export const popoverProps = {
     trigger: {
@@ -111,3 +112,4 @@ export const popoverProps = {
     }
 };
 export const popoverEmits = ['show', 'hide', 'update:show', 'border-reached'];
+export const popoverInjectionKey: InjectionKey<PopoverInjection> = Symbol('popoverInjectionKey');

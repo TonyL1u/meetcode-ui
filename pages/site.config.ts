@@ -1,7 +1,8 @@
 import { ref, watch } from 'vue';
-import { setGlobalTheme } from 'meetcode-ui';
+import { globalTheme, setGlobalTheme } from 'meetcode-ui';
 
-const siteTheme = ref<'light' | 'dark'>('light');
+type SiteTheme = 'light' | 'dark';
+const siteTheme = ref<SiteTheme>(globalTheme.value as SiteTheme);
 
 watch(
     siteTheme,

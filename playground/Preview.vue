@@ -8,6 +8,7 @@ import { MAIN_FILE, vueRuntimeUrl } from './compiler/sfcCompiler';
 import { compileModulesForPreview } from './compiler/moduleCompiler';
 import { orchestrator, orchestrator as store } from './orchestrator';
 import { siteTheme } from '@pages/site.config';
+import { McMessage } from 'meetcode-ui';
 
 const emit = defineEmits<(e: 'renderFinished') => void>();
 const container = ref();
@@ -20,6 +21,7 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 watch([runtimeError, runtimeWarning], () => {
     orchestrator.runtimeErrors = [runtimeError.value, runtimeWarning.value].filter(x => x);
+    runtimeError.value && McMessage.error(runtimeError.value);
 });
 
 // create sandbox on mount
