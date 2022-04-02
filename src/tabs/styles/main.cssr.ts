@@ -6,35 +6,15 @@ export default c([
             display: 'flex',
             position: 'relative'
         }),
-        c(
-            '&-tab',
-            {
-                cursor: 'pointer',
-                display: 'inline-flex',
-                justifyContent: 'space-evenly',
-                alignItems: 'center'
-            },
-            [
-                c('&:hover', {
-                    color: 'var(--tab-active-color)'
-                })
-            ]
-        ),
-        c('&-tab--active', {
-            color: 'var(--tab-active-color)'
+        c('&-tab', {
+            cursor: 'pointer',
+            display: 'inline-flex',
+            justifyContent: 'space-evenly',
+            alignItems: 'center'
         }),
-        c(
-            '&-tab--disabled',
-            {
-                cursor: 'not-allowed',
-                color: '#bbb'
-            },
-            [
-                c('&:hover', {
-                    color: '#bbb'
-                })
-            ]
-        )
+        c('&-tab--disabled', {
+            cursor: 'not-allowed'
+        })
     ]),
     c('.mc-tabs__header', [
         c('&--center &-scroll-content', {
@@ -44,15 +24,10 @@ export default c([
             flex: 1
         }),
         c('&--with-line', [
-            c('.mc-tabs__header-scroll-content', {
-                borderBottom: '1px solid #e4e7ed'
-            }),
             c('.mc-tabs__header-bar--bottom + .mc-tabs__header-scroll-content', {
-                borderTop: 'none',
-                borderBottom: '1px solid #e4e7ed'
+                borderTop: 'none'
             }),
             c('.mc-tabs__header-bar--top + .mc-tabs__header-scroll-content', {
-                borderTop: '1px solid #e4e7ed',
                 borderBottom: 'none'
             })
         ]),
@@ -99,7 +74,6 @@ export default c([
                     bottom: '-1px',
                     width: '100%',
                     height: '2px',
-                    background: 'var(--tab-active-color)',
                     transition: 'transform 0.25s ease-in-out',
                     transform: 'scaleX(0)'
                 }),
@@ -111,8 +85,7 @@ export default c([
                 '&-bar',
                 {
                     zIndex: 1,
-                    height: '2px',
-                    background: 'var(--tab-active-color)'
+                    height: '2px'
                 },
                 [c('&--bottom', { bottom: 0 }), c('&--top', { top: 0 })]
             )

@@ -83,7 +83,7 @@ export const tabsProps = {
     },
     activeColor: {
         type: String as PropType<TabsProps['activeColor']>,
-        default: '#10b981'
+        default: ''
     },
     barPosition: {
         type: String as PropType<TabsProps['barPosition']>,

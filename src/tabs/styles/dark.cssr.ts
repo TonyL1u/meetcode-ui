@@ -7,6 +7,14 @@ export default c([
             color: '#eee'
         },
         [
+            c('&-tab', [
+                c('&:hover', {
+                    color: 'var(--tab-active-color, #63e2b7)'
+                })
+            ]),
+            c('&-tab--active', {
+                color: 'var(--tab-active-color, #63e2b7)'
+            }),
             c(
                 '&-tab--disabled',
                 {
@@ -20,6 +28,29 @@ export default c([
             )
         ]
     ),
+    c('.mc-tabs__header', [
+        c('&--with-line', [
+            c('.mc-tabs__header-scroll-content', {
+                borderBottom: '1px solid #7a7d85'
+            }),
+            c('.mc-tabs__header-bar--bottom + .mc-tabs__header-scroll-content', {
+                borderBottom: '1px solid #7a7d85'
+            }),
+            c('.mc-tabs__header-bar--top + .mc-tabs__header-scroll-content', {
+                borderTop: '1px solid #7a7d85'
+            })
+        ])
+    ]),
+    c('.mc-tabs--bar .mc-tabs__header', [
+        c('&--bar-scale .mc-tabs-tab', [
+            c('&::after', {
+                background: 'var(--tab-active-color, #63e2b7)'
+            })
+        ]),
+        c('&-bar', {
+            background: 'var(--tab-active-color, #63e2b7)'
+        })
+    ]),
     c('.mc-tabs--card .mc-tabs-tab', [
         c(
             '&--active',
@@ -28,7 +59,7 @@ export default c([
             },
             [
                 c('&::before', {
-                    background: '#10b981'
+                    background: '#63e2b7'
                 }),
                 c('&::after', {
                     background: '#1f2430'
