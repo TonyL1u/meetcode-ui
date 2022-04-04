@@ -49,6 +49,14 @@
     }
 
     &.dark {
+        .code-demo {
+            border-color: rgba(255, 255, 255, 0.2);
+
+            .tool-box {
+                border-top-color: rgba(255, 255, 255, 0.2);
+            }
+        }
+
         blockquote {
             border-left: 4px solid rgba(255, 255, 255, 0.2);
         }

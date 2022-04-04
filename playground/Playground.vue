@@ -1,9 +1,10 @@
 <script lang="ts" setup>
+import { ref } from 'vue';
 import Editor from './Editor.vue';
 import Preview from './Preview.vue';
 import { Splitpanes, Pane } from 'splitpanes';
 import { onShouldUpdateContent, orchestrator } from './orchestrator';
-import { ref } from 'vue';
+import { siteTheme } from '../pages/site.config';
 
 const emit = defineEmits<(e: 'renderFinished') => void>();
 const initialScript = ref('');
@@ -26,7 +27,7 @@ const handleRenderFinished = () => emit('renderFinished');
 </script>
 
 <template>
-    <Splitpanes class="default-theme mc-p-4 mc-flex mc-box-border mc-h-full">
+    <Splitpanes class="default-theme mc-p-4 mc-flex mc-box-border mc-h-full" :class="siteTheme">
         <Pane class="mc-h-full">
             <Splitpanes class="default-theme mc-flex mc-flex-col mc-h-full" horizontal>
                 <Pane>
@@ -55,7 +56,13 @@ const handleRenderFinished = () => emit('renderFinished');
 
     & > .container {
         @apply mc-rounded mc-h-full mc-overflow-hidden mc-box-border mc-flex;
-        border: 1px #e5e7eb solid;
+        border: 1px solid #e5e7eb;
+    }
+}
+
+.splitpanes.default-theme.dark .splitpanes__pane {
+    & > .container {
+        border: 1px solid #9ca3af;
     }
 }
 

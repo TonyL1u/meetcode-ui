@@ -164,12 +164,13 @@ async function updatePreview() {
     <div ref="container" w="full" h="full" flex="~" class="preview-container" place="items-center content-center"></div>
 </template>
 
-<style>
+<style lang="scss">
 .preview-container {
     width: 100%;
     height: 100%;
     overflow: hidden;
 }
+
 .preview-container,
 iframe {
     width: 100%;

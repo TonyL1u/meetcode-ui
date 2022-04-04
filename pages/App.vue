@@ -40,9 +40,9 @@ const theme = computed(() => {
 </script>
 
 <style lang="scss">
-@import './style/highlight.scss';
-@import './style/highlight-dark.scss';
-@import './style/markdown-style.scss';
+@import './styles/highlight.scss';
+@import './styles/highlight-dark.scss';
+@import './styles/markdown-style.scss';
 
 html,
 body {

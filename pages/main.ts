@@ -7,6 +7,6 @@ import 'vfonts/Lato.css';
 // 等宽字体
 import 'vfonts/FiraCode.css';
 // 引入tailwindcss
-import './style/index.css';
+import './styles/index.css';
 
 createApp(App).use(router).component('CodeDemo', CodeDemo).mount('#app');
