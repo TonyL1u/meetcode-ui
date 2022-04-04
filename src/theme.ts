@@ -1,7 +1,8 @@
-import { watch, reactive } from 'vue';
+import { watch, reactive, computed } from 'vue';
 import { createGlobalState, useStorage, RemovableRef } from '@vueuse/core';
 import { CNode } from 'css-render';
 
+type ThemeType = 'light' | 'dark';
 interface CSSRenderState {
     key: string;
     isMounted: boolean;
@@ -12,8 +13,10 @@ const useLight = reactive<CSSRenderState[]>([]);
 const useDark = reactive<CSSRenderState[]>([]);
 // const componentsWithLightTheme = reactive<string[]>([]);
 // const componentsWithDarkTheme = reactive<string[]>([]);
-const useGlobalThemeState = createGlobalState(() => useStorage('meetcode-ui-theme-local-storage', 'light'));
-export const globalTheme: RemovableRef<string> = useGlobalThemeState();
+const useGlobalThemeState = createGlobalState(() => useStorage<ThemeType>('meetcode-ui-theme-local-storage', 'light'));
+export const globalTheme: RemovableRef<ThemeType> = useGlobalThemeState();
+export const isLight = computed(() => globalTheme.value === 'light');
+export const isDark = computed(() => globalTheme.value === 'dark');
 
 function registerLightTheme() {
     useDark

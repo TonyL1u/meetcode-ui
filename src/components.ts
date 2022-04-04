@@ -14,3 +14,4 @@ export * from './icon';
 export * from './space';
 // export * from './popup';
 export * from './modal';
+export * from './input';

@@ -47,7 +47,7 @@
         :body-style="{ height: '75vh', width: '75vw', minWidth: '1280px', minHeight: '768px', padding: '8px', boxSizing: 'border-box' }"
         @after-leave="isLoading = true"
     >
-        <McLoading size="large" type="ripple" :show="isLoading" :mask-style="{ background: siteTheme === 'light' ? '#fff' : '#313540' }" :content-style="{ height: '100%' }" style="height: 100%">
+        <McLoading size="large" type="ripple" :show="isLoading" :mask-style="{ background: isLight ? '#fff' : '#313540' }" :content-style="{ height: '100%' }" style="height: 100%">
             <Playground @render-finished="isLoading = false" />
         </McLoading>
     </McModal>
@@ -60,7 +60,7 @@ import { McTooltip, McTabs, McTabPane, McModal, McButton, McIcon, McSpace, McMes
 import { Code as IconCode, CopyOutline as IconCopy, CubeOutline as IconEdit } from '@vicons/ionicons5';
 import { useClipboard } from '@vueuse/core';
 import { loadInitialState } from '@playground/orchestrator';
-import { siteTheme } from '../site.config';
+import { siteTheme, isLight } from '../site.config';
 import Playground from '@playground/Playground.vue';
 
 const props = defineProps<{ codeSources: string }>();

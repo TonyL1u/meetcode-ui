@@ -31,11 +31,11 @@ import { NLayout, NLayoutHeader, NLayoutContent, NLayoutSider, NNotificationProv
 import Header from './home/Header.vue';
 import Menu from './home/Menu.vue';
 import Navigator from './home/Navigator.vue';
-import { siteTheme } from './site.config';
+import { siteTheme, isDark } from './site.config';
 
 // 初始跟随系统主题
 const theme = computed(() => {
-    return siteTheme.value === 'dark' ? darkTheme : null;
+    return isDark.value ? darkTheme : null;
 });
 </script>
 

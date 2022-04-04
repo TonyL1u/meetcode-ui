@@ -7,7 +7,7 @@ import { PreviewProxy } from './logic/PreviewProxy';
 import { MAIN_FILE, vueRuntimeUrl } from './compiler/sfcCompiler';
 import { compileModulesForPreview } from './compiler/moduleCompiler';
 import { orchestrator, orchestrator as store } from './orchestrator';
-import { siteTheme } from '@pages/site.config';
+import { isDark } from '@pages/site.config';
 import { McMessage } from 'meetcode-ui';
 
 const emit = defineEmits<(e: 'renderFinished') => void>();
@@ -140,7 +140,7 @@ async function updatePreview() {
             await proxy.eval([
                 "window.__modules__ = {};window.__css__ = ''",
                 ...modules,
-                siteTheme.value === 'dark' ? 'document.querySelector("html").classList.add("dark")' : 'document.querySelector("html").classList.remove("dark")',
+                isDark.value ? 'document.querySelector("html").classList.add("dark")' : 'document.querySelector("html").classList.remove("dark")',
                 `
       import { createApp as _createApp } from "vue"
       if (window.__app__) {

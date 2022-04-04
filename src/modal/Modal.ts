@@ -207,8 +207,8 @@ export default defineComponent({
                       slots.footer
                           ? [renderSlot(slots, 'footer')]
                           : [
-                                cancelText.value !== null ? createVNode(McButton, { class: 'mc-modal__footer-button', onClick: handleCancel }, { default: () => cancelText.value }) : null,
-                                confirmText.value !== null ? createVNode(McButton, { class: 'mc-modal__footer-button', onClick: handleConfirm, type: 'success' }, { default: () => confirmText.value }) : null
+                                cancelText.value !== null ? createVNode(McButton, { ghost: true, onClick: handleCancel }, { default: () => cancelText.value }) : null,
+                                confirmText.value !== null ? createVNode(McButton, { style: { marginLeft: '16px' }, type: 'success', onClick: handleConfirm }, { default: () => confirmText.value }) : null
                             ]
                   )
                 : null;

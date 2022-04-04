@@ -76,8 +76,8 @@ export default defineComponent({
                           hasActionSlot
                               ? renderSlot(slots, 'action')
                               : createVNode(Fragment, null, [
-                                    showCancel ? createVNode(McButton, { size: 'small', disabled: cancelDisabled.value, onClick: handleCancel }, { default: () => cancelText.value }) : null,
-                                    showConfirm ? createVNode(McButton, { size: 'small', type: 'success', disabled: confirmDisabled.value, style: { 'margin-left': '8px' }, onClick: handleConfirm }, { default: () => confirmText.value }) : null
+                                    showCancel ? createVNode(McButton, { size: 'small', ghost: true, disabled: cancelDisabled.value, onClick: handleCancel }, { default: () => cancelText.value }) : null,
+                                    showConfirm ? createVNode(McButton, { size: 'small', type: 'success', disabled: confirmDisabled.value, style: { marginLeft: '8px' }, onClick: handleConfirm }, { default: () => confirmText.value }) : null
                                 ])
                       ]
                   )
