@@ -18,6 +18,7 @@ function component() {
     echo "export * from './$1';" >> components.ts
     cd $1
     mv NAME.ts $file.ts
+    mv __tests__/NAME.spec.ts __tests__/$file.spec.ts
     echo "export { default as Mc$file } from './$file';" > index.ts
 }
 

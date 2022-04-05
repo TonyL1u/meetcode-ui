@@ -7,7 +7,7 @@ export default defineComponent({
         // theme register
         onMounted(() => {
             useThemeRegister({
-                key: 'McInput',
+                key: 'NAME',
                 main: mainCssr,
                 light: lightCssr,
                 dark: darkCssr
