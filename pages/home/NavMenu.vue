@@ -1,10 +1,12 @@
 <template>
-    <McPopover trigger="click" placement="bottom-end" :style="{ height: '90vh', padding: 0, width: '300px', overflow: 'auto' }">
+    <McPopover trigger="click" placement="bottom-end" :style="{ height: '90vh', padding: 0, width: '300px' }">
         <McIcon class="nav-menu-trigger" :size="24">
             <IconMenu />
         </McIcon>
         <template #content>
-            <Menu />
+            <div class="mc-h-full mc-overflow-auto">
+                <Menu />
+            </div>
         </template>
     </McPopover>
 </template>

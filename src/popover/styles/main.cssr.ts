@@ -22,8 +22,8 @@ export default c([
                 lineHeight: '24px'
             }),
             c('&__arrow', {
-                width: '8px',
-                height: '8px',
+                width: 'calc(8px * 1.414)',
+                height: 'calc(8px * 1.414)',
                 position: 'absolute',
                 transformOrigin: '50% 50%',
                 background: 'inherit',
@@ -47,8 +47,8 @@ export default c([
                 marginBottom: '10px'
             }),
             c('& > .mc-popover__arrow', {
-                transform: 'translateX(-50%) rotate(45deg)',
-                bottom: '-4px'
+                clipPath: 'polygon(0 0, 50% 50%, 100% 0)',
+                bottom: 'calc(-8px * 1.414)'
             })
         ]
     ),
@@ -64,8 +64,8 @@ export default c([
                 marginLeft: '10px'
             }),
             c('& > .mc-popover__arrow', {
-                transform: 'translateY(-50%) rotate(45deg)',
-                left: '-4px'
+                clipPath: 'polygon(50% 50%, 100% 100%, 100% 0)',
+                left: 'calc(-8px * 1.414)'
             })
         ]
     ),
@@ -81,8 +81,8 @@ export default c([
                 marginBottom: '10px'
             }),
             c('& > .mc-popover__arrow', {
-                transform: 'translateX(-50%) rotate(45deg)',
-                top: '-4px'
+                clipPath: 'polygon(50% 50%, 0 100%, 100% 100%)',
+                top: 'calc(-8px * 1.414)'
             })
         ]
     ),
@@ -98,8 +98,8 @@ export default c([
                 marginRight: '10px'
             }),
             c('& > .mc-popover__arrow', {
-                transform: 'translateY(-50%) rotate(45deg)',
-                right: '-4px'
+                clipPath: 'polygon(0 0, 0 100%, 50% 50%)',
+                right: 'calc(-8px * 1.414)'
             })
         ]
     ),
@@ -107,12 +107,12 @@ export default c([
         c(
             '& > .mc-popover',
             {
-                '-ms-transform-origin-x': '15%',
-                '-webkit-transform-origin-x': '15%'
+                '-ms-transform-origin-x': '10px',
+                '-webkit-transform-origin-x': '10px'
             },
             [
                 c('& > .mc-popover__arrow', {
-                    left: '15%'
+                    left: '10px'
                 })
             ]
         )
@@ -126,7 +126,8 @@ export default c([
             },
             [
                 c('& > .mc-popover__arrow', {
-                    left: '50%'
+                    left: '50%',
+                    transform: 'translateX(-50%)'
                 })
             ]
         )
@@ -135,12 +136,12 @@ export default c([
         c(
             '& > .mc-popover',
             {
-                '-ms-transform-origin-x': '85%',
-                '-webkit-transform-origin-x': '85%'
+                '-ms-transform-origin-x': 'calc(100% - 10px)',
+                '-webkit-transform-origin-x': 'calc(100% - 10px)'
             },
             [
                 c('& > .mc-popover__arrow', {
-                    left: '85%'
+                    right: '10px'
                 })
             ]
         )
@@ -149,12 +150,12 @@ export default c([
         c(
             '& > .mc-popover',
             {
-                '-ms-transform-origin-y': '15%',
-                '-webkit-transform-origin-y': '15%'
+                '-ms-transform-origin-y': '10px',
+                '-webkit-transform-origin-y': '10px'
             },
             [
                 c('& > .mc-popover__arrow', {
-                    top: '15%'
+                    top: '10px'
                 })
             ]
         )
@@ -168,7 +169,8 @@ export default c([
             },
             [
                 c('& > .mc-popover__arrow', {
-                    top: '50%'
+                    top: '50%',
+                    transform: 'translateY(-50%)'
                 })
             ]
         )
@@ -177,12 +179,12 @@ export default c([
         c(
             '& > .mc-popover',
             {
-                '-ms-transform-origin-y': '85%',
-                '-webkit-transform-origin-y': '85%'
+                '-ms-transform-origin-y': 'calc(100% - 10px)',
+                '-webkit-transform-origin-y': 'calc(100% - 10px)'
             },
             [
                 c('& > .mc-popover__arrow', {
-                    top: '85%'
+                    bottom: '10px'
                 })
             ]
         )

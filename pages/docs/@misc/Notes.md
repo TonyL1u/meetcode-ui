@@ -178,3 +178,7 @@
 -   Popover 里如果嵌套了另外一个 Popover，当鼠标移到内部嵌套的 Popover 时，两个 Popover 都会消失
 -   所有的弹出类组件都有同一个问题，点击外面判断不准确
 -   有涉及 z-index 弹层的不能写死，需要动态修改
+
+2022-04-05
+
+-   如果设置 Popover 主体的 overflow 设为 `hidden` 或 `auto` ，箭头会被隐藏
