@@ -1,5 +1,12 @@
 import { PropType, RenderFunction } from 'vue';
 import { PopoverProps } from '../popover';
+import * as CSS from 'csstype';
+
+declare module 'csstype' {
+    interface Properties {
+        '--popselect-inner-max-width'?: string;
+    }
+}
 
 export type PopselectValue = string | number | Array<string | number>;
 export type PopselectMergedProps = PopselectProps & PopoverProps;
@@ -16,6 +23,7 @@ export interface PopselectProps {
     maxHeight?: number;
     autoClose?: boolean;
     autoScroll?: boolean;
+    truncate?: boolean | number;
 }
 export const popselectProps = {
     value: {
@@ -41,7 +49,10 @@ export const popselectProps = {
     autoScroll: {
         type: Boolean as PropType<PopselectProps['autoScroll']>,
         default: true
+    },
+    truncate: {
+        type: [Boolean, Number] as PropType<PopselectProps['truncate']>,
+        default: 200
     }
 };
 export const popselectEmits = ['update:value'];
-

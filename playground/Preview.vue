@@ -21,7 +21,7 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 watch([runtimeError, runtimeWarning], () => {
     orchestrator.runtimeErrors = [runtimeError.value, runtimeWarning.value].filter(x => x);
-    runtimeError.value && McMessage.error(runtimeError.value);
+    runtimeError.value && McMessage.error(runtimeError.value.toString());
 });
 
 // create sandbox on mount

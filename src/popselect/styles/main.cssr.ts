@@ -23,11 +23,11 @@ export default c('.mc-popselect', [
                     alignItems: 'center'
                 },
                 [
-                    c('& > div', {
+                    c('& > div.truncate', {
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
-                        maxWidth: '200px'
+                        maxWidth: 'var(--popselect-inner-max-width)'
                     })
                 ]
             )
