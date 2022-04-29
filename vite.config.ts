@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import vueJsx from '@vitejs/plugin-vue-jsx';
 import viteCompression from 'vite-plugin-compression';
 import path from 'path';
 import Markdown from 'vite-plugin-md';
@@ -25,6 +26,7 @@ export default defineConfig({
         vue({
             include: [/\.vue$/, /\.md$/]
         }),
+        vueJsx(),
         Markdown(MarkdownConfig),
         viteCompression()
     ],
@@ -43,4 +45,8 @@ export default defineConfig({
     optimizeDeps: {
         include: [`${prefix}/language/css/css.worker`, `${prefix}/language/html/html.worker`, `${prefix}/language/typescript/ts.worker`, `${prefix}/editor/editor.worker`]
     }
+    // esbuild: {
+    //     jsxFactory: 'h',
+    //     jsxFragment: 'Fragment'
+    // }
 });

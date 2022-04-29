@@ -22,7 +22,6 @@ export interface ModalPosition {
     left?: number | string;
 }
 export interface ModalExposeInstance {
-    show: () => void;
     hide: () => void;
     el: HTMLElement;
 }
@@ -52,6 +51,16 @@ export interface ModalProps {
     position?: ModalPosition;
     animation?: 'scale' | 'slide';
     onBeforeLeave?: OnBeforeLeaveImpl;
+}
+export interface ModalObjectEmits {
+    'onUpdate:show'?: (val: boolean) => void;
+    onWrapperClick?: (e: MouseEvent) => void;
+    onShortcutStroke?: (keys: string[]) => void;
+    onAfterEnter?: () => void;
+    onAfterLeave?: () => void;
+    onBeforeEnter?: () => void;
+    onCancel?: () => void;
+    onConfirm?: () => void;
 }
 export const modalProps = {
     show: {

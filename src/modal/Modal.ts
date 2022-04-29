@@ -258,7 +258,6 @@ export default defineComponent({
         provide(modalInjectionKey, modalElRef);
 
         expose({
-            show: () => callUpdateShow(true),
             hide: () => callUpdateShow(false),
             el: modalElRef
         });

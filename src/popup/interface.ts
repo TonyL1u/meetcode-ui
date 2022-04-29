@@ -1,17 +1,15 @@
-import { Component, Ref } from 'vue';
-import { ModalExposeInstance, ModalProps } from '../modal';
+import { Ref } from 'vue';
+import type { ObjectEmitsOptions } from 'vue';
+import { ModalExposeInstance, ModalProps, ModalObjectEmits } from '../modal';
 
-export interface PopupOptions<T> {
-    show?: boolean;
-    props?: T;
-    modalProps?: ModalProps;
-    on?: Record<string, any>;
+export type PopupModalConfig = Omit<ModalProps, 'show'> & ModalObjectEmits;
+export interface PopupSourceOptions<P extends Record<string, any>, E extends ObjectEmitsOptions> {
+    props?: P;
+    on?: E;
 }
 
-export type PopupApi<T> = (
-    source: Component,
-    options?: PopupOptions<T>
-) => {
-    show: () => void;
+export interface PopupInstance {
+    show: (config?: PopupModalConfig) => void;
+    hide: () => void;
     instance: Ref<ModalExposeInstance | undefined>;
-};
+}

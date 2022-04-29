@@ -11,6 +11,7 @@
         </McPopover>
     </McSpace>
 </template>
+
 <script lang="ts" setup>
 import { McPopover, McSpace, McButton } from 'meetcode-ui';
 </script>

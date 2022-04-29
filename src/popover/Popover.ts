@@ -122,12 +122,7 @@ export default defineComponent({
 
             return {
                 onMouseenter: handleContentShow,
-                onMouseleave(e: MouseEvent) {
-                    console.log(e);
-                    e.stopPropagation();
-                    e.stopImmediatePropagation();
-                    handleContentHide();
-                }
+                onMouseleave: handleContentHide
             };
         });
 
@@ -182,7 +177,7 @@ export default defineComponent({
                 const originalHandler = tempVNode.props[name];
 
                 tempVNode.props[name] = originalHandler
-                    ? (...args: Array<unknown>) => {
+                    ? (...args: unknown[]) => {
                           originalHandler(...args);
                           handler(...args);
                       }

@@ -4,7 +4,7 @@ import Basic from '@/popup/demos/DemoBasic.vue'
 
 # Popup 弹窗
 
-基于 `McModal` 。
+基于 `McModal` ，指令式的模态框。
 
 ## 演示
 

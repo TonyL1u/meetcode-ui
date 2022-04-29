@@ -6,16 +6,31 @@
 import { McPopup, McButton } from 'meetcode-ui';
 import Test from './Test.vue';
 
+interface Props {
+    msg: string;
+}
+
+type Emit = {
+    update: () => void;
+};
+
 const handleClick = () => {
-    McPopup(Test, {
+    const { show, hide } = McPopup<Props, Emit>(Test, {
         props: {
-            title: '测试'
+            msg: 'hello world'
         },
-        modalProps: {
-            title: '测试'
-        },
-        on: {}
+        on: {
+            update: () => {
+                console.log('update');
+                hide();
+            }
+        }
     });
-    // console.log(instance.value?.el);
+    show({
+        title: '123',
+        showHeader: false,
+        showFooter: false,
+        shortcutKey: 'Shift+A'
+    });
 };
 </script>
