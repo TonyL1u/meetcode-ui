@@ -4,14 +4,11 @@
 
 <script lang="ts" setup>
 import { McButton } from 'meetcode-ui';
-const props = defineProps<{
-    msg?: string;
-}>();
-const emit = defineEmits<{
-    (e: 'update'): void;
-}>();
+
+const props = defineProps<{ msg?: string }>();
+const emit = defineEmits<{ (e: 'close'): void }>();
 
 const handleClick = () => {
-    emit('update');
+    emit('close');
 };
 </script>
