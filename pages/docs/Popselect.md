@@ -36,14 +36,14 @@ import { McTextLink } from 'meetcode-ui'
 
 ## Props
 
-|    名称     |           类型           |   默认值    |                                   说明                                    |
-| :---------: | :----------------------: | :---------: | :-----------------------------------------------------------------------: |
-|   options   | `Array<PopselectOption>` |    `[]`     |                                   选项                                    |
-|  multiple   |        `boolean`         |   `false`   |                                 是否多选                                  |
-| max-height  |         `number`         |    `300`    |                           弹出框的最大高度(px)                            |
-| auto-close  |        `boolean`         | `undefined` |             选择后自动关闭弹出框。单选默认开启，多选默认关闭              |
-| auto-scroll |        `boolean`         |   `true`    | 弹出框出现后，已选择的选项滚动到最上方。多选默认滚动到第 1 个已选择的选项 |
-|  truncate   |   `boolean \| number`    |    `200`    |               选项文本长度是否截断省略。默认超出 200px 截断               |
+|    名称     |        类型         |   默认值    |                                   说明                                    |
+| :---------: | :-----------------: | :---------: | :-----------------------------------------------------------------------: |
+|   options   | `PopselectOption[]` |    `[]`     |                                   选项                                    |
+|  multiple   |      `boolean`      |   `false`   |                                 是否多选                                  |
+| max-height  |      `number`       |    `300`    |                           弹出框的最大高度(px)                            |
+| auto-close  |      `boolean`      | `undefined` |             选择后自动关闭弹出框。单选默认开启，多选默认关闭              |
+| auto-scroll |      `boolean`      |   `true`    | 弹出框出现后，已选择的选项滚动到最上方。多选默认滚动到第 1 个已选择的选项 |
+|  truncate   | `boolean \| number` |    `200`    |               选项文本长度是否截断省略。默认超出 200px 截断               |
 
 更多 Props 请参考 <McTextLink to="Popover#props">Popover Props</McTextLink> 。
 

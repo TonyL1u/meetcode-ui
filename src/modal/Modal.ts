@@ -69,37 +69,6 @@ export default defineComponent({
         const keys = computed(() => Array.from(magicKeys.current));
         let closeAction: ModalCloseAction;
 
-        watch(
-            show,
-            () => {
-                if (show.value) {
-                    callUpdateShow(true);
-                    modalAppearXRef.value = x.value;
-                    modalAppearYRef.value = y.value;
-                }
-            },
-            { immediate: true }
-        );
-
-        const { pause, resume } = pausableWatch(magicKeys[shortcutKey.value!], v => {
-            if (v && show.value && closeOnShortcut.value && isTopModal.value) {
-                callShortcutStroke();
-                callUpdateShow(false);
-            }
-        });
-
-        watch(
-            isTopModal,
-            () => {
-                if (!isTopModal.value) {
-                    pause();
-                } else {
-                    resume();
-                }
-            },
-            { immediate: true }
-        );
-
         onClickOutside(modalElRef, event => {
             if (wrapperClosable.value && isTopModal.value) {
                 callWrapperClick(event);
@@ -160,6 +129,37 @@ export default defineComponent({
             callOnConfirm();
             callUpdateShow(false);
         };
+
+        watch(
+            show,
+            () => {
+                if (show.value) {
+                    callUpdateShow(true);
+                    modalAppearXRef.value = x.value;
+                    modalAppearYRef.value = y.value;
+                }
+            },
+            { immediate: true }
+        );
+
+        const { pause, resume } = pausableWatch(magicKeys[shortcutKey.value!], v => {
+            if (v && show.value && closeOnShortcut.value && isTopModal.value) {
+                callShortcutStroke();
+                callUpdateShow(false);
+            }
+        });
+
+        watch(
+            isTopModal,
+            () => {
+                if (!isTopModal.value) {
+                    pause();
+                } else {
+                    resume();
+                }
+            },
+            { immediate: true }
+        );
 
         const modalPosition = computed<CSSProperties>(() => {
             const { top, right, bottom, left } = position.value || {};
@@ -258,7 +258,8 @@ export default defineComponent({
         provide(modalInjectionKey, modalElRef);
 
         expose({
-            close: callUpdateShow,
+            show: () => callUpdateShow(true),
+            hide: () => callUpdateShow(false),
             el: modalElRef
         });
 

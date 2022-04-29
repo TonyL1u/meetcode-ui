@@ -22,7 +22,8 @@ export interface ModalPosition {
     left?: number | string;
 }
 export interface ModalExposeInstance {
-    close: () => void;
+    show: () => void;
+    hide: () => void;
     el: HTMLElement;
 }
 

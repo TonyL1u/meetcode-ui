@@ -1,1 +1,1 @@
-export { default as McPopup } from './PopupApi';
+export { default as McPopup } from './Popup';
