@@ -7,17 +7,9 @@ const containerMounted = ref(false);
 const MessageReactiveList: Message[] = reactive([]);
 
 function mountContainer() {
+    const hostElement = document.createElement('div');
     render(createVNode(MessageEnvironment), document.body);
     containerMounted.value = true;
-}
-
-function unmountContainer() {
-    const container = document.querySelector('.mc-message-global-container');
-    if (container) {
-        document.body.removeChild(container);
-        containerMounted.value = false;
-        render(null, document.body);
-    }
 }
 
 function createMessage(message: Message) {
@@ -61,4 +53,4 @@ function ApiConstructor<T extends MessageType>(maybeOptions?: MaybeMessageApiOpt
 }
 
 export default MessageReactiveList;
-export { createMessage, closeMessage, ApiConstructor, containerMounted, mountContainer, unmountContainer };
+export { createMessage, closeMessage, ApiConstructor, containerMounted, mountContainer };

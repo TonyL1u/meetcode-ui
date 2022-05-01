@@ -51,6 +51,8 @@ export interface ModalProps {
     position?: ModalPosition;
     animation?: 'scale' | 'slide';
     onBeforeLeave?: OnBeforeLeaveImpl;
+    appearX?: number;
+    appearY?: number;
 }
 export interface ModalObjectEmits {
     'onUpdate:show'?: (val: boolean) => void;
@@ -153,6 +155,14 @@ export const modalProps = {
     },
     onBeforeLeave: {
         type: Function as PropType<ModalProps['onBeforeLeave']>,
+        default: undefined
+    },
+    appearX: {
+        type: Number as PropType<ModalProps['appearX']>,
+        default: undefined
+    },
+    appearY: {
+        type: Number as PropType<ModalProps['appearY']>,
         default: undefined
     }
 };

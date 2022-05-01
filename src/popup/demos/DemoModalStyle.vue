@@ -10,7 +10,12 @@ const instance = McPopup(Test);
 const handleClick = () => {
     instance.show({
         title: '弹窗标题',
-        showFooter: false
+        animation: 'slide',
+        slots: {
+            footer() {
+                return '好！';
+            }
+        }
     });
 };
 </script>

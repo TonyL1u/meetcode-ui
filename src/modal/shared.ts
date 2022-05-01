@@ -8,5 +8,5 @@ export function addModal(key: string) {
 
 export function removeModal(key: string) {
     const index = modalStack.findIndex(modalKey => modalKey === key);
-    modalStack.splice(index, 1);
+    index > -1 && modalStack.splice(index, 1);
 }

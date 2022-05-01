@@ -1,4 +1,5 @@
 import '@vue/runtime-core';
+import { ComputedRef } from 'vue';
 
 declare module '@vue/runtime-core' {
     interface VNodeCustomProperties {
@@ -6,4 +7,5 @@ declare module '@vue/runtime-core' {
     }
 
     export type CustomVNodeTypes = VNodeTypes & VNodeCustomProperties;
+    export type MaybeComputedRef<T> = ComputedRef<T> | T;
 }

@@ -1,4 +1,4 @@
-import { defineComponent, createVNode, toRefs, computed, renderSlot, ref, Transition, watch, createTextVNode, CSSProperties, mergeProps, onMounted, provide } from 'vue';
+import { defineComponent, createVNode, toRefs, computed, renderSlot, ref, Transition, watch, createTextVNode, CSSProperties, mergeProps, onMounted, provide, nextTick } from 'vue';
 import { createKey, useThemeRegister } from '../_utils_';
 import { onClickOutside, useMouse, useMagicKeys, pausableWatch } from '@vueuse/core';
 import { VLazyTeleport } from 'vueuc';
@@ -49,7 +49,9 @@ export default defineComponent({
             pure,
             position,
             animation,
-            onBeforeLeave
+            onBeforeLeave,
+            appearX,
+            appearY
         } = toRefs(props);
         const key = createKey('modal');
         const modalContainerElRef = ref<HTMLElement>();
@@ -59,6 +61,7 @@ export default defineComponent({
         const modalTransformOrigin = computed(() => (appearFromCursor.value ? `${modalAppearXRef.value}px ${modalAppearYRef.value}px` : 'center center'));
         const modalTransitionName = computed(() => (appearFromCursor.value ? 'mc-modal-scale' : ['scale', 'slide'].includes(animation.value!) ? `mc-modal-${animation.value}` : 'mc-modal-scale'));
         const isTopModal = computed(() => modalStack.length > 0 && modalStack[modalStack.length - 1] === key);
+        const isMountModal = ref(true);
         const { x, y } = useMouse();
         const magicKeys = useMagicKeys({
             passive: false,
@@ -69,6 +72,40 @@ export default defineComponent({
         const keys = computed(() => Array.from(magicKeys.current));
         let closeAction: ModalCloseAction;
 
+        watch(
+            show,
+            () => {
+                if (show.value) {
+                    isMountModal.value = true;
+                    modalAppearXRef.value = appearX.value || x.value;
+                    modalAppearYRef.value = appearY.value || y.value;
+                    addModal(key);
+                } else {
+                    removeModal(key);
+                }
+            },
+            { immediate: true }
+        );
+
+        const { pause, resume } = pausableWatch(magicKeys[shortcutKey.value!], v => {
+            if (v && show.value && closeOnShortcut.value && isTopModal.value) {
+                callShortcutStroke();
+                callUpdateShow(false);
+            }
+        });
+
+        watch(
+            isTopModal,
+            () => {
+                if (!isTopModal.value) {
+                    pause();
+                } else {
+                    resume();
+                }
+            },
+            { immediate: true }
+        );
+
         onClickOutside(modalElRef, event => {
             if (wrapperClosable.value && isTopModal.value) {
                 callWrapperClick(event);
@@ -77,12 +114,9 @@ export default defineComponent({
         });
 
         const callUpdateShow = async (val: boolean) => {
-            if (val) {
-                addModal(key);
-            } else {
+            if (!val) {
                 const callback = await onBeforeLeave.value?.(closeAction);
                 if (callback) return;
-                removeModal(key);
             }
 
             emit('update:show', val);
@@ -103,6 +137,7 @@ export default defineComponent({
         };
 
         const callAfterLeave = () => {
+            isMountModal.value = false;
             emit('after-leave');
         };
 
@@ -129,37 +164,6 @@ export default defineComponent({
             callOnConfirm();
             callUpdateShow(false);
         };
-
-        watch(
-            show,
-            () => {
-                if (show.value) {
-                    callUpdateShow(true);
-                    modalAppearXRef.value = x.value;
-                    modalAppearYRef.value = y.value;
-                }
-            },
-            { immediate: true }
-        );
-
-        const { pause, resume } = pausableWatch(magicKeys[shortcutKey.value!], v => {
-            if (v && show.value && closeOnShortcut.value && isTopModal.value) {
-                callShortcutStroke();
-                callUpdateShow(false);
-            }
-        });
-
-        watch(
-            isTopModal,
-            () => {
-                if (!isTopModal.value) {
-                    pause();
-                } else {
-                    resume();
-                }
-            },
-            { immediate: true }
-        );
 
         const modalPosition = computed<CSSProperties>(() => {
             const { top, right, bottom, left } = position.value || {};
@@ -262,6 +266,6 @@ export default defineComponent({
             el: modalElRef
         });
 
-        return () => createVNode(VLazyTeleport, { to: 'body', show: show.value }, { default: () => modalContainerVNode.value });
+        return () => (isMountModal.value ? createVNode(VLazyTeleport, { to: 'body', show: show.value }, { default: () => modalContainerVNode.value }) : null);
     }
 });

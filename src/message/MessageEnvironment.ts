@@ -1,7 +1,7 @@
-import { createVNode, TransitionGroup, FunctionalComponent, nextTick } from 'vue';
+import { createVNode, TransitionGroup, FunctionalComponent } from 'vue';
 import { useThemeRegister } from '../_utils_';
 import MessageEntity from './Message';
-import MessageReactiveList, { closeMessage, unmountContainer } from './MessageComposable';
+import MessageReactiveList, { closeMessage } from './MessageComposable';
 import { MessageExposeInstance, Message } from './interface';
 import { mainCssr, lightCssr, darkCssr } from './styles';
 // import gsap from 'gsap';

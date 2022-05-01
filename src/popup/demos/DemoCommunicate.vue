@@ -3,24 +3,30 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 import { McPopup, McButton } from 'meetcode-ui';
 import Test from './Test2.vue';
 
 interface TestProps {
-    msg: string;
+    count: number;
+    // 写成 reactiveCount: Ref<number> 也是完全正确并合理的
+    reactiveCount: number;
 }
-
-type TestEmit = {
+type TestEmits = {
     close: () => void;
+    update: () => void;
 };
 
-const { show, hide } = McPopup<TestProps, TestEmit>(Test, {
-    props: {
-        msg: '点我关闭弹窗'
-    },
+const count = ref(0);
+const { show, hide } = McPopup<TestProps, TestEmits>(Test, {
+    props: { count: count.value, reactiveCount: count },
     on: {
         close() {
             hide();
+            count.value = 0;
+        },
+        update() {
+            count.value++;
         }
     }
 });
