@@ -10,11 +10,10 @@ declare module 'csstype' {
 }
 
 export type OnBeforeLeaveImpl = (action: ModalCloseAction) => Promise<boolean | undefined | void> | boolean | undefined | void;
-export type OnBeforeEnterImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
 export type OnCancelImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
 export type OnConfirmImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
 export type ModalCloseAction = 'wrapper' | 'close' | 'shortcut' | 'cancel' | 'confirm';
-export type ModalInjection = Ref<HTMLElement | null> | null;
+export type ModalInjection = Ref<HTMLElement | undefined> | null;
 export interface ModalPosition {
     top?: number | string;
     right?: number | string;
@@ -25,7 +24,6 @@ export interface ModalExposeInstance {
     hide: () => void;
     el: HTMLElement;
 }
-
 export interface ModalProps {
     show?: boolean;
     width?: number | string;
@@ -74,7 +72,7 @@ export const modalProps = {
         default: 600
     },
     height: {
-        type: [Number, String] as PropType<ModalProps['width']>,
+        type: [Number, String] as PropType<ModalProps['height']>,
         default: 'initial'
     },
     appearFromCursor: {

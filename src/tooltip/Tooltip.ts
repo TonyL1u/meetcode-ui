@@ -1,7 +1,8 @@
 import { defineComponent, renderSlot, createVNode, mergeProps, onMounted } from 'vue';
 import { propsMergeSlots, useThemeRegister } from '../_utils_';
 import { omit } from 'lodash-es';
-import { McPopover, popoverProps } from '../popover';
+import { McPopover } from '../popover';
+import { popoverProps } from '../popover/interface';
 import { TooltipMergedProps, tooltipProps } from './interface';
 import { lightCssr, darkCssr } from './styles';
 

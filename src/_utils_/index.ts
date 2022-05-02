@@ -10,5 +10,6 @@ export { reactiveOmit } from './reactiveOmit';
 export { responsiveTarget } from './responsiveTarget';
 export { sleep } from './sleep';
 export { useThemeRegister } from './theme';
+export { useSharedItems } from './useSharedItems';
 
 export type { FlattenOptions } from './flatten';

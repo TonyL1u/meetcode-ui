@@ -2,7 +2,8 @@ import { defineComponent, ref, toRefs, renderSlot, createVNode, Fragment, mergeP
 import { getSlotFirstVNode, propsMergeSlots, useThemeRegister } from '../_utils_';
 import { omit } from 'lodash-es';
 import { AlertCircle as IconAlert } from '@vicons/ionicons5';
-import { McPopover, PopoverExposeInstance, popoverProps, popoverEmits, PopoverTrigger } from '../popover';
+import { McPopover, PopoverExposeInstance, PopoverTrigger } from '../popover';
+import { popoverProps, popoverEmits } from '../popover/interface';
 import { McButton } from '../button';
 import { McIcon } from '../icon';
 import { PopconfirmMergedProps, popconfirmProps, popconfirmEmits } from './interface';

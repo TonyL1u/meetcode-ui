@@ -1,12 +1,18 @@
 import { Ref, VNodeChild, ComputedRef } from 'vue';
 import type { ObjectEmitsOptions } from 'vue';
 import { ModalExposeInstance, ModalProps, ModalObjectEmits } from '../modal';
+import { DrawerProps, DrawerObjectEmits } from '../drawer';
 
+export type PopupType = 'modal' | 'drawer';
 export interface PopupModalSlots {
     header?: () => VNodeChild;
     footer?: () => VNodeChild;
 }
+export interface PopupDrawerSlots {
+    header?: () => VNodeChild;
+}
 export type PopupModalConfig = Omit<ModalProps, 'show'> & ModalObjectEmits & { slots?: PopupModalSlots };
+export type PopupDrawerConfig = Omit<DrawerProps, 'show'> & DrawerObjectEmits & { slots?: PopupDrawerSlots };
 export interface PopupSourceOptions<P extends Record<string, any>, E extends ObjectEmitsOptions> {
     props?: {
         [K in keyof P]: Ref<P[K]> | P[K];
@@ -15,7 +21,10 @@ export interface PopupSourceOptions<P extends Record<string, any>, E extends Obj
 }
 
 export interface PopupInstance {
-    show: (config?: PopupModalConfig) => void;
+    show(): void;
+    show<T extends PopupType>(type: T): void;
+    show(config: PopupModalConfig): void;
+    show<T extends PopupType>(maybePopupConfig?: T | PopupModalConfig, config?: T extends 'modal' ? PopupModalConfig : PopupDrawerConfig): void;
     hide: () => void;
     instance: Ref<ModalExposeInstance | undefined>;
 }

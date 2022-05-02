@@ -1,11 +1,10 @@
 import { defineComponent, createVNode, toRefs, computed, renderSlot, ref, Transition, watch, createTextVNode, CSSProperties, mergeProps, onMounted, provide, nextTick } from 'vue';
-import { createKey, useThemeRegister } from '../_utils_';
+import { createKey, useThemeRegister, useSharedItems } from '../_utils_';
 import { onClickOutside, useMouse, useMagicKeys, pausableWatch } from '@vueuse/core';
 import { VLazyTeleport } from 'vueuc';
 import { modalProps, ModalCloseAction, modalInjectionKey } from './interface';
 import { McIcon } from '../icon';
 import { McButton } from '../button';
-import { modalStack, addModal, removeModal } from './shared';
 import { Close as IconClose } from '@vicons/ionicons5';
 import * as CSS from 'csstype';
 import { mainCssr, lightCssr, darkCssr } from './styles';
@@ -54,14 +53,14 @@ export default defineComponent({
             appearY
         } = toRefs(props);
         const key = createKey('modal');
-        const modalContainerElRef = ref<HTMLElement>();
-        const modalElRef = ref<HTMLElement | null>(null);
+        const modalElRef = ref<HTMLElement>();
         const modalAppearXRef = ref(0);
         const modalAppearYRef = ref(0);
         const modalTransformOrigin = computed(() => (appearFromCursor.value ? `${modalAppearXRef.value}px ${modalAppearYRef.value}px` : 'center center'));
         const modalTransitionName = computed(() => (appearFromCursor.value ? 'mc-modal-scale' : ['scale', 'slide'].includes(animation.value!) ? `mc-modal-${animation.value}` : 'mc-modal-scale'));
-        const isTopModal = computed(() => modalStack.length > 0 && modalStack[modalStack.length - 1] === key);
+        const isTopModal = computed(() => topItem.value === key);
         const isMountModal = ref(true);
+        const { add, remove, topItem } = useSharedItems();
         const { x, y } = useMouse();
         const magicKeys = useMagicKeys({
             passive: false,
@@ -79,9 +78,9 @@ export default defineComponent({
                     isMountModal.value = true;
                     modalAppearXRef.value = appearX.value || x.value;
                     modalAppearYRef.value = appearY.value || y.value;
-                    addModal(key);
+                    add(key);
                 } else {
-                    removeModal(key);
+                    remove(key);
                 }
             },
             { immediate: true }
@@ -234,29 +233,22 @@ export default defineComponent({
         });
 
         const modalContainerVNode = computed(() => {
-            return createVNode(
-                'div',
-                {
-                    ref: modalContainerElRef,
-                    class: 'mc-modal-container'
-                },
-                [
-                    createVNode(
-                        Transition,
-                        { name: 'mc-modal-mask-fade', appear: true },
-                        {
-                            default: () => (show.value ? createVNode('div', { class: 'mc-modal-mask' }) : null)
-                        }
-                    ),
-                    createVNode(
-                        Transition,
-                        { name: modalTransitionName.value, appear: true, onBeforeEnter: callBeforeEnter, onAfterEnter: callAfterEnter, onAfterLeave: callAfterLeave },
-                        {
-                            default: () => (show.value ? modalVNode.value : null)
-                        }
-                    )
-                ]
-            );
+            return createVNode('div', { class: 'mc-modal-container' }, [
+                createVNode(
+                    Transition,
+                    { name: 'mc-modal-mask-fade', appear: true },
+                    {
+                        default: () => (show.value ? createVNode('div', { class: 'mc-modal-mask' }) : null)
+                    }
+                ),
+                createVNode(
+                    Transition,
+                    { name: modalTransitionName.value, appear: true, onBeforeEnter: callBeforeEnter, onAfterEnter: callAfterEnter, onAfterLeave: callAfterLeave },
+                    {
+                        default: () => (show.value ? modalVNode.value : null)
+                    }
+                )
+            ]);
         });
 
         provide(modalInjectionKey, modalElRef);

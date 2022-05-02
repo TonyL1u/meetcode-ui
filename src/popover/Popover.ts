@@ -4,6 +4,7 @@ import { VBinder, VTarget, VFollower } from 'vueuc';
 import { useElementBounding, useMouseInElement, useThrottleFn, pausableWatch, onClickOutside } from '@vueuse/core';
 import { PopoverTriggerBorder, PopoverProps, popoverProps, popoverEmits, popoverInjectionKey } from './interface';
 import { modalInjectionKey } from '../modal/interface';
+import { drawerInjectionKey } from '../drawer/interface';
 import { mainCssr, lightCssr, darkCssr } from './styles';
 
 export default defineComponent({
@@ -57,9 +58,11 @@ export default defineComponent({
         const teleportDisabled = computed(() => {
             const popover = inject(popoverInjectionKey, null);
             const modal = inject(modalInjectionKey, null);
+            const drawer = inject(drawerInjectionKey, null);
 
-            return !!popover || !!modal;
+            return !!popover || !!modal || !!drawer;
         });
+
         onClickOutside(contentElRef, (e: MouseEvent) => {
             if (trigger.value === 'click' && !triggerVNode.value?.el?.contains(e.target)) {
                 handleContentHide();
@@ -70,17 +73,23 @@ export default defineComponent({
         const callShow = () => {
             emit('show', true);
         };
+
         const callHide = () => {
             emit('hide', false);
         };
+
         const callUpdateShow = () => {
             emit('update:show', showRef.value);
         };
+
         const callBorderReached = (flag: boolean, dirs: Array<PopoverTriggerBorder>) => {
             emit('border-reached', flag, dirs);
         };
+
         const throttleCallShow = useThrottleFn(callShow, 100, false);
+
         const throttleCallHide = useThrottleFn(callHide, 100, false);
+
         const throttleCallUpdateShow = useThrottleFn(callUpdateShow, 100, false);
 
         // visible control
@@ -88,10 +97,12 @@ export default defineComponent({
             window.clearTimeout(contentShowTimer.value);
             contentShowTimer.value = null;
         };
+
         const clearHideTimer = () => {
             window.clearTimeout(contentHideTimer.value);
             contentHideTimer.value = null;
         };
+
         const handleContentShow = () => {
             clearHideTimer();
             if (showRef.value) return;
@@ -101,6 +112,7 @@ export default defineComponent({
                 emitThrottled.value ? throttleCallUpdateShow() : callUpdateShow();
             }, showDelay.value);
         };
+
         const handleContentHide = () => {
             clearShowTimer();
             if (!showRef.value) return;
@@ -110,6 +122,7 @@ export default defineComponent({
                 emitThrottled.value ? throttleCallUpdateShow() : callUpdateShow();
             }, hideDelay.value);
         };
+
         const syncPosition = () => {
             var _a;
             // @ts-ignore
@@ -186,6 +199,7 @@ export default defineComponent({
 
             return tempVNode;
         });
+
         const contentVNode = computed(() => {
             if (disabled.value) return null;
 
@@ -214,6 +228,7 @@ export default defineComponent({
                 return withDirectives(tempVNode, [[vShow, showRef.value]]);
             }
         });
+
         const triggerEl = computed(() => {
             return (triggerVNode.value?.el as HTMLElement) || null;
         });
