@@ -78,7 +78,8 @@ export default c([
             borderRadius: 'var(--button-radius)',
             color: 'var(--button-default-color)',
             fontSize: 'var(--button-font-size)',
-            transition: 'background-color 0.3s'
+            transition: 'background-color 0.3s',
+            flexDirection: 'var(--button-flex-direction)' as any
         },
         [
             c('&__icon, &__content', {
@@ -86,18 +87,10 @@ export default c([
                 fontSize: 'inherit',
                 lineHeight: 1
             }),
-            c(
-                '&__icon',
-                {
-                    display: 'flex',
-                    fontSize: 'var(--button-icon-size)'
-                },
-                [
-                    c('.mc-icon', {
-                        color: 'var(--button-default-color)'
-                    })
-                ]
-            ),
+            c('&__icon', {
+                display: 'flex',
+                fontSize: 'var(--button-icon-size)'
+            }),
             c('&__icon-loading', {
                 display: 'inline-block',
                 border: '2px solid rgba(0, 0, 0, 0.1)',
@@ -108,8 +101,11 @@ export default c([
                 animation: 'mc-button-icon-loading-spin 1.2s linear infinite',
                 transition: 'background-color 0.3s'
             }),
-            c('& > span:not(:last-child)', {
+            c('& > span.left:not(:last-child)', {
                 marginRight: 'var(--button-icon-margin)'
+            }),
+            c('& > span.right:not(:last-child)', {
+                marginLeft: 'var(--button-icon-margin)'
             }),
             c('&--rippling::after', {
                 animation: 'mc-button-border-ripple-out 0.5s'
@@ -155,7 +151,7 @@ export default c([
                         borderColor: 'var(--button-hover-border-color)'
                     }),
                     c('.mc-button__icon-loading', {
-                        borderLeftColor: 'ar(--button-hover-color)'
+                        borderLeftColor: 'var(--button-hover-color)'
                     })
                 ]
             ),
@@ -170,7 +166,7 @@ export default c([
                         borderColor: 'var(--button-active-border-color)'
                     }),
                     c('.mc-button__icon-loading', {
-                        borderLeftColor: 'ar(--button-active-color)'
+                        borderLeftColor: 'var(--button-active-color)'
                     })
                 ]
             ),
@@ -186,7 +182,7 @@ export default c([
                         borderColor: 'var(--button-disabled-border-color)'
                     }),
                     c('.mc-button__icon-loading', {
-                        borderLeftColor: 'ar(--button-disabled-color)'
+                        borderLeftColor: 'var(--button-disabled-color)'
                     })
                 ]
             )

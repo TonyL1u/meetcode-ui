@@ -12,7 +12,12 @@
                     <NLayout has-sider sider-placement="right">
                         <NLayoutContent>
                             <NNotificationProvider>
-                                <router-view :class="siteTheme" />
+                                <div class="mc-flex mc-flex-col mc-justify-between mc-w-full mc-h-full">
+                                    <router-view :class="siteTheme" />
+                                    <Suspense>
+                                        <PagerNavigator />
+                                    </Suspense>
+                                </div>
                             </NNotificationProvider>
                         </NLayoutContent>
                         <NLayoutSider class="sider-navigator" :width="164" content-style="padding-right: 24px">
@@ -31,6 +36,7 @@ import { NLayout, NLayoutHeader, NLayoutContent, NLayoutSider, NNotificationProv
 import Header from './home/Header.vue';
 import Menu from './home/Menu.vue';
 import Navigator from './home/Navigator.vue';
+import PagerNavigator from './home/PagerNavigator.vue';
 import { siteTheme, isDark } from './site.config';
 
 // 初始跟随系统主题
@@ -58,7 +64,7 @@ body {
     height: 100vh;
 
     .header {
-        padding: 0 24px;
+        padding: 0 12px 0 24px;
         display: flex;
         align-items: center;
         justify-content: flex-end;
@@ -73,9 +79,11 @@ body {
     }
 
     .markdown-body {
+        width: 100%;
         max-width: 768px;
         margin: 1em auto;
         padding: 0 24px;
+        box-sizing: border-box;
 
         @include custom-markdown-style;
 
@@ -95,10 +103,16 @@ body {
 }
 
 @media screen and (max-width: 1080px) {
-    #app .header .nav-menu-trigger {
-        display: inline-block;
-        margin-left: 8px;
+    #app .header {
+        .nav-menu-trigger {
+            display: inline-block;
+        }
+
+        .title {
+            display: none;
+        }
     }
+
     .sider-menu {
         display: none;
     }

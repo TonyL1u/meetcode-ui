@@ -36,7 +36,7 @@ export default defineComponent({
             });
         });
 
-        const { value: valueVM, options, multiple, maxHeight, autoClose, autoScroll, truncate } = toRefs(props);
+        const { value: valueVM, options, multiple, maxHeight, autoClose, autoScroll, truncate, matchTrigger } = toRefs(props);
         const popoverRef = ref<PopoverExposeInstance>();
         let scrollToOption: (index: number) => void;
 
@@ -117,7 +117,7 @@ export default defineComponent({
                 class: 'mc-popselect',
                 style: {
                     padding: '0px',
-                    minWidth: '110px',
+                    minWidth: matchTrigger.value ? 'none' : '110px',
                     ...cssVars.value
                 }
             });

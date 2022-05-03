@@ -110,11 +110,14 @@ export default defineComponent({
         };
 
         const cssVars = computed<CSS.Properties>(() => {
-            const drawerWidth = ['left', 'right'].includes(appearDirection.value!) ? (typeof size.value === 'number' ? `${size.value}px` : size.value) : '100vw';
-            const drawerHeight = ['top', 'bottom'].includes(appearDirection.value!) ? (typeof size.value === 'number' ? `${size.value}px` : size.value) : '100vh';
+            const drawerSize = typeof size.value === 'number' ? `${size.value}px` : size.value;
+            const drawerWidth = ['left', 'right'].includes(appearDirection.value!) ? drawerSize : '100vw';
+            const drawerHeight = ['top', 'bottom'].includes(appearDirection.value!) ? drawerSize : '100vh';
+
             return {
                 '--drawer-width': drawerWidth,
-                '--drawer-height': drawerHeight
+                '--drawer-height': drawerHeight,
+                '--drawer-size': drawerSize
             };
         });
 
@@ -142,13 +145,14 @@ export default defineComponent({
             const mergedProps = mergeProps(
                 {
                     ref: drawerElRef,
-                    class: ['mc-drawer', pure.value ? 'mc-drawer--pure' : '', `mc-drawer--${appearDirection.value}`],
-                    style: cssVars.value
+                    class: ['mc-drawer', pure.value ? 'mc-drawer--pure' : '', `mc-drawer--${appearDirection.value}`]
                 },
                 attrs
             );
 
-            return createVNode('div', { class: 'mc-drawer-wrapper' }, [createVNode('div', mergedProps, [headerVNode.value, createVNode('div', { class: ['mc-drawer__body', bodyClass.value], style: bodyStyle.value }, [renderSlot(slots, 'default')])])]);
+            return createVNode('div', { class: 'mc-drawer-wrapper', style: cssVars.value }, [
+                createVNode('div', mergedProps, [headerVNode.value, createVNode('div', { class: ['mc-drawer__body', bodyClass.value], style: bodyStyle.value }, [renderSlot(slots, 'default')])])
+            ]);
         });
 
         const drawerContainerVNode = computed(() => {

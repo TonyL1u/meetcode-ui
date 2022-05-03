@@ -142,7 +142,7 @@ import SelectAll from '@/checkbox/demos/DemoSelectAll.vue'
 |  status   | `CheckboxGroupStatus` | CheckboxGroup 内选中复选框的状态 |
 |    el     |     `HTMLElement`     |    CheckboxGroup 的 Dom 节点     |
 
-## Type Declarations
+<!-- ## Type Declarations
 
 ```ts
 export type CheckboxValue = string | number | boolean;
@@ -151,4 +151,4 @@ export type CheckboxGroupStatus = {
     all: boolean;
     indeterminate: boolean;
 };
-```
+``` -->

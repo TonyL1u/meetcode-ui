@@ -9,7 +9,7 @@ import Test from './Test2.vue';
 
 interface TestProps {
     count: number;
-    // 写成 reactiveCount: Ref<number> 也是完全正确并合理的
+    // 写成 reactiveCount: Ref<number> 也是完全合理并正确的
     reactiveCount: number;
 }
 type TestEmits = {

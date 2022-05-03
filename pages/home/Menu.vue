@@ -1,7 +1,3 @@
-<template>
-    <NMenu v-model:value="activeKey" @update:value="handleUpdateValue" :options="menuTree" accordion />
-</template>
-
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
@@ -17,11 +13,11 @@ activeKey.value = window.location.pathname.split('/meetcode-ui')[1];
 
 watch(
     () => route.path,
-    (newPath, oldPath) => {
-        const splitKey = newPath.split('/');
+    path => {
+        const splitKey = path.split('/');
         const title = decodeURI(splitKey[splitKey.length - 1]);
         useTitle(`McUI Docs | ${title}`);
-        activeKey.value = newPath;
+        activeKey.value = path;
     }
 );
 
@@ -29,3 +25,7 @@ const handleUpdateValue = (key: string): void => {
     router.push(key === '' ? '/' : key);
 };
 </script>
+
+<template>
+    <NMenu v-model:value="activeKey" @update:value="handleUpdateValue" :options="menuTree" accordion />
+</template>

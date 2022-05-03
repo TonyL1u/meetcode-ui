@@ -24,6 +24,7 @@ declare module 'csstype' {
         '--button-icon-margin'?: string;
         '--button-radius'?: string;
         '--button-ripple-color'?: string;
+        '--button-flex-direction'?: string;
     }
 }
 
@@ -53,6 +54,7 @@ export interface ButtonProps {
     circle?: boolean;
     block?: boolean;
     loading?: boolean;
+    iconRight?: boolean;
     color?: string;
     textColor?: string;
     borderColor?: string;
@@ -110,6 +112,10 @@ export const buttonProps = {
     },
     block: {
         type: Boolean as PropType<ButtonProps['block']>,
+        default: false
+    },
+    iconRight: {
+        type: Boolean as PropType<ButtonProps['iconRight']>,
         default: false
     },
     color: {

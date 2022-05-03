@@ -137,6 +137,7 @@ import ButtonGroup from '@/button/demos/DemoButtonGroup.vue'
 |      circle      |                                 `boolean`                                  |   `false`   |                                               圆形按钮                                               |
 |      block       |                                 `boolean`                                  |   `false`   |                                          是否显示为块级按钮                                          |
 |     loading      |                                 `boolean`                                  |   `false`   |                                              加载中状态                                              |
+|    icon-right    |                                 `boolean`                                  |   `false`   |                                    是否将（加载中）图标显示在右边                                    |
 |      color       |                                  `string`                                  | `undefined` | 按钮背景色，支持如 `#000` 、 `rgb(0, 0, 0)` 、 `rgba(233, 233, 233, 0.5)` 、 `blue` 等合法的颜色格式 |
 |    text-color    |                                  `string`                                  | `undefined` |                                       按钮字体色，支持格式如上                                       |
 |   border-color   |                                  `string`                                  | `undefined` |                                       按钮边框色，支持格式如上                                       |

@@ -49,7 +49,7 @@ export default defineComponent({
             });
         });
 
-        const { type, size, disabled, ghost, dashed, render, round, circle, block, loading, color, textColor, borderColor, colorSet, textColorSet, borderColorSet } = toRefs(props);
+        const { type, size, disabled, ghost, dashed, render, round, circle, block, loading, iconRight, color, textColor, borderColor, colorSet, textColorSet, borderColorSet } = toRefs(props);
         const buttonElRef = ref<HTMLElement>();
         const isRippling = ref(false);
         const isDefault = computed(() => type.value === 'default');
@@ -130,12 +130,17 @@ export default defineComponent({
             return {
                 ...colorVars,
                 ...sizeVars,
-                '--button-ripple-color': setColorAlpha(colorVars['--button-active-border-color']!, 0)
+                '--button-ripple-color': setColorAlpha(colorVars['--button-active-border-color']!, 0),
+                '--button-flex-direction': iconRight.value ? 'row-reverse' : 'row'
             };
         });
 
         const iconVNode = computed(() => {
-            return loading.value ? createVNode('span', { class: 'mc-button__icon-loading' }) : slots.icon ? createVNode('span', { class: 'mc-button__icon' }, [renderSlot(slots, 'icon')]) : null;
+            return loading.value
+                ? createVNode('span', { class: ['mc-button__icon-loading', iconRight.value ? 'right' : 'left'] })
+                : slots.icon
+                ? createVNode('span', { class: ['mc-button__icon', iconRight.value ? 'right' : 'left'] }, [renderSlot(slots, 'icon')])
+                : null;
         });
 
         const contentVNode = computed(() => {

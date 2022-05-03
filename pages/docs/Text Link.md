@@ -5,7 +5,7 @@ import Email from '@/text-link/demos/DemoEmail.vue'
 import EmailRaw from '@/text-link/demos/DemoEmailRaw.vue'
 </script>
 
-# TextLink 文字链接
+# Text Link 文字链接
 
 ## 演示
 
@@ -37,7 +37,7 @@ import EmailRaw from '@/text-link/demos/DemoEmailRaw.vue'
 
 |    名称     |                            类型                             |   默认值    |                                               说明                                                |
 | :---------: | :---------------------------------------------------------: | :---------: | :-----------------------------------------------------------------------------------------------: |
-|    type     | `'primary' \| 'success' \| 'warning' \| 'danger' \| 'info'` | `'default'` |                                             链接类型                                              |
+|    type     | `'primary' \| 'success' \| 'warning' \| 'danger' \| 'info'` | `'success'` |                                             链接类型                                              |
 |     to      |                          `string`                           |    `'#'`    |                                             跳转链接                                              |
 |  underline  |                          `boolean`                          |   `false`   |                                          是否显示下划线                                           |
 |    block    |                          `boolean`                          |   `false`   |                                        是否显示为块级样式                                         |

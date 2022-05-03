@@ -1,7 +1,7 @@
-import { Ref, VNodeChild, ComputedRef } from 'vue';
+import { Ref, VNodeChild } from 'vue';
 import type { ObjectEmitsOptions } from 'vue';
 import { ModalExposeInstance, ModalProps, ModalObjectEmits } from '../modal';
-import { DrawerProps, DrawerObjectEmits } from '../drawer';
+import { DrawerExposeInstance, DrawerProps, DrawerObjectEmits } from '../drawer';
 
 export type PopupType = 'modal' | 'drawer';
 export interface PopupModalSlots {
@@ -24,7 +24,7 @@ export interface PopupInstance {
     show(): void;
     show<T extends PopupType>(type: T): void;
     show(config: PopupModalConfig): void;
-    show<T extends PopupType>(maybePopupConfig?: T | PopupModalConfig, config?: T extends 'modal' ? PopupModalConfig : PopupDrawerConfig): void;
+    show<T extends PopupType>(type: T, config: T extends 'modal' ? PopupModalConfig : PopupDrawerConfig): void;
     hide: () => void;
-    instance: Ref<ModalExposeInstance | undefined>;
+    instance: Ref<ModalExposeInstance | DrawerExposeInstance | undefined>;
 }

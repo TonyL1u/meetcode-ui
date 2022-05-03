@@ -1,18 +1,17 @@
 <template>
-    <McPopover trigger="click" placement="bottom-end" :style="{ height: '90vh', padding: 0, width: '300px' }">
-        <McIcon class="nav-menu-trigger" :size="24">
-            <IconMenu />
-        </McIcon>
-        <template #content>
-            <div class="mc-h-full mc-overflow-auto">
-                <Menu />
-            </div>
-        </template>
-    </McPopover>
+    <McIcon class="nav-menu-trigger" :size="24" @click="show = true">
+        <IconMenu />
+    </McIcon>
+    <McDrawer v-model:show="show" appear-direction="left" size="85vw" :show-header="false" :body-style="{ padding: '0px' }">
+        <Menu @update:value="show = false" />
+    </McDrawer>
 </template>
 
 <script lang="ts" setup>
-import { McPopover, McIcon } from 'meetcode-ui';
+import { ref } from 'vue';
+import { McIcon, McDrawer } from 'meetcode-ui';
 import { MenuOutline as IconMenu } from '@vicons/ionicons5';
 import Menu from './Menu.vue';
+
+const show = ref(false);
 </script>

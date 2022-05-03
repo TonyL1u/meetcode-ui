@@ -27,7 +27,7 @@
                     </template>
                 </McButton>
             </McTooltip>
-            <!-- <McTooltip content="在线运行">
+            <McTooltip content="在线运行">
                 <McButton render="text" size="mini" @click="handleShowModal">
                     <template #icon>
                         <McIcon :size="12">
@@ -35,11 +35,11 @@
                         </McIcon>
                     </template>
                 </McButton>
-            </McTooltip> -->
+            </McTooltip>
         </McSpace>
     </div>
 
-    <!-- <McModal
+    <McModal
         v-model:show="showModal"
         style="border-radius: 8px"
         :appear-from-cursor="false"
@@ -50,7 +50,7 @@
         <McLoading size="large" type="ripple" :show="isLoading" :mask-style="{ background: isLight ? '#fff' : '#313540' }" :content-style="{ height: '100%' }" style="height: 100%">
             <Playground @render-finished="isLoading = false" />
         </McLoading>
-    </McModal> -->
+    </McModal>
 </template>
 
 <script lang="ts" setup>
@@ -61,7 +61,7 @@ import { Code as IconCode, CopyOutline as IconCopy, CubeOutline as IconEdit } fr
 import { useClipboard } from '@vueuse/core';
 import { loadInitialState } from '@playground/orchestrator';
 import { siteTheme, isLight } from '../site.config';
-// import Playground from '@playground/Playground.vue';
+import Playground from '@playground/Playground.vue';
 
 const props = defineProps<{ codeSources: string }>();
 const codes = ref<Array<any>>(JSON.parse(props.codeSources) || []);

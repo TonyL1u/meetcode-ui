@@ -53,7 +53,8 @@ export default c([
                     }),
                     c('.mc-drawer__body', {
                         padding: '20px',
-                        flex: 1
+                        flex: 1,
+                        overflow: 'auto'
                     })
                 ]
             ),
@@ -79,15 +80,15 @@ export default c([
         opacity: 0
     }),
     c('.mc-drawer-appear-top-enter-from, .mc-drawer-appear-top-leave-to', {
-        transform: 'translateY(-600px)'
+        transform: 'translateY(calc(0px - var(--drawer-size)))'
     }),
     c('.mc-drawer-appear-right-enter-from, .mc-drawer-appear-right-leave-to', {
-        transform: 'translateX(600px)'
+        transform: 'translateX(var(--drawer-size))'
     }),
     c('.mc-drawer-appear-bottom-enter-from, .mc-drawer-appear-bottom-leave-to', {
-        transform: 'translateY(600px)'
+        transform: 'translateY(var(--drawer-size))'
     }),
     c('.mc-drawer-appear-left-enter-from, .mc-drawer-appear-left-leave-to', {
-        transform: 'translateX(-600px)'
+        transform: 'translateX(calc(0px - var(--drawer-size)))'
     })
 ]);

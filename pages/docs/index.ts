@@ -1,28 +1,30 @@
-import { Ref, ref } from 'vue';
+import { ref } from 'vue';
+import type { Ref } from 'vue';
 import type { MenuOption, TreeSelectOption } from 'naive-ui';
+import { PATH_NAME_MAP } from '../site.config';
 
 interface Route {
     path: string;
-    component: () => Promise<{
-        [key: string]: any;
-    }>;
+    name: string;
+    component: () => Promise<{ [key: string]: any }>;
 }
-const markdownModules = import.meta.glob('./**/*.md');
+export const markdownModules = import.meta.glob('./**/*.md');
 const rootFolder: TreeSelectOption = {
     label: 'docs',
     key: '',
     children: []
 };
 
-const routes = ref<Array<Route>>([]);
-const menuTree: Ref<Array<MenuOption>> = ref([]);
-const folderTree = ref<Array<TreeSelectOption>>([rootFolder]);
-const menuBlackList = ['./Split.md'];
+const routes = ref<Route[]>([]);
+const menuTree: Ref<MenuOption[]> = ref([]);
+const folderTree = ref<TreeSelectOption[]>([rootFolder]);
+const menuBlackList = ['./Split.md', './Input.md'];
 
 for (const path in markdownModules) {
     if (menuBlackList.includes(path)) continue;
     routes.value.push({
         path: encodeURI(path.slice(1, -3)),
+        name: PATH_NAME_MAP[path.slice(2, -3)] || '',
         component: markdownModules[path]
     });
 

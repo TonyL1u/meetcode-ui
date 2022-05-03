@@ -77,7 +77,7 @@ import { McTextLink } from 'meetcode-ui'
 
 ::: demo codePreview=BeforeLeave
 
-### Modal 关闭前的回调
+### 关闭前的回调
 
 提供钩子函数 `on-before-leave` 来控制 Modal 关闭前的行为。入参有 5 种值用于区分关闭模态框的行为：
 
@@ -101,7 +101,7 @@ import { McTextLink } from 'meetcode-ui'
 
 |       名称        |              类型               |   默认值    |                 说明                 |
 | :---------------: | :-----------------------------: | :---------: | :----------------------------------: |
-|   (v-model)show   |            `boolean`            |   `false`   |            是否展示 Modal            |
+|   (v-model)show   |            `boolean`            |   `false`   |            是否显示 Modal            |
 |       width       |       `number \| string`        |    `600`    |              模态框宽度              |
 |      height       |        `number\|string`         | `'initial'` |              模态框高度              |
 | wrapper-closable  |            `boolean`            |   `true`    |         点击遮罩是否触发事件         |
@@ -120,7 +120,7 @@ import { McTextLink } from 'meetcode-ui'
 |    show-footer    |            `boolean`            |   `true`    |           是否显示 footer            |
 |    cancel-text    |        `string \| null`         |  `'取消'`   | 取消按钮文字，设置为 `null` 隐藏按钮 |
 |   confirm-text    |        `string \| null`         |  `'确定'`   | 确定按钮文字，设置为 `null` 隐藏按钮 |
-|       pure        |            `boolean`            |   `false`   |               旋转速度               |
+|       pure        |            `boolean`            |   `false`   |            清除模态框样式            |
 |     position      |            `object`             | `undefined` |            模态框出现位置            |
 |     animation     |      `'scale' \| 'slide'`       |  `'scale'`  |            模态框出现动画            |
 

@@ -6,6 +6,7 @@ declare module 'csstype' {
     interface Properties {
         '--drawer-width'?: string;
         '--drawer-height'?: string;
+        '--drawer-size'?: string;
     }
 }
 export type DrawerCloseAction = 'wrapper' | 'close' | 'shortcut';
@@ -49,7 +50,7 @@ export const drawerProps = {
     },
     size: {
         type: [Number, String] as PropType<DrawerProps['size']>,
-        default: 600
+        default: '30%'
     },
     appearDirection: {
         type: String as PropType<DrawerProps['appearDirection']>,
