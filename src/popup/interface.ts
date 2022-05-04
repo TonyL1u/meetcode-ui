@@ -1,5 +1,6 @@
-import { Ref, VNodeChild } from 'vue';
+import { Ref, VNodeChild, InjectionKey } from 'vue';
 import type { ObjectEmitsOptions } from 'vue';
+import type { RouteLocationNormalizedLoaded } from 'vue-router';
 import { ModalExposeInstance, ModalProps, ModalObjectEmits } from '../modal';
 import { DrawerExposeInstance, DrawerProps, DrawerObjectEmits } from '../drawer';
 
@@ -19,7 +20,6 @@ export interface PopupSourceOptions<P extends Record<string, any>, E extends Obj
     };
     on?: E;
 }
-
 export interface PopupInstance {
     show(): void;
     show<T extends PopupType>(type: T): void;
@@ -28,3 +28,4 @@ export interface PopupInstance {
     hide: () => void;
     instance: Ref<ModalExposeInstance | DrawerExposeInstance | undefined>;
 }
+export const popupRouteInjectionKey: InjectionKey<RouteLocationNormalizedLoaded> = Symbol('popupRouteInjectionKey');

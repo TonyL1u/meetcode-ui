@@ -8,7 +8,7 @@ interface Route {
     name: string;
     component: () => Promise<{ [key: string]: any }>;
 }
-export const markdownModules = import.meta.glob('./**/*.md');
+const markdownModules = import.meta.glob('./**/*.md');
 const rootFolder: TreeSelectOption = {
     label: 'docs',
     key: '',

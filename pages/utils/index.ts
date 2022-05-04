@@ -1,3 +1,4 @@
+import { watch } from 'vue';
 import { watchOnce } from '@vueuse/core';
 import { useRouter, useRoute } from 'vue-router';
 import type { Router, RouteLocationNormalizedLoaded } from 'vue-router';
@@ -29,4 +30,19 @@ export function onRouterReady(cb?: (router: Router, route: RouteLocationNormaliz
             });
         });
     }
+}
+
+export function onRouteChange<T extends keyof RouteLocationNormalizedLoaded>(key: T, cb: (value: RouteLocationNormalizedLoaded[T]) => void) {
+    const route = useRoute();
+
+    watch(
+        () => route[key],
+        value => {
+            cb(value);
+        }
+    );
+}
+
+export function onRoutePathChange(cb: (path: string) => void) {
+    onRouteChange('path', cb);
 }

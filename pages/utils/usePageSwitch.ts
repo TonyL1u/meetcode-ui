@@ -1,6 +1,11 @@
-import { computed } from 'vue';
+import { computed, watch, toRaw } from 'vue';
 import { routes } from '../docs';
 import { onRouterReady } from '.';
+
+const allRoutes = toRaw(routes.value)
+    .filter(route => !route.path.includes('@misc'))
+    .map(({ name, path }) => ({ name, path }));
+allRoutes.push({ name: '404 Not Found', path: '/404' });
 
 export interface SwitcherData {
     name: string;
@@ -10,10 +15,11 @@ export interface SwitcherData {
 export async function usePageSwitch() {
     const { router, route } = await onRouterReady();
     const routeIndex = computed(() => {
-        return routes.value.findIndex(r => r.path === route.path);
+        return allRoutes.findIndex(r => r.path === route.path);
     });
     const next = computed<SwitcherData | null>(() => {
-        const nextRoute = routes.value[routeIndex.value + 1];
+        if (current.value === null) return null;
+        const nextRoute = allRoutes[routeIndex.value + 1];
         if (nextRoute) {
             const { name, path } = nextRoute;
             return { name, path };
@@ -21,13 +27,15 @@ export async function usePageSwitch() {
 
         return null;
     });
-    const current = computed<SwitcherData>(() => {
-        const { name = '', path = '' } = routes.value[routeIndex.value] ?? {};
+    const current = computed<SwitcherData | null>(() => {
+        const { name = '', path = '' } = allRoutes[routeIndex.value] ?? {};
 
-        return { name, path };
+        if (name && path) return { name, path };
+        return null;
     });
     const prev = computed<SwitcherData | null>(() => {
-        const prevRoute = routes.value[routeIndex.value - 1];
+        if (current.value === null) return null;
+        const prevRoute = allRoutes[routeIndex.value - 1];
         if (prevRoute) {
             const { name, path } = prevRoute;
             return { name, path };

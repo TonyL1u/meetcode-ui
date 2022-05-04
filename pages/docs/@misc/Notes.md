@@ -191,3 +191,7 @@
 
 -   在 Popup 中使用 message 会报错
 -   Modal 中嵌套 Modal 时，最后一个 Modal 关闭时，stack 中的实例没有清除，导致无法关闭
+
+2022-05-03
+
+-   在传入 Popup 的 vue 文件中使用 vue-router4 的 `useRoute()` 和 `useRouter()` Api 报错

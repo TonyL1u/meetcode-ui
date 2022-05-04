@@ -12,8 +12,12 @@ const router = createRouter({
             redirect: encodeURI('/@misc/起步')
         },
         {
-            path: '/:catchAll(.*)',
+            path: '/404',
             component: () => import('./home/404.vue')
+        },
+        {
+            path: '/:catchAll(.*)',
+            redirect: '/404'
         }
     ]
 });
