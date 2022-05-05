@@ -42,8 +42,9 @@ export default c([
                         fontSize: '18px',
                         fontWeight: 500
                     }),
-                    c('.mc-drawer-close-icon', {
-                        cursor: 'pointer'
+                    c('.mc-drawer-close-button', {
+                        position: 'relative',
+                        left: '8px'
                     }),
                     c('.mc-drawer__header', {
                         display: 'flex',

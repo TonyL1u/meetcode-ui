@@ -8,8 +8,6 @@ import Test from './Test1.vue';
 
 const handleClick = () => {
     const instance = McPopup(Test);
-    instance.show('drawer', {
-        title: '抽屉'
-    });
+    instance.show('drawer', { title: '抽屉' });
 };
 </script>

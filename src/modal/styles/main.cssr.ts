@@ -44,8 +44,9 @@ export default c([
                         fontSize: '18px',
                         fontWeight: 500
                     }),
-                    c('.mc-modal-close-icon', {
-                        cursor: 'pointer'
+                    c('.mc-modal-close-button', {
+                        position: 'relative',
+                        left: '8px'
                     }),
                     c('.mc-modal__header', {
                         display: 'flex',

@@ -1,8 +1,10 @@
-import { render, createVNode, ref, Component, FunctionalComponent, isRef, defineComponent } from 'vue';
-import type { ObjectEmitsOptions } from 'vue';
+import { render, createVNode, ref, Component, FunctionalComponent, isRef, defineComponent, VNodeChild } from 'vue';
 import { PopupSourceOptions, PopupInstance, PopupModalConfig, PopupDrawerConfig, PopupType } from './interface';
-import { McModal, ModalExposeInstance } from '../modal';
-import { McDrawer, DrawerExposeInstance } from '../drawer';
+import { McModal } from '../modal';
+import { McDrawer } from '../drawer';
+import type { ObjectEmitsOptions } from 'vue';
+import type { ModalExposeInstance } from '../modal';
+import type { DrawerExposeInstance } from '../drawer';
 
 function McPopup<P extends Record<string, any>, E extends ObjectEmitsOptions>(source: Component | string, options: PopupSourceOptions<P, E> = {}): PopupInstance {
     const PopupHostElement = document.createElement('div');

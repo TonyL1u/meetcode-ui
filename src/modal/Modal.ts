@@ -186,16 +186,19 @@ export default defineComponent({
             const titleVNode = createVNode('div', { class: 'mc-modal-title' }, [typeof title.value === 'string' ? createTextVNode(title.value) : title.value?.()]);
             const closeIconVNode = closable.value
                 ? createVNode(
-                      McIcon,
+                      McButton,
                       {
-                          size: 20,
-                          class: 'mc-modal-close-icon',
+                          render: 'text',
+                          class: 'mc-modal-close-button',
+                          style: { padding: '0 6px' },
                           onClick: () => {
                               closeAction = 'close';
                               callUpdateShow(false);
                           }
                       },
-                      { default: () => createVNode(IconClose) }
+                      {
+                          icon: () => createVNode(McIcon, { size: 20 }, { default: () => createVNode(IconClose) })
+                      }
                   )
                 : null;
 

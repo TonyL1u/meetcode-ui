@@ -103,7 +103,7 @@ import { McTextLink } from 'meetcode-ui'
 | :---------------: | :-----------------------------: | :---------: | :----------------------------------: |
 |   (v-model)show   |            `boolean`            |   `false`   |            是否显示 Modal            |
 |       width       |       `number \| string`        |    `600`    |              模态框宽度              |
-|      height       |        `number\|string`         | `'initial'` |              模态框高度              |
+|      height       |       `number \| string`        | `'initial'` |              模态框高度              |
 | wrapper-closable  |            `boolean`            |   `true`    |         点击遮罩是否触发事件         |
 |   shortcut-key    |            `string`             | `'Escape'`  |           模态框关闭快捷键           |
 | close-on-shortcut |            `boolean`            |   `true`    |       是否允许快捷键关闭模态框       |
@@ -126,17 +126,17 @@ import { McTextLink } from 'meetcode-ui'
 
 ## Event
 
-|        名称        |                                     类型                                      |          说明          |
-| :----------------: | :---------------------------------------------------------------------------: | :--------------------: |
-|   on-update:show   |                          `(value: boolean) => void`                           | 模态框显示或隐藏时触发 |
-|  on-wrapper-click  |                                 `() => void`                                  |  点击遮罩层的回调事件  |
-| on-shortcut-stroke |                          `(keys: string[]) => void`                           | 快捷键关闭模态框时触发 |
-|   on-after-enter   |                          `(value: boolean) => void`                           |   模态框显示后的回调   |
-|   on-after-leave   |                          `(value: boolean) => void`                           |   模态框隐藏后的回调   |
-|  on-before-enter   |                          `(value: boolean) => void`                           |   模态框显示前的回调   |
-|  on-before-leave   | `() => Promise<boolean \| undefined \| void> \| boolean \| undefined \| void` |   模态框隐藏前的回调   |
-|     on-cancel      |                          `(value: boolean) => void`                           |   点击取消按钮的回调   |
-|     on-confirm     |                          `(value: boolean) => void`                           |   点击确定按钮的回调   |
+|        名称        |                                                 类型                                                  |          说明          |
+| :----------------: | :---------------------------------------------------------------------------------------------------: | :--------------------: |
+|   on-update:show   |                                      `(value: boolean) => void`                                       | 模态框显示或隐藏时触发 |
+|  on-wrapper-click  |                                             `() => void`                                              |  点击遮罩层的回调事件  |
+| on-shortcut-stroke |                                      `(keys: string[]) => void`                                       | 快捷键关闭模态框时触发 |
+|   on-after-enter   |                                      `(value: boolean) => void`                                       |   模态框显示后的回调   |
+|   on-after-leave   |                                      `(value: boolean) => void`                                       |   模态框隐藏后的回调   |
+|  on-before-enter   |                                      `(value: boolean) => void`                                       |   模态框显示前的回调   |
+|  on-before-leave   | `(action: ModalCloseAction) => Promise<boolean \| undefined \| void> \| boolean \| undefined \| void` |   模态框隐藏前的回调   |
+|     on-cancel      |                                      `(value: boolean) => void`                                       |   点击取消按钮的回调   |
+|     on-confirm     |                                      `(value: boolean) => void`                                       |   点击确定按钮的回调   |
 
 ## Slot
 

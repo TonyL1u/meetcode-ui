@@ -2,6 +2,7 @@ import { defineComponent, onMounted, computed, createVNode, toRefs, ref, Transit
 import { createKey, useThemeRegister, useSharedItems } from '../_utils_';
 import { onClickOutside, useMagicKeys, pausableWatch } from '@vueuse/core';
 import { McIcon } from '../icon';
+import { McButton } from '../button';
 import { Close as IconClose } from '@vicons/ionicons5';
 import { VLazyTeleport } from 'vueuc';
 import { drawerProps, DrawerCloseAction, drawerInjectionKey } from './interface';
@@ -125,16 +126,19 @@ export default defineComponent({
             const titleVNode = createVNode('div', { class: 'mc-drawer-title' }, [typeof title.value === 'string' ? createTextVNode(title.value) : title.value?.()]);
             const closeIconVNode = closable.value
                 ? createVNode(
-                      McIcon,
+                      McButton,
                       {
-                          size: 20,
-                          class: 'mc-drawer-close-icon',
+                          render: 'text',
+                          class: 'mc-drawer-close-button',
+                          style: { padding: '0 6px' },
                           onClick: () => {
                               closeAction = 'close';
                               callUpdateShow(false);
                           }
                       },
-                      { default: () => createVNode(IconClose) }
+                      {
+                          icon: () => createVNode(McIcon, { size: 20 }, { default: () => createVNode(IconClose) })
+                      }
                   )
                 : null;
 
