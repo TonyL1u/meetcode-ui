@@ -12,6 +12,10 @@ const router = createRouter({
             redirect: encodeURI('/@misc/起步')
         },
         {
+            path: '/Drawer_new',
+            component: () => import('../src/drawer/demos/zh-CN/index.md')
+        },
+        {
             path: '/404',
             component: () => import('./home/404.vue')
         },

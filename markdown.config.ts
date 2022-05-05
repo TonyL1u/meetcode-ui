@@ -30,6 +30,7 @@ export default {
                 return params.trim().match(/^demo\s*(.*)$/);
             },
             render: function (tokens: Token[], idx: number) {
+                console.log(tokens[0]);
                 const m = tokens[idx].info.trim().match(/^demo\s*(.*)$/);
                 if (m && tokens[idx].nesting === 1) {
                     const ScriptSetup = tokens[0].content.split('\n').slice(1, -2);
@@ -42,8 +43,10 @@ export default {
                             ComponentMap[key] = src.slice(1, -1);
                         }
                     }
+                    // console.log(ScriptSetup);
+                    // console.log(fs.readFileSync('./src/drawer/demos/zh-CN/DemoBasic.vue', 'utf-8'));
 
-                    const components: Array<string> = m[1] ? m[1].split('codePreview=')[1].split(',') : [];
+                    const components: string[] = m[1] ? m[1].split('codePreview=')[1].split(',') : [];
                     const codeSources = components.map((name: string) => {
                         const [root, ...rest] = ComponentMap[name].split('/');
                         const rootDir = fileSourceMap[root];
