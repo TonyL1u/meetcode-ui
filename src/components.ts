@@ -12,6 +12,6 @@ export * from './button';
 export * from './icon';
 export * from './space';
 export * from './modal';
-export * from './input';
+// export * from './input';
 export * from './drawer';
 export * from './popup';

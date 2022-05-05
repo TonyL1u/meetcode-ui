@@ -5,9 +5,9 @@ import { ChevronBackSharp as IconPrev, ChevronForwardSharp as IconNext } from '@
 import { usePageSwitch } from '../utils';
 
 const { switchNext, switchPrev, next, prev, current } = await usePageSwitch();
-const showPrev = computed(() => !!(prev.value && prev.value.name && prev.value.path !== '/404'));
-const showNext = computed(() => !!(next.value && next.value.name && next.value.path !== '/404'));
-const showPager = computed(() => current.value && current.value.path !== '/404' && (showPrev.value || showNext.value));
+const showPrev = computed(() => !!(prev.value?.name && prev.value.path !== '/404'));
+const showNext = computed(() => !!(next.value?.name && next.value.path !== '/404'));
+const showPager = computed(() => !!(current.value?.name && current.value.path !== '/404' && (showPrev.value || showNext.value)));
 </script>
 
 <template>

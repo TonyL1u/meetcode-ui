@@ -21,7 +21,7 @@ const folderTree = ref<TreeSelectOption[]>([rootFolder]);
 const menuBlackList = ['./Split.md', './Input.md'];
 
 for (const path in markdownModules) {
-    if (menuBlackList.includes(path)) continue;
+    if (menuBlackList.includes(path) || path.indexOf('@misc') > -1) continue;
     routes.value.push({
         path: encodeURI(path.slice(1, -3)),
         name: PATH_NAME_MAP[path.slice(2, -3)] || '',

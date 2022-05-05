@@ -8,7 +8,7 @@ const install = (app: App) => {
             .filter(key => !NoNeedRegister.includes(key))
             .map(key => components[key as keyof typeof components]) as DefineComponent[]
     ).forEach(component => {
-        app.component(component.name, component);
+        app.component('Mc' + component.name, component);
     });
 };
 
