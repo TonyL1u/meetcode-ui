@@ -1,5 +1,5 @@
 import { ref, watch, computed } from 'vue';
-import { globalTheme, setGlobalTheme } from 'meetcode-ui';
+import { globalTheme, setGlobalTheme, globalLanguage, setGlobalLanguage } from 'meetcode-ui';
 
 type SiteTheme = 'light' | 'dark';
 export const siteTheme = ref<SiteTheme>(globalTheme.value);
@@ -28,7 +28,7 @@ watch(
 );
 
 type SiteLanguage = 'zh-CN' | 'en-US';
-export const siteLanguage = ref<SiteLanguage>('zh-CN');
+export const siteLanguage = ref<SiteLanguage>(globalLanguage.value);
 export const isZhCN = computed(() => siteLanguage.value === 'zh-CN');
 export const isEnUS = computed(() => siteLanguage.value === 'en-US');
 export function useSiteLanguage() {
@@ -53,6 +53,13 @@ export function useSiteLanguage() {
         }
     };
 }
+watch(
+    siteLanguage,
+    lang => {
+        setGlobalLanguage(lang);
+    },
+    { immediate: true }
+);
 
 export const PATH_NAME_MAP_ZH: Record<string, string> = {
     button: 'Button 按钮',

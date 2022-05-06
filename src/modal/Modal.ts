@@ -1,5 +1,6 @@
 import { defineComponent, createVNode, toRefs, computed, renderSlot, ref, Transition, watch, createTextVNode, CSSProperties, mergeProps, onMounted, provide, nextTick } from 'vue';
 import { createKey, useThemeRegister, useSharedItems } from '../_utils_';
+import { useI18n } from '../i18n';
 import { onClickOutside, useMouse, useMagicKeys, pausableWatch } from '@vueuse/core';
 import { VLazyTeleport } from 'vueuc';
 import { modalProps, ModalCloseAction, modalInjectionKey } from './interface';
@@ -62,6 +63,7 @@ export default defineComponent({
         const isMountModal = ref(true);
         const { add, remove, topItem } = useSharedItems();
         const { x, y } = useMouse();
+        const { i18n } = useI18n('modal');
         const magicKeys = useMagicKeys({
             passive: false,
             onEventFired(event: Event) {
@@ -213,8 +215,8 @@ export default defineComponent({
                       slots.footer
                           ? [renderSlot(slots, 'footer')]
                           : [
-                                cancelText.value !== null ? createVNode(McButton, { ghost: true, onClick: handleCancel }, { default: () => cancelText.value }) : null,
-                                confirmText.value !== null ? createVNode(McButton, { style: { marginLeft: '16px' }, type: 'success', onClick: handleConfirm }, { default: () => confirmText.value }) : null
+                                cancelText.value !== null ? createVNode(McButton, { ghost: true, onClick: handleCancel }, { default: () => i18n('CancelButtonText', cancelText.value || '') }) : null,
+                                confirmText.value !== null ? createVNode(McButton, { style: { marginLeft: '16px' }, type: 'success', onClick: handleConfirm }, { default: () => i18n('ConfirmButtonText', confirmText.value || '') }) : null
                             ]
                   )
                 : null;

@@ -1,7 +1,7 @@
 <template>
     <McSpace>
-        <McButton @click="handleClick">正常</McButton>
-        <McButton @click="handleClick" disabled>禁用</McButton>
+        <McButton @click="handleClick">Normal</McButton>
+        <McButton @click="handleClick" disabled>Disabled</McButton>
     </McSpace>
 </template>
 

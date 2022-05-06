@@ -6,7 +6,7 @@
                     <IconAttach />
                 </McIcon>
             </template>
-            上传附件
+            Upload
         </McButton>
 
         <McButton type="success" ghost icon-right>
@@ -15,7 +15,7 @@
                     <IconAttach />
                 </McIcon>
             </template>
-            上传附件
+            Upload
         </McButton>
     </McSpace>
 </template>

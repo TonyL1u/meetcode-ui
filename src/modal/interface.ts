@@ -1,7 +1,9 @@
 import { PropType, VNodeChild, Ref, InjectionKey } from 'vue';
 import { ElementClassSet } from '../_utils_';
+import { useI18n } from '../i18n';
 import * as CSS from 'csstype';
 
+const { i18n } = useI18n();
 declare module 'csstype' {
     interface Properties {
         '--modal-width'?: string;
@@ -133,11 +135,11 @@ export const modalProps = {
     },
     cancelText: {
         type: [String, Object] as PropType<ModalProps['cancelText']>,
-        default: '取消'
+        default: undefined
     },
     confirmText: {
         type: [String, Object] as PropType<ModalProps['confirmText']>,
-        default: '确定'
+        default: undefined
     },
     pure: {
         type: Boolean as PropType<ModalProps['pure']>,

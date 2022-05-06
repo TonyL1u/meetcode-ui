@@ -1,9 +1,9 @@
 <script setup>
-import Demos from './zh-CN'
+import Demos from './en-US'
 const { Basic, Ghost, Dashed, Render, Disabled, Icon, Loading, Size, Shape, Block, Color, ButtonGroup } = Demos
 </script>
 
-@@@ meta Component=button,Lang=zh-CN
+@@@ meta Component=button,Lang=en-US
 
 # Button
 
@@ -29,9 +29,9 @@ Dashed
 
 ::: demo CodePreview=Render
 
-### Render mode
+### Render Mode
 
-提供 3 种渲染模式 `normal`（默认）、 `text` 和 `link` ，可以将按钮渲染成不同的样式。
+There are three rendering modes: `normal` (default), `text` and `link` , which can render buttons into different styles.
 
 <Render />
 
@@ -39,7 +39,7 @@ Dashed
 
 ::: demo CodePreview=Disabled
 
-### 禁用
+### Disabled
 
 <Disabled />
 
@@ -47,9 +47,9 @@ Dashed
 
 ::: demo CodePreview=Icon
 
-### 图标
+### Icon
 
-在按钮内使用图标。
+Use icons within buttons.
 
 <Icon />
 
@@ -57,9 +57,9 @@ Dashed
 
 ::: demo CodePreview=Loading
 
-### 加载中
+### Loading Status
 
-设置 `loading = true` 为按钮添加加载状态。
+Set `loading = true` to add loading status for the button.
 
 <Loading />
 
@@ -67,9 +67,9 @@ Dashed
 
 ::: demo CodePreview=Size
 
-### 尺寸
+### Button Size
 
-按钮有 `mini` 、 `small` 、 `medium`（默认） 和 `large` 4 种大小。
+Buttons are available in `mini` , `small` , `medium` (default) and `large` sizes.
 
 <Size />
 
@@ -77,7 +77,7 @@ Dashed
 
 ::: demo CodePreview=Shape
 
-### 形状
+### Shape
 
 <Shape />
 
@@ -85,9 +85,9 @@ Dashed
 
 ::: demo CodePreview=Block
 
-### 块级按钮
+### Block Level Button
 
-设置 `block` 属性，可以将按钮显示为块级。
+Set `block` to display the button as a block level.
 
 <Block />
 
@@ -95,9 +95,9 @@ Dashed
 
 ::: demo CodePreview=Color
 
-### 自定义颜色
+### Custom Color
 
-设置 `type = custom` 时，可以自定义按钮颜色。
+When `type = custom` is set, the button color can be customized.
 
 <Color />
 
@@ -105,9 +105,9 @@ Dashed
 
 ::: demo CodePreview=ButtonGroup
 
-### 按钮组
+### Button Group
 
-一组按钮。
+A group of buttons.
 
 <ButtonGroup />
 

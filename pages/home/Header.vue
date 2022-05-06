@@ -68,10 +68,8 @@ const handleRouteToGithub = () => {
 };
 
 onLanguageChange(lang => {
-    console.log(lang);
-    console.log(router);
-    console.log(route);
-    // const
-    // router.replace()
+    const { currentRoute } = router;
+    const newPath = currentRoute.value.fullPath.replace(lang === 'en-US' ? 'zh-CN' : 'en-US', lang);
+    router.replace(newPath);
 });
 </script>

@@ -12,9 +12,9 @@ const show = ref(false);
 
 const handleBeforeLeave = (action: DrawerCloseAction) => {
     if (action === 'wrapper') {
-        const instance = McPopup('Close current window?');
+        const instance = McPopup('Are you sure to close?');
         instance.show({
-            title: 'Confirm?',
+            title: 'Confirm',
             width: 300,
             animation: 'slide',
             onConfirm() {

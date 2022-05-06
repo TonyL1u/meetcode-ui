@@ -10,7 +10,6 @@ import { useSiteLanguage } from '../site.config';
 const router = useRouter();
 const { siteLanguage } = useSiteLanguage();
 const { menus } = useMenu();
-console.log(menus);
 const activeKey = ref<string>('');
 activeKey.value = window.location.pathname.split('/meetcode-ui')[1];
 
@@ -18,7 +17,7 @@ onRoutePathChange(path => {
     const splitKey = path.split('/');
     const title = decodeURI(splitKey[splitKey.length - 1]);
     useTitle(`McUI Docs | ${title}`);
-    activeKey.value = path;
+    activeKey.value = title;
 });
 
 const handleUpdateValue = (key: string): void => {

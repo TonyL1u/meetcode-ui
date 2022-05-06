@@ -1,7 +1,7 @@
 import { reactive } from 'vue';
 import { upperFirstLetter } from '../utils';
 import { PATH_NAME_MAP_ZH, PATH_NAME_MAP_EN } from '../site.config';
-import type { Ref, Component } from 'vue';
+import type { Component } from 'vue';
 import type { MenuOption } from 'naive-ui';
 
 interface Route {

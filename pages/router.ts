@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { routes } from './docs';
 import { useMenu } from './utils';
 
 const {
