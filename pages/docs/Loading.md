@@ -10,7 +10,7 @@ import LoadingType from '@/loading/demos/DemoLoadingType.vue'
 
 ## 演示
 
-::: demo codePreview=Basic
+::: demo CodePreview=Basic
 
 ### 基础用法
 
@@ -20,21 +20,21 @@ import LoadingType from '@/loading/demos/DemoLoadingType.vue'
 
 :::
 
-::: demo codePreview=ContentFill
+::: demo CodePreview=ContentFill
 
 ### 内容填充
 
 <ContentFill />
 :::
 
-::: demo codePreview=MaskStyle
+::: demo CodePreview=MaskStyle
 
 ### 遮罩样式
 
 <MaskStyle />
 :::
 
-::: demo codePreview=Description
+::: demo CodePreview=Description
 
 ### 添加描述
 

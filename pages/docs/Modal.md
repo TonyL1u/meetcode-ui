@@ -13,7 +13,7 @@ import { McTextLink } from 'meetcode-ui'
 
 ## 演示
 
-::: demo codePreview=Basic
+::: demo CodePreview=Basic
 
 ### 基础用法
 
@@ -21,7 +21,7 @@ import { McTextLink } from 'meetcode-ui'
 
 :::
 
-::: demo codePreview=Position
+::: demo CodePreview=Position
 
 ### 调整位置
 
@@ -31,7 +31,7 @@ import { McTextLink } from 'meetcode-ui'
 
 :::
 
-::: demo codePreview=CustomStyle
+::: demo CodePreview=CustomStyle
 
 ### 调整样式
 
@@ -39,7 +39,7 @@ import { McTextLink } from 'meetcode-ui'
 
 :::
 
-::: demo codePreview=Appear
+::: demo CodePreview=Appear
 
 ### 出现动画
 
@@ -49,7 +49,7 @@ import { McTextLink } from 'meetcode-ui'
 
 :::
 
-::: demo codePreview=WrapperClick
+::: demo CodePreview=WrapperClick
 
 ### 遮罩事件
 
@@ -61,7 +61,7 @@ import { McTextLink } from 'meetcode-ui'
 
 :::
 
-::: demo codePreview=Shortcut
+::: demo CodePreview=Shortcut
 
 ### 快捷键
 
@@ -75,7 +75,7 @@ import { McTextLink } from 'meetcode-ui'
 
 :::
 
-::: demo codePreview=BeforeLeave
+::: demo CodePreview=BeforeLeave
 
 ### 关闭前的回调
 

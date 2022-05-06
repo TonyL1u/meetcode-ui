@@ -1,8 +1,9 @@
 <script setup>
-import Basic from '@/drawer/demos/DemoBasic.vue'
-import Nesting from '@/drawer/demos/DemoNesting.vue'
-import BeforeLeave from '@/drawer/demos/DemoBeforeLeave.vue'
+import Demos from './zh-CN'
+const { Basic, Nesting, BeforeLeave } = Demos
 </script>
+
+@@@ meta Component=drawer,Lang=zh-CN
 
 # Drawer 抽屉
 
@@ -12,7 +13,7 @@ import BeforeLeave from '@/drawer/demos/DemoBeforeLeave.vue'
 
 ### 基础用法
 
-<Basic />
+<Basic/>
 
 :::
 
@@ -80,3 +81,5 @@ import BeforeLeave from '@/drawer/demos/DemoBeforeLeave.vue'
 | :-----: | :--: | :--------------: |
 | default | `()` |   抽屉主体内容   |
 | header  | `()` | 抽屉 header 内容 |
+
+@@@

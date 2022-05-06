@@ -15,7 +15,7 @@ import BeforeTabSwitch from '@/tabs/demos/DemoBeforeTabSwitch.vue'
 
 ## 演示
 
-::: demo codePreview=Basic
+::: demo CodePreview=Basic
 
 ### 基础用法
 
@@ -24,35 +24,35 @@ import BeforeTabSwitch from '@/tabs/demos/DemoBeforeTabSwitch.vue'
 <Basic />
 :::
 
-::: demo codePreview=TypeCard
+::: demo CodePreview=TypeCard
 
 ### 选项卡
 
 <TypeCard />
 :::
 
-::: demo codePreview=TypeSegment
+::: demo CodePreview=TypeSegment
 
 ### 分段
 
 <TypeSegment />
 :::
 
-::: demo codePreview=HeaderLayout
+::: demo CodePreview=HeaderLayout
 
 ### 头部布局
 
 <HeaderLayout />
 :::
 
-::: demo codePreview=CustomTab
+::: demo CodePreview=CustomTab
 
 ### 自定义 Tab 和样式
 
 <CustomTab />
 :::
 
-::: demo codePreview=OnlyHeader
+::: demo CodePreview=OnlyHeader
 
 ### 无面板
 
@@ -61,7 +61,7 @@ import BeforeTabSwitch from '@/tabs/demos/DemoBeforeTabSwitch.vue'
 <OnlyHeader />
 :::
 
-::: demo codePreview=DefaultValue
+::: demo CodePreview=DefaultValue
 
 ### 默认值
 
@@ -74,7 +74,7 @@ import BeforeTabSwitch from '@/tabs/demos/DemoBeforeTabSwitch.vue'
 <DefaultValue />
 :::
 
-::: demo codePreview=RenderMode
+::: demo CodePreview=RenderMode
 
 ### 渲染模式
 
@@ -87,7 +87,7 @@ import BeforeTabSwitch from '@/tabs/demos/DemoBeforeTabSwitch.vue'
 <RenderMode />
 :::
 
-::: demo codePreview=TabSwitch
+::: demo CodePreview=TabSwitch
 
 ### Tab 切换
 
@@ -96,7 +96,7 @@ import BeforeTabSwitch from '@/tabs/demos/DemoBeforeTabSwitch.vue'
 <TabSwitch />
 :::
 
-::: demo codePreview=BeforeTabSwitch
+::: demo CodePreview=BeforeTabSwitch
 
 ### Tab 切换前的回调
 

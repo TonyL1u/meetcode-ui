@@ -12,7 +12,7 @@ Grid 布局是一个强大的响应式 CSS 布局系统，但其属性繁多，�
 
 ## 演示
 
-::: demo codePreview=Basic
+::: demo CodePreview=Basic
 
 ### 基础用法
 
@@ -21,14 +21,14 @@ Grid 布局是一个强大的响应式 CSS 布局系统，但其属性繁多，�
 <Basic />
 :::
 
-::: demo codePreview=Gap
+::: demo CodePreview=Gap
 
 ### 间隔
 
 <Gap />
 :::
 
-::: demo codePreview=Responsive
+::: demo CodePreview=Responsive
 
 ### 自适应
 
@@ -40,7 +40,7 @@ Grid 布局是一个强大的响应式 CSS 布局系统，但其属性繁多，�
 
 :::
 
-::: demo codePreview=FillMode
+::: demo CodePreview=FillMode
 
 ### 填充模式
 
@@ -52,7 +52,7 @@ Grid 布局是一个强大的响应式 CSS 布局系统，但其属性繁多，�
 
 :::
 
-::: demo codePreview=ItemControl
+::: demo CodePreview=ItemControl
 
 ### 项目控制
 

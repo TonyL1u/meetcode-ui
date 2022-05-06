@@ -35,7 +35,7 @@ const show = ref(false);
 
 ## 演示
 
-::: demo codePreview=Test1,Basic
+::: demo CodePreview=Test1,Basic
 
 ### 基础用法
 
@@ -44,7 +44,7 @@ const show = ref(false);
 <Basic />
 :::
 
-::: demo codePreview=ModalStyle
+::: demo CodePreview=ModalStyle
 
 ### 弹窗样式
 
@@ -56,7 +56,7 @@ const show = ref(false);
 
 :::
 
-::: demo codePreview=Test2,Communicate
+::: demo CodePreview=Test2,Communicate
 
 ### 通信
 
@@ -72,7 +72,7 @@ const show = ref(false);
 
 :::
 
-::: demo codePreview=AppearPosition
+::: demo CodePreview=AppearPosition
 
 ### 出现位置
 
@@ -83,7 +83,7 @@ const show = ref(false);
 <AppearPosition />
 :::
 
-::: demo codePreview=Drawer
+::: demo CodePreview=Drawer
 
 ### 抽屉
 

@@ -12,28 +12,28 @@ import { McTextLink } from 'meetcode-ui'
 
 ## 演示
 
-::: demo codePreview=Basic
+::: demo CodePreview=Basic
 
 ### 基础用法
 
 <Basic />
 :::
 
-::: demo codePreview=Icon
+::: demo CodePreview=Icon
 
 ### 图标
 
 <Icon />
 :::
 
-::: demo codePreview=Action
+::: demo CodePreview=Action
 
 ### 操作
 
 <Action />
 :::
 
-::: demo codePreview=Event
+::: demo CodePreview=Event
 
 ### 事件
 

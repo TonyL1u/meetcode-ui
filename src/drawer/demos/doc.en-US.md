@@ -1,54 +1,43 @@
----
-templateKey: mirror
-nazev: Černobílá
-title: Black and White
-cena: '2700'
-price: '108'
-thumbnail: /img/img_1659.jpeg
----
-
 <script setup>
-import Basic from '@/drawer/demos/zh-CN/DemoBasic.vue'
-import Nesting from '@/drawer/demos/zh-CN/DemoNesting.vue'
-import BeforeLeave from '@/drawer/demos/zh-CN/DemoBeforeLeave.vue'
-// import Basic from './DemoBasic.vue';
-
-// const 
+import Demos from './en-US'
+const { Basic, Nesting, BeforeLeave } = Demos
 </script>
 
-# Drawer 抽屉
+@@@ meta Component=drawer,Lang=en-US
 
-## 演示
+# Drawer
 
-::: demo codePreview=Basic
+## Demos
 
-### 基础用法
+::: demo CodePreview=Basic
 
-<Basic />
+### Basic
+
+<Basic/>
 
 :::
 
-::: demo codePreview=Nesting
+::: demo CodePreview=Nesting
 
-### 嵌套
+### Nesting
 
 <Nesting />
 
 :::
 
-::: demo codePreview=BeforeLeave
+::: demo CodePreview=BeforeLeave
 
-### 关闭前的回调
+### Callback before closing
 
-提供钩子函数 `on-before-leave` 来控制 Drawer 关闭前的行为。入参有 3 种值用于区分关闭抽屉的行为：
+A hook function `on before leave` is provided to control the behavior of the drawer before it is closed. The input parameter has three values to distinguish the behavior of closing the drawer:
 
-`wrapper` ：点击遮罩层关闭。
+`wrapper` : Click the mask layer to close.
 
-`close` ：点击右上角关闭按钮关闭。
+`close` : Click the close button in the upper right corner to close.
 
-`shortcut` ：键盘快捷键关闭。
+`shortcut` : Keyboard shortcut to close.
 
-返回值为 `true` 时，会阻止抽屉关闭。支持异步调用。
+When the return value is `true`, the drawer will be prevented from closing. Supports asynchronous calls.
 
 <BeforeLeave />
 
@@ -92,3 +81,5 @@ import BeforeLeave from '@/drawer/demos/zh-CN/DemoBeforeLeave.vue'
 | :-----: | :--: | :--------------: |
 | default | `()` |   抽屉主体内容   |
 | header  | `()` | 抽屉 header 内容 |
+
+@@@

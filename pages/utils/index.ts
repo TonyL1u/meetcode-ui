@@ -4,6 +4,7 @@ import { useRouter, useRoute } from 'vue-router';
 import type { Router, RouteLocationNormalizedLoaded } from 'vue-router';
 
 export * from './usePageSwitch';
+export * from './useMenu';
 
 export function onRouterReady(): Promise<{ router: Router; route: RouteLocationNormalizedLoaded }>;
 export function onRouterReady(cb: (router: Router, route: RouteLocationNormalizedLoaded) => void): void;
@@ -46,3 +47,11 @@ export function onRouteChange<T extends keyof RouteLocationNormalizedLoaded>(key
 export function onRoutePathChange(cb: (path: string) => void) {
     onRouteChange('path', cb);
 }
+
+export function upperFirstLetter(str: string = '') {
+    return `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
+}
+
+// export function lowerFirstLetter(str: string = '') {
+//     return `${str.charAt(0).toLocaleLowerCase()}${str.slice(1)}`;
+// }

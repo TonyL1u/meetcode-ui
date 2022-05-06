@@ -1,17 +1,9 @@
 <script setup>
-import Basic from '@/button/demos/DemoBasic.vue'
-import Ghost from '@/button/demos/DemoGhost.vue'
-import Dashed from '@/button/demos/DemoDashed.vue'
-import Disabled from '@/button/demos/DemoDisabled.vue'
-import Render from '@/button/demos/DemoRender.vue'
-import Icon from '@/button/demos/DemoIcon.vue'
-import Loading from '@/button/demos/DemoLoading.vue'
-import Size from '@/button/demos/DemoSize.vue'
-import Shape from '@/button/demos/DemoShape.vue'
-import Block from '@/button/demos/DemoBlock.vue'
-import Color from '@/button/demos/DemoColor.vue'
-import ButtonGroup from '@/button/demos/DemoButtonGroup.vue'
+import Demos from './zh-CN'
+const { Basic, Ghost, Dashed, Render, Disabled, Icon, Loading, Size, Shape, Block, Color, ButtonGroup } = Demos
 </script>
+
+@@@ meta Component=button,Lang=zh-CN
 
 # Button 按钮
 
@@ -169,3 +161,5 @@ import ButtonGroup from '@/button/demos/DemoButtonGroup.vue'
 | 名称 |     类型      |      说明       |
 | :--: | :-----------: | :-------------: |
 |  el  | `HTMLElement` | 按钮的 Dom 节点 |
+
+@@@

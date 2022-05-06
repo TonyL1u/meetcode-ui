@@ -8,7 +8,7 @@ import Spin from '@/icon/demos/DemoSpin.vue'
 
 ## 演示
 
-::: demo codePreview=Basic,Color
+::: demo CodePreview=Basic,Color
 
 ### 基础用法
 
@@ -18,7 +18,7 @@ import Spin from '@/icon/demos/DemoSpin.vue'
 
 :::
 
-::: demo codePreview=Spin
+::: demo CodePreview=Spin
 
 ### 旋转
 

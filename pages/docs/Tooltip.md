@@ -9,7 +9,7 @@ import { McTextLink } from 'meetcode-ui'
 
 ## 演示
 
-::: demo codePreview=Basic
+::: demo CodePreview=Basic
 
 ### 基础用法
 

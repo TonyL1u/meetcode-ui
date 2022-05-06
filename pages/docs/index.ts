@@ -1,7 +1,7 @@
 import { ref } from 'vue';
 import type { Ref } from 'vue';
 import type { MenuOption, TreeSelectOption } from 'naive-ui';
-import { PATH_NAME_MAP } from '../site.config';
+import { PATH_NAME_MAP_ZH } from '../site.config';
 
 interface Route {
     path: string;
@@ -24,7 +24,7 @@ for (const path in markdownModules) {
     if (menuBlackList.includes(path) || path.indexOf('@misc') > -1) continue;
     routes.value.push({
         path: encodeURI(path.slice(1, -3)),
-        name: PATH_NAME_MAP[path.slice(2, -3)] || '',
+        name: PATH_NAME_MAP_ZH[path.slice(2, -3)] || '',
         component: markdownModules[path]
     });
 

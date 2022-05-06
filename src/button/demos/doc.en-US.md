@@ -1,35 +1,27 @@
 <script setup>
-import Basic from '@/button/demos/DemoBasic.vue'
-import Ghost from '@/button/demos/DemoGhost.vue'
-import Dashed from '@/button/demos/DemoDashed.vue'
-import Disabled from '@/button/demos/DemoDisabled.vue'
-import Render from '@/button/demos/DemoRender.vue'
-import Icon from '@/button/demos/DemoIcon.vue'
-import Loading from '@/button/demos/DemoLoading.vue'
-import Size from '@/button/demos/DemoSize.vue'
-import Shape from '@/button/demos/DemoShape.vue'
-import Block from '@/button/demos/DemoBlock.vue'
-import Color from '@/button/demos/DemoColor.vue'
-import ButtonGroup from '@/button/demos/DemoButtonGroup.vue'
+import Demos from './zh-CN'
+const { Basic, Ghost, Dashed, Render, Disabled, Icon, Loading, Size, Shape, Block, Color, ButtonGroup } = Demos
 </script>
 
-# Button 按钮
+@@@ meta Component=button,Lang=zh-CN
 
-## 演示
+# Button
+
+## Demos
 
 ::: demo CodePreview=Basic,Ghost,Dashed
 
-### 基础用法
+### Basic
 
-基础
+Basic
 
 <Basic />
 
-透明
+Transparent
 
 <Ghost />
 
-虚线
+Dashed
 
 <Dashed />
 
@@ -37,7 +29,7 @@ import ButtonGroup from '@/button/demos/DemoButtonGroup.vue'
 
 ::: demo CodePreview=Render
 
-### 渲染模式
+### Render mode
 
 提供 3 种渲染模式 `normal`（默认）、 `text` 和 `link` ，可以将按钮渲染成不同的样式。
 
@@ -169,3 +161,5 @@ import ButtonGroup from '@/button/demos/DemoButtonGroup.vue'
 | 名称 |     类型      |      说明       |
 | :--: | :-----------: | :-------------: |
 |  el  | `HTMLElement` | 按钮的 Dom 节点 |
+
+@@@

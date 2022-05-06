@@ -11,21 +11,21 @@ import { McTextLink } from 'meetcode-ui'
 
 ## 演示
 
-::: demo codePreview=Basic
+::: demo CodePreview=Basic
 
 ### 基础用法
 
 <Basic />
 :::
 
-::: demo codePreview=Multiple
+::: demo CodePreview=Multiple
 
 ### 多选
 
 <Multiple />
 :::
 
-::: demo codePreview=HeightLimit
+::: demo CodePreview=HeightLimit
 
 ### 高度限制
 

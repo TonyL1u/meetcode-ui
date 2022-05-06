@@ -13,7 +13,7 @@
                     </McIcon>
                 </template>
             </McButton>
-            <McButton render="text">
+            <McButton render="text" @click="switchLanguage">
                 <template #icon>
                     <McIcon :size="18">
                         <LanguageOutline />
@@ -37,12 +37,16 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { McButton, McIcon, McPopselect } from 'meetcode-ui';
-import { useSiteTheme } from '../site.config';
-import { LanguageOutline, LogoGithub, MoonOutline, SunnyOutline } from '@vicons/ionicons5';
 import NavMenu from './NavMenu.vue';
+import { LanguageOutline, LogoGithub, MoonOutline, SunnyOutline } from '@vicons/ionicons5';
+import { useRouter, useRoute, routerKey } from 'vue-router';
+import { useSiteTheme, useSiteLanguage } from '../site.config';
 import { repository } from '../../package.json';
 
+const router = useRouter();
+const route = useRoute();
 const { switchTheme, isDark } = useSiteTheme();
+const { switchLanguage, onLanguageChange } = useSiteLanguage();
 const mainVersion = ref('0.0.20');
 const versions = ref([
     {
@@ -58,7 +62,16 @@ const versions = ref([
         value: '0.0.18'
     }
 ]);
+
 const handleRouteToGithub = () => {
     window.open(repository.url);
 };
+
+onLanguageChange(lang => {
+    console.log(lang);
+    console.log(router);
+    console.log(route);
+    // const
+    // router.replace()
+});
 </script>

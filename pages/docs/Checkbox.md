@@ -12,7 +12,7 @@ import SelectAll from '@/checkbox/demos/DemoSelectAll.vue'
 
 ## 演示
 
-::: demo codePreview=Basic
+::: demo CodePreview=Basic
 
 ### 基础用法
 
@@ -20,7 +20,7 @@ import SelectAll from '@/checkbox/demos/DemoSelectAll.vue'
 
 :::
 
-::: demo codePreview=CustomValue
+::: demo CodePreview=CustomValue
 
 ### 自定义值
 
@@ -28,7 +28,7 @@ import SelectAll from '@/checkbox/demos/DemoSelectAll.vue'
 
 :::
 
-::: demo codePreview=Group
+::: demo CodePreview=Group
 
 ### 选项组
 
@@ -38,7 +38,7 @@ import SelectAll from '@/checkbox/demos/DemoSelectAll.vue'
 
 :::
 
-::: demo codePreview=GroupLayout
+::: demo CodePreview=GroupLayout
 
 ### 布局
 
@@ -48,7 +48,7 @@ import SelectAll from '@/checkbox/demos/DemoSelectAll.vue'
 
 :::
 
-::: demo codePreview=Max
+::: demo CodePreview=Max
 
 ### 最大可选数量
 
@@ -58,7 +58,7 @@ import SelectAll from '@/checkbox/demos/DemoSelectAll.vue'
 
 :::
 
-::: demo codePreview=Event
+::: demo CodePreview=Event
 
 ### 事件
 
@@ -66,7 +66,7 @@ import SelectAll from '@/checkbox/demos/DemoSelectAll.vue'
 
 :::
 
-::: demo codePreview=SelectAll
+::: demo CodePreview=SelectAll
 
 ### 全选
 

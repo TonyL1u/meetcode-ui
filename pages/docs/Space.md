@@ -8,7 +8,7 @@ import Vertical from '@/space/demos/DemoVertical.vue'
 
 ## 演示
 
-::: demo codePreview=Basic
+::: demo CodePreview=Basic
 
 ### 基础用法
 
@@ -16,7 +16,7 @@ import Vertical from '@/space/demos/DemoVertical.vue'
 
 :::
 
-::: demo codePreview=Gap
+::: demo CodePreview=Gap
 
 ### 间隔
 
@@ -24,7 +24,7 @@ import Vertical from '@/space/demos/DemoVertical.vue'
 
 :::
 
-::: demo codePreview=Vertical
+::: demo CodePreview=Vertical
 
 ### 垂直
 

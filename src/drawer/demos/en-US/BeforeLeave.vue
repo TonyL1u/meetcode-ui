@@ -1,7 +1,7 @@
 <template>
-    <McButton type="success" ghost @click="show = true">打开</McButton>
+    <McButton type="success" ghost @click="show = true">Open</McButton>
 
-    <McDrawer v-model:show="show" title="抽屉" @before-leave="handleBeforeLeave">内容</McDrawer>
+    <McDrawer v-model:show="show" title="Drawer" @before-leave="handleBeforeLeave">Something...</McDrawer>
 </template>
 
 <script lang="ts" setup>
@@ -12,9 +12,9 @@ const show = ref(false);
 
 const handleBeforeLeave = (action: DrawerCloseAction) => {
     if (action === 'wrapper') {
-        const instance = McPopup('是否关闭当前窗口？');
+        const instance = McPopup('Close current window?');
         instance.show({
-            title: '请确认',
+            title: 'Confirm?',
             width: 300,
             animation: 'slide',
             onConfirm() {

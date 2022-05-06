@@ -12,7 +12,7 @@ import AsyncMessage from '@/message/demos/DemoAsyncMessage.vue'
 
 ## 演示
 
-::: demo codePreview=Basic
+::: demo CodePreview=Basic
 
 ### 基础用法
 
@@ -22,7 +22,7 @@ import AsyncMessage from '@/message/demos/DemoAsyncMessage.vue'
 
 :::
 
-::: demo codePreview=Card
+::: demo CodePreview=Card
 
 ### 卡片样式
 
@@ -32,7 +32,7 @@ import AsyncMessage from '@/message/demos/DemoAsyncMessage.vue'
 
 :::
 
-::: demo codePreview=Duration
+::: demo CodePreview=Duration
 
 ### 持续时间
 
@@ -44,7 +44,7 @@ import AsyncMessage from '@/message/demos/DemoAsyncMessage.vue'
 
 :::
 
-::: demo codePreview=DynamicOptions
+::: demo CodePreview=DynamicOptions
 
 ### 动态配置
 
@@ -54,7 +54,7 @@ import AsyncMessage from '@/message/demos/DemoAsyncMessage.vue'
 
 :::
 
-::: demo codePreview=Close
+::: demo CodePreview=Close
 
 ### 关闭
 
@@ -64,7 +64,7 @@ import AsyncMessage from '@/message/demos/DemoAsyncMessage.vue'
 
 :::
 
-::: demo codePreview=Custom
+::: demo CodePreview=Custom
 
 ### 自定义
 
@@ -72,7 +72,7 @@ import AsyncMessage from '@/message/demos/DemoAsyncMessage.vue'
 
 :::
 
-::: demo codePreview=AsyncMessage
+::: demo CodePreview=AsyncMessage
 
 ### 异步信息
 

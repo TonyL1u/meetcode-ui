@@ -54,29 +54,32 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
-import hljs from 'highlight.js';
+import { ref } from 'vue';
 import { McTooltip, McTabs, McTabPane, McModal, McButton, McIcon, McSpace, McMessage, McLoading } from 'meetcode-ui';
 import { Code as IconCode, CopyOutline as IconCopy, CubeOutline as IconEdit } from '@vicons/ionicons5';
 import { useClipboard } from '@vueuse/core';
 import { loadInitialState } from '@playground/orchestrator';
-import { siteTheme, isLight } from '../site.config';
+import { isLight } from '../site.config';
+import hljs from 'highlight.js';
 import Playground from '@playground/Playground.vue';
 
-const props = defineProps<{ codeSources: string }>();
-const codes = ref<Array<any>>(JSON.parse(props.codeSources) || []);
+interface CodeSource {
+    name: string;
+    importSource: string;
+    compressedSource: string;
+}
+const props = defineProps<{ codeSources?: string }>();
+const codes: CodeSource[] = props.codeSources ? JSON.parse(props.codeSources) : [];
+const showToolbox = codes.length > 0;
 const codePreviewVisible = ref(false);
 const showModal = ref(false);
 const tabIndex = ref(0);
 const isLoading = ref(true);
 const { copy } = useClipboard();
 
-const showToolbox = computed(() => {
-    return codes.value.length > 0;
-});
 const handleShowModal = () => {
     setTimeout(() => {
-        loadInitialState(codes.value[tabIndex.value].compressedSource);
+        loadInitialState(codes[tabIndex.value].compressedSource);
         showModal.value = true;
     }, 0);
 };
@@ -84,7 +87,7 @@ const highlighted = (content: string) => {
     return hljs.highlight(content, { language: 'html' }).value;
 };
 const copyCode = () => {
-    const code = codes.value[tabIndex.value];
+    const code = codes[tabIndex.value];
     copy(code.importSource);
     McMessage.success(`${code.name}.vue代码已复制到剪贴板`, { card: true });
 };

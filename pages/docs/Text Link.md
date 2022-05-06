@@ -9,21 +9,21 @@ import EmailRaw from '@/text-link/demos/DemoEmailRaw.vue'
 
 ## 演示
 
-::: demo codePreview=Basic
+::: demo CodePreview=Basic
 
 ### 基础用法
 
 <Basic />
 :::
 
-::: demo codePreview=Underline
+::: demo CodePreview=Underline
 
 ### 显示下划线
 
 <Underline />
 :::
 
-::: demo codePreview=Email,EmailRaw
+::: demo CodePreview=Email,EmailRaw
 
 ### 邮件链接
 

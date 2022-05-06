@@ -1,16 +1,15 @@
-import type MarkdownIt from 'markdown-it';
-import type Token from 'markdown-it/lib/token';
 import MarkdownItContainer from 'markdown-it-container';
 import MarkdownItHljs from 'markdown-it-highlightjs';
 import MarkdownItAnchor from 'markdown-it-anchor';
 import fs from 'fs';
-import path from 'path';
 import lz from 'lz-string';
+import type MarkdownIt from 'markdown-it';
+import type Token from 'markdown-it/lib/token';
 
-const fileSourceMap: any = {
-    '@pages': 'pages',
-    '@': 'src'
-};
+let MAIN = '';
+let LANG: 'zh-CN' | 'en-US' = 'zh-CN';
+const META_REG = /^meta\s*(Component=(.*),Lang=(.*))/;
+const CODE_PREVIEW_REG = /^demo\s*(CodePreview=(.*))/;
 
 export default {
     // default options passed to markdown-it
@@ -25,33 +24,37 @@ export default {
             permalink: MarkdownItAnchor.permalink.headerLink()
         });
         md.use(MarkdownItHljs);
+        md.use(MarkdownItContainer, 'meta', {
+            marker: '@',
+            render: function (tokens: Token[], idx: number) {
+                const token = tokens[idx];
+                const meta = token.info.trim().match(META_REG);
+
+                if (meta) {
+                    MAIN = meta[2];
+                    LANG = meta[3] as 'zh-CN' | 'en-US';
+                }
+
+                return '';
+            }
+        });
         md.use(MarkdownItContainer, 'demo', {
             validate: function (params: string) {
                 return params.trim().match(/^demo\s*(.*)$/);
             },
             render: function (tokens: Token[], idx: number) {
-                console.log(tokens[0]);
-                const m = tokens[idx].info.trim().match(/^demo\s*(.*)$/);
-                if (m && tokens[idx].nesting === 1) {
-                    const ScriptSetup = tokens[0].content.split('\n').slice(1, -2);
-                    const ComponentMap: any = {};
-                    for (const ipt of ScriptSetup) {
-                        const workTags = ipt.trim().split(' ');
-                        if (workTags[0] === 'import') {
-                            const key: string = workTags[1];
-                            const src: string = workTags[3];
-                            ComponentMap[key] = src.slice(1, -1);
-                        }
-                    }
-                    // console.log(ScriptSetup);
-                    // console.log(fs.readFileSync('./src/drawer/demos/zh-CN/DemoBasic.vue', 'utf-8'));
+                const token = tokens[idx];
+                const isTokenNesting = token.nesting === 1;
+                const demo = token.info.trim().match(/^demo\s*(.*)$/);
+                const code = token.info.trim().match(CODE_PREVIEW_REG);
 
-                    const components: string[] = m[1] ? m[1].split('codePreview=')[1].split(',') : [];
-                    const codeSources = components.map((name: string) => {
-                        const [root, ...rest] = ComponentMap[name].split('/');
-                        const rootDir = fileSourceMap[root];
-                        const importPath = path.join(__dirname, `${rootDir}/${rest.join('/')}`);
-                        const importSource = fs.readFileSync(importPath, 'utf-8').trim();
+                if (!isTokenNesting) return `</CodeDemo>`;
+
+                if (code) {
+                    const components = code[2].split(',');
+                    const codeSources = components.map(name => {
+                        const path = `src/${MAIN}/demos/${LANG}/${name}.vue`;
+                        const importSource = fs.readFileSync(path, 'utf-8').trim();
                         const compressedSource = lz.compressToEncodedURIComponent(importSource);
 
                         return {
@@ -62,9 +65,8 @@ export default {
                     });
 
                     return `<CodeDemo code-sources="${md.utils.escapeHtml(JSON.stringify(codeSources))}">`;
-                } else {
-                    // closing tag
-                    return `</CodeDemo>`;
+                } else if (demo) {
+                    return `<CodeDemo>`;
                 }
             }
         });

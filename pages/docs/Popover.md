@@ -13,7 +13,7 @@ import Delay from '@/popover/demos/DemoDelay.vue'
 
 ## 演示
 
-::: demo codePreview=Basic
+::: demo CodePreview=Basic
 
 ### 基础用法
 
@@ -22,14 +22,14 @@ import Delay from '@/popover/demos/DemoDelay.vue'
 <Basic />
 :::
 
-::: demo codePreview=Placement
+::: demo CodePreview=Placement
 
 ### 弹出位置
 
 <Placement />
 :::
 
-::: demo codePreview=ModifyContentStyle
+::: demo CodePreview=ModifyContentStyle
 
 ### 样式修改
 
@@ -42,21 +42,21 @@ import Delay from '@/popover/demos/DemoDelay.vue'
 <ModifyContentStyle />
 :::
 
-::: demo codePreview=Event
+::: demo CodePreview=Event
 
 ### 事件
 
 <Event />
 :::
 
-::: demo codePreview=Offset
+::: demo CodePreview=Offset
 
 ### 偏移
 
 <Offset />
 :::
 
-::: demo codePreview=Follow
+::: demo CodePreview=Follow
 
 ### 跟随鼠标
 
@@ -67,7 +67,7 @@ import Delay from '@/popover/demos/DemoDelay.vue'
 <Follow />
 :::
 
-::: demo codePreview=Boundary
+::: demo CodePreview=Boundary
 
 ### 边界检测
 
@@ -77,7 +77,7 @@ import Delay from '@/popover/demos/DemoDelay.vue'
 
 :::
 
-::: demo codePreview=Delay
+::: demo CodePreview=Delay
 
 ### 延迟
 
