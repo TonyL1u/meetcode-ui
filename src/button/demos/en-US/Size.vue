@@ -1,6 +1,6 @@
 <template>
     <McSpace>
-        <McButton>默认</McButton>
+        <McButton>Default</McButton>
         <McButton size="mini" type="primary">
             <template #icon>
                 <McIcon>

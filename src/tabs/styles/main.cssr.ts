@@ -4,7 +4,8 @@ export default c([
     c('.mc-tabs', [
         c('&__header-scroll-content', {
             display: 'flex',
-            position: 'relative'
+            position: 'relative',
+            minWidth: 'max-content'
         }),
         c('&-tab', {
             cursor: 'pointer',

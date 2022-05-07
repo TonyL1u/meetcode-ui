@@ -112,6 +112,10 @@ body {
         .title {
             display: none;
         }
+
+        .header-tabs {
+            display: none;
+        }
     }
 
     .sider-menu {

@@ -1,8 +1,13 @@
 <template>
     <div class="mc-flex mc-justify-between mc-items-center mc-w-full">
-        <div class="mc-flex mc-items-center">
+        <div class="mc-flex mc-items-center mc-relative">
             <NavMenu />
             <div class="title mc-text-2xl mc-leading-6">Meetcode UI</div>
+            <McTabs type="empty" class="header-tabs mc-absolute mc-left-[276px]" :content-style="{ padding: 0 }">
+                <McTab name="docs">文档</McTab>
+                <McTab name="components">组件</McTab>
+                <McTab name="develop">开发指南</McTab>
+            </McTabs>
         </div>
         <div class="mc-flex mc-items-center">
             <McButton render="text" @click="switchTheme">
@@ -36,7 +41,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { McButton, McIcon, McPopselect, useI18nController, useThemeController } from 'meetcode-ui';
+import { McButton, McIcon, McPopselect, McTabs, McTab, useI18nController, useThemeController } from 'meetcode-ui';
 import NavMenu from './NavMenu.vue';
 import { LanguageOutline, LogoGithub, MoonOutline, SunnyOutline } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';

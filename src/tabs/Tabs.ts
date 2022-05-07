@@ -216,7 +216,7 @@ export default defineComponent({
                         'div',
                         {
                             class: ['mc-tabs__content', contentClass?.value],
-                            style: contentStyle?.value
+                            style: contentStyle.value
                         },
                         slots.default ? flatten(slots.default(), tabIKey, true) : createCommentVNode('', true)
                     )
