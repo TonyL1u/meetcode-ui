@@ -5,9 +5,10 @@ import lightTheme from 'theme-vitesse/themes/vitesse-light.json';
 import type { editor as Editor } from 'monaco-editor';
 import { editorPlugins } from '../../monaco/plugins/editor';
 import setupMonaco from '../../monaco';
-import { siteTheme, isDark } from '@pages/site.config';
+import { useThemeController } from 'meetcode-ui';
 
 export function useMonaco(target: Ref, options: any) {
+    const { current: siteTheme, isDark } = useThemeController();
     const changeEventHook = createEventHook<string>();
     const isSetup = ref(false);
     let editor: Editor.IStandaloneCodeEditor;

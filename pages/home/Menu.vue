@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { NMenu } from 'naive-ui';
+import { useRouter } from 'vue-router';
 import { useTitle } from '@vueuse/core';
+import { useI18nController } from 'meetcode-ui';
 import { onRoutePathChange, useMenu } from '../utils';
-import { useSiteLanguage } from '../site.config';
 
 // 初始化路由
 const router = useRouter();
-const { siteLanguage } = useSiteLanguage();
+const { current } = useI18nController();
 const { menus } = useMenu();
 const activeKey = ref<string>('');
 activeKey.value = window.location.pathname.split('/meetcode-ui')[1];
@@ -21,7 +21,7 @@ onRoutePathChange(path => {
 });
 
 const handleUpdateValue = (key: string): void => {
-    router.push(key === '' ? '/' : `/${siteLanguage.value}/${key}`);
+    router.push(key === '' ? '/' : `/${current.value}/${key}`);
 };
 </script>
 

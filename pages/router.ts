@@ -4,14 +4,12 @@ import { useMenu } from './utils';
 const {
     routes: { zh, en }
 } = useMenu();
-console.log(zh);
-console.log(en);
+
 const router = createRouter({
     // 指定路由模式
     history: createWebHistory('meetcode-ui'),
     // 路由地址
     routes: [
-        // ...routes.value,
         ...zh,
         ...en,
         {

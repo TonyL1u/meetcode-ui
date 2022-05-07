@@ -1,9 +1,7 @@
 import { PropType, VNodeChild, Ref, InjectionKey } from 'vue';
 import { ElementClassSet } from '../_utils_';
-import { useI18n } from '../i18n';
 import * as CSS from 'csstype';
 
-const { i18n } = useI18n();
 declare module 'csstype' {
     interface Properties {
         '--modal-width'?: string;

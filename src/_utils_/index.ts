@@ -11,5 +11,6 @@ export { responsiveTarget } from './responsiveTarget';
 export { sleep } from './sleep';
 export { useThemeRegister } from './useThemeRegister';
 export { useSharedItems } from './useSharedItems';
+export { useI18n } from './useI18n';
 
 export type { FlattenOptions } from './flatten';

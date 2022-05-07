@@ -7,13 +7,13 @@ import { PreviewProxy } from './logic/PreviewProxy';
 import { MAIN_FILE, vueRuntimeUrl } from './compiler/sfcCompiler';
 import { compileModulesForPreview } from './compiler/moduleCompiler';
 import { orchestrator, orchestrator as store } from './orchestrator';
-import { isDark } from '@pages/site.config';
-import { McMessage } from 'meetcode-ui';
+import { McMessage, useThemeController } from 'meetcode-ui';
 
 const emit = defineEmits<(e: 'renderFinished') => void>();
 const container = ref();
 const runtimeError = ref();
 const runtimeWarning = ref();
+const { isDark } = useThemeController();
 let sandbox: HTMLIFrameElement;
 let proxy: PreviewProxy;
 let stopUpdateWatcher: WatchStopHandle;

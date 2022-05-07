@@ -1,4 +1,4 @@
 export * from './components';
-export { globalTheme, setGlobalTheme } from './theme';
-export { globalLanguage, setGlobalLanguage } from './i18n';
+export { useThemeController } from './theme';
+export { useI18nController } from './i18n';
 export { default } from './install';

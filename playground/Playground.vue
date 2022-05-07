@@ -4,11 +4,12 @@ import Editor from './Editor.vue';
 import Preview from './Preview.vue';
 import { Splitpanes, Pane } from 'splitpanes';
 import { onShouldUpdateContent, orchestrator } from './orchestrator';
-import { siteTheme } from '../pages/site.config';
+import { useThemeController } from 'meetcode-ui';
 
 const emit = defineEmits<(e: 'renderFinished') => void>();
 const initialScript = ref('');
 const initialTemplate = ref('');
+const { current: siteTheme } = useThemeController();
 onShouldUpdateContent(() => {
     if (orchestrator.activeFile) {
         initialScript.value = orchestrator.activeFile?.script;

@@ -36,17 +36,15 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { McButton, McIcon, McPopselect } from 'meetcode-ui';
+import { McButton, McIcon, McPopselect, useI18nController, useThemeController } from 'meetcode-ui';
 import NavMenu from './NavMenu.vue';
 import { LanguageOutline, LogoGithub, MoonOutline, SunnyOutline } from '@vicons/ionicons5';
-import { useRouter, useRoute, routerKey } from 'vue-router';
-import { useSiteTheme, useSiteLanguage } from '../site.config';
+import { useRouter } from 'vue-router';
 import { repository } from '../../package.json';
 
 const router = useRouter();
-const route = useRoute();
-const { switchTheme, isDark } = useSiteTheme();
-const { switchLanguage, onLanguageChange } = useSiteLanguage();
+const { switchTheme, isDark } = useThemeController();
+const { switchLanguage, onLanguageChange } = useI18nController();
 const mainVersion = ref('0.0.20');
 const versions = ref([
     {

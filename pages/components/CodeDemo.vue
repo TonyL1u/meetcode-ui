@@ -55,11 +55,10 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { McTooltip, McTabs, McTabPane, McModal, McButton, McIcon, McSpace, McMessage, McLoading } from 'meetcode-ui';
+import { McTooltip, McTabs, McTabPane, McModal, McButton, McIcon, McSpace, McMessage, McLoading, useThemeController } from 'meetcode-ui';
 import { Code as IconCode, CopyOutline as IconCopy, CubeOutline as IconEdit } from '@vicons/ionicons5';
 import { useClipboard } from '@vueuse/core';
 import { loadInitialState } from '@playground/orchestrator';
-import { isLight } from '../site.config';
 import hljs from 'highlight.js';
 import Playground from '@playground/Playground.vue';
 
@@ -76,6 +75,7 @@ const showModal = ref(false);
 const tabIndex = ref(0);
 const isLoading = ref(true);
 const { copy } = useClipboard();
+const { isLight } = useThemeController();
 
 const handleShowModal = () => {
     setTimeout(() => {

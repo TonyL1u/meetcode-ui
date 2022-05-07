@@ -33,12 +33,13 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { NLayout, NLayoutHeader, NLayoutContent, NLayoutSider, NNotificationProvider, NConfigProvider, darkTheme } from 'naive-ui';
+import { useThemeController } from 'meetcode-ui';
 import Header from './home/Header.vue';
 import Menu from './home/Menu.vue';
 import Navigator from './home/Navigator.vue';
 import PagerNavigator from './home/PagerNavigator.vue';
-import { siteTheme, isDark } from './site.config';
 
+const { current: siteTheme, isDark } = useThemeController();
 // 初始跟随系统主题
 const theme = computed(() => {
     return isDark.value ? darkTheme : null;
