@@ -6,7 +6,7 @@
     </McDrawer>
 
     <McDrawer v-model:show="show2" :size="300" title="Another Drawer">
-        <McButton type="success" ghost @click="show3 = true">Open Again Again</McButton>
+        <McButton type="success" ghost @click="show3 = true">Open Again and Again</McButton>
     </McDrawer>
 
     <McModal v-model:show="show3" title="Modal">Something...</McModal>

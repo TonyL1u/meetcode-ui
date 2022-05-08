@@ -6,12 +6,20 @@ const useGlobalLanguageState = createGlobalState(() => useStorage<LanguageType>(
 export const globalLanguage: RemovableRef<LanguageType> = useGlobalLanguageState();
 
 /**
+ * @private
+ */
+const globalLanguageChangeEventHook = createEventHook<LanguageType>();
+/**
  * User's integrate i18n controller
  */
 export function useI18nController(initialLang?: LanguageType) {
     const languageChangeEventHook = createEventHook<LanguageType>();
     const setLanguage = (lang: LanguageType = 'zh-CN') => {
-        globalLanguage.value = lang;
+        if (globalLanguage.value !== lang) {
+            globalLanguage.value = lang;
+            languageChangeEventHook.trigger(lang);
+            globalLanguageChangeEventHook.trigger(lang);
+        }
     };
 
     if (initialLang) setLanguage(initialLang);
@@ -22,12 +30,11 @@ export function useI18nController(initialLang?: LanguageType) {
         switchLanguage() {
             if (globalLanguage.value === 'en-US') {
                 setLanguage('zh-CN');
-                languageChangeEventHook.trigger('zh-CN');
             } else {
                 setLanguage('en-US');
-                languageChangeEventHook.trigger('en-US');
             }
         },
-        onLanguageChange: languageChangeEventHook.on
+        onLanguageChange: languageChangeEventHook.on,
+        onGlobalLanguageChange: globalLanguageChangeEventHook.on
     };
 }

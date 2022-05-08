@@ -11,5 +11,7 @@ export default defineComponent({
                 main: mainCssr
             });
         });
+
+        // main logic...
     }
 });

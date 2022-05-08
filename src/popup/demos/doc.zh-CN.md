@@ -1,5 +1,6 @@
 <script setup>
 import Demos from './zh-CN'
+import { McTextLink } from 'meetcode-ui'
 const {Basic, ModalStyle, Communicate, AppearPosition, Drawer} = Demos
 </script>
 

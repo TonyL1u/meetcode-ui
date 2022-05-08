@@ -16,11 +16,11 @@ const createWithVue = () => {
     instance.show();
 };
 const createWithVNode = () => {
-    const instance = McPopup(createVNode('div', null, '通过VNode创建'));
+    const instance = McPopup(createVNode('div', null, 'Created by VNode'));
     instance.show();
 };
 const createWithHTML = () => {
-    const instance = McPopup('通过<i>HTML</i>创建');
+    const instance = McPopup('Created by <i>HTML</i>');
     instance.show();
 };
 </script>

@@ -1,21 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { useMenu } from './utils';
+import { routesMap } from './menu';
 
-const {
-    routes: { zh, en }
-} = useMenu();
-
+const { docs, components, develop } = routesMap;
 const router = createRouter({
     // 指定路由模式
     history: createWebHistory('meetcode-ui'),
     // 路由地址
     routes: [
-        ...zh,
-        ...en,
-        {
-            path: '/',
-            redirect: encodeURI('/@misc/起步')
-        },
+        ...docs['zh-CN'],
+        ...docs['en-US'],
+        ...components['zh-CN'],
+        ...components['en-US'],
+        ...develop['zh-CN'],
+        ...develop['en-US'],
         {
             path: '/404',
             component: () => import('./home/404.vue')

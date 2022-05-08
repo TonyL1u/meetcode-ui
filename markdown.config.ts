@@ -7,7 +7,7 @@ import type MarkdownIt from 'markdown-it';
 import type Token from 'markdown-it/lib/token';
 
 let MAIN = '';
-let LANG: 'zh-CN' | 'en-US' = 'zh-CN';
+let LANG: 'zh-CN' | 'en-US' | '' = '';
 const META_REG = /^meta\s*(Component=(.*),Lang=(.*))/;
 const CODE_PREVIEW_REG = /^demo\s*(CodePreview=(.*))/;
 
@@ -35,6 +35,11 @@ export default {
                     LANG = meta[3] as 'zh-CN' | 'en-US';
                 }
 
+                if (token.nesting === -1) {
+                    MAIN = '';
+                    LANG = '';
+                }
+
                 return '';
             }
         });
@@ -53,12 +58,13 @@ export default {
                 if (code) {
                     const components = code[2].split(',');
                     const codeSources = components.map(name => {
-                        const path = `src/${MAIN}/demos/${LANG}/${name}.vue`;
+                        const manuallyPath = name.match(/(.*)\[(.*)\]/);
+                        const path = manuallyPath ? manuallyPath[2] : `src/${MAIN}/demos/${LANG}/${name}.vue`;
                         const importSource = fs.readFileSync(path, 'utf-8').trim();
                         const compressedSource = lz.compressToEncodedURIComponent(importSource);
 
                         return {
-                            name,
+                            name: manuallyPath ? manuallyPath[1] : name,
                             importSource,
                             compressedSource
                         };

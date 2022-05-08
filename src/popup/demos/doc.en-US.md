@@ -1,5 +1,6 @@
 <script setup>
 import Demos from './en-US'
+import { McTextLink } from 'meetcode-ui'
 const {Basic, ModalStyle, Communicate, AppearPosition, Drawer} = Demos
 </script>
 
@@ -7,9 +8,9 @@ const {Basic, ModalStyle, Communicate, AppearPosition, Drawer} = Demos
 
 # Popup
 
-Derived from `McModal` and `McDrawer`, create a modal box(drawer) through service.
+Derived from `McModal` and `McDrawer` , create a modal box(drawer) through service.
 
-Normally, an additional piece of code is loaded into your code when using modal boxes or drawers:
+Normally, an additional piece of code is loaded into your program when using modal boxes or drawers:
 
 ```xml
 <template>
@@ -27,7 +28,7 @@ const show = ref(false);
 </script>
 ```
 
-Such code about the modal box is independent, so it can be completely separated from the code so that you can easier to maintain your code.
+Such code about the modal box is independent, so it can be completely separated from the code so that you can easier to maintain your program.
 
 ## Demos
 

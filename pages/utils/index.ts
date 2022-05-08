@@ -33,18 +33,18 @@ export function onRouterReady(cb?: (router: Router, route: RouteLocationNormaliz
     }
 }
 
-export function onRouteChange<T extends keyof RouteLocationNormalizedLoaded>(key: T, cb: (value: RouteLocationNormalizedLoaded[T]) => void) {
+export function onRouteChange<T extends keyof RouteLocationNormalizedLoaded>(key: T, cb: (value: RouteLocationNormalizedLoaded[T], route: RouteLocationNormalizedLoaded) => void) {
     const route = useRoute();
 
     watch(
         () => route[key],
         value => {
-            cb(value);
+            cb(value, route);
         }
     );
 }
 
-export function onRoutePathChange(cb: (path: string) => void) {
+export function onRoutePathChange(cb: (path: string, route: RouteLocationNormalizedLoaded) => void) {
     onRouteChange('path', cb);
 }
 
@@ -52,6 +52,6 @@ export function upperFirstLetter(str: string = '') {
     return `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
 }
 
-// export function lowerFirstLetter(str: string = '') {
-//     return `${str.charAt(0).toLocaleLowerCase()}${str.slice(1)}`;
-// }
+export function lowerFirstLetter(str: string = '') {
+    return `${str.charAt(0).toLocaleLowerCase()}${str.slice(1)}`;
+}

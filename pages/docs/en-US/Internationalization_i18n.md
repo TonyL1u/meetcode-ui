@@ -1,0 +1,58 @@
+# i18n
+
+Meetcode UI 提供多语言版本。通过统一语言管理工具 `useI18nController` 来轻松控制语言切换。
+
+## 使用语言管理工具
+
+1. 引入语言管理工具
+
+```ts
+import { useI18nController } from 'meetcode-ui';
+```
+
+2. 设置语言
+
+```ts
+const { switchLanguage, setLanguage } = useThemeController();
+
+// 切换语言
+switchLanguage();
+
+// 手动设置为中文
+setLanguage('zh-CN');
+
+// 手动设置为英文
+setLanguage('en-US');
+```
+
+3. 其他
+
+|          名称          |              类型               |         说明         |
+| :--------------------: | :-----------------------------: | :------------------: |
+|        current         |  `RemovableRef<LanguageType>`   |  当前正在使用的语言  |
+|      setLanguage       | `(theme: LanguageType) => void` |     手动设置语言     |
+|     switchLanguage     |          `() => void`           |       切换语言       |
+|    onLanguageChange    |   `EventHookOn<LanguageType>`   |   语言切换钩子函数   |
+| onGlobalLanguageChange |   `EventHookOn<LanguageType>`   | 全局语言切换钩子函数 |
+
+4. TS 声明
+
+```ts
+declare type LanguageType = 'zh-CN' | 'en-US';
+declare type EventHookOn<T = any> = (fn: (param: T) => void) => {
+    off: () => void;
+};
+export declare function useI18nController(initialLang?: LanguageType): {
+    current: RemovableRef<LanguageType>;
+    setLanguage: (lang?: LanguageType) => void;
+    switchLanguage(): void;
+    onLanguageChange: EventHookOn<LanguageType>;
+    onGlobalLanguageChange: EventHookOn<LanguageType>;
+};
+```
+
+## 支持语言
+
+-   中文 - `zh-CN`
+-   英文 - `en-US`
+-   ...

@@ -13,5 +13,7 @@ export default defineComponent({
                 dark: darkCssr
             });
         });
+
+        // main logic...
     }
 });

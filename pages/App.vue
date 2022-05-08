@@ -2,11 +2,17 @@
     <NConfigProvider :theme="theme" abstract>
         <NLayout position="absolute">
             <NLayoutHeader class="header" bordered style="height: 64px">
-                <Header />
+                <Header v-if="currentTab">
+                    <McTabs v-model:value="currentTab" :show-line="false" class="header-tabs mc-absolute mc-left-[276px]" :content-style="{ padding: 0 }" @update:value="handleUpdateTab">
+                        <McTab name="docs">文档</McTab>
+                        <McTab name="components">组件</McTab>
+                        <McTab name="develop">开发指南</McTab>
+                    </McTabs>
+                </Header>
             </NLayoutHeader>
             <NLayout position="absolute" style="top: 64px" has-sider>
                 <NLayoutSider class="sider-menu" bordered :collapsed-width="0" :width="300" collapse-mode="transform" show-trigger="bar">
-                    <Menu />
+                    <NMenu v-if="currentMenuKey" v-model:value="currentMenuKey" :options="menus" accordion @update:value="handleUpdateMenu" />
                 </NLayoutSider>
                 <NLayoutContent class="main-content">
                     <NLayout has-sider sider-placement="right">
@@ -31,18 +37,43 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
-import { NLayout, NLayoutHeader, NLayoutContent, NLayoutSider, NNotificationProvider, NConfigProvider, darkTheme } from 'naive-ui';
-import { useThemeController } from 'meetcode-ui';
+import { computed, ref } from 'vue';
+import { NLayout, NLayoutHeader, NLayoutContent, NLayoutSider, NNotificationProvider, NConfigProvider, NMenu, darkTheme } from 'naive-ui';
+import { McTabs, McTab, useThemeController, useI18nController } from 'meetcode-ui';
+import { useRouter } from 'vue-router';
+import { useTitle } from '@vueuse/core';
 import Header from './home/Header.vue';
-import Menu from './home/Menu.vue';
 import Navigator from './home/Navigator.vue';
 import PagerNavigator from './home/PagerNavigator.vue';
+import { menusMap, routesMap } from './menu';
+import { onRouterReady, onRoutePathChange } from './utils';
+import type { MenuTab, RouteMetaData } from './menu';
+import type { MenuOption } from 'naive-ui';
 
+const router = useRouter();
 const { current: siteTheme, isDark } = useThemeController();
-// 初始跟随系统主题
-const theme = computed(() => {
-    return isDark.value ? darkTheme : null;
+const { current: siteLang } = useI18nController();
+const currentTab = ref<MenuTab>();
+const currentMenuKey = ref();
+const menus = computed<MenuOption[]>(() => menusMap[currentTab.value!][siteLang.value]);
+const theme = computed(() => (isDark.value ? darkTheme : null));
+const handleUpdateTab = (tab: MenuTab) => {
+    router.push(routesMap[tab][siteLang.value][0].path);
+    currentMenuKey.value = menus.value[0].key;
+};
+const handleUpdateMenu = (key: string): void => {
+    router.push(`/${siteLang.value}/${key}`);
+};
+
+onRouterReady((router, { path, meta }) => {
+    console.log(path);
+    const { tab, route } = meta as RouteMetaData;
+    currentTab.value = tab;
+    currentMenuKey.value = `${tab}/${route}`;
+});
+onRoutePathChange((path, { meta }) => {
+    const { title } = meta as RouteMetaData;
+    useTitle(`Meetcode UI - ${title}`);
 });
 </script>
 

@@ -2,29 +2,23 @@
 import { ref } from 'vue';
 import { NMenu } from 'naive-ui';
 import { useRouter } from 'vue-router';
-import { useTitle } from '@vueuse/core';
-import { useI18nController } from 'meetcode-ui';
-import { onRoutePathChange, useMenu } from '../utils';
+import { onRouterReady } from '../utils';
+import type { MenuOption } from 'naive-ui';
+
+const props = defineProps<{ menus: MenuOption[] }>();
 
 // 初始化路由
 const router = useRouter();
-const { current } = useI18nController();
-const { menus } = useMenu();
 const activeKey = ref<string>('');
-activeKey.value = window.location.pathname.split('/meetcode-ui')[1];
-
-onRoutePathChange(path => {
-    const splitKey = path.split('/');
-    const title = decodeURI(splitKey[splitKey.length - 1]);
-    useTitle(`McUI Docs | ${title}`);
-    activeKey.value = title;
-});
-
 const handleUpdateValue = (key: string): void => {
-    router.push(key === '' ? '/' : `/${current.value}/${key}`);
+    router.push(key === '' ? '/' : key);
 };
+
+onRouterReady((router, route) => {
+    activeKey.value = route.path;
+});
 </script>
 
 <template>
-    <NMenu v-model:value="activeKey" @update:value="handleUpdateValue" :options="menus" accordion />
+    <NMenu v-model:value="activeKey" @update:value="handleUpdateValue" :options="props.menus" accordion />
 </template>

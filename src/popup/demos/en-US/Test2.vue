@@ -1,7 +1,7 @@
 <template>
     <McSpace vertical>
-        响应式变量: {{ props.reactiveCount }} 非响应式变量: {{ props.count }}
-        <McButton type="success" ghost @click="handleClick">点我关闭弹窗</McButton>
+        reactiveCount: {{ props.reactiveCount }} count: {{ props.count }}
+        <McButton type="success" ghost @click="handleClick">Close</McButton>
         <McButton type="success" ghost @click="handleIncrease">+1</McButton>
     </McSpace>
 </template>

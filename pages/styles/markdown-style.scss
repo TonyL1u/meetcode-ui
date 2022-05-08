@@ -22,10 +22,11 @@
         }
     }
 
-    code:not(.hljs) {
+    code {
         padding: 1px 4px;
         border-radius: 3px;
         font-family: v-mono;
+        transition: 0.3s;
     }
 
     &.light {
