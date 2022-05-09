@@ -37,7 +37,7 @@ setTheme('dark');
 |    onThemeChange    |   `EventHookOn<ThemeType>`   |    The callback function when theme has changed     |
 | onGlobalThemeChange |   `EventHookOn<ThemeType>`   | The global callback function when theme has changed |
 
-4. Type declaration
+4. Type declarations
 
 ```ts
 declare type ThemeType = 'light' | 'dark';

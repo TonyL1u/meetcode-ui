@@ -1,8 +1,6 @@
 <template>
     <div class="mc-flex mc-justify-between mc-items-center mc-w-full">
         <div class="mc-flex mc-items-center mc-relative">
-            <NavMenu />
-            <div class="title mc-text-2xl mc-leading-6">Meetcode UI</div>
             <slot></slot>
         </div>
         <div class="mc-flex mc-items-center">
@@ -38,7 +36,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { McButton, McIcon, McPopselect, useI18nController, useThemeController } from 'meetcode-ui';
-import NavMenu from './NavMenu.vue';
 import { useRouter } from 'vue-router';
 import { LanguageOutline, LogoGithub, MoonOutline, SunnyOutline } from '@vicons/ionicons5';
 import { repository } from '../../package.json';

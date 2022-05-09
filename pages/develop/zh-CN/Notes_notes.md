@@ -201,3 +201,7 @@
 -   Tabs position 属性设置为 absolute，样式有问题
 -   如果 Tabs 里没有 TabPane，应该不渲染 content
 -   Popselect 的 options 传入普通变量会报错
+
+2022-05-09
+
+-   自动生成的菜单项顺序无法控制

@@ -64,7 +64,7 @@ export default defineComponent({
             if (updateGroupValue) {
                 updateGroupValue(mergedValue.value);
             } else {
-                callUpdateValue(mergedChecked.value ? uncheckedValue.value : checkedValue.value);
+                callUpdateValue(mergedChecked.value ? uncheckedValue.value! : checkedValue.value!);
             }
         };
 

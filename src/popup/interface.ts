@@ -26,6 +26,7 @@ export interface PopupInstance {
     show(config: PopupModalConfig): void;
     show<T extends PopupType>(type: T, config: T extends 'modal' ? PopupModalConfig : PopupDrawerConfig): void;
     hide: () => void;
-    instance: Ref<ModalExposeInstance | DrawerExposeInstance | undefined>;
+    destroy: () => void;
+    instance: Ref<ModalExposeInstance | DrawerExposeInstance | undefined | null>;
 }
 export const popupRouteInjectionKey: InjectionKey<RouteLocationNormalizedLoaded> = Symbol('popupRouteInjectionKey');

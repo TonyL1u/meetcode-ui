@@ -3,16 +3,20 @@
         <NLayout position="absolute">
             <NLayoutHeader class="header" bordered style="height: 64px">
                 <Header v-if="currentTab">
+                    <McIcon class="nav-menu-trigger" :size="24" @click="handleShowNavMenu">
+                        <IconMenu />
+                    </McIcon>
+                    <div class="title mc-text-2xl mc-leading-6">Meetcode UI</div>
                     <McTabs v-model:value="currentTab" :show-line="false" class="header-tabs mc-absolute mc-left-[276px]" :content-style="{ padding: 0 }" @update:value="handleUpdateTab">
-                        <McTab name="docs">文档</McTab>
-                        <McTab name="components">组件</McTab>
-                        <McTab name="develop">开发指南</McTab>
+                        <McTab name="docs">{{ siteLang === 'zh-CN' ? '文档' : 'Docs' }}</McTab>
+                        <McTab name="components">{{ siteLang === 'zh-CN' ? '组件' : 'Components' }}</McTab>
+                        <McTab name="develop">{{ siteLang === 'zh-CN' ? '开发指南' : 'Develop' }}</McTab>
                     </McTabs>
                 </Header>
             </NLayoutHeader>
             <NLayout position="absolute" style="top: 64px" has-sider>
                 <NLayoutSider class="sider-menu" bordered :collapsed-width="0" :width="300" collapse-mode="transform" show-trigger="bar">
-                    <NMenu v-if="currentMenuKey" v-model:value="currentMenuKey" :options="menus" accordion @update:value="handleUpdateMenu" />
+                    <MenuVNode v-if="currentMenuKey" :menu="menu" />
                 </NLayoutSider>
                 <NLayoutContent class="main-content">
                     <NLayout has-sider sider-placement="right">
@@ -37,42 +41,99 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, ref, createVNode } from 'vue';
 import { NLayout, NLayoutHeader, NLayoutContent, NLayoutSider, NNotificationProvider, NConfigProvider, NMenu, darkTheme } from 'naive-ui';
-import { McTabs, McTab, useThemeController, useI18nController } from 'meetcode-ui';
-import { useRouter } from 'vue-router';
-import { useTitle } from '@vueuse/core';
+import { McTabs, McTab, McIcon, McPopup, useThemeController, useI18nController } from 'meetcode-ui';
+import { MenuOutline as IconMenu } from '@vicons/ionicons5';
+import { useRoute, useRouter } from 'vue-router';
+import { useTitle, watchOnce } from '@vueuse/core';
 import Header from './home/Header.vue';
 import Navigator from './home/Navigator.vue';
 import PagerNavigator from './home/PagerNavigator.vue';
 import { menusMap, routesMap } from './menu';
 import { onRouterReady, onRoutePathChange } from './utils';
+import type { FunctionalComponent } from 'vue';
 import type { MenuTab, RouteMetaData } from './menu';
 import type { MenuOption } from 'naive-ui';
 
 const router = useRouter();
+const route = useRoute();
 const { current: siteTheme, isDark } = useThemeController();
 const { current: siteLang } = useI18nController();
 const currentTab = ref<MenuTab>();
-const currentMenuKey = ref();
-const menus = computed<MenuOption[]>(() => menusMap[currentTab.value!][siteLang.value]);
+const currentMenuKey = ref<string>();
 const theme = computed(() => (isDark.value ? darkTheme : null));
+const menu = computed<MenuOption[]>(() => menusMap[currentTab.value!][siteLang.value]);
+const MenuVNode: FunctionalComponent<{ menu: MenuOption[] }> = props => {
+    const { menu } = props;
+    return createVNode(NMenu, {
+        value: currentMenuKey.value,
+        'onUpdate:value': (key: string) => {
+            currentMenuKey.value = key;
+            router.push(`/${siteLang.value}/${key}`);
+        },
+        options: menu,
+        accordion: true
+    });
+};
+const handleShowNavMenu = () => {
+    const allMenu = [
+        {
+            type: 'group',
+            label: '文档',
+            key: 'docs',
+            children: menusMap.docs[siteLang.value]
+        },
+        {
+            type: 'group',
+            label: '组件',
+            key: 'components',
+            children: menusMap.components[siteLang.value]
+        },
+        {
+            type: 'group',
+            label: '开发指南',
+            key: 'develop',
+            children: menusMap.develop[siteLang.value]
+        }
+    ];
+    const { show } = McPopup<{ menu: MenuOption[] }, { 'update:value': (key: string) => void }>(MenuVNode, {
+        props: { menu: allMenu },
+        on: {
+            'update:value': key => {
+                watchOnce(
+                    () => route.meta,
+                    meta => {
+                        const { tab } = meta as RouteMetaData;
+                        currentTab.value = tab;
+                    }
+                );
+            }
+        }
+    });
+    show('drawer', {
+        appearDirection: 'left',
+        size: '85vw',
+        showHeader: false,
+        bodyStyle: { padding: '0px' }
+    });
+};
 const handleUpdateTab = (tab: MenuTab) => {
     router.push(routesMap[tab][siteLang.value][0].path);
-    currentMenuKey.value = menus.value[0].key;
+    currentMenuKey.value = menu.value[0].key! as string;
 };
-const handleUpdateMenu = (key: string): void => {
-    router.push(`/${siteLang.value}/${key}`);
-};
-
-onRouterReady((router, { path, meta }) => {
-    console.log(path);
-    const { tab, route } = meta as RouteMetaData;
+const updateMenuTab = (tab: MenuTab, route: string) => {
     currentTab.value = tab;
     currentMenuKey.value = `${tab}/${route}`;
+};
+
+onRouterReady((router, { meta }) => {
+    const { tab, route } = meta as RouteMetaData;
+    updateMenuTab(tab, route);
 });
 onRoutePathChange((path, { meta }) => {
-    const { title } = meta as RouteMetaData;
+    const { title, tab, route } = meta as RouteMetaData;
+    updateMenuTab(tab, route);
     useTitle(`Meetcode UI - ${title}`);
 });
 </script>

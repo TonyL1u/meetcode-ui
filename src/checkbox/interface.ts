@@ -34,11 +34,11 @@ export interface CheckboxGroupOptions {
 export interface CheckboxProps {
     value?: CheckboxValue;
     label?: string;
-    size: CheckboxSize;
-    checkedValue: CheckboxValue;
-    uncheckedValue: CheckboxValue;
-    disabled: boolean;
-    indeterminate: boolean;
+    size?: CheckboxSize;
+    checkedValue?: CheckboxValue;
+    uncheckedValue?: CheckboxValue;
+    disabled?: boolean;
+    indeterminate?: boolean;
     checkedColor?: string;
 }
 export interface CheckboxGroupProps {

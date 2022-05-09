@@ -76,7 +76,6 @@ const tabIndex = ref(0);
 const isLoading = ref(true);
 const { copy } = useClipboard();
 const { isLight } = useThemeController();
-
 const handleShowModal = () => {
     setTimeout(() => {
         loadInitialState(codes[tabIndex.value].compressedSource);

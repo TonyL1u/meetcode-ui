@@ -76,6 +76,21 @@ export default {
                 }
             }
         });
+
+        md.renderer.rules['heading_open'] = function (tokens, idx, options, env, self) {
+            if (tokens[idx].tag === 'h1') {
+                return `<EditOnGithub ${self.renderAttrs(tokens[idx])}>`;
+            }
+
+            return self.renderToken(tokens, idx, options);
+        };
+
+        md.renderer.rules['heading_close'] = function (tokens, idx, options, env, self) {
+            if (tokens[idx].tag === 'h1') {
+                return '</EditOnGithub>';
+            }
+            return self.renderToken(tokens, idx, options);
+        };
     },
     // Class names for the wrapper div
     wrapperClasses: 'markdown-body'

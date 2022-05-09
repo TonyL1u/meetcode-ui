@@ -1,5 +1,5 @@
 import { watch } from 'vue';
-import { watchOnce } from '@vueuse/core';
+import { watchOnce, createEventHook } from '@vueuse/core';
 import { useRouter, useRoute } from 'vue-router';
 import type { Router, RouteLocationNormalizedLoaded } from 'vue-router';
 

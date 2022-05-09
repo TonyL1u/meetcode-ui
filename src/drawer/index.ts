@@ -1,2 +1,2 @@
 export { default as McDrawer } from './Drawer';
-export type { DrawerCloseAction, DrawerProps, DrawerExposeInstance, DrawerAppearDirection } from './interface';
+export type { DrawerCloseAction, DrawerProps, DrawerObjectEmits, DrawerExposeInstance, DrawerAppearDirection } from './interface';

@@ -6,10 +6,23 @@ import type { ObjectEmitsOptions } from 'vue';
 import type { ModalExposeInstance } from '../modal';
 import type { DrawerExposeInstance } from '../drawer';
 
-function McPopup<P extends Record<string, any>, E extends ObjectEmitsOptions>(source: Component | string, options: PopupSourceOptions<P, E> = {}): PopupInstance {
-    const PopupHostElement = document.createElement('div');
-    const instance = ref<ModalExposeInstance | DrawerExposeInstance>();
+function McPopup<P extends Record<string, any> = {}, E extends ObjectEmitsOptions = {}>(source: Component | string, options: PopupSourceOptions<P, E> = {}): PopupInstance {
+    const PopupHostElement = ref<HTMLDivElement | null>(document.createElement('div'));
+    const instance = ref<ModalExposeInstance | DrawerExposeInstance | null>();
     const visible = ref(false);
+    const createDefaultVNode = () => {
+        const { props: sourceProps = {}, on: sourceEmits = {} } = options;
+        const props: Record<string, any> = {};
+        const events: ObjectEmitsOptions = {};
+        for (const [name, handler] of Object.entries(sourceEmits as E)) {
+            events[`on${name.charAt(0).toUpperCase()}${name.slice(1)}`] = handler;
+        }
+        for (const [name, value] of Object.entries(sourceProps)) {
+            props[name] = isRef(value) ? value.value : value;
+        }
+
+        return createVNode(typeof source === 'string' ? defineComponent({ template: source }) : source, { ...props, ...events });
+    };
     const modalVNode: FunctionalComponent<PopupModalConfig> = (props = {}, ctx) => {
         const { footer, header } = props.slots ?? {};
 
@@ -27,19 +40,7 @@ function McPopup<P extends Record<string, any>, E extends ObjectEmitsOptions>(so
             },
             {
                 header,
-                default: () => {
-                    const { props: sourceProps = {}, on: sourceEmits = {} } = options;
-                    const props: Record<string, any> = {};
-                    const events: ObjectEmitsOptions = {};
-                    for (const [name, handler] of Object.entries(sourceEmits as E)) {
-                        events[`on${name.charAt(0).toUpperCase()}${name.slice(1)}`] = handler;
-                    }
-                    for (const [name, value] of Object.entries(sourceProps)) {
-                        props[name] = isRef(value) ? value.value : value;
-                    }
-
-                    return createVNode(typeof source === 'string' ? defineComponent({ template: source }) : source, { ...props, ...events });
-                },
+                default: createDefaultVNode,
                 footer
             }
         );
@@ -60,36 +61,28 @@ function McPopup<P extends Record<string, any>, E extends ObjectEmitsOptions>(so
             },
             {
                 header,
-                default: () => {
-                    const { props: sourceProps = {}, on: sourceEmits = {} } = options;
-                    const props: Record<string, any> = {};
-                    const events: ObjectEmitsOptions = {};
-                    for (const [name, handler] of Object.entries(sourceEmits as E)) {
-                        events[`on${name.charAt(0).toUpperCase()}${name.slice(1)}`] = handler;
-                    }
-                    for (const [name, value] of Object.entries(sourceProps)) {
-                        props[name] = isRef(value) ? value.value : value;
-                    }
-
-                    return createVNode(typeof source === 'string' ? defineComponent({ template: source }) : source, { ...props, ...events });
-                }
+                default: createDefaultVNode
             }
         );
     };
 
     return {
+        instance,
         show<T extends PopupType = 'modal'>(maybePopupConfig?: T | PopupModalConfig, config: PopupModalConfig | PopupDrawerConfig = {}) {
             visible.value = true;
             if (typeof maybePopupConfig === 'string') {
-                render(createVNode(maybePopupConfig === 'modal' ? modalVNode : drawerVNode, { ...config }), PopupHostElement);
+                render(createVNode(maybePopupConfig === 'modal' ? modalVNode : drawerVNode, { ...config }), PopupHostElement.value!);
             } else {
-                render(createVNode(modalVNode, { ...(maybePopupConfig || {}) }), PopupHostElement);
+                render(createVNode(modalVNode, { ...(maybePopupConfig || {}) }), PopupHostElement.value!);
             }
         },
         hide() {
             instance.value?.hide();
         },
-        instance
+        destroy() {
+            instance.value = null;
+            PopupHostElement.value = null;
+        }
     };
 }
 
