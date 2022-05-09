@@ -1,11 +1,3 @@
-<script setup>
-import Demos from './zh-CN'
-import { McTextLink } from 'meetcode-ui'
-const {Basic, ModalStyle, Communicate, AppearPosition, Drawer} = Demos
-</script>
-
-@@@ meta Component=popup,Lang=zh-CN
-
 # Popup 弹窗
 
 基于 `McModal` 和 `McDrawer` ，指令式的模态框（抽屉）。
@@ -103,5 +95,3 @@ export declare interface PopupInstance {
     instance: Ref<ModalExposeInstance | DrawerExposeInstance | undefined>;
 }
 ```
-
-@@@

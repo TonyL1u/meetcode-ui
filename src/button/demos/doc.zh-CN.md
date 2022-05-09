@@ -1,10 +1,3 @@
-<script setup>
-import Demos from './zh-CN'
-const { Basic, Ghost, Dashed, Render, Disabled, Icon, Loading, Size, Shape, Block, Color, ButtonGroup } = Demos
-</script>
-
-@@@ meta Component=button,Lang=zh-CN
-
 # Button 按钮
 
 ## 演示
@@ -161,5 +154,3 @@ const { Basic, Ghost, Dashed, Render, Disabled, Icon, Loading, Size, Shape, Bloc
 | 名称 |     类型      |      说明       |
 | :--: | :-----------: | :-------------: |
 |  el  | `HTMLElement` | 按钮的 Dom 节点 |
-
-@@@

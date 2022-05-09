@@ -1,11 +1,3 @@
-<script setup>
-import Demos from './en-US'
-import { McTextLink } from 'meetcode-ui'
-const {Basic, ModalStyle, Communicate, AppearPosition, Drawer} = Demos
-</script>
-
-@@@ meta Component=popup,Lang=en-US
-
 # Popup
 
 Derived from `McModal` and `McDrawer` , create a modal box(drawer) through service.
@@ -103,5 +95,3 @@ export declare interface PopupInstance {
     instance: Ref<ModalExposeInstance | DrawerExposeInstance | undefined>;
 }
 ```
-
-@@@

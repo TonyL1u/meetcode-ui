@@ -1,10 +1,3 @@
-<script setup>
-import Demos from './en-US'
-const {Basic, CustomValue, Group, GroupLayout, Max, Event, SelectAll} = Demos
-</script>
-
-@@@ meta Component=checkbox,Lang=en-US
-
 # Checkbox
 
 ## Demos
@@ -138,5 +131,3 @@ You can set a half checked icon by setting `Indeterminate`
 |   clear   |     `() => void`      |        取消全选 Checkbox         |
 |  status   | `CheckboxGroupStatus` | CheckboxGroup 内选中复选框的状态 |
 |    el     |     `HTMLElement`     |    CheckboxGroup 的 Dom 节点     |
-
-@@@

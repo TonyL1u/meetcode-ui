@@ -1,6 +1,6 @@
 # Theme Configuration
 
-Meetcode UI provides light and dark themes. The theme switching can be easily controlled through the integrate theme management tool —— `usethemecontroller`.
+Meetcode UI provides light and dark themes. The theme switching can be easily controlled through the integrate theme management tool —— `useThemeController` .
 
 ## Theme Management Tool
 

@@ -1,10 +1,3 @@
-<script setup>
-import Demos from './en-US'
-const { Basic, Nesting, BeforeLeave } = Demos
-</script>
-
-@@@ meta Component=drawer,Lang=en-US
-
 # Drawer
 
 ## Demos
@@ -81,5 +74,3 @@ When the return value is `true`, the drawer will be prevented from closing. Supp
 | :-----: | :--: | :--------------: |
 | default | `()` |   抽屉主体内容   |
 | header  | `()` | 抽屉 header 内容 |
-
-@@@

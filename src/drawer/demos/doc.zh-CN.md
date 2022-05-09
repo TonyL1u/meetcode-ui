@@ -1,10 +1,3 @@
-<script setup>
-import Demos from './zh-CN'
-const { Basic, Nesting, BeforeLeave } = Demos
-</script>
-
-@@@ meta Component=drawer,Lang=zh-CN
-
 # Drawer 抽屉
 
 ## 演示
@@ -13,7 +6,7 @@ const { Basic, Nesting, BeforeLeave } = Demos
 
 ### 基础用法
 
-<Basic/>
+<Basic />
 
 :::
 
@@ -81,5 +74,3 @@ const { Basic, Nesting, BeforeLeave } = Demos
 | :-----: | :--: | :--------------: |
 | default | `()` |   抽屉主体内容   |
 | header  | `()` | 抽屉 header 内容 |
-
-@@@

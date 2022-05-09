@@ -1,10 +1,3 @@
-<script setup>
-import Demos from './en-US'
-const { Basic, Ghost, Dashed, Render, Disabled, Icon, Loading, Size, Shape, Block, Color, ButtonGroup } = Demos
-</script>
-
-@@@ meta Component=button,Lang=en-US
-
 # Button
 
 ## Demos
@@ -161,5 +154,3 @@ A group of buttons.
 | 名称 |     类型      |      说明       |
 | :--: | :-----------: | :-------------: |
 |  el  | `HTMLElement` | 按钮的 Dom 节点 |
-
-@@@

@@ -1,10 +1,3 @@
-<script setup>
-import Demos from './zh-CN'
-const {Basic, CustomValue, Group, GroupLayout, Max, Event, SelectAll} = Demos
-</script>
-
-@@@ meta Component=checkbox,Lang=zh-CN
-
 # Checkbox 复选框
 
 ## 演示
@@ -138,5 +131,3 @@ const {Basic, CustomValue, Group, GroupLayout, Max, Event, SelectAll} = Demos
 |   clear   |     `() => void`      |        取消全选 Checkbox         |
 |  status   | `CheckboxGroupStatus` | CheckboxGroup 内选中复选框的状态 |
 |    el     |     `HTMLElement`     |    CheckboxGroup 的 Dom 节点     |
-
-@@@
