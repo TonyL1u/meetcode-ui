@@ -8,6 +8,7 @@
                     </McIcon>
                     <div class="title mc-text-2xl mc-leading-6">Meetcode UI</div>
                     <McTabs v-model:value="currentTab" :show-line="false" class="header-tabs mc-absolute mc-left-[276px]" :content-style="{ padding: 0 }" @tab-click="handleTabClick">
+                        <!-- <McTab name="home">{{ siteLang === 'zh-CN' ? '首页' : 'Home' }}</McTab> -->
                         <McTab name="docs">{{ siteLang === 'zh-CN' ? '文档' : 'Docs' }}</McTab>
                         <McTab name="components">{{ siteLang === 'zh-CN' ? '组件' : 'Components' }}</McTab>
                         <McTab name="develop">{{ siteLang === 'zh-CN' ? '开发指南' : 'Develop' }}</McTab>
@@ -157,13 +158,13 @@ body {
     }
 
     .main-content .n-layout {
-        min-height: calc(100vh - 64px);
+        min-height: calc(100vh - 45px);
     }
 
     .markdown-body {
         width: 100%;
-        max-width: 768px;
-        margin: 1em auto;
+        max-width: 1024px;
+        margin: 0 auto;
         padding: 0 24px;
         box-sizing: border-box;
 
@@ -184,51 +185,6 @@ body {
     }
 }
 
-.my {
-    &::before {
-        content: '';
-        width: 70vmax;
-        height: 70vmax;
-        position: absolute;
-        background: rgba(0, 0, 0, 0.07);
-        left: -20vmin;
-        top: -20vmin;
-        animation: morph 15s linear infinite alternate, spin 20s linear infinite;
-        z-index: 1;
-        will-change: border-radius, transform;
-        transform-origin: 55% 55%;
-        pointer-events: none;
-    }
-
-    &::after {
-        content: '';
-        width: 70vmin;
-        height: 70vmin;
-        position: absolute;
-        background: rgba(0, 0, 0, 0.07);
-        left: auto;
-        right: -10vmin;
-        top: auto;
-        bottom: 0;
-        animation: morph 10s linear infinite alternate, spin 26s linear infinite reverse;
-        transform-origin: 20% 20%;
-    }
-}
-
-@keyframes morph {
-    0% {
-        border-radius: 40% 60% 60% 40% / 70% 30% 70% 30%;
-    }
-    100% {
-        border-radius: 40% 60%;
-    }
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(1turn);
-    }
-}
 @media screen and (max-width: 1080px) {
     #app .header {
         .nav-menu-trigger {
@@ -250,8 +206,7 @@ body {
 }
 
 @media screen and (max-width: 640px) {
-    .sider-navigator,
-    .add-docs-button {
+    .sider-navigator {
         display: none;
     }
 }

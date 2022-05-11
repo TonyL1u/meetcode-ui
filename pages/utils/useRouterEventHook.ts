@@ -18,22 +18,22 @@ interface UseRouterEventHookReturn {
 
 export function useRouterEventHook(): UseRouterEventHookReturn {
     function createRouteChangeEventHook<T extends keyof RouteLocationNormalizedLoaded>(key: T) {
-        if (!hookMap[key]) {
+        if (!hooksMap[key]) {
             const hook = createEventHook<HookPayload<T>>();
-            hookMap[key] = hook;
+            hooksMap[key] = hook;
             return hook;
         }
-        return hookMap[key] as EventHook<HookPayload<T>>;
+        return hooksMap[key] as EventHook<HookPayload<T>>;
     }
 
     const router = useRouter();
     const route = useRoute();
-    const hookMap: Partial<Record<keyof RouteLocationNormalizedLoaded, EventHook>> = {};
+    const hooksMap: Partial<Record<keyof RouteLocationNormalizedLoaded, EventHook>> = {};
 
     router.afterEach((to, from) => {
-        Object.keys(hookMap).forEach(key => {
+        Object.keys(hooksMap).forEach(key => {
             const routeKey = key as keyof RouteLocationNormalized;
-            if (to[routeKey] !== from[routeKey]) hookMap[routeKey]?.trigger({ [key]: to[routeKey], route });
+            if (to[routeKey] !== from[routeKey]) hooksMap[routeKey]?.trigger({ [key]: to[routeKey], route });
         });
     });
 

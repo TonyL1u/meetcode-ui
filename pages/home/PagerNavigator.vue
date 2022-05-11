@@ -23,7 +23,7 @@ const switchPrev = () => {
 </script>
 
 <template>
-    <div v-if="next || prev" class="mc-px-6 mc-py-7 mc-mx-auto mc-max-w-[768px] mc-flex mc-justify-between mc-w-full mc-box-border" :style="{ justifyContent: !prev ? 'flex-end' : !next ? 'flex-start' : '' }">
+    <div v-if="next || prev" class="mc-px-6 mc-py-7 mc-mx-auto mc-max-w-[1024px] mc-flex mc-justify-between mc-w-full mc-box-border" :style="{ justifyContent: !prev ? 'flex-end' : !next ? 'flex-start' : '' }">
         <div v-if="prev" class="switcher prev" @click="switchPrev">
             <div class="mc-flex mc-items-center mc-text-xs">
                 <McIcon :size="12">
@@ -31,7 +31,7 @@ const switchPrev = () => {
                 </McIcon>
                 Previous
             </div>
-            <span class="mc-text-base mc-text-green-500">{{ tab === 'components' ? `${prev.label} ${componentNameMap[prev.label.toLowerCase()]}` : prev.label }}</span>
+            <span class="mc-text-base mc-text-green-500">{{ tab === 'components' && siteLang === 'zh-CN' ? `${prev.label} ${componentNameMap[prev.label.toLowerCase()]}` : prev.label }}</span>
         </div>
         <div v-if="next" class="switcher next" @click="switchNext">
             <div class="mc-flex mc-items-center mc-text-xs">
@@ -40,7 +40,7 @@ const switchPrev = () => {
                     <IconNext />
                 </McIcon>
             </div>
-            <span class="mc-text-base mc-text-green-500">{{ tab === 'components' ? `${componentNameMap[next.label.toLowerCase()]} ${next.label}` : next.label }}</span>
+            <span class="mc-text-base mc-text-green-500">{{ tab === 'components' && siteLang === 'zh-CN' ? `${componentNameMap[next.label.toLowerCase()]} ${next.label}` : next.label }}</span>
         </div>
     </div>
 </template>
