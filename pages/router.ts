@@ -15,7 +15,12 @@ const router = createRouter({
         ...develop['en-US'],
         {
             path: '/404',
-            component: () => import('./home/404.vue')
+            component: () => import('./404.vue'),
+            meta: {
+                title: '404',
+                tab: 'docs',
+                route: ''
+            }
         },
         {
             path: '/:catchAll(.*)',

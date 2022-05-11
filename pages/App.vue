@@ -114,7 +114,7 @@ const handleShowNavMenu = () => {
 };
 const handleTabClick = (tab: MenuTab) => {
     if (currentTab.value === tab) return;
-    // 等待 currentTab 同步更新后...
+    // 等待 currentTab 同步更新后执行
     nextTick(() => {
         router.push(routesMap[tab][siteLang.value][0].path);
         currentMenuKey.value = menu.value[0].key! as string;

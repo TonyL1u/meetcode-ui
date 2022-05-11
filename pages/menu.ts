@@ -5,7 +5,6 @@ import type { MenuOption } from 'naive-ui';
 export type MenuTab = 'docs' | 'components' | 'develop';
 export interface RouteMetaData extends RouteMeta {
     title: string;
-    lang: RouteLang;
     tab: MenuTab;
     route: string;
 }
@@ -46,13 +45,13 @@ function createRoutes(tab: MenuTab, lang: RouteLang, matcher?: RegExp): Route[] 
             path: `/${lang}/${tab}/${route}`,
             name: '',
             component: module,
-            meta: { title, lang, tab, route }
+            meta: { title, tab, route }
         };
     });
 }
 
 function createMenus(tab: MenuTab, lang: RouteLang, matcher?: RegExp) {
-    return Object.entries(modulesMap[tab][lang]).map(([path, module]) => {
+    return Object.entries(modulesMap[tab][lang]).map(([path]) => {
         const pathMatcher = matcher ? path.match(matcher) : lang === 'zh-CN' ? path.match(/\/zh-CN\/(.*).md/) : path.match(/\/en-US\/(.*).md/);
         const info = pathMatcher![1].split('_');
         const [menu, route] = info.length > 1 ? info : [info[0], info[0]];
