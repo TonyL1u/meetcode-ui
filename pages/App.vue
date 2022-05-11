@@ -24,7 +24,7 @@
                             <div class="mc-flex mc-flex-col mc-justify-between mc-w-full mc-h-full">
                                 <router-view :class="siteTheme" />
                                 <Suspense>
-                                    <PagerNavigator />
+                                    <!-- <PagerNavigator /> -->
                                 </Suspense>
                             </div>
                         </NLayoutContent>
@@ -48,7 +48,7 @@ import { useTitle } from '@vueuse/core';
 import { useRouterEventHook } from './utils/useRouterEventHook';
 import Header from './home/Header.vue';
 import Navigator from './home/Navigator.vue';
-import PagerNavigator from './home/PagerNavigator.vue';
+// import PagerNavigator from './home/PagerNavigator.vue';
 import { menusMap, routesMap } from './menu';
 import type { FunctionalComponent } from 'vue';
 import type { MenuTab, RouteMetaData } from './menu';

@@ -5,6 +5,7 @@ import fs from 'fs';
 import lz from 'lz-string';
 import type MarkdownIt from 'markdown-it';
 import type Token from 'markdown-it/lib/token';
+import type Renderer from 'markdown-it/lib/renderer';
 
 export default {
     // default options passed to markdown-it
@@ -70,7 +71,7 @@ export default {
             return self.renderToken(tokens, idx, options);
         };
 
-        md.renderer.rules['html_block'] = function (tokens, idx, options, env: { id: string }, self) {
+        const componentRenderRule: Renderer.RenderRule = function (tokens, idx, options, env: { id: string }, self) {
             const { content } = tokens[idx];
             const name = content.match(/<(.*)\/>/);
             if (env.id.indexOf('/meetcode-ui/src') > -1 && name && name[1].trim().slice(0, 2) !== 'Mc') {
@@ -80,5 +81,9 @@ export default {
 
             return content;
         };
+
+        md.renderer.rules['html_block'] = componentRenderRule;
+
+        md.renderer.rules['html_inline'] = componentRenderRule;
     }
 };

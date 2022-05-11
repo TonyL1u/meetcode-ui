@@ -1,3 +1,4 @@
+import { upperFirstLetter } from './utils';
 import type { RouteMeta } from 'vue-router';
 import type { Component } from 'vue';
 import type { MenuOption } from 'naive-ui';
@@ -57,7 +58,9 @@ function createMenus(tab: MenuTab, lang: RouteLang, matcher?: RegExp) {
         const [menu, route] = info.length > 1 ? info : [info[0], info[0]];
 
         return {
-            label: `${menu.charAt(0).toUpperCase()}${menu.slice(1)}`,
+            label: upperFirstLetter(menu)
+                .split('-')
+                .reduce((prev, cur) => `${prev} ${upperFirstLetter(cur)}`),
             key: `${tab}/${route}`
         };
     });

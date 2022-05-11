@@ -1,11 +1,4 @@
 import { computed, watch, toRaw } from 'vue';
-import { routes } from '../docs';
-import { onRouterReady } from '.';
-
-const allRoutes = toRaw(routes.value)
-    .filter(route => !route.path.includes('@misc'))
-    .map(({ name, path }) => ({ name, path }));
-allRoutes.push({ name: '404 Not Found', path: '/404' });
 
 export interface SwitcherData {
     name: string;
