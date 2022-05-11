@@ -5,6 +5,7 @@
 </template>
 
 <script lang="ts" setup>
+import { toRef } from 'vue';
 import { NAnchorLink } from 'naive-ui';
 
 interface AnchorLink {
@@ -13,6 +14,6 @@ interface AnchorLink {
     sub?: Array<AnchorLink>;
 }
 
-const props = defineProps<{ anchorLinks: Array<AnchorLink> | undefined }>();
-const { anchorLinks } = props;
+const props = defineProps<{ anchorLinks?: Array<AnchorLink> }>();
+const anchorLinks = toRef(props, 'anchorLinks');
 </script>

@@ -1,19 +1,13 @@
-import { defineComponent, onMounted, createVNode, renderSlot } from 'vue';
-import { useThemeRegister } from '../_utils_';
-import { layoutContentIKey } from './interface';
-import { mainCssr } from './styles';
+import { defineComponent, inject, createVNode, renderSlot } from 'vue';
+import { layoutContentIKey, layoutInjectionKey } from './interface';
 
 export default defineComponent({
     name: 'LayoutContent',
     iKey: layoutContentIKey,
     setup(props, { slots }) {
-        // theme register
-        onMounted(() => {
-            useThemeRegister({
-                key: 'McLayout',
-                main: mainCssr
-            });
-        });
+        if (!inject(layoutInjectionKey, null)) {
+            throw new Error('[McLayoutContent]: McLayoutContent must be placed inside McLayout.');
+        }
 
         // main logic...
         return () => {

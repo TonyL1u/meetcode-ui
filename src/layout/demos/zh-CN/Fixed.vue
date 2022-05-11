@@ -1,30 +1,17 @@
 <template>
-    <McLayout>
+    <McLayout style="height: 300px">
         <McLayoutHeader />
-        <McLayoutContent />
-        <McLayoutFooter />
-    </McLayout>
-
-    <McLayout style="margin-top: 12px">
-        <McLayoutSider />
-        <McLayoutContent />
-    </McLayout>
-
-    <McLayout style="margin-top: 12px">
-        <McLayoutHeader />
-        <McLayout>
+        <McLayout style="flex: 1">
             <McLayoutSider />
-            <McLayoutContent />
-        </McLayout>
-        <McLayoutFooter />
-    </McLayout>
-
-    <McLayout style="margin-top: 12px">
-        <McLayoutSider />
-        <McLayout>
-            <McLayoutHeader />
-            <McLayoutContent />
-            <McLayoutFooter />
+            <McLayoutContent>
+                <div style="height: 500px; display: flex; flex-direction: column; justify-content: space-between">
+                    <div>滚动</div>
+                    <div>滚动</div>
+                    <div>滚动</div>
+                    <div>滚动</div>
+                    <div>滚动</div>
+                </div>
+            </McLayoutContent>
         </McLayout>
     </McLayout>
 </template>
@@ -54,6 +41,5 @@ import { McLayout, McLayoutContent, McLayoutHeader, McLayoutFooter, McLayoutSide
 
 .mc-layout-content {
     background: #6ee7b7;
-    height: 200px;
 }
 </style>

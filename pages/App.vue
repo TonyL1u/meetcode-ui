@@ -1,5 +1,5 @@
 <template>
-    <NConfigProvider :theme="theme" abstract>
+    <!-- <NConfigProvider :theme="theme" abstract>
         <NLayout v-if="currentMenuKey && currentTab" position="absolute">
             <NLayoutHeader class="header" bordered style="height: 45px">
                 <Header>
@@ -8,7 +8,6 @@
                     </McIcon>
                     <div class="title mc-text-2xl mc-leading-6">Meetcode UI</div>
                     <McTabs v-model:value="currentTab" :show-line="false" class="header-tabs mc-absolute mc-left-[276px]" :content-style="{ padding: 0 }" @tab-click="handleTabClick">
-                        <!-- <McTab name="home">{{ siteLang === 'zh-CN' ? '首页' : 'Home' }}</McTab> -->
                         <McTab name="docs">{{ siteLang === 'zh-CN' ? '文档' : 'Docs' }}</McTab>
                         <McTab name="components">{{ siteLang === 'zh-CN' ? '组件' : 'Components' }}</McTab>
                         <McTab name="develop">{{ siteLang === 'zh-CN' ? '开发指南' : 'Develop' }}</McTab>
@@ -34,17 +33,48 @@
                 </NLayoutContent>
             </NLayout>
         </NLayout>
-    </NConfigProvider>
+    </NConfigProvider> -->
+    <McLayout v-if="currentMenuKey && currentTab" style="height: 100vh">
+        <McLayoutHeader>
+            <Header class="header">
+                <McIcon class="nav-menu-trigger" :size="24" @click="handleShowNavMenu">
+                    <IconMenu />
+                </McIcon>
+                <div class="title mc-text-2xl mc-leading-6">Meetcode UI</div>
+                <McTabs v-model:value="currentTab" :show-line="false" class="header-tabs mc-absolute mc-left-[276px]" :content-style="{ padding: 0 }" @tab-click="handleTabClick">
+                    <McTab name="docs">{{ siteLang === 'zh-CN' ? '文档' : 'Docs' }}</McTab>
+                    <McTab name="components">{{ siteLang === 'zh-CN' ? '组件' : 'Components' }}</McTab>
+                    <McTab name="develop">{{ siteLang === 'zh-CN' ? '开发指南' : 'Develop' }}</McTab>
+                </McTabs>
+            </Header>
+        </McLayoutHeader>
+        <McLayout style="flex: 1">
+            <McLayoutSider class="menu-sider" style="width: 300px">
+                <MenuVNode :menu="menu" />
+            </McLayoutSider>
+            <McLayout>
+                <McLayoutContent>
+                    <div class="mc-flex mc-flex-col mc-justify-between mc-w-full mc-h-full">
+                        <router-view :class="siteTheme" />
+                        <PagerNavigator :menu="menu" :tab="currentTab" :current-key="currentMenuKey" />
+                    </div>
+                </McLayoutContent>
+                <McLayoutSider style="width: 164px">
+                    <Navigator />
+                </McLayoutSider>
+            </McLayout>
+        </McLayout>
+    </McLayout>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref, createVNode, nextTick } from 'vue';
 import { NLayout, NLayoutHeader, NLayoutContent, NLayoutSider, NConfigProvider, NMenu, darkTheme } from 'naive-ui';
-import { McTabs, McTab, McIcon, McPopup, useThemeController, useI18nController } from 'meetcode-ui';
+import { McTabs, McTab, McIcon, McPopup, McLayout, McLayoutContent, McLayoutHeader, McLayoutFooter, McLayoutSider, useThemeController, useI18nController } from 'meetcode-ui';
 import { MenuOutline as IconMenu } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';
 import { useTitle } from '@vueuse/core';
-import { useRouterEventHook } from './utils/useRouterEventHook';
+import { useRouterEventHook } from './utils';
 import Header from './home/Header.vue';
 import Navigator from './home/Navigator.vue';
 import PagerNavigator from './home/PagerNavigator.vue';
@@ -146,15 +176,8 @@ body {
     // -moz-osx-font-smoothing: grayscale;
     height: 100vh;
 
-    .header {
-        padding: 0 12px 0 24px;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-
-        .nav-menu-trigger {
-            display: none;
-        }
+    .nav-menu-trigger {
+        display: none;
     }
 
     .main-content .n-layout {
@@ -186,7 +209,12 @@ body {
 }
 
 @media screen and (max-width: 1080px) {
-    #app .header {
+    #app {
+        .header {
+            padding-left: 20px;
+            padding-right: 8px;
+        }
+
         .nav-menu-trigger {
             display: inline-block;
         }
@@ -200,7 +228,7 @@ body {
         }
     }
 
-    .sider-menu {
+    .menu-sider {
         display: none;
     }
 }

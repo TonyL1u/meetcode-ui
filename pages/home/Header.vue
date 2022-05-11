@@ -1,5 +1,5 @@
 <template>
-    <div class="mc-flex mc-justify-between mc-items-center mc-w-full">
+    <div class="mc-flex mc-justify-between mc-items-center mc-pl-8 mc-pr-4 mc-h-[45px]">
         <div class="mc-flex mc-items-center mc-relative">
             <slot></slot>
         </div>
