@@ -1,69 +1,56 @@
-<script setup>
-import Basic from '@/tabs/demos/DemoBasic.vue'
-import TypeCard from '@/tabs/demos/DemoTypeCard.vue'
-import TypeSegment from '@/tabs/demos/DemoTypeSegment.vue'
-import DefaultValue from '@/tabs/demos/DemoDefaultValue.vue'
-import HeaderLayout from '@/tabs/demos/DemoHeaderLayout.vue'
-import CustomTab from '@/tabs/demos/DemoCustomTab.vue'
-import OnlyHeader from '@/tabs/demos/DemoOnlyHeader.vue'
-import RenderMode from '@/tabs/demos/DemoRenderMode.vue'
-import TabSwitch from '@/tabs/demos/DemoTabSwitch.vue'
-import BeforeTabSwitch from '@/tabs/demos/DemoBeforeTabSwitch.vue'
-</script>
+# Tabs
 
-# Tabs 标签页
-
-## 演示
+## Demos
 
 ::: demo CodePreview=Basic
 
-### 基础用法
+### Basic
 
-默认激活第一个。
+The first tab will be activated by default.
 
 <Basic />
 :::
 
 ::: demo CodePreview=TypeCard
 
-### 选项卡
+### Card
 
 <TypeCard />
 :::
 
 ::: demo CodePreview=TypeSegment
 
-### 分段
+### Segment
 
 <TypeSegment />
 :::
 
 ::: demo CodePreview=HeaderLayout
 
-### 头部布局
+### Head Layout
 
 <HeaderLayout />
 :::
 
 ::: demo CodePreview=CustomTab
 
-### 自定义 Tab 和样式
+### Custom Tab Style
 
 <CustomTab />
 :::
 
 ::: demo CodePreview=OnlyHeader
 
-### 无面板
+### No Pane
 
-如果不想展示标签页面板，可以使用 `McTab` 。支持与 `McTabPane` 混合使用。
+If you don't want to show the panel, you can use `McTab` . It supports mixed use with `McTabPane`.
 
 <OnlyHeader />
 :::
 
 ::: demo CodePreview=DefaultValue
 
-### 默认值
+### Default Tab
 
 通过 `default-tab` 来设置默认激活（初始值）的 tab。
 
@@ -76,7 +63,7 @@ import BeforeTabSwitch from '@/tabs/demos/DemoBeforeTabSwitch.vue'
 
 ::: demo CodePreview=RenderMode
 
-### 渲染模式
+### Render Mode
 
 标签面板默认使用 `v-if` 指令渲染，每次切换 tab 后都会销毁里面的内容。如果想使用 `v-show` 指令渲染，可以设置 `preload` 或 `lazy` 属性。
 

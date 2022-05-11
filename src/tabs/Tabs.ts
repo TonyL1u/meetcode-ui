@@ -9,7 +9,7 @@ import { mainCssr, lightCssr, darkCssr } from './styles';
 export default defineComponent({
     name: 'Tabs',
     props: tabsProps,
-    emits: ['update:value', 'tab:switch', 'tab:click'],
+    emits: ['update:value', 'tab-switch', 'tab-click'],
     setup(props, { slots, emit, expose }) {
         // theme register
         onMounted(() => {
@@ -68,10 +68,10 @@ export default defineComponent({
         const callUpdateTab = (name: TabPaneName) => {
             activeTabName.value = name;
             valueVM && emit('update:value', name);
-            emit('tab:switch', activeTabName.value);
+            emit('tab-switch', activeTabName.value);
         };
         const handleTabClick = (name: TabPaneName) => {
-            emit('tab:click', name);
+            emit('tab-click', name);
             handleBeforeTabSwitch(name);
         };
         const handleBeforeTabSwitch = async (name: TabPaneName) => {

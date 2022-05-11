@@ -1,16 +1,3 @@
-<script setup>
-import Basic from '@/tabs/demos/DemoBasic.vue'
-import TypeCard from '@/tabs/demos/DemoTypeCard.vue'
-import TypeSegment from '@/tabs/demos/DemoTypeSegment.vue'
-import DefaultValue from '@/tabs/demos/DemoDefaultValue.vue'
-import HeaderLayout from '@/tabs/demos/DemoHeaderLayout.vue'
-import CustomTab from '@/tabs/demos/DemoCustomTab.vue'
-import OnlyHeader from '@/tabs/demos/DemoOnlyHeader.vue'
-import RenderMode from '@/tabs/demos/DemoRenderMode.vue'
-import TabSwitch from '@/tabs/demos/DemoTabSwitch.vue'
-import BeforeTabSwitch from '@/tabs/demos/DemoBeforeTabSwitch.vue'
-</script>
-
 # Tabs 标签页
 
 ## 演示

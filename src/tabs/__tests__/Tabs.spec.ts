@@ -124,8 +124,8 @@ describe('mc-tabs', () => {
         await secondTab.trigger('click');
 
         expect(wrapper.emitted('update:value')).toHaveLength(1);
-        expect(wrapper.emitted('tab:switch')).toHaveLength(1);
-        expect(wrapper.emitted('tab:click')).toHaveLength(2);
+        expect(wrapper.emitted('tab-switch')).toHaveLength(1);
+        expect(wrapper.emitted('tab-click')).toHaveLength(2);
         wrapper.unmount();
     });
 

@@ -7,7 +7,7 @@
                         <IconMenu />
                     </McIcon>
                     <div class="title mc-text-2xl mc-leading-6">Meetcode UI</div>
-                    <McTabs v-model:value="currentTab" :show-line="false" class="header-tabs mc-absolute mc-left-[276px]" :content-style="{ padding: 0 }" @update:value="handleUpdateTab">
+                    <McTabs v-model:value="currentTab" :show-line="false" class="header-tabs mc-absolute mc-left-[276px]" :content-style="{ padding: 0 }" @tab-click="handleTabClick">
                         <McTab name="docs">{{ siteLang === 'zh-CN' ? '文档' : 'Docs' }}</McTab>
                         <McTab name="components">{{ siteLang === 'zh-CN' ? '组件' : 'Components' }}</McTab>
                         <McTab name="develop">{{ siteLang === 'zh-CN' ? '开发指南' : 'Develop' }}</McTab>
@@ -21,14 +21,12 @@
                 <NLayoutContent class="main-content">
                     <NLayout has-sider sider-placement="right">
                         <NLayoutContent>
-                            <NNotificationProvider>
-                                <div class="mc-flex mc-flex-col mc-justify-between mc-w-full mc-h-full">
-                                    <router-view :class="siteTheme" />
-                                    <Suspense>
-                                        <PagerNavigator />
-                                    </Suspense>
-                                </div>
-                            </NNotificationProvider>
+                            <div class="mc-flex mc-flex-col mc-justify-between mc-w-full mc-h-full">
+                                <router-view :class="siteTheme" />
+                                <Suspense>
+                                    <PagerNavigator />
+                                </Suspense>
+                            </div>
                         </NLayoutContent>
                         <NLayoutSider class="sider-navigator" :width="164" content-style="padding-right: 24px">
                             <Navigator />
@@ -41,25 +39,25 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, createVNode } from 'vue';
-import { NLayout, NLayoutHeader, NLayoutContent, NLayoutSider, NNotificationProvider, NConfigProvider, NMenu, darkTheme } from 'naive-ui';
+import { computed, ref, createVNode, nextTick } from 'vue';
+import { NLayout, NLayoutHeader, NLayoutContent, NLayoutSider, NConfigProvider, NMenu, darkTheme } from 'naive-ui';
 import { McTabs, McTab, McIcon, McPopup, useThemeController, useI18nController } from 'meetcode-ui';
 import { MenuOutline as IconMenu } from '@vicons/ionicons5';
-import { useRoute, useRouter } from 'vue-router';
-import { useTitle, watchOnce } from '@vueuse/core';
+import { useRouter } from 'vue-router';
+import { useTitle } from '@vueuse/core';
+import { useRouterEventHook } from './utils/useRouterEventHook';
 import Header from './home/Header.vue';
 import Navigator from './home/Navigator.vue';
 import PagerNavigator from './home/PagerNavigator.vue';
 import { menusMap, routesMap } from './menu';
-import { onRouterReady, onRoutePathChange } from './utils';
 import type { FunctionalComponent } from 'vue';
 import type { MenuTab, RouteMetaData } from './menu';
 import type { MenuOption } from 'naive-ui';
 
 const router = useRouter();
-const route = useRoute();
 const { current: siteTheme, isDark } = useThemeController();
 const { current: siteLang } = useI18nController();
+const { onRouteChange } = useRouterEventHook();
 const currentTab = ref<MenuTab>();
 const currentMenuKey = ref<string>();
 const theme = computed(() => (isDark.value ? darkTheme : null));
@@ -69,6 +67,7 @@ const MenuVNode: FunctionalComponent<{ menu: MenuOption[] }> = props => {
     return createVNode(NMenu, {
         value: currentMenuKey.value,
         'onUpdate:value': (key: string) => {
+            if (currentMenuKey.value === key) return;
             currentMenuKey.value = key;
             router.push(`/${siteLang.value}/${key}`);
         },
@@ -77,37 +76,32 @@ const MenuVNode: FunctionalComponent<{ menu: MenuOption[] }> = props => {
     });
 };
 const handleShowNavMenu = () => {
-    const allMenu = [
-        {
-            type: 'group',
-            label: '文档',
-            key: 'docs',
-            children: menusMap.docs[siteLang.value]
+    const { show, hide } = McPopup<{ menu: MenuOption[] }, { 'update:value': (key: string) => void }>(MenuVNode, {
+        props: {
+            menu: [
+                {
+                    type: 'group',
+                    label: '文档',
+                    key: 'docs',
+                    children: menusMap.docs[siteLang.value]
+                },
+                {
+                    type: 'group',
+                    label: '组件',
+                    key: 'components',
+                    children: menusMap.components[siteLang.value]
+                },
+                {
+                    type: 'group',
+                    label: '开发指南',
+                    key: 'develop',
+                    children: menusMap.develop[siteLang.value]
+                }
+            ]
         },
-        {
-            type: 'group',
-            label: '组件',
-            key: 'components',
-            children: menusMap.components[siteLang.value]
-        },
-        {
-            type: 'group',
-            label: '开发指南',
-            key: 'develop',
-            children: menusMap.develop[siteLang.value]
-        }
-    ];
-    const { show } = McPopup<{ menu: MenuOption[] }, { 'update:value': (key: string) => void }>(MenuVNode, {
-        props: { menu: allMenu },
         on: {
-            'update:value': key => {
-                watchOnce(
-                    () => route.meta,
-                    meta => {
-                        const { tab } = meta as RouteMetaData;
-                        currentTab.value = tab;
-                    }
-                );
+            'update:value': () => {
+                hide();
             }
         }
     });
@@ -118,22 +112,19 @@ const handleShowNavMenu = () => {
         bodyStyle: { padding: '0px' }
     });
 };
-const handleUpdateTab = (tab: MenuTab) => {
-    router.push(routesMap[tab][siteLang.value][0].path);
-    currentMenuKey.value = menu.value[0].key! as string;
-};
-const updateMenuTab = (tab: MenuTab, route: string) => {
-    currentTab.value = tab;
-    currentMenuKey.value = `${tab}/${route}`;
+const handleTabClick = (tab: MenuTab) => {
+    if (currentTab.value === tab) return;
+    // 等待 currentTab 同步更新后...
+    nextTick(() => {
+        router.push(routesMap[tab][siteLang.value][0].path);
+        currentMenuKey.value = menu.value[0].key! as string;
+    });
 };
 
-onRouterReady((router, { meta }) => {
-    const { tab, route } = meta as RouteMetaData;
-    updateMenuTab(tab, route);
-});
-onRoutePathChange((path, { meta }) => {
+onRouteChange('meta', ({ meta }) => {
     const { title, tab, route } = meta as RouteMetaData;
-    updateMenuTab(tab, route);
+    currentTab.value = tab;
+    currentMenuKey.value = `${tab}/${route}`;
     useTitle(`Meetcode UI - ${title}`);
 });
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <McTabs @tab:click="handleTabClick" @tab:switch="handleSwitchTab">
+    <McTabs @tab-click="handleTabClick" @tab-switch="handleSwitchTab">
         <McTabPane name="tab1" tab-label="Tab 1">1</McTabPane>
         <McTabPane name="tab2" tab-label="Tab 2">2</McTabPane>
         <McTabPane name="tab3" tab-label="Tab 3">3</McTabPane>
