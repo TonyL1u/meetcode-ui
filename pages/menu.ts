@@ -16,7 +16,6 @@ type RoutesMap = MapType<Route[]>;
 type MenusMap = MapType<MenuOption[]>;
 interface Route {
     path: string;
-    name: string;
     component: Component;
     meta: RouteMetaData;
 }
@@ -44,7 +43,6 @@ function createRoutes(tab: MenuTab, lang: RouteLang, matcher?: RegExp): Route[] 
 
         return {
             path: `/${lang}/${tab}/${route}`,
-            name: '',
             component: module,
             meta: { title, tab, route }
         };

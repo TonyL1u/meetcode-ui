@@ -1,8 +1,8 @@
 <template>
     <NConfigProvider :theme="theme" abstract>
-        <NLayout position="absolute">
-            <NLayoutHeader class="header" bordered style="height: 64px">
-                <Header v-if="currentTab">
+        <NLayout v-if="currentMenuKey && currentTab" position="absolute">
+            <NLayoutHeader class="header" bordered style="height: 45px">
+                <Header>
                     <McIcon class="nav-menu-trigger" :size="24" @click="handleShowNavMenu">
                         <IconMenu />
                     </McIcon>
@@ -14,18 +14,16 @@
                     </McTabs>
                 </Header>
             </NLayoutHeader>
-            <NLayout position="absolute" style="top: 64px" has-sider>
+            <NLayout position="absolute" style="top: 45px" has-sider>
                 <NLayoutSider class="sider-menu" bordered :collapsed-width="0" :width="300" collapse-mode="transform" show-trigger="bar">
-                    <MenuVNode v-if="currentMenuKey" :menu="menu" />
+                    <MenuVNode :menu="menu" />
                 </NLayoutSider>
                 <NLayoutContent class="main-content">
                     <NLayout has-sider sider-placement="right">
                         <NLayoutContent>
                             <div class="mc-flex mc-flex-col mc-justify-between mc-w-full mc-h-full">
                                 <router-view :class="siteTheme" />
-                                <Suspense>
-                                    <!-- <PagerNavigator /> -->
-                                </Suspense>
+                                <PagerNavigator :menu="menu" :tab="currentTab" :current-key="currentMenuKey" />
                             </div>
                         </NLayoutContent>
                         <NLayoutSider class="sider-navigator" :width="164" content-style="padding-right: 24px">
@@ -48,7 +46,7 @@ import { useTitle } from '@vueuse/core';
 import { useRouterEventHook } from './utils/useRouterEventHook';
 import Header from './home/Header.vue';
 import Navigator from './home/Navigator.vue';
-// import PagerNavigator from './home/PagerNavigator.vue';
+import PagerNavigator from './home/PagerNavigator.vue';
 import { menusMap, routesMap } from './menu';
 import type { FunctionalComponent } from 'vue';
 import type { MenuTab, RouteMetaData } from './menu';
@@ -186,6 +184,51 @@ body {
     }
 }
 
+.my {
+    &::before {
+        content: '';
+        width: 70vmax;
+        height: 70vmax;
+        position: absolute;
+        background: rgba(0, 0, 0, 0.07);
+        left: -20vmin;
+        top: -20vmin;
+        animation: morph 15s linear infinite alternate, spin 20s linear infinite;
+        z-index: 1;
+        will-change: border-radius, transform;
+        transform-origin: 55% 55%;
+        pointer-events: none;
+    }
+
+    &::after {
+        content: '';
+        width: 70vmin;
+        height: 70vmin;
+        position: absolute;
+        background: rgba(0, 0, 0, 0.07);
+        left: auto;
+        right: -10vmin;
+        top: auto;
+        bottom: 0;
+        animation: morph 10s linear infinite alternate, spin 26s linear infinite reverse;
+        transform-origin: 20% 20%;
+    }
+}
+
+@keyframes morph {
+    0% {
+        border-radius: 40% 60% 60% 40% / 70% 30% 70% 30%;
+    }
+    100% {
+        border-radius: 40% 60%;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(1turn);
+    }
+}
 @media screen and (max-width: 1080px) {
     #app .header {
         .nav-menu-trigger {

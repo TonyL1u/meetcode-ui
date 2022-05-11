@@ -1,12 +1,21 @@
-import { defineComponent, toRefs, computed, createVNode } from 'vue';
-import { flattenWithOptions } from '../_utils_';
+import { defineComponent, toRefs, computed, createVNode, onMounted } from 'vue';
+import { flattenWithOptions, useThemeRegister } from '../_utils_';
 import { spaceProps } from './interface';
+import { mainCssr } from './styles';
 import * as CSS from 'csstype';
 
 export default defineComponent({
     name: 'Space',
     props: spaceProps,
     setup(props, { slots }) {
+        // theme register
+        onMounted(() => {
+            useThemeRegister({
+                key: 'McSpace',
+                main: mainCssr
+            });
+        });
+
         const { vertical, gap, itemStyle, justify } = toRefs(props);
         const cssVars = computed<CSS.Properties>(() => {
             return {

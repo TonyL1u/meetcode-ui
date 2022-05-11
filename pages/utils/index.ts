@@ -1,9 +1,7 @@
 import { watch } from 'vue';
-import { watchOnce, createEventHook } from '@vueuse/core';
+import { watchOnce } from '@vueuse/core';
 import { useRouter, useRoute } from 'vue-router';
 import type { Router, RouteLocationNormalizedLoaded } from 'vue-router';
-
-export * from './usePageSwitch';
 
 export function onRouterReady(): Promise<{ router: Router; route: RouteLocationNormalizedLoaded }>;
 export function onRouterReady(cb: (router: Router, route: RouteLocationNormalizedLoaded) => void): void;

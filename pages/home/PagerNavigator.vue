@@ -1,32 +1,62 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
-import { McIcon, McButton } from 'meetcode-ui';
+import { computed, toRefs } from 'vue';
+import { useRouter } from 'vue-router';
+import { McIcon, useI18nController } from 'meetcode-ui';
 import { ChevronBackSharp as IconPrev, ChevronForwardSharp as IconNext } from '@vicons/ionicons5';
-import { usePageSwitch } from '../utils';
+import { componentNameMap } from '../site.config';
+import type { MenuTab } from '../menu';
+import type { MenuOption } from 'naive-ui';
 
-const { switchNext, switchPrev, next, prev, current } = await usePageSwitch();
-const showPrev = computed(() => !!(prev.value?.name && prev.value.path !== '/404'));
-const showNext = computed(() => !!(next.value?.name && next.value.path !== '/404'));
-const showPager = computed(() => !!(current.value?.name && current.value.path !== '/404' && (showPrev.value || showNext.value)));
+const props = defineProps<{ menu: MenuOption[]; currentKey: string; tab: MenuTab }>();
+const { menu, currentKey, tab } = toRefs(props);
+const router = useRouter();
+const { current: siteLang } = useI18nController();
+const currentIndex = computed(() => menu.value.findIndex(item => item.key === currentKey.value));
+const next = computed(() => menu.value[currentIndex.value + 1] ?? null);
+const prev = computed(() => menu.value[currentIndex.value - 1] ?? null);
+const switchNext = () => {
+    if (next.value) router.push(`/${siteLang.value}/${next.value.key}`);
+};
+const switchPrev = () => {
+    if (prev.value) router.push(`/${siteLang.value}/${prev.value.key}`);
+};
 </script>
 
 <template>
-    <div v-if="showPager" class="mc-px-2 mc-pt-3 mc-pb-7 mc-mx-auto mc-max-w-[768px] mc-flex mc-justify-between mc-w-full mc-box-border" :style="{ justifyContent: !showPrev ? 'flex-end' : !showNext ? 'flex-start' : '' }">
-        <McButton v-if="showPrev" render="link" @click="switchPrev">
-            <template #icon>
-                <McIcon :size="14">
+    <div v-if="next || prev" class="mc-px-6 mc-py-7 mc-mx-auto mc-max-w-[768px] mc-flex mc-justify-between mc-w-full mc-box-border" :style="{ justifyContent: !prev ? 'flex-end' : !next ? 'flex-start' : '' }">
+        <div v-if="prev" class="switcher prev" @click="switchPrev">
+            <div class="mc-flex mc-items-center mc-text-xs">
+                <McIcon :size="12">
                     <IconPrev />
                 </McIcon>
-            </template>
-            {{ prev!.name }}
-        </McButton>
-        <McButton v-if="showNext" render="link" icon-right @click="switchNext">
-            <template #icon>
-                <McIcon :size="14">
+                Previous
+            </div>
+            <span class="mc-text-base mc-text-green-500">{{ tab === 'components' ? `${prev.label} ${componentNameMap[prev.label.toLowerCase()]}` : prev.label }}</span>
+        </div>
+        <div v-if="next" class="switcher next" @click="switchNext">
+            <div class="mc-flex mc-items-center mc-text-xs">
+                Next
+                <McIcon :size="12">
                     <IconNext />
                 </McIcon>
-            </template>
-            {{ next!.name }}
-        </McButton>
+            </div>
+            <span class="mc-text-base mc-text-green-500">{{ tab === 'components' ? `${componentNameMap[next.label.toLowerCase()]} ${next.label}` : next.label }}</span>
+        </div>
     </div>
 </template>
+
+<style lang="scss" scoped>
+.switcher {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+
+    &.prev {
+        align-items: flex-start;
+    }
+
+    &.next {
+        align-items: flex-end;
+    }
+}
+</style>
