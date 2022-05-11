@@ -1,9 +1,11 @@
 import { defineComponent, onMounted } from 'vue';
 import { useThemeRegister } from '../_utils_';
+import { layoutSiderIKey } from './interface';
 import { mainCssr } from './styles';
 
 export default defineComponent({
-    name: 'NAME',
+    name: 'LayoutSider',
+    iKey: layoutSiderIKey,
     setup() {
         // theme register
         onMounted(() => {

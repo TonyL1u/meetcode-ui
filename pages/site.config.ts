@@ -4,6 +4,7 @@ export const componentNameMap: Record<string, string> = {
     drawer: '抽屉',
     grid: '网格布局',
     icon: '图标',
+    layout: '布局',
     loading: '加载',
     message: '信息',
     modal: '模态框',

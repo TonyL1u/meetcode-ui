@@ -22,11 +22,6 @@ function component() {
     echo "export { default as Mc$file } from './$file';" > index.ts
 }
 
-function doc() {
-    cd ../../pages/docs
-    echo "<script setup></script>" > $file.md
-}
-
 cd src
 
 while read -p "请输入要新增的组件名：" NAME
@@ -38,7 +33,6 @@ do
     else
         firstLetterUpper $NAME
         component $NAME
-        doc $NAME
         echo "模版创建成功！"
         exit
     fi

@@ -14,3 +14,5 @@ export * from './space';
 export * from './modal';
 export * from './drawer';
 export * from './popup';
+export * from './layout';
+// export * from './split';

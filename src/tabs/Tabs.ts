@@ -176,9 +176,7 @@ export default defineComponent({
                     class: ['mc-tabs__header-scroll-content', headerClass?.value],
                     style: headerStyle?.value
                 },
-                maybeTabPanes.map(maybeTabPane => {
-                    return getTabVNode(maybeTabPane);
-                })
+                maybeTabPanes.map(maybeTabPane => getTabVNode(maybeTabPane))
             );
         });
 

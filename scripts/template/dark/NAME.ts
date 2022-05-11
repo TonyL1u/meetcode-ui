@@ -3,6 +3,7 @@ import { useThemeRegister } from '../_utils_';
 import { mainCssr, lightCssr, darkCssr } from './styles';
 
 export default defineComponent({
+    name: 'NAME',
     setup() {
         // theme register
         onMounted(() => {
