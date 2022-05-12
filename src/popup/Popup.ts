@@ -1,4 +1,4 @@
-import { render, createVNode, ref, Component, FunctionalComponent, isRef, defineComponent, VNodeChild } from 'vue';
+import { render, createVNode, ref, Component, FunctionalComponent, isRef, defineComponent } from 'vue';
 import { PopupSourceOptions, PopupInstance, PopupModalConfig, PopupDrawerConfig, PopupType } from './interface';
 import { McModal } from '../modal';
 import { McDrawer } from '../drawer';

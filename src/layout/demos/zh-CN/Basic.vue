@@ -13,8 +13,8 @@
     <McLayout style="margin-top: 12px">
         <McLayoutHeader />
         <McLayout>
-            <McLayoutSider />
             <McLayoutContent />
+            <McLayoutSider />
         </McLayout>
         <McLayoutFooter />
     </McLayout>

@@ -1,39 +1,4 @@
 <template>
-    <!-- <NConfigProvider :theme="theme" abstract>
-        <NLayout v-if="currentMenuKey && currentTab" position="absolute">
-            <NLayoutHeader class="header" bordered style="height: 45px">
-                <Header>
-                    <McIcon class="nav-menu-trigger" :size="24" @click="handleShowNavMenu">
-                        <IconMenu />
-                    </McIcon>
-                    <div class="title mc-text-2xl mc-leading-6">Meetcode UI</div>
-                    <McTabs v-model:value="currentTab" :show-line="false" class="header-tabs mc-absolute mc-left-[276px]" :content-style="{ padding: 0 }" @tab-click="handleTabClick">
-                        <McTab name="docs">{{ siteLang === 'zh-CN' ? '文档' : 'Docs' }}</McTab>
-                        <McTab name="components">{{ siteLang === 'zh-CN' ? '组件' : 'Components' }}</McTab>
-                        <McTab name="develop">{{ siteLang === 'zh-CN' ? '开发指南' : 'Develop' }}</McTab>
-                    </McTabs>
-                </Header>
-            </NLayoutHeader>
-            <NLayout position="absolute" style="top: 45px" has-sider>
-                <NLayoutSider class="sider-menu" bordered :collapsed-width="0" :width="300" collapse-mode="transform" show-trigger="bar">
-                    <MenuVNode :menu="menu" />
-                </NLayoutSider>
-                <NLayoutContent class="main-content">
-                    <NLayout has-sider sider-placement="right">
-                        <NLayoutContent>
-                            <div class="mc-flex mc-flex-col mc-justify-between mc-w-full mc-h-full">
-                                <router-view :class="siteTheme" />
-                                <PagerNavigator :menu="menu" :tab="currentTab" :current-key="currentMenuKey" />
-                            </div>
-                        </NLayoutContent>
-                        <NLayoutSider class="sider-navigator" :width="164" content-style="padding-right: 24px">
-                            <Navigator />
-                        </NLayoutSider>
-                    </NLayout>
-                </NLayoutContent>
-            </NLayout>
-        </NLayout>
-    </NConfigProvider> -->
     <McLayout v-if="currentMenuKey && currentTab" style="height: 100vh">
         <McLayoutHeader>
             <Header class="header">
@@ -52,14 +17,14 @@
             <McLayoutSider class="menu-sider" style="width: 300px">
                 <MenuVNode :menu="menu" />
             </McLayoutSider>
-            <McLayout>
-                <McLayoutContent>
-                    <div class="mc-flex mc-flex-col mc-justify-between mc-w-full mc-h-full">
+            <McLayout style="position: relative">
+                <McLayoutContent style="padding-right: 164px; overflow: auto">
+                    <div class="mc-flex mc-flex-col mc-justify-between mc-w-full mc-min-h-full">
                         <router-view :class="siteTheme" />
                         <PagerNavigator :menu="menu" :tab="currentTab" :current-key="currentMenuKey" />
                     </div>
                 </McLayoutContent>
-                <McLayoutSider style="width: 164px">
+                <McLayoutSider class="sider-navigator" style="width: 164px; position: absolute; right: 0; height: 100%">
                     <Navigator />
                 </McLayoutSider>
             </McLayout>
@@ -186,7 +151,7 @@ body {
 
     .markdown-body {
         width: 100%;
-        max-width: 1024px;
+        max-width: 768px;
         margin: 0 auto;
         padding: 0 24px;
         box-sizing: border-box;

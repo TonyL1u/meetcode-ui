@@ -3,7 +3,7 @@ export { createHoverColor, createActiveColor, createDisabledColor, useColorFacto
 export { createKey } from './createKey';
 export { c } from './cssr';
 export { flatten, flattenWithOptions } from './flatten';
-export { getSlotFirstVNode } from './getSlotFirstVNode';
+export { getSlotFirstVNode, getSlotVNodeIndex } from './getSlotFirstVNode';
 export { kebabCaseEscape } from './kebabCaseEscape';
 export { propsMergeSlots } from './propsMergeSlots';
 export { reactiveOmit } from './reactiveOmit';

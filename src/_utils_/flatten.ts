@@ -15,7 +15,7 @@ export interface FlattenOptions {
  * @param result
  * @returns
  */
-export function flatten<T = Record<string, unknown>>(vNodes?: Array<SpecificVNode<T>>, identificationKey?: Symbol | Symbol[], mode = false, result: Array<SpecificVNode<T>> = []) {
+export function flatten<T = Record<string, unknown>>(vNodes?: SpecificVNode<T>[], identificationKey?: Symbol | Symbol[], mode = false, result: SpecificVNode<T>[] = []) {
     if (!vNodes) return result;
     const filterVNodes = identificationKey
         ? vNodes.filter(vNode => {
@@ -27,7 +27,7 @@ export function flatten<T = Record<string, unknown>>(vNodes?: Array<SpecificVNod
 
     for (const vNode of filterVNodes) {
         if (vNode.type === Fragment) {
-            flatten(vNode.children as Array<SpecificVNode<T>>, identificationKey, mode, result);
+            flatten(vNode.children as SpecificVNode<T>[], identificationKey, mode, result);
         } else if (vNode.type !== Comment) {
             result.push(vNode);
         }
@@ -40,5 +40,5 @@ export function flattenWithOptions<T = Record<string, unknown>>(options: Flatten
     const { slots, name, key } = options;
     if (!slots?.[name || 'default']) return result;
 
-    return flatten<T>(slots[name || 'default']?.() as Array<SpecificVNode<T>>, key, mode, result);
+    return flatten<T>(slots[name || 'default']?.() as SpecificVNode<T>[], key, mode, result);
 }

@@ -6,7 +6,8 @@ export default c([
         {
             display: 'flex',
             flexDirection: 'column',
-            overflow: 'auto'
+            overflow: 'auto',
+            position: 'relative'
         },
         [
             c('&--with-sider', {
@@ -16,5 +17,6 @@ export default c([
     ),
     c('.mc-layout--with-sider > .mc-layout', { flex: 1 }),
     c('.mc-layout--with-sider > .mc-layout-content', { flex: 1 }),
-    c('.mc-layout-content, .mc-layout-sider', { overflow: 'auto' })
+    c('.mc-layout-scroll-area', { width: '100%', minHeight: '100%', overflow: 'auto', boxSizing: 'border-box' }),
+    c('.mc-layout-sider', { width: 'var(--layout-sider-width)' }, [c('&--fixed', { position: 'absolute', right: 0, height: '100%' })])
 ]);

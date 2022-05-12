@@ -1,11 +1,12 @@
-import { defineComponent, inject, createVNode, renderSlot } from 'vue';
-import { layoutHeaderIKey, layoutInjectionKey } from './interface';
+import { defineComponent, inject, createVNode, renderSlot, getCurrentInstance, CustomVNodeTypes } from 'vue';
+import { layoutHeaderIKey, layoutInjectionKey, layoutIKey } from './interface';
 
 export default defineComponent({
     name: 'LayoutHeader',
     iKey: layoutHeaderIKey,
     setup(props, { slots }) {
-        if (!inject(layoutInjectionKey, null)) {
+        const { parent } = getCurrentInstance() ?? {};
+        if (parent && (parent.type as CustomVNodeTypes).iKey !== layoutIKey) {
             throw new Error('[McLayoutHeader]: McLayoutHeader must be placed inside McLayout.');
         }
 

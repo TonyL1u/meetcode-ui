@@ -16,9 +16,21 @@
 
 :::
 
-::: demo CodePreview=Fixed
+## 使用预设
 
-### 固定
+通过布局组件的组合可以实现复杂的布局效果，但可能会手动添加写很多 css 样式。 `McLayout` 预设了几种常用布局效果，希望能帮助你少写点的代码。
 
-<Fixed />
+::: demo CodePreview=TwoCol
+
+### 两栏布局
+
+<TwoCol />
+
+:::
+
+::: demo CodePreview=ThreeCol
+
+### 三栏布局
+
+<ThreeCol />
 :::
