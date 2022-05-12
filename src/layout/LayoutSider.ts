@@ -20,7 +20,7 @@ export default defineComponent({
 
         // main logic...
         return () => {
-            return createVNode('aside', { class: 'mc-layout-sider', style: cssVars.value }, [renderSlot(slots, 'default')]);
+            return slots.default ? createVNode('aside', { class: 'mc-layout-sider', style: cssVars.value }, [renderSlot(slots, 'default')]) : null;
         };
     }
 });

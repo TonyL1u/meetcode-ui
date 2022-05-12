@@ -12,7 +12,7 @@ export default defineComponent({
 
         // main logic...
         return () => {
-            return createVNode('main', { class: 'mc-layout-content' }, [renderSlot(slots, 'default')]);
+            return slots.default ? createVNode('main', { class: 'mc-layout-content' }, [renderSlot(slots, 'default')]) : null;
         };
     }
 });

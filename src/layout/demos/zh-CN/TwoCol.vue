@@ -1,10 +1,10 @@
 <template>
-    <McLayout class="layout-preset-demo" style="height: 200px" preset="two-col">
+    <McLayout class="layout-preset-demo" style="height: 200px" preset="two-col" sider-right>
         <template #sider></template>
         <template #content></template>
     </McLayout>
 
-    <McLayout class="layout-preset-demo" style="height: 200px" preset="two-col" :content-style="{ padding: '12px' }" fixed-sider sider-right>
+    <McLayout class="layout-preset-demo" style="height: 200px" preset="two-col" :content-style="{ padding: '12px' }" fixed-sider>
         <template #sider></template>
         <template #content>
             <h2>滚动</h2>
