@@ -65,15 +65,19 @@ interface RowLayoutComponentProps {
 }
 type RowLayoutSlotName = 'header' | 'content' | 'footer';
 const BasicRowLayoutComponent: FunctionalComponent<RowLayoutComponentProps> = (props, { slots }) => {
-    const { showHeader = true, showContent = true, showFooter = true, headerStyle, contentStyle, footerStyle, headerClass, contentClass, footerClass } = props;
+    const { showHeader = true, showContent = true, showFooter = true, fixedHeader, headerStyle, contentStyle, footerStyle, headerClass, contentClass, footerClass } = props;
 
-    return createVNode(Layout, null, {
-        default: () => [
-            showHeader ? createVNode(LayoutHeader, { class: headerClass, style: headerStyle }, { default: () => renderSlot(slots, 'header') }) : null,
-            showContent ? createVNode(LayoutContent, { class: contentClass, style: contentStyle }, { default: () => renderSlot(slots, 'content') }) : null,
-            showFooter ? createVNode(LayoutFooter, { class: footerClass, style: footerStyle }, { default: () => renderSlot(slots, 'footer') }) : null
-        ]
-    });
+    return createVNode(
+        Layout,
+        { class: fixedHeader && showHeader ? 'mc-layout--header-fixed' : '' },
+        {
+            default: () => [
+                showHeader ? createVNode(LayoutHeader, { class: headerClass, style: headerStyle }, { default: () => renderSlot(slots, 'header') }) : null,
+                showContent ? createVNode(LayoutContent, { class: contentClass, style: contentStyle }, { default: () => renderSlot(slots, 'content') }) : null,
+                showFooter ? createVNode(LayoutFooter, { class: footerClass, style: footerStyle }, { default: () => renderSlot(slots, 'footer') }) : null
+            ]
+        }
+    );
 };
 // @ts-ignore
 BasicRowLayoutComponent.iKey = basicRowLayoutComponentIKey;

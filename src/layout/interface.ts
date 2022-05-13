@@ -5,6 +5,7 @@ import * as CSS from 'csstype';
 declare module 'csstype' {
     interface Properties {
         '--layout-sider-width'?: string;
+        '--layout-header-height'?: string;
     }
 }
 
@@ -50,9 +51,14 @@ export interface LayoutProps {
 export interface LayoutSiderProps {
     width?: string | number;
     bordered?: boolean;
+    collapsable?: boolean;
 }
 
 export interface LayoutHeaderProps {
+    bordered?: boolean;
+}
+
+export interface LayoutFooterProps {
     bordered?: boolean;
 }
 
@@ -179,12 +185,23 @@ export const layoutSiderProps = {
     bordered: {
         type: Boolean as PropType<LayoutSiderProps['bordered']>,
         default: false
+    },
+    collapsable: {
+        type: Boolean as PropType<LayoutSiderProps['collapsable']>,
+        default: false
     }
 };
 
 export const layoutHeaderProps = {
     bordered: {
         type: Boolean as PropType<LayoutHeaderProps['bordered']>,
+        default: false
+    }
+};
+
+export const layoutFooterProps = {
+    bordered: {
+        type: Boolean as PropType<LayoutFooterProps['bordered']>,
         default: false
     }
 };

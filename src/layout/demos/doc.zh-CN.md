@@ -1,6 +1,6 @@
 # Layout 布局
 
-通过布局组件的组合可以实现复杂的布局效果，但可能会手动添加写很多额外的代码。 `McLayout` 预设了几种常用布局效果，希望能帮助你少写点的代码。
+通过布局组件的组合可以实现复杂的布局效果，但可能会写很多额外的代码。 `McLayout` 预设了几种常用布局效果，希望能帮助你少写点的代码。
 
 ## 演示
 
@@ -18,6 +18,32 @@
 
 :::
 
+::: demo CodePreview=Border
+
+### 边框
+
+`McLayoutSider` 、 `McLayoutHeader` 和 `McLayoutFooter` 可以设置边框。
+
+<Border />
+
+:::
+
+::: demoCodePreview=HideSider
+
+### 隐藏侧边栏
+
+<HideSider />
+
+:::
+
+::: demo
+
+### 调整大小
+
+:::
+
+## 预设
+
 ::: demo CodePreview=FullLayout
 
 ### 全屏布局
@@ -25,6 +51,14 @@
 <FullLayout />
 
 :::
+
+<!-- ::: demo CodePreview=FullFixedLayout
+
+### 全屏布局-固定
+
+为保证演示效果，请在下方**在线运行**中预览。
+
+::: -->
 
 ::: demo CodePreview=TwoColumnLayout
 

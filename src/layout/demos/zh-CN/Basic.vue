@@ -2,7 +2,6 @@
     <McLayout>
         <McLayoutHeader />
         <McLayoutContent />
-        <McLayoutFooter />
     </McLayout>
 
     <McLayout style="margin-top: 12px">

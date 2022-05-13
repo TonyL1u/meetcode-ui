@@ -1,5 +1,5 @@
 import { defineComponent, toRefs, createVNode, renderSlot, getCurrentInstance, CustomVNodeTypes } from 'vue';
-import { layoutHeaderIKey, layoutHeaderProps, layoutIKey } from '../interface';
+import { layoutHeaderIKey, layoutIKey, layoutHeaderProps } from '../interface';
 
 export default defineComponent({
     name: 'LayoutHeader',
