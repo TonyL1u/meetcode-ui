@@ -47,9 +47,9 @@ When the return value is `true`, the drawer will be prevented from closing. Supp
 |   shortcut-key    |                 `string`                 | `'Escape'`  |     抽屉关闭快捷键     |
 | close-on-shortcut |                `boolean`                 |   `true`    | 是否允许快捷键关闭抽屉 |
 |     closable      |                `boolean`                 |   `true`    | 是否显示右上角关闭按钮 |
-|   header-style    |     `string \| CSSStyleDeclaration`      | `undefined` |      header 样式       |
-|    body-style     |     `string \| CSSStyleDeclaration`      | `undefined` |       body 样式        |
-|    mask-style     |     `string \| CSSStyleDeclaration`      | `undefined` |       遮罩层样式       |
+|   header-style    |        `string \| CSSProperties`         | `undefined` |      header 样式       |
+|    body-style     |        `string \| CSSProperties`         | `undefined` |       body 样式        |
+|    mask-style     |        `string \| CSSProperties`         | `undefined` |       遮罩层样式       |
 |   header-class    |            `string \| Array`             | `undefined` |      header 类名       |
 |    body-class     |            `string \| Array`             | `undefined` |       body 类名        |
 |       title       |      `string \| (() => VNodeChild)`      | `undefined` |          标题          |

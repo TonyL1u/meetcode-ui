@@ -88,30 +88,30 @@
 
 ## Props
 
-|       名称        |              类型               |   默认值    |                 说明                 |
-| :---------------: | :-----------------------------: | :---------: | :----------------------------------: |
-|   (v-model)show   |            `boolean`            |   `false`   |            是否显示 Modal            |
-|       width       |       `number \| string`        |    `600`    |              模态框宽度              |
-|      height       |       `number \| string`        | `'initial'` |              模态框高度              |
-| wrapper-closable  |            `boolean`            |   `true`    |         点击遮罩是否触发事件         |
-|   shortcut-key    |            `string`             | `'Escape'`  |           模态框关闭快捷键           |
-| close-on-shortcut |            `boolean`            |   `true`    |       是否允许快捷键关闭模态框       |
-|     closable      |            `boolean`            |   `true`    |        是否显示右上角关闭按钮        |
-|   header-style    | `string \| CSSStyleDeclaration` | `undefined` |             header 样式              |
-|    body-style     | `string \| CSSStyleDeclaration` | `undefined` |              body 样式               |
-|   footer-style    | `string \| CSSStyleDeclaration` | `undefined` |             footer 样式              |
-|    mask-style     | `string \| CSSStyleDeclaration` | `undefined` |              遮罩层样式              |
-|   header-class    |        `string \| Array`        | `undefined` |             header 类名              |
-|    body-class     |        `string \| Array`        | `undefined` |              body 类名               |
-|   footer-class    |        `string \| Array`        | `undefined` |             footer 类名              |
-|       title       | `string \| (() => VNodeChild)`  | `undefined` |                 标题                 |
-|    show-header    |            `boolean`            |   `true`    |           是否显示 header            |
-|    show-footer    |            `boolean`            |   `true`    |           是否显示 footer            |
-|    cancel-text    |        `string \| null`         |  `'取消'`   | 取消按钮文字，设置为 `null` 隐藏按钮 |
-|   confirm-text    |        `string \| null`         |  `'确定'`   | 确定按钮文字，设置为 `null` 隐藏按钮 |
-|       pure        |            `boolean`            |   `false`   |            清除模态框样式            |
-|     position      |            `object`             | `undefined` |            模态框出现位置            |
-|     animation     |      `'scale' \| 'slide'`       |  `'scale'`  |            模态框出现动画            |
+|       名称        |              类型              |   默认值    |                 说明                 |
+| :---------------: | :----------------------------: | :---------: | :----------------------------------: |
+|   (v-model)show   |           `boolean`            |   `false`   |            是否显示 Modal            |
+|       width       |       `number \| string`       |    `600`    |              模态框宽度              |
+|      height       |       `number \| string`       | `'initial'` |              模态框高度              |
+| wrapper-closable  |           `boolean`            |   `true`    |         点击遮罩是否触发事件         |
+|   shortcut-key    |            `string`            | `'Escape'`  |           模态框关闭快捷键           |
+| close-on-shortcut |           `boolean`            |   `true`    |       是否允许快捷键关闭模态框       |
+|     closable      |           `boolean`            |   `true`    |        是否显示右上角关闭按钮        |
+|   header-style    |   `string \| CSSProperties`    | `undefined` |             header 样式              |
+|    body-style     |   `string \| CSSProperties`    | `undefined` |              body 样式               |
+|   footer-style    |   `string \| CSSProperties`    | `undefined` |             footer 样式              |
+|    mask-style     |   `string \| CSSProperties`    | `undefined` |              遮罩层样式              |
+|   header-class    |       `string \| Array`        | `undefined` |             header 类名              |
+|    body-class     |       `string \| Array`        | `undefined` |              body 类名               |
+|   footer-class    |       `string \| Array`        | `undefined` |             footer 类名              |
+|       title       | `string \| (() => VNodeChild)` | `undefined` |                 标题                 |
+|    show-header    |           `boolean`            |   `true`    |           是否显示 header            |
+|    show-footer    |           `boolean`            |   `true`    |           是否显示 footer            |
+|    cancel-text    |        `string \| null`        |  `'取消'`   | 取消按钮文字，设置为 `null` 隐藏按钮 |
+|   confirm-text    |        `string \| null`        |  `'确定'`   | 确定按钮文字，设置为 `null` 隐藏按钮 |
+|       pure        |           `boolean`            |   `false`   |            清除模态框样式            |
+|     position      |            `object`            | `undefined` |            模态框出现位置            |
+|     animation     |      `'scale' \| 'slide'`      |  `'scale'`  |            模态框出现动画            |
 
 ## Event
 

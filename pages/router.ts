@@ -31,7 +31,7 @@ const router = createRouter({
 
 router.afterEach((to, from) => {
     // scroll to top
-    const scrollContent = document.querySelector('.main-content > .n-layout-scroll-container');
+    const scrollContent = document.querySelector('.main-content');
     if (scrollContent) scrollContent.scrollTop = 0;
 });
 

@@ -1,14 +1,9 @@
-import { defineComponent, onMounted, toRefs, createVNode, resolveComponent, CustomVNodeTypes, renderSlot, FunctionalComponent } from 'vue';
-import { getSlotFirstVNode, getSlotVNodeIndex, flatten, useThemeRegister } from '../_utils_';
-import { layoutProps, layoutIKey, layoutHeaderIKey, layoutContentIKey, layoutFooterIKey, layoutSiderIKey } from './interface';
-import LayoutHeader from './LayoutHeader';
-import LayoutContent from './LayoutContent';
-import LayoutFooter from './LayoutFooter';
-import LayoutSider from './LayoutSider';
-import { mainCssr } from './styles';
+import { defineComponent, onMounted, toRefs, createVNode, resolveComponent, CustomVNodeTypes, renderSlot } from 'vue';
+import { getSlotFirstVNode, getSlotVNodeIndex, useThemeRegister } from '../_utils_';
+import { layoutProps, layoutIKey, layoutHeaderIKey, layoutContentIKey, layoutFooterIKey, layoutSiderIKey, basicColumnLayoutComponentIKey, basicRowLayoutComponentIKey } from './interface';
+import { createColumnLayout, createRowLayout } from './preset';
+import { mainCssr, lightCssr, darkCssr } from './styles';
 
-const twoColLayoutIKey = Symbol('twoColLayout');
-const threeColLayoutIKey = Symbol('threeColLayout');
 export default defineComponent({
     name: 'Layout',
     iKey: layoutIKey,
@@ -18,107 +13,172 @@ export default defineComponent({
         onMounted(() => {
             useThemeRegister({
                 key: 'McLayout',
-                main: mainCssr
+                main: mainCssr,
+                light: lightCssr,
+                dark: darkCssr
             });
         });
-        const { preset, fixedHeader, fixedSider, fixedFooter, siderRight, siderWidth, headerStyle, contentStyle, footerStyle } = toRefs(props);
+        const {
+            preset,
+            siderRight,
+            siderWidth,
+            leftSiderWidth,
+            rightSiderWidth,
+            fixedSider,
+            fixedLeftSider,
+            fixedRightSider,
+            fixedHeader,
+            fixedFooter,
+            siderStyle,
+            leftSiderStyle,
+            rightSiderStyle,
+            siderClass,
+            leftSiderClass,
+            rightSiderClass,
+            headerStyle,
+            contentStyle,
+            footerStyle,
+            headerClass,
+            contentClass,
+            footerClass,
+            showSider,
+            showLeftSider,
+            showRightSider,
+            showHeader,
+            showContent,
+            showFooter
+        } = toRefs(props);
         const McLayout = resolveComponent('McLayout', true);
-
-        const TwoColLayout: FunctionalComponent<{ siderPlacement: 'left' | 'right'; fixed: boolean }> = (props, { slots: internalSlots }) => {
-            const { siderPlacement, fixed } = props;
-
-            const children = [
-                createVNode(
-                    LayoutSider,
-                    { class: { 'mc-layout-sider--fixed': siderPlacement === 'right' && fixed }, width: siderWidth.value },
-                    {
-                        default: internalSlots.sider ? () => renderSlot(internalSlots, 'sider') : null
-                    }
-                ),
-                createVNode(
-                    LayoutContent,
-                    { style: { paddingRight: siderPlacement === 'right' && fixed ? siderWidth.value + 'px' : '', overflow: fixed && internalSlots.sider ? 'auto' : '' } },
-                    {
-                        default: internalSlots.content ? () => (fixed ? createVNode('div', { class: 'mc-layout-scroll-area', style: contentStyle.value }, [renderSlot(slots, 'content')]) : renderSlot(internalSlots, 'content')) : null
-                    }
-                )
-            ];
-
-            siderPlacement === 'right' && children.reverse();
-            return createVNode(McLayout, null, { default: () => children });
-        };
-        // @ts-ignore
-        TwoColLayout.iKey = twoColLayoutIKey;
-
-        const ThreeColLayout: FunctionalComponent<{ fixed: boolean }> = (props, { slots: internalSlots }) => {
-            const { fixed } = props;
-
-            return createVNode(McLayout, null, {
-                default: () => [
-                    createVNode(LayoutSider, null, {
-                        default: internalSlots['left-sider'] ? () => renderSlot(internalSlots, 'left-sider') : null
-                    }),
-                    createVNode(
-                        TwoColLayout,
-                        { siderPlacement: 'right', fixed },
-                        {
-                            sider: internalSlots['right-sider'] ? () => renderSlot(internalSlots, 'right-sider') : null,
-                            content: internalSlots.content ? () => renderSlot(internalSlots, 'content') : null
-                        }
-                    )
-                ]
-            });
-        };
-
-        const FullLayout: FunctionalComponent<{ fixedHeader: boolean; fixedFooter: boolean }> = (props, { slots: internalSlots }) => {
-            const { fixedHeader, fixedFooter } = props;
-
-            return createVNode(McLayout, { style: headerStyle.value }, [
-                createVNode(LayoutHeader, null, {
-                    default: () => renderSlot(slots, 'header')
-                }),
-                createVNode(LayoutContent, null, {
-                    default: () => (fixedHeader || fixedFooter ? createVNode('div', { class: 'mc-layout-scroll-area', style: contentStyle.value }, [renderSlot(slots, 'content')]) : renderSlot(internalSlots, 'content'))
-                }),
-                createVNode(
-                    LayoutFooter,
-                    { style: footerStyle.value },
-                    {
-                        default: () => renderSlot(slots, 'footer')
-                    }
-                )
-            ]);
-        };
 
         // main logic...
         return () => {
-            if (preset.value === 'two-col') {
-                return createVNode(
-                    TwoColLayout,
-                    { siderPlacement: siderRight.value ? 'right' : 'left', fixed: fixedSider.value },
+            if (preset.value === 'two-column') {
+                return createColumnLayout(
+                    {
+                        siderPlacement: siderRight.value ? 'right' : 'left',
+                        fixed: fixedSider.value,
+                        siderWidth: siderWidth.value,
+                        siderStyle: siderStyle.value,
+                        siderClass: siderClass.value,
+                        contentStyle: contentStyle.value,
+                        contentClass: contentClass.value,
+                        showSider: showSider.value,
+                        showContent: showContent.value
+                    },
                     {
                         sider: () => renderSlot(slots, 'sider'),
                         content: () => renderSlot(slots, 'content')
                     }
                 );
-            } else if (preset.value === 'three-col') {
-                return createVNode(
-                    ThreeColLayout,
-                    { fixed: fixedSider.value },
+            } else if (preset.value === 'three-column') {
+                return createColumnLayout(
                     {
-                        'left-sider': slots['left-sider'] ? () => renderSlot(slots, 'left-sider') : null,
-                        content: slots['content'] ? () => renderSlot(slots, 'content') : null,
-                        'right-sider': slots['right-sider'] ? () => renderSlot(slots, 'right-sider') : null
+                        siderPlacement: 'left',
+                        fixed: fixedLeftSider.value,
+                        siderWidth: leftSiderWidth.value,
+                        siderStyle: leftSiderStyle.value,
+                        siderClass: leftSiderClass.value,
+                        contentStyle: contentStyle.value,
+                        contentClass: contentClass.value,
+                        showSider: showLeftSider.value,
+                        showContent: showContent.value
+                    },
+                    {
+                        sider: () => renderSlot(slots, 'left-sider'),
+                        content: () =>
+                            createColumnLayout(
+                                {
+                                    siderPlacement: 'right',
+                                    fixed: fixedRightSider.value,
+                                    siderWidth: rightSiderWidth.value,
+                                    siderStyle: rightSiderStyle.value,
+                                    siderClass: rightSiderClass.value,
+                                    contentStyle: contentStyle.value,
+                                    contentClass: contentClass.value,
+                                    showSider: showRightSider.value,
+                                    showContent: showContent.value
+                                },
+                                {
+                                    sider: () => renderSlot(slots, 'right-sider'),
+                                    content: () => renderSlot(slots, 'content')
+                                }
+                            )
                     }
                 );
             } else if (preset.value === 'full') {
-                return createVNode(
-                    FullLayout,
-                    { fixedHeader: fixedHeader.value, fixedFooter: fixedFooter.value },
+                return createRowLayout(
                     {
-                        header: slots.header ? () => renderSlot(slots, 'header') : null,
-                        content: slots.content ? () => renderSlot(slots, 'content') : null,
-                        footer: slots.footer ? () => renderSlot(slots, 'footer') : null
+                        headerStyle: headerStyle.value,
+                        contentStyle: contentStyle.value,
+                        footerStyle: footerStyle.value,
+                        headerClass: headerClass.value,
+                        contentClass: contentClass.value,
+                        footerClass: footerClass.value,
+                        fixedHeader: fixedHeader.value,
+                        fixedFooter: fixedFooter.value,
+                        showHeader: showHeader.value,
+                        showContent: showContent.value,
+                        showFooter: showFooter.value
+                    },
+                    {
+                        header: () => renderSlot(slots, 'header'),
+                        content: () => renderSlot(slots, 'content'),
+                        footer: () => renderSlot(slots, 'footer')
+                    }
+                );
+            } else if (preset.value === 'holy') {
+                return createRowLayout(
+                    {
+                        headerStyle: headerStyle.value,
+                        contentStyle: contentStyle.value,
+                        footerStyle: footerStyle.value,
+                        headerClass: headerClass.value,
+                        contentClass: contentClass.value,
+                        footerClass: footerClass.value,
+                        fixedHeader: fixedHeader.value,
+                        fixedFooter: fixedFooter.value,
+                        showHeader: showHeader.value,
+                        showContent: showContent.value,
+                        showFooter: showFooter.value
+                    },
+                    {
+                        header: () => renderSlot(slots, 'header'),
+                        content: () =>
+                            createColumnLayout(
+                                {
+                                    siderPlacement: 'left',
+                                    fixed: fixedLeftSider.value,
+                                    siderWidth: leftSiderWidth.value,
+                                    siderStyle: leftSiderStyle.value,
+                                    siderClass: leftSiderClass.value,
+                                    contentStyle: contentStyle.value,
+                                    contentClass: contentClass.value,
+                                    showSider: showLeftSider.value,
+                                    showContent: showContent.value
+                                },
+                                {
+                                    sider: () => renderSlot(slots, 'left-sider'),
+                                    content: () =>
+                                        createColumnLayout(
+                                            {
+                                                siderPlacement: 'right',
+                                                fixed: fixedRightSider.value,
+                                                siderWidth: rightSiderWidth.value,
+                                                siderStyle: rightSiderStyle.value,
+                                                siderClass: rightSiderClass.value,
+                                                contentStyle: contentStyle.value,
+                                                contentClass: contentClass.value,
+                                                showSider: showRightSider.value,
+                                                showContent: showContent.value
+                                            },
+                                            {
+                                                sider: () => renderSlot(slots, 'right-sider'),
+                                                content: () => renderSlot(slots, 'content')
+                                            }
+                                        )
+                                }
+                            ),
+                        footer: () => renderSlot(slots, 'footer')
                     }
                 );
             }
@@ -128,12 +188,13 @@ export default defineComponent({
             const footerVNode = getSlotFirstVNode(slots.default, layoutFooterIKey);
             const layoutVNode = getSlotFirstVNode(slots.default, layoutIKey);
             const siderVNode = getSlotFirstVNode(slots.default, layoutSiderIKey);
-            const twoColLayoutVNode = getSlotFirstVNode(slots.default, twoColLayoutIKey);
+            const basicColumnLayoutVNode = getSlotFirstVNode(slots.default, basicColumnLayoutComponentIKey);
+            const basicRowLayoutVNode = getSlotFirstVNode(slots.default, basicRowLayoutComponentIKey);
 
             const needExtraLayout = siderVNode && !layoutVNode && (headerVNode || footerVNode);
             const children = [
                 !needExtraLayout ? headerVNode : null,
-                needExtraLayout ? createVNode(McLayout, null, { default: () => [headerVNode, contentVNode, footerVNode] }) : twoColLayoutVNode ?? layoutVNode ?? contentVNode,
+                needExtraLayout ? createVNode(McLayout, null, { default: () => [headerVNode, contentVNode, footerVNode] }) : (basicColumnLayoutVNode || basicRowLayoutVNode) ?? layoutVNode ?? contentVNode,
                 !needExtraLayout ? footerVNode : null
             ];
 

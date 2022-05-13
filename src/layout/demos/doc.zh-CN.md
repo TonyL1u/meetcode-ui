@@ -1,5 +1,7 @@
 # Layout 布局
 
+通过布局组件的组合可以实现复杂的布局效果，但可能会手动添加写很多额外的代码。 `McLayout` 预设了几种常用布局效果，希望能帮助你少写点的代码。
+
 ## 演示
 
 ::: demo CodePreview=Basic
@@ -16,29 +18,34 @@
 
 :::
 
-## 使用预设
-
-通过布局组件的组合可以实现复杂的布局效果，但可能会手动添加写很多 css 样式。 `McLayout` 预设了几种常用布局效果，希望能帮助你少写点的代码。
-
-::: demo CodePreview=Full
+::: demo CodePreview=FullLayout
 
 ### 全屏布局
 
-<Full />
+<FullLayout />
 
 :::
 
-::: demo CodePreview=TwoCol
+::: demo CodePreview=TwoColumnLayout
 
 ### 两栏布局
 
-<TwoCol />
+<TwoColumnLayout />
 
 :::
 
-::: demo CodePreview=ThreeCol
+::: demo CodePreview=ThreeColumnLayout
 
 ### 三栏布局
 
-<ThreeCol />
+<ThreeColumnLayout />
+
+:::
+
+::: demo CodePreview=HolyLayout
+
+### 圣杯布局
+
+<HolyLayout />
+
 :::

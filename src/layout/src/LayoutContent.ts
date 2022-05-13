@@ -1,5 +1,5 @@
 import { defineComponent, getCurrentInstance, createVNode, renderSlot, CustomVNodeTypes } from 'vue';
-import { layoutContentIKey, layoutIKey } from './interface';
+import { layoutContentIKey, layoutIKey } from '../interface';
 
 export default defineComponent({
     name: 'LayoutContent',
@@ -12,7 +12,7 @@ export default defineComponent({
 
         // main logic...
         return () => {
-            return slots.default ? createVNode('main', { class: 'mc-layout-content' }, [renderSlot(slots, 'default')]) : null;
+            return createVNode('main', { class: 'mc-layout-content' }, [renderSlot(slots, 'default')]);
         };
     }
 });

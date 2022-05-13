@@ -1,5 +1,5 @@
 <template>
-    <NAnchor :bound="67" style="z-index: 1; width: 144px; position: fixed; top: 58px">
+    <NAnchor :bound="67" style="z-index: 1; width: 144px; position: fixed; top: 78px">
         <RecursionAnchorLink :anchor-links="anchorLinks" />
     </NAnchor>
 </template>

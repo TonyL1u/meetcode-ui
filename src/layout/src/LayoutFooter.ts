@@ -1,5 +1,5 @@
 import { defineComponent, getCurrentInstance, createVNode, renderSlot, CustomVNodeTypes } from 'vue';
-import { layoutFooterIKey, layoutIKey } from './interface';
+import { layoutFooterIKey, layoutIKey } from '../interface';
 
 export default defineComponent({
     name: 'LayoutFooter',
@@ -12,7 +12,7 @@ export default defineComponent({
 
         // main logic...
         return () => {
-            return slots.default ? createVNode('footer', { class: 'mc-layout-footer' }, [renderSlot(slots, 'default')]) : null;
+            return createVNode('footer', { class: 'mc-layout-footer' }, [renderSlot(slots, 'default')]);
         };
     }
 });

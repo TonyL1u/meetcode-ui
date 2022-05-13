@@ -1,5 +1,6 @@
 import { InjectionKey, Ref, CSSProperties, VNodeChild, PropType } from 'vue';
 import * as CSS from 'csstype';
+import type { ElementClassSet, ElementStyleSet } from '../_utils_';
 
 declare module 'csstype' {
     interface Properties {
@@ -28,10 +29,10 @@ export interface TabsProps {
     animation?: 'slide' | 'scale' | 'fade';
     activeColor?: string;
     barPosition?: 'bottom' | 'top';
-    headerStyle?: string | CSSProperties;
-    headerClass?: string;
-    contentStyle?: string | CSSProperties;
-    contentClass?: string;
+    headerStyle?: ElementStyleSet;
+    headerClass?: ElementClassSet;
+    contentStyle?: ElementStyleSet;
+    contentClass?: ElementClassSet;
     onBeforeTabSwitch?: OnBeforeTabSwitchImpl;
 }
 export interface TabPaneProps {

@@ -1,4 +1,4 @@
-import { VNode, RendererNode, RendererElement } from 'vue';
+import { VNode, RendererNode, RendererElement, CSSProperties } from 'vue';
 import * as CSS from 'csstype';
 
 /**
@@ -59,6 +59,7 @@ export interface UIColorAttrs extends Record<string, string> {
 }
 
 export type ElementClassSet = string | Record<string, boolean> | (string | Record<string, boolean>)[];
+export type ElementStyleSet = CSSProperties | string;
 
 /**
  * Jest Utils

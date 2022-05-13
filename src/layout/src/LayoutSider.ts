@@ -1,5 +1,5 @@
 import { defineComponent, getCurrentInstance, createVNode, renderSlot, CustomVNodeTypes, toRefs, computed } from 'vue';
-import { layoutSiderIKey, layoutIKey, layoutSiderProps } from './interface';
+import { layoutSiderIKey, layoutIKey, layoutSiderProps } from '../interface';
 import * as CSS from 'csstype';
 
 export default defineComponent({
@@ -11,7 +11,7 @@ export default defineComponent({
         if (parent && (parent.type as CustomVNodeTypes).iKey !== layoutIKey) {
             throw new Error('[McLayoutHeader]: McLayoutHeader must be placed inside McLayout.');
         }
-        const { width } = toRefs(props);
+        const { width, bordered } = toRefs(props);
         const cssVars = computed<CSS.Properties>(() => {
             return {
                 '--layout-sider-width': typeof width.value === 'number' ? `${width.value}px` : width.value
@@ -20,7 +20,7 @@ export default defineComponent({
 
         // main logic...
         return () => {
-            return slots.default ? createVNode('aside', { class: 'mc-layout-sider', style: cssVars.value }, [renderSlot(slots, 'default')]) : null;
+            return createVNode('aside', { class: ['mc-layout-sider', bordered.value ? 'mc-layout-sider--bordered' : ''], style: cssVars.value }, [renderSlot(slots, 'default')]);
         };
     }
 });

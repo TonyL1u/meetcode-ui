@@ -1,12 +1,12 @@
 <template>
     <McLayout v-if="currentMenuKey && currentTab" style="height: 100vh">
-        <McLayoutHeader>
+        <McLayoutHeader bordered>
             <Header class="header">
                 <McIcon class="nav-menu-trigger" :size="24" @click="handleShowNavMenu">
                     <IconMenu />
                 </McIcon>
                 <div class="title mc-text-2xl mc-leading-6">Meetcode UI</div>
-                <McTabs v-model:value="currentTab" :show-line="false" class="header-tabs mc-absolute mc-left-[276px]" :content-style="{ padding: 0 }" @tab-click="handleTabClick">
+                <McTabs v-model:value="currentTab" :show-line="false" class="header-tabs mc-absolute mc-left-[268px]" :header-style="{ height: '55px' }" :content-style="{ padding: 0 }" @tab-click="handleTabClick">
                     <McTab name="docs">{{ siteLang === 'zh-CN' ? '文档' : 'Docs' }}</McTab>
                     <McTab name="components">{{ siteLang === 'zh-CN' ? '组件' : 'Components' }}</McTab>
                     <McTab name="develop">{{ siteLang === 'zh-CN' ? '开发指南' : 'Develop' }}</McTab>
@@ -14,11 +14,11 @@
             </Header>
         </McLayoutHeader>
         <McLayout style="flex: 1">
-            <McLayoutSider class="menu-sider" style="width: 300px">
+            <McLayoutSider class="menu-sider" style="width: 300px" bordered>
                 <MenuVNode :menu="menu" />
             </McLayoutSider>
             <McLayout style="position: relative">
-                <McLayoutContent style="padding-right: 164px; overflow: auto">
+                <McLayoutContent class="main-content">
                     <div class="mc-flex mc-flex-col mc-justify-between mc-w-full mc-min-h-full">
                         <router-view :class="siteTheme" />
                         <PagerNavigator :menu="menu" :tab="currentTab" :current-key="currentMenuKey" />
@@ -30,11 +30,38 @@
             </McLayout>
         </McLayout>
     </McLayout>
+    <!-- <McLayout v-if="currentMenuKey && currentTab" preset="holy" style="height: 100vh">
+        <template #header>
+            <Header class="header">
+                <McIcon class="nav-menu-trigger" :size="24" @click="handleShowNavMenu">
+                    <IconMenu />
+                </McIcon>
+                <div class="title mc-text-2xl mc-leading-6">Meetcode UI</div>
+                <McTabs v-model:value="currentTab" :show-line="false" class="header-tabs mc-absolute mc-left-[276px]" :content-style="{ padding: 0 }" @tab-click="handleTabClick">
+                    <McTab name="docs">{{ siteLang === 'zh-CN' ? '文档' : 'Docs' }}</McTab>
+                    <McTab name="components">{{ siteLang === 'zh-CN' ? '组件' : 'Components' }}</McTab>
+                    <McTab name="develop">{{ siteLang === 'zh-CN' ? '开发指南' : 'Develop' }}</McTab>
+                </McTabs>
+            </Header>
+        </template>
+        <template #left-sider>
+            <MenuVNode :menu="menu" />
+        </template>
+        <template #content>
+            <div class="mc-flex mc-flex-col mc-justify-between mc-w-full mc-min-h-full">
+                <router-view :class="siteTheme" />
+                <PagerNavigator :menu="menu" :tab="currentTab" :current-key="currentMenuKey" />
+            </div>
+        </template>
+        <template #right-sider>
+            <Navigator />
+        </template>
+    </McLayout> -->
 </template>
 
 <script lang="ts" setup>
 import { computed, ref, createVNode, nextTick } from 'vue';
-import { NLayout, NLayoutHeader, NLayoutContent, NLayoutSider, NConfigProvider, NMenu, darkTheme } from 'naive-ui';
+import { NMenu, darkTheme } from 'naive-ui';
 import { McTabs, McTab, McIcon, McPopup, McLayout, McLayoutContent, McLayoutHeader, McLayoutFooter, McLayoutSider, useThemeController, useI18nController } from 'meetcode-ui';
 import { MenuOutline as IconMenu } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';
@@ -54,7 +81,6 @@ const { current: siteLang } = useI18nController();
 const { onRouteChange } = useRouterEventHook();
 const currentTab = ref<MenuTab>();
 const currentMenuKey = ref<string>();
-const theme = computed(() => (isDark.value ? darkTheme : null));
 const menu = computed<MenuOption[]>(() => menusMap[currentTab.value!][siteLang.value]);
 const MenuVNode: FunctionalComponent<{ menu: MenuOption[] }> = props => {
     const { menu } = props;
@@ -141,12 +167,13 @@ body {
     // -moz-osx-font-smoothing: grayscale;
     height: 100vh;
 
-    .nav-menu-trigger {
-        display: none;
+    .main-content {
+        padding-right: 164px;
+        overflow: auto;
     }
 
-    .main-content .n-layout {
-        min-height: calc(100vh - 45px);
+    .nav-menu-trigger {
+        display: none;
     }
 
     .markdown-body {
@@ -201,6 +228,10 @@ body {
 @media screen and (max-width: 640px) {
     .sider-navigator {
         display: none;
+    }
+
+    #app .main-content {
+        padding-right: 0px;
     }
 }
 </style>

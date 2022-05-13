@@ -1,5 +1,5 @@
 <template>
-    <div class="code-demo" :style="{ paddingBottom: showToolbox ? '0px' : '12px' }">
+    <div class="code-demo" :style="{ paddingBottom: showToolbox ? '0px' : '12px', borderColor: isHashed ? '#16a34a' : '' }">
         <div class="demo-box">
             <slot></slot>
         </div>
@@ -58,6 +58,7 @@ import { ref } from 'vue';
 import { McTooltip, McTabs, McTabPane, McModal, McButton, McIcon, McSpace, McMessage, McLoading, useThemeController } from 'meetcode-ui';
 import { Code as IconCode, CopyOutline as IconCopy, CubeOutline as IconEdit } from '@vicons/ionicons5';
 import { useClipboard } from '@vueuse/core';
+import { useRouterEventHook } from '../utils';
 import { loadInitialState } from '@playground/orchestrator';
 import hljs from 'highlight.js';
 import Playground from '@playground/Playground.vue';
@@ -67,14 +68,16 @@ interface CodeSource {
     importSource: string;
     compressedSource: string;
 }
-const props = defineProps<{ codeSources?: string }>();
+const props = defineProps<{ codeSources?: string; hash?: string }>();
 const codes: CodeSource[] = props.codeSources ? JSON.parse(props.codeSources) : [];
 const showToolbox = codes.length > 0;
 const codePreviewVisible = ref(false);
 const showModal = ref(false);
 const tabIndex = ref(0);
 const isLoading = ref(true);
+const isHashed = ref(false);
 const { copy } = useClipboard();
+const { onRouteChange } = useRouterEventHook();
 const { isLight } = useThemeController();
 const handleShowModal = () => {
     setTimeout(() => {
@@ -90,6 +93,10 @@ const copyCode = () => {
     copy(code.importSource);
     McMessage.success(`${code.name}.vue代码已复制到剪贴板`, { card: true });
 };
+
+onRouteChange('hash', ({ hash }) => {
+    isHashed.value = hash.slice(1) === props.hash;
+});
 </script>
 
 <style lang="scss" scoped>

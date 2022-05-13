@@ -1,7 +1,9 @@
 <template>
-    <McLayout class="layout-preset-demo" style="height: 200px" :header-style="{ height: '32px' }" preset="full">
+    <McLayout preset="holy" class="layout-preset-demo" style="height: 296px" :header-style="{ height: '48px' }" :footer-style="{ height: '48px' }">
         <template #header></template>
+        <template #left-sider></template>
         <template #content></template>
+        <template #right-sider></template>
         <template #footer></template>
     </McLayout>
 </template>

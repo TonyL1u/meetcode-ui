@@ -1,6 +1,7 @@
 export * from './tsutils';
 export { createHoverColor, createActiveColor, createDisabledColor, useColorFactory, setColorAlpha } from './color';
 export { createKey } from './createKey';
+export { createCpnVNode } from './createVNode';
 export { c } from './cssr';
 export { flatten, flattenWithOptions } from './flatten';
 export { getSlotFirstVNode, getSlotVNodeIndex } from './getSlotFirstVNode';

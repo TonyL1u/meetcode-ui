@@ -34,13 +34,6 @@ import { McLayout, McLayoutContent, McLayoutHeader, McLayoutFooter, McLayoutSide
 </script>
 
 <style lang="scss" scoped>
-.mc-layout-header,
-.mc-layout-content,
-.mc-layout-footer,
-.mc-layout-sider {
-    padding: 12px;
-}
-
 .mc-layout-sider {
     background: #a7f3d0;
     width: 100px;
@@ -49,7 +42,7 @@ import { McLayout, McLayoutContent, McLayoutHeader, McLayoutFooter, McLayoutSide
 .mc-layout-header,
 .mc-layout-footer {
     background: #d1fae5;
-    height: 32px;
+    height: 48px;
 }
 
 .mc-layout-content {

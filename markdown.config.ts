@@ -26,6 +26,7 @@ export default {
             },
             render: function (tokens: Token[], idx: number, options: any, env: { id: string }) {
                 const token = tokens[idx];
+                const decodeHash = tokens[idx + 1]?.tag === 'h3' ? decodeURI(tokens[idx + 1].attrs?.[0][1] || '') : '';
                 const isTokenNesting = token.nesting === 1;
                 const demo = token.info.trim().match(/^demo\s*(.*)$/);
                 const code = token.info.trim().match(/^demo\s*(CodePreview=(.*))/);
@@ -48,9 +49,9 @@ export default {
                         };
                     });
 
-                    return `<CodeDemo code-sources="${md.utils.escapeHtml(JSON.stringify(codeSources))}">`;
+                    return `<CodeDemo code-sources="${md.utils.escapeHtml(JSON.stringify(codeSources))}" hash="${decodeHash}">`;
                 } else if (demo) {
-                    return `<CodeDemo>`;
+                    return `<CodeDemo hash="${decodeHash}">`;
                 }
             }
         });
