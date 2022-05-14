@@ -1,4 +1,4 @@
-import { PropType, VNodeChild, Ref, InjectionKey } from 'vue';
+import { PropType, VNodeChild, Ref, InjectionKey, CSSProperties } from 'vue';
 import { ElementClassSet } from '../_utils_';
 import * as CSS from 'csstype';
 
@@ -33,10 +33,10 @@ export interface ModalProps {
     shortcutKey?: string;
     closeOnShortcut?: boolean;
     closable?: boolean;
-    headerStyle?: string | Partial<CSSStyleDeclaration>;
-    bodyStyle?: string | Partial<CSSStyleDeclaration>;
-    footerStyle?: string | Partial<CSSStyleDeclaration>;
-    maskStyle?: string | Partial<CSSStyleDeclaration>;
+    headerStyle?: string | CSSProperties;
+    bodyStyle?: string | CSSProperties;
+    footerStyle?: string | CSSProperties;
+    maskStyle?: string | CSSProperties;
     headerClass?: ElementClassSet;
     bodyClass?: ElementClassSet;
     footerClass?: ElementClassSet;

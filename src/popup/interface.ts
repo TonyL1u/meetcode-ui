@@ -19,6 +19,7 @@ export interface PopupSourceOptions<P extends Record<string, any>, E extends Obj
         [K in keyof P]: Ref<P[K]> | P[K];
     };
     on?: E;
+    autoDestroy?: boolean;
 }
 export interface PopupInstance {
     show(): void;

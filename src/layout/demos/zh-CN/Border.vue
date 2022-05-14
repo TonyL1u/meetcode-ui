@@ -1,10 +1,8 @@
 <template>
     <McLayout>
+        <McLayoutSider bordered>Sider</McLayoutSider>
         <McLayoutHeader bordered>Header</McLayoutHeader>
-        <McLayout>
-            <McLayoutSider bordered>Sider</McLayoutSider>
-            <McLayoutContent>Content</McLayoutContent>
-        </McLayout>
+        <McLayoutContent>Content</McLayoutContent>
         <McLayoutFooter bordered>Footer</McLayoutFooter>
     </McLayout>
 </template>

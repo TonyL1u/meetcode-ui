@@ -14,7 +14,7 @@
             </Header>
         </McLayoutHeader>
         <McLayout style="flex: 1">
-            <McLayoutSider class="menu-sider" :width="300" bordered collapsable>
+            <McLayoutSider class="menu-sider" :width="300" transition-mode="transform" trigger-type="bar" bordered collapsable>
                 <MenuVNode :menu="menu" />
             </McLayoutSider>
             <McLayout style="position: relative">

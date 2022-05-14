@@ -205,13 +205,13 @@ export default defineComponent({
 
                 const compareCond = layoutIndex > -1 ? siderIndex > layoutIndex : contentIndex > -1 ? siderIndex > contentIndex : siderIndex === slots.default?.().length! - 1;
                 if (compareCond) {
-                    children.push(siderVNode);
+                    children.push(createVNode(siderVNode, { class: 'mc-layout-sider--right' }));
                 } else {
-                    children.unshift(siderVNode);
+                    children.unshift(createVNode(siderVNode, { class: 'mc-layout-sider--left' }));
                 }
             }
 
-            return createVNode('div', { class: ['mc-layout', siderVNode ? 'mc-layout--with-sider' : ''] }, children);
+            return createVNode('div', { class: ['mc-layout', siderVNode ? `mc-layout--with-sider` : ''] }, children);
         };
     }
 });

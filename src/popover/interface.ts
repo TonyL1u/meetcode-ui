@@ -1,14 +1,14 @@
-import { PropType, VNodeChild, Ref, InjectionKey } from 'vue';
+import { PropType, VNodeChild, Ref, InjectionKey, CSSProperties } from 'vue';
 
 export type PopoverTrigger = 'hover' | 'click' | 'manual' | 'follow';
 export type PopoverPlacement = 'top' | 'bottom' | 'left' | 'right' | 'top-start' | 'top-end' | 'left-start' | 'left-end' | 'right-start' | 'right-end' | 'bottom-start' | 'bottom-end';
 export type PopoverTriggerBorder = 'top' | 'right' | 'bottom' | 'left';
 export type PopoverFollowMode = 'move' | 'click';
 export type PopoverOffset = {
-    top?: string;
-    right?: string;
-    bottom?: string;
-    left?: string;
+    top?: CSSProperties['top'];
+    right?: CSSProperties['right'];
+    bottom?: CSSProperties['bottom'];
+    left?: CSSProperties['left'];
 };
 export type PopoverInjection = Ref<HTMLElement | null> | null;
 export interface PopoverExposeInstance {

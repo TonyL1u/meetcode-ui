@@ -6,7 +6,7 @@
 import { McPopup, McButton } from 'meetcode-ui';
 import Test from './Test1.vue';
 
-const instance = McPopup(Test);
+const instance = McPopup(Test, { autoDestroy: false });
 const handleClick = () => {
     instance.show({
         title: '弹窗标题',

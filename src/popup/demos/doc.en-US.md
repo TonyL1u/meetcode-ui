@@ -43,6 +43,8 @@ For more props, please refer to <McTextLink to="Modal#props">Modal Props</McText
 
 <ModalStyle />
 
+> After closing the popup, the current instance will be automatically destroyed. If you don't want to do this, please set `autoDestroy = false` .
+
 :::
 
 ::: demo CodePreview=Test2,Communicate

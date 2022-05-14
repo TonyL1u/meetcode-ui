@@ -1,4 +1,4 @@
-import { PropType, VNodeChild, Ref, InjectionKey } from 'vue';
+import { PropType, VNodeChild, Ref, InjectionKey, CSSProperties } from 'vue';
 import { ElementClassSet } from '../_utils_';
 import * as CSS from 'csstype';
 
@@ -25,9 +25,9 @@ export interface DrawerProps {
     shortcutKey?: string;
     closeOnShortcut?: boolean;
     closable?: boolean;
-    headerStyle?: string | Partial<CSSStyleDeclaration>;
-    bodyStyle?: string | Partial<CSSStyleDeclaration>;
-    maskStyle?: string | Partial<CSSStyleDeclaration>;
+    headerStyle?: string | Partial<CSSProperties>;
+    bodyStyle?: string | Partial<CSSProperties>;
+    maskStyle?: string | Partial<CSSProperties>;
     headerClass?: ElementClassSet;
     bodyClass?: ElementClassSet;
     title?: string | (() => VNodeChild);

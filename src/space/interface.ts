@@ -1,4 +1,4 @@
-import { PropType } from 'vue';
+import { PropType, CSSProperties } from 'vue';
 import * as CSS from 'csstype';
 
 declare module 'csstype' {
@@ -12,7 +12,7 @@ declare module 'csstype' {
 export interface SpaceProps {
     vertical?: boolean;
     gap?: number;
-    itemStyle?: string | Partial<CSSStyleDeclaration>;
+    itemStyle?: string | CSSProperties;
     justify?: 'flex-start' | 'flex-end' | 'center' | 'space-round' | 'space-between' | 'space-evenly';
 }
 

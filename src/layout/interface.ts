@@ -1,11 +1,14 @@
 import type { ElementClassSet, ElementStyleSet } from '../_utils_';
-import type { InjectionKey, PropType } from 'vue';
+import type { InjectionKey, PropType, CSSProperties } from 'vue';
 import * as CSS from 'csstype';
 
 declare module 'csstype' {
     interface Properties {
         '--layout-sider-width'?: string;
         '--layout-header-height'?: string;
+        '--layout-sider-collapse-button-trigger-top'?: string;
+        '--layout-sider-collapse-button-trigger-bottom'?: string;
+        '--layout-sider-scroll-area-min-width'?: string;
     }
 }
 
@@ -51,7 +54,12 @@ export interface LayoutProps {
 export interface LayoutSiderProps {
     width?: string | number;
     bordered?: boolean;
+    collapsed?: boolean;
     collapsable?: boolean;
+    triggerPosition?: { top?: CSS.Properties['top']; bottom?: CSS.Properties['bottom'] };
+    triggerType?: 'button' | 'bar';
+    transitionMode?: 'width' | 'transform';
+    onBeforeToggle: (isCollapsed: boolean) => Promise<boolean | undefined | void> | boolean | undefined | void;
 }
 
 export interface LayoutHeaderProps {
@@ -186,9 +194,29 @@ export const layoutSiderProps = {
         type: Boolean as PropType<LayoutSiderProps['bordered']>,
         default: false
     },
+    collapsed: {
+        type: Boolean as PropType<LayoutSiderProps['collapsed']>,
+        default: false
+    },
     collapsable: {
         type: Boolean as PropType<LayoutSiderProps['collapsable']>,
         default: false
+    },
+    triggerPosition: {
+        type: Object as PropType<LayoutSiderProps['triggerPosition']>,
+        default: undefined
+    },
+    triggerType: {
+        type: String as PropType<LayoutSiderProps['triggerType']>,
+        default: 'button'
+    },
+    transitionMode: {
+        type: String as PropType<LayoutSiderProps['transitionMode']>,
+        default: 'width'
+    },
+    onBeforeToggle: {
+        type: Function as PropType<LayoutSiderProps['onBeforeToggle']>,
+        default: undefined
     }
 };
 

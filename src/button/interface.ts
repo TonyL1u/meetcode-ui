@@ -43,6 +43,10 @@ export type ButtonRender = 'normal' | 'text' | 'link';
 export type ButtonColorSet = Pick<UIColorAttrs, 'color' | 'borderColor' | 'backgroundColor'>;
 export type ButtonSizeMap = Record<ButtonSize, ButtonSizeSet>;
 
+export interface ButtonExposeInstance {
+    el: HTMLButtonElement;
+}
+
 export interface ButtonProps {
     type?: ButtonType;
     size?: ButtonSize;

@@ -10,6 +10,10 @@ function McPopup<P extends Record<string, any> = {}, E extends ObjectEmitsOption
     const PopupHostElement = ref<HTMLDivElement | null>(document.createElement('div'));
     const instance = ref<ModalExposeInstance | DrawerExposeInstance | null>();
     const visible = ref(false);
+    const destroy = () => {
+        instance.value = null;
+        PopupHostElement.value = null;
+    };
     const createDefaultVNode = () => {
         const { props: sourceProps = {}, on: sourceEmits = {} } = options;
         const props: Record<string, any> = {};
@@ -36,6 +40,10 @@ function McPopup<P extends Record<string, any> = {}, E extends ObjectEmitsOption
                     visible.value = value;
                     props['onUpdate:show']?.(value);
                 },
+                onAfterLeave: () => {
+                    (options.autoDestroy ?? true) && destroy();
+                    props['onAfterLeave']?.();
+                },
                 appearFromCursor: props.appearFromCursor || false
             },
             {
@@ -57,6 +65,10 @@ function McPopup<P extends Record<string, any> = {}, E extends ObjectEmitsOption
                 'onUpdate:show': (value: boolean) => {
                     visible.value = value;
                     props['onUpdate:show']?.(value);
+                },
+                onAfterLeave: () => {
+                    (options.autoDestroy ?? true) && destroy();
+                    props['onAfterLeave']?.();
                 }
             },
             {
@@ -69,20 +81,20 @@ function McPopup<P extends Record<string, any> = {}, E extends ObjectEmitsOption
     return {
         instance,
         show<T extends PopupType = 'modal'>(maybePopupConfig?: T | PopupModalConfig, config: PopupModalConfig | PopupDrawerConfig = {}) {
+            if (instance.value === null || PopupHostElement.value === null) {
+                throw new Error('[McPopup]: Current instance has been destroyed.');
+            }
             visible.value = true;
             if (typeof maybePopupConfig === 'string') {
-                render(createVNode(maybePopupConfig === 'modal' ? modalVNode : drawerVNode, { ...config }), PopupHostElement.value!);
+                render(createVNode(maybePopupConfig === 'modal' ? modalVNode : drawerVNode, { ...config }), PopupHostElement.value);
             } else {
-                render(createVNode(modalVNode, { ...(maybePopupConfig || {}) }), PopupHostElement.value!);
+                render(createVNode(modalVNode, { ...(maybePopupConfig || {}) }), PopupHostElement.value);
             }
         },
         hide() {
             instance.value?.hide();
         },
-        destroy() {
-            instance.value = null;
-            PopupHostElement.value = null;
-        }
+        destroy
     };
 }
 

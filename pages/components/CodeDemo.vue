@@ -107,6 +107,7 @@ onRouteChange('hash', ({ hash }) => {
     padding: 12px;
     margin: 16px 0;
     overflow: auto;
+    transition: background 0.2s, border-color 0.2s;
 }
 
 :deep(.demo-box) {
@@ -128,5 +129,6 @@ onRouteChange('hash', ({ hash }) => {
 
 .tool-box {
     border-top: 1px solid #e4e7ed;
+    transition: background 0.2s, border-color 0.2s;
 }
 </style>

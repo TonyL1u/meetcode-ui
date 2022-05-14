@@ -43,6 +43,8 @@ const show = ref(false);
 
 <ModalStyle />
 
+> 关闭弹窗后，会自动销毁当前实例。如果不希望这样做，可以设置 `autoDestroy = false` 。
+
 :::
 
 ::: demo CodePreview=Test2,Communicate
