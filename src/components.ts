@@ -16,3 +16,4 @@ export * from './drawer';
 export * from './popup';
 export * from './layout';
 // export * from './split';
+export * from './menu';

@@ -29,6 +29,34 @@
         transition: 0.2s;
     }
 
+    pre code {
+        border-radius: 4px;
+        position: relative;
+
+        &.hljs[class*=language-]::before {
+            position: absolute;
+            top: 4px;
+            right: 8px;
+            z-index: 2;
+            font-size: 12px;
+            font-weight: 500;
+            transition: color .2s;
+            color: #888
+        }
+
+        &.hljs.language-ts::before {
+            content: 'ts'
+        }
+
+        &.hljs.language-xml::before {
+            content: 'vue'
+        }
+    }
+
+    pre::before + code[class*=language-] {
+        content: '123'
+    }
+
     &.light {
         blockquote {
             border-left: 4px solid #e0e0e6;

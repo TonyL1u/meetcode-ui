@@ -76,7 +76,7 @@ import type { MenuTab, RouteMetaData } from './menu';
 import type { MenuOption } from 'naive-ui';
 
 const router = useRouter();
-const { current: siteTheme, isDark } = useThemeController();
+const { current: siteTheme } = useThemeController();
 const { current: siteLang } = useI18nController();
 const { onRouteChange } = useRouterEventHook();
 const currentTab = ref<MenuTab>();
