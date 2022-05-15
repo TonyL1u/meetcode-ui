@@ -28,6 +28,7 @@ const { show, hide } = McPopup<TestProps, TestEmits>(Test, {
         update() {
             count.value++;
         }
-    }
+    },
+    autoDestroy: false
 });
 </script>

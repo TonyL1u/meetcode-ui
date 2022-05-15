@@ -27,34 +27,46 @@
         border-radius: 3px;
         font-family: v-mono;
         transition: 0.2s;
+        padding: 0;
     }
 
     pre code {
         border-radius: 4px;
+    }
+
+    div[class*='language-'] {
         position: relative;
 
-        &.hljs[class*=language-]::before {
+        &::before {
             position: absolute;
             top: 4px;
             right: 8px;
             z-index: 2;
             font-size: 12px;
             font-weight: 500;
-            transition: color .2s;
-            color: #888
-        }
-
-        &.hljs.language-ts::before {
-            content: 'ts'
-        }
-
-        &.hljs.language-xml::before {
-            content: 'vue'
+            transition: color 0.2s;
+            color: #888;
         }
     }
 
-    pre::before + code[class*=language-] {
-        content: '123'
+    div.language-ts::before {
+        content: 'ts';
+    }
+
+    div.language-xml::before {
+        content: 'vue';
+    }
+
+    div.language-text::before {
+        content: 'text';
+    }
+
+    div.language-html::before {
+        content: 'html';
+    }
+
+    div.language-md::before {
+        content: 'markdown';
     }
 
     &.light {

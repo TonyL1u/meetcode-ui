@@ -1,5 +1,5 @@
 <template>
-    <McLayout v-if="currentMenuKey && currentTab" style="height: 100vh">
+    <McLayout v-if="currentMenuKey && currentTab" style="height: 100vh; overflow: hidden">
         <McLayoutHeader bordered>
             <Header class="header">
                 <McIcon class="nav-menu-trigger" :size="24" @click="handleShowNavMenu">
@@ -7,13 +7,14 @@
                 </McIcon>
                 <div class="title mc-text-2xl mc-leading-6">Meetcode UI</div>
                 <McTabs v-model:value="currentTab" :show-line="false" class="header-tabs mc-absolute mc-left-[268px]" :header-style="{ height: '55px' }" :content-style="{ padding: 0 }" @tab-click="handleTabClick">
+                    <McTab name="home">{{ siteLang === 'zh-CN' ? '首页' : 'Home' }}</McTab>
                     <McTab name="docs">{{ siteLang === 'zh-CN' ? '文档' : 'Docs' }}</McTab>
                     <McTab name="components">{{ siteLang === 'zh-CN' ? '组件' : 'Components' }}</McTab>
                     <McTab name="develop">{{ siteLang === 'zh-CN' ? '开发指南' : 'Develop' }}</McTab>
                 </McTabs>
             </Header>
         </McLayoutHeader>
-        <McLayout style="flex: 1">
+        <McLayout v-if="currentTab !== 'home'" style="flex: 1">
             <McLayoutSider class="menu-sider" :width="300" transition-mode="transform" trigger-type="bar" bordered collapsable>
                 <MenuVNode :menu="menu" />
             </McLayoutSider>
@@ -29,6 +30,9 @@
                 </McLayoutSider>
             </McLayout>
         </McLayout>
+        <McLayoutContent v-else style="flex: 1; overflow: hidden">
+            <router-view :class="siteTheme" />
+        </McLayoutContent>
     </McLayout>
     <!-- <McLayout v-if="currentMenuKey && currentTab" preset="holy" style="height: 100vh">
         <template #header>
@@ -132,7 +136,11 @@ const handleShowNavMenu = () => {
         bodyStyle: { padding: '0px' }
     });
 };
-const handleTabClick = (tab: MenuTab) => {
+const handleTabClick = (tab: MenuTab | 'home') => {
+    if (tab === 'home') {
+        router.push(`/${siteLang.value}/home`);
+        return;
+    }
     if (currentTab.value === tab) return;
     // 等待 currentTab 同步更新后执行
     nextTick(() => {
@@ -180,7 +188,7 @@ body {
         width: 100%;
         max-width: 768px;
         margin: 0 auto;
-        padding: 0 24px;
+        padding: 0 18px;
         box-sizing: border-box;
 
         @include custom-markdown-style;
@@ -221,13 +229,13 @@ body {
     }
 
     .menu-sider {
-        display: none;
+        display: none !important;
     }
 }
 
 @media screen and (max-width: 640px) {
     .sider-navigator {
-        display: none;
+        display: none !important;
     }
 
     #app .main-content {

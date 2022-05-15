@@ -14,17 +14,26 @@ const router = createRouter({
         ...develop['zh-CN'],
         ...develop['en-US'],
         {
-            path: '/404',
-            component: () => import('./404.vue'),
+            path: '/zh-CN/home',
+            component: () => import('./HomePage.vue'),
             meta: {
-                title: '404',
-                tab: 'docs',
+                title: '一个 Vue3 UI 组件库',
+                tab: 'home',
+                route: ''
+            }
+        },
+        {
+            path: '/en-US/home',
+            component: () => import('./HomePage.vue'),
+            meta: {
+                title: 'A Vue3 UI Component Library',
+                tab: 'home',
                 route: ''
             }
         },
         {
             path: '/:catchAll(.*)',
-            redirect: '/404'
+            redirect: '/zh-CN/home'
         }
     ]
 });

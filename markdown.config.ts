@@ -86,5 +86,11 @@ export default {
         md.renderer.rules['html_block'] = componentRenderRule;
 
         md.renderer.rules['html_inline'] = componentRenderRule;
+
+        const fenceWrap = (render: Renderer.RenderRule) => (tokens: Token[], idx: number, options: MarkdownIt.Options, env: any, self: any) => {
+            return `<div class="language-${tokens[idx].info}">${render.apply(this, [tokens, idx, options, env, self])}</div>`;
+        };
+
+        md.renderer.rules['fence'] = fenceWrap(md.renderer.rules['fence']!);
     }
 };
