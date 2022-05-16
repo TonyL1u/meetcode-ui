@@ -16,10 +16,6 @@ const handleCopy = () => {
     if (code) {
         copy(code);
         hasCopied.value = true;
-
-        setTimeout(() => {
-            hasCopied.value = false;
-        }, 2000);
     }
 };
 </script>
@@ -27,7 +23,7 @@ const handleCopy = () => {
 <template>
     <div :class="`language-${props.lang}`">
         <McTooltip v-model:show="hasCopied" trigger="manual" content="已复制" placement="left">
-            <McButton class="copy-btn mc-top-1 mc-right-1 mc-opacity-0" style="position: absolute" render="text" size="mini" circle @click="handleCopy">
+            <McButton class="copy-btn mc-top-1 mc-right-1 mc-opacity-0" style="position: absolute" render="text" size="mini" circle @mouseleave="hasCopied = false" @click="handleCopy">
                 <template #icon>
                     <McIcon v-if="hasCopied" color="#00bf80" :size="14">
                         <IconCheck />

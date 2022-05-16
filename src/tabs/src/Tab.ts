@@ -1,5 +1,5 @@
 import { inject, createVNode, renderSlot, defineComponent } from 'vue';
-import { tabsInjectionKey, tabIKey, tabProps } from './interface';
+import { tabsInjectionKey, tabIKey, tabProps } from '../interface';
 
 export default defineComponent({
     name: 'Tab',

@@ -3,6 +3,7 @@ export { createHoverColor, createActiveColor, createDisabledColor, useColorFacto
 export { createKey } from './createKey';
 export { c } from './cssr';
 export { cssUnitTransform } from './cssUnitTransform';
+export { checkParent } from './checkParent';
 export { flatten, flattenWithOptions } from './flatten';
 export { getSlotFirstVNode, getSlotVNodeIndex } from './getSlotFirstVNode';
 export { kebabCaseEscape } from './kebabCaseEscape';

@@ -1,9 +1,9 @@
 import { createVNode, renderSlot } from 'vue';
 import Layout from './Layout';
-import LayoutHeader from './src/LayoutHeader';
-import LayoutContent from './src/LayoutContent';
-import LayoutFooter from './src/LayoutFooter';
-import LayoutSider from './src/LayoutSider';
+import McLayoutHeader from './src/LayoutHeader';
+import McLayoutContent from './src/LayoutContent';
+import McLayoutFooter from './src/LayoutFooter';
+import McLayoutSider from './src/LayoutSider';
 import { basicColumnLayoutComponentIKey, basicRowLayoutComponentIKey } from './interface';
 import type { FunctionalComponent, VNodeChild } from 'vue';
 import type { ElementClassSet, ElementStyleSet } from '../_utils_';
@@ -26,7 +26,7 @@ const BasicColumnLayoutComponent: FunctionalComponent<ColumnLayoutProps> = (prop
     const children = [
         showSider
             ? createVNode(
-                  LayoutSider,
+                  McLayoutSider,
                   { width: siderWidth, style: siderStyle, class: siderClass },
                   {
                       default: () => renderSlot(slots, 'sider')
@@ -35,7 +35,7 @@ const BasicColumnLayoutComponent: FunctionalComponent<ColumnLayoutProps> = (prop
             : null,
         showContent
             ? createVNode(
-                  LayoutContent,
+                  McLayoutContent,
                   { style: contentStyle, class: contentClass },
                   {
                       default: () => renderSlot(slots, 'content')
@@ -72,9 +72,9 @@ const BasicRowLayoutComponent: FunctionalComponent<RowLayoutComponentProps> = (p
         { class: fixedHeader && showHeader ? 'mc-layout--header-fixed' : '' },
         {
             default: () => [
-                showHeader ? createVNode(LayoutHeader, { class: headerClass, style: headerStyle }, { default: () => renderSlot(slots, 'header') }) : null,
-                showContent ? createVNode(LayoutContent, { class: contentClass, style: contentStyle }, { default: () => renderSlot(slots, 'content') }) : null,
-                showFooter ? createVNode(LayoutFooter, { class: footerClass, style: footerStyle }, { default: () => renderSlot(slots, 'footer') }) : null
+                showHeader ? createVNode(McLayoutHeader, { class: headerClass, style: headerStyle }, { default: () => renderSlot(slots, 'header') }) : null,
+                showContent ? createVNode(McLayoutContent, { class: contentClass, style: contentStyle }, { default: () => renderSlot(slots, 'content') }) : null,
+                showFooter ? createVNode(McLayoutFooter, { class: footerClass, style: footerStyle }, { default: () => renderSlot(slots, 'footer') }) : null
             ]
         }
     );

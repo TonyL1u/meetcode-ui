@@ -6,7 +6,8 @@ export default c('.mc-popselect', [
         {
             padding: '8px 12px',
             cursor: 'pointer',
-            borderRadius: '4px'
+            borderRadius: '4px',
+            transition: 'background-color .2s'
         },
         [
             c('&:not(:last-child)', {

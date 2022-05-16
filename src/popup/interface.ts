@@ -30,4 +30,3 @@ export interface PopupInstance {
     destroy: () => void;
     instance: Ref<ModalExposeInstance | DrawerExposeInstance | undefined | null>;
 }
-export const popupRouteInjectionKey: InjectionKey<RouteLocationNormalizedLoaded> = Symbol('popupRouteInjectionKey');

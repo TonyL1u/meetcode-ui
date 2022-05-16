@@ -1,6 +1,6 @@
 import { ref, toRefs, inject, computed, createVNode, createCommentVNode, renderSlot, vShow, withDirectives, defineComponent } from 'vue';
 import { watchOnce } from '@vueuse/core';
-import { tabsInjectionKey, tabPaneIKey, tabPaneProps } from './interface';
+import { tabsInjectionKey, tabPaneIKey, tabPaneProps } from '../interface';
 
 export default defineComponent({
     name: 'TabPane',

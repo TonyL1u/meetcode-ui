@@ -2,7 +2,7 @@ import { ref, toRefs, computed, watch, mergeProps, provide, createVNode, createT
 import { flatten, getSlotFirstVNode, kebabCaseEscape, SpecificVNode, useThemeRegister } from '../_utils_';
 import { useElementBounding, throttledWatch } from '@vueuse/core';
 import { tabsInjectionKey, tabPaneIKey, tabIKey, TabPaneName, MaybeTabPaneProps, tabsProps } from './interface';
-import McTab from './Tab';
+import McTab from './src/Tab';
 import * as CSS from 'csstype';
 import { mainCssr, lightCssr, darkCssr } from './styles';
 
@@ -68,7 +68,7 @@ export default defineComponent({
         const callUpdateTab = (name: TabPaneName) => {
             activeTabName.value = name;
             valueVM && emit('update:value', name);
-            emit('tab-switch', activeTabName.value);
+            emit('tab-switch', name);
         };
         const handleTabClick = (name: TabPaneName) => {
             emit('tab-click', name);
