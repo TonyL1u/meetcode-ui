@@ -19,6 +19,9 @@ export interface MenuItemProps {
 export interface MenuItemGroupProps {
     title: string | (() => VNodeChild);
 }
+export interface SubMenuProps {
+    title: string | (() => VNodeChild);
+}
 export const menuProps = {
     value: {
         type: [String, Number, Symbol] as PropType<MenuProps['value']>,
@@ -34,6 +37,12 @@ export const menuItemProps = {
 export const menuItemGroupProps = {
     title: {
         type: [String, Function] as PropType<MenuItemGroupProps['title']>,
+        default: undefined
+    }
+};
+export const subMenuProps = {
+    title: {
+        type: [String, Function] as PropType<SubMenuProps['title']>,
         default: undefined
     }
 };

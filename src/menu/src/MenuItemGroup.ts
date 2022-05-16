@@ -15,6 +15,6 @@ export default defineComponent({
         const { title } = toRefs(props);
 
         // main logic...
-        return () => createVNode('li', { class: 'mc-menu-item-group' }, [createVNode('div', { style: 'padding-left: 32px' }, [title.value]), renderSlot(slots, 'default')]);
+        return () => createVNode('li', { class: 'mc-menu-item-group' }, [createVNode('span', { class: 'mc-menu-item-group-title' }, [title.value]), createVNode('ul', { class: 'mc-menu-item-group-children' }, [renderSlot(slots, 'default')])]);
     }
 });

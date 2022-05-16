@@ -6,9 +6,9 @@ export default defineComponent({
     name: 'MenuItem',
     props: menuItemProps,
     setup(props, { slots, attrs }) {
-        if (!checkParent(menuIKey) && !checkParent(menuItemGroupIKey) && !checkParent(subMenuIKey)) {
-            throw new Error('[McMenuItem]: McMenuItem must be placed inside McMenu or McMenuItemGroup or McSubMenu.');
-        }
+        // if (!checkParent(menuIKey) && !checkParent(menuItemGroupIKey) && !checkParent(subMenuIKey)) {
+        //     throw new Error('[McMenuItem]: McMenuItem must be placed inside McMenu or McMenuItemGroup or McSubMenu.');
+        // }
         const instance = getCurrentInstance();
         const {} = toRefs(props);
         const key = instance?.vnode.key;
