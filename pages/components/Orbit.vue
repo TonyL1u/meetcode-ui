@@ -1,5 +1,5 @@
 <template>
-    <div class="orbit-container mc-flex mc-mt-10 mc-space-x-12">
+    <div class="orbit-container mc-flex mc-space-x-12">
         <div class="orbit">
             <div class="point"></div>
         </div>

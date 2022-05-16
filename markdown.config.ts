@@ -19,7 +19,9 @@ export default {
         md.use(MarkdownItAnchor, {
             permalink: MarkdownItAnchor.permalink.headerLink()
         });
+
         md.use(MarkdownItHljs);
+
         md.use(MarkdownItContainer, 'demo', {
             validate: function (params: string) {
                 return params.trim().match(/^demo\s*(.*)$/);
@@ -88,7 +90,8 @@ export default {
         md.renderer.rules['html_inline'] = componentRenderRule;
 
         const fenceWrap = (render: Renderer.RenderRule) => (tokens: Token[], idx: number, options: MarkdownIt.Options, env: any, self: any) => {
-            return `<div class="language-${tokens[idx].info}">${render.apply(this, [tokens, idx, options, env, self])}</div>`;
+            const code = lz.compressToEncodedURIComponent(tokens[idx].content);
+            return `<CodeBlock lang="${tokens[idx].info}" code="${code}">${render.apply(this, [tokens, idx, options, env, self])}</CodeBlock>`;
         };
 
         md.renderer.rules['fence'] = fenceWrap(md.renderer.rules['fence']!);

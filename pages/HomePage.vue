@@ -9,7 +9,7 @@ const { current } = useI18nController();
     <div class="home-container mc-flex mc-flex-col mc-items-center mc-justify-center mc-h-full mc-overflow-hidden">
         <div class="mc-text-4xl">Meetcode UI</div>
         <div class="mc-text-xs mc-tracking-[5px] mc-mt-3">{{ current === 'zh-CN' ? '一个基于 Vue3 + TS 的组件库' : 'a component library based on Vue3 & TS' }}</div>
-        <Orbit />
+        <Orbit class="mc-mt-10 mc-mb-48" />
     </div>
 </template>
 
@@ -43,7 +43,7 @@ const { current } = useI18nController();
 
     &.light::before,
     &.light::after {
-        background: rgba(0, 128, 0, 0.07);
+        background: rgba(22, 163, 74, 0.07);
     }
 
     &.dark::before,

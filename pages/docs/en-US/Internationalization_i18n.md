@@ -1,41 +1,41 @@
 # i18n
 
-Meetcode UI 提供多语言版本。通过统一语言管理工具 `useI18nController` 来轻松控制语言切换。
+Meetcode UI is available in multiple languages. The language switching can be easily controlled through the integrate language management tool —— `useI18nController` .
 
-## 使用语言管理工具
+## Language Management Tool
 
-1. 引入语言管理工具
+1. Import the integrate language management tool
 
 ```ts
 import { useI18nController } from 'meetcode-ui';
 ```
 
-2. 设置语言
+2. Set your language
 
 ```ts
-const { switchLanguage, setLanguage } = useThemeController();
+const { switchLanguage, setLanguage } = useI18nController();
 
-// 切换语言
+// Switch language
 switchLanguage();
 
-// 手动设置为中文
+// Set zh-CN manually
 setLanguage('zh-CN');
 
-// 手动设置为英文
+// Set en-US manually
 setLanguage('en-US');
 ```
 
-3. 其他
+3. Others
 
-|          名称          |              类型               |         说明         |
-| :--------------------: | :-----------------------------: | :------------------: |
-|        current         |  `RemovableRef<LanguageType>`   |  当前正在使用的语言  |
-|      setLanguage       | `(theme: LanguageType) => void` |     手动设置语言     |
-|     switchLanguage     |          `() => void`           |       切换语言       |
-|    onLanguageChange    |   `EventHookOn<LanguageType>`   |   语言切换钩子函数   |
-| onGlobalLanguageChange |   `EventHookOn<LanguageType>`   | 全局语言切换钩子函数 |
+|          名称          |              类型               |                           说明                           |
+| :--------------------: | :-----------------------------: | :------------------------------------------------------: |
+|        current         |  `RemovableRef<LanguageType>`   |                 Current language in use                  |
+|      setLanguage       | `(theme: LanguageType) => void` |                  Set language manually                   |
+|     switchLanguage     |          `() => void`           |                     Switch language                      |
+|    onLanguageChange    |   `EventHookOn<LanguageType>`   |     The callback function when language has changed      |
+| onGlobalLanguageChange |   `EventHookOn<LanguageType>`   | The globally callback function when language has changed |
 
-4. TS 声明
+4. Type declarations
 
 ```ts
 declare type LanguageType = 'zh-CN' | 'en-US';
@@ -51,8 +51,8 @@ export declare function useI18nController(initialLang?: LanguageType): {
 };
 ```
 
-## 支持语言
+## Supporting Language
 
--   中文 - `zh-CN`
--   英文 - `en-US`
+-   Chinese - `zh-CN`
+-   English - `en-US`
 -   ...

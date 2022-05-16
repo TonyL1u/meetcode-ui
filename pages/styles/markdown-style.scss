@@ -47,6 +47,16 @@
             transition: color 0.2s;
             color: #888;
         }
+
+        &:hover {
+            &::before {
+                display: none;
+            }
+
+            .copy-btn {
+                opacity: 1;
+            }
+        }
     }
 
     div.language-ts::before {

@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { useI18nController } from 'meetcode-ui';
 import { routesMap } from './menu';
 
+const { current } = useI18nController();
 const { docs, components, develop } = routesMap;
 const router = createRouter({
     // 指定路由模式
@@ -33,7 +35,7 @@ const router = createRouter({
         },
         {
             path: '/:catchAll(.*)',
-            redirect: '/zh-CN/home'
+            redirect: `/${current.value}/home`
         }
     ]
 });
