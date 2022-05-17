@@ -1,19 +1,26 @@
 import { defineComponent, renderSlot, createVNode, inject, computed, toRefs, getCurrentInstance } from 'vue';
 import { checkParent } from '../../_utils_';
-import { menuIKey, menuItemGroupIKey, subMenuIKey, menuItemProps, menuInjectionKey } from '../interface';
+import { menuIKey, menuItemGroupIKey, subMenuIKey, menuItemIKey, menuItemProps, menuInjectionKey, subMenuInjectionKey, menuGroupInjectionKey } from '../interface';
 
 export default defineComponent({
     name: 'MenuItem',
     props: menuItemProps,
+    iKey: menuItemIKey,
     setup(props, { slots, attrs }) {
         // if (!checkParent(menuIKey) && !checkParent(menuItemGroupIKey) && !checkParent(subMenuIKey)) {
         //     throw new Error('[McMenuItem]: McMenuItem must be placed inside McMenu or McMenuItemGroup or McSubMenu.');
         // }
         const instance = getCurrentInstance();
-        const {} = toRefs(props);
         const key = instance?.vnode.key;
-        const { activeKey, updateKey } = inject(menuInjectionKey, null) ?? {};
+        const { activeKey, updateKey, padding: menuPadding = 0 } = inject(menuInjectionKey, null) ?? {};
+        const { padding: subMenuPadding = 0 } = inject(subMenuInjectionKey, null) ?? {};
+        const { padding: menuItemGroupPadding = 0 } = inject(menuGroupInjectionKey, null) ?? {};
         const isActive = computed(() => !!(key && key === activeKey?.value));
+        const selfPadding = computed(() => {
+            return checkParent(menuItemGroupIKey) ? menuItemGroupPadding + 16 : (checkParent(menuIKey) ? menuPadding : subMenuPadding) + 32;
+        });
+        // console.log(menuPadding, subMenuPadding, menuItemGroupPadding);
+        // console.log(selfPadding.value);
 
         // main logic...
         return () =>
@@ -21,6 +28,7 @@ export default defineComponent({
                 'li',
                 {
                     class: ['mc-menu-item', isActive.value ? 'mc-menu-item--active' : ''],
+                    style: { paddingLeft: `${selfPadding.value}px` },
                     onClick: () => {
                         key && updateKey?.(key);
                     }

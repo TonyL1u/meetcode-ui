@@ -1,31 +1,53 @@
 import type { Key } from '../_utils_';
 import type { PropType, InjectionKey, Ref, VNodeChild } from 'vue';
 
-export interface MenuInjection {
+interface MenuInjection {
     activeKey: Ref<Key>;
     updateKey: (key: Key) => void;
+    expandedKeys: Ref<Key[]>;
+    updateExpandedKeys: (key: Key) => void;
+    padding: number;
+}
+interface SubMenuInjection {
+    padding: number;
+}
+interface MenuGroupInjection {
+    padding: number;
 }
 export const menuInjectionKey: InjectionKey<MenuInjection> = Symbol();
+export const subMenuInjectionKey: InjectionKey<SubMenuInjection> = Symbol();
+export const menuGroupInjectionKey: InjectionKey<MenuGroupInjection> = Symbol();
 export const menuIKey = Symbol('menu');
+export const menuItemIKey = Symbol('menuItem');
 export const menuItemGroupIKey = Symbol('menuItemGroup');
 export const subMenuIKey = Symbol('subMenu');
 
 export interface MenuProps {
-    value: Key;
+    value?: Key;
+    expandKeys?: Key[];
+    indent?: number;
 }
 export interface MenuItemProps {
-    key: Key;
+    key?: Key;
 }
 export interface MenuItemGroupProps {
-    title: string | (() => VNodeChild);
+    title?: string | (() => VNodeChild);
 }
 export interface SubMenuProps {
-    title: string | (() => VNodeChild);
+    title?: string | (() => VNodeChild);
 }
 export const menuProps = {
     value: {
         type: [String, Number, Symbol] as PropType<MenuProps['value']>,
         default: undefined
+    },
+    expandKeys: {
+        type: Array as PropType<MenuProps['expandKeys']>,
+        default: undefined
+    },
+    indent: {
+        type: Number as PropType<MenuProps['indent']>,
+        default: 32
     }
 };
 export const menuItemProps = {

@@ -1,98 +1,58 @@
-import { defineComponent, renderSlot, createVNode, toRefs, ref, Transition } from 'vue';
-import { checkParent } from '../../_utils_';
-import { menuIKey, menuItemGroupIKey, subMenuIKey, subMenuProps } from '../interface';
+import { defineComponent, renderSlot, createVNode, toRefs, ref, provide, inject, computed, getCurrentInstance } from 'vue';
+import { checkParent, flattenWithOptions } from '../../_utils_';
+import { menuIKey, menuItemIKey, menuItemGroupIKey, subMenuIKey, subMenuProps, menuInjectionKey, subMenuInjectionKey, menuGroupInjectionKey } from '../interface';
 import { McIcon } from '../../icon';
+import { McFadeInExpandTransition } from '../../_transition_';
 import { ChevronDownOutline } from '@vicons/ionicons5';
-import { mainCssr, lightCssr, darkCssr } from '../styles';
 
 export default defineComponent({
     name: 'SubMenu',
     iKey: subMenuIKey,
     props: subMenuProps,
     setup(props, { slots }) {
-        if (!checkParent(menuIKey) && !checkParent(menuItemGroupIKey)) {
-            throw new Error('[McSubMenu]: McSubMenu must be placed inside McMenu or McMenuItemGroup.');
-        }
+        // if (!checkParent(menuIKey) && !checkParent(menuItemGroupIKey)) {
+        //     throw new Error('[McSubMenu]: McSubMenu must be placed inside McMenu or McMenuItemGroup.');
+        // }
 
+        const instance = getCurrentInstance();
+        const key = instance?.vnode.key;
         const { title } = toRefs(props);
-        const isExpand = ref(true);
+        const { activeKey, expandedKeys, updateExpandedKeys } = inject(menuInjectionKey, null) ?? {};
+        const { padding: menuPadding = 0 } = inject(menuInjectionKey, null) ?? {};
+        const { padding: subMenuPadding = 0 } = inject(subMenuInjectionKey, null) ?? {};
+        const { padding: menuItemGroupPadding = 0 } = inject(menuGroupInjectionKey, null) ?? {};
+        const isExpanded = ref(expandedKeys?.value.includes(key || ''));
+        const isActive = computed(() => {
+            const keys = flattenWithOptions({ slots, key: menuItemIKey, infinity: true }).map(item => {
+                return item.key;
+            });
 
-        function handleBeforeLeave(el: HTMLElement): void {
-            if (props.width) {
-                el.style.maxWidth = `${el.offsetWidth}px`;
-            } else {
-                el.style.maxHeight = `${el.offsetHeight}px`;
-            }
-            void el.offsetWidth;
-        }
-        function handleLeave(el: HTMLElement): void {
-            if (props.width) {
-                el.style.maxWidth = '0';
-            } else {
-                el.style.maxHeight = '0';
-            }
-            void el.offsetWidth;
-            const { onLeave } = props;
-            if (onLeave) onLeave();
-        }
-        function handleAfterLeave(el: HTMLElement): void {
-            if (props.width) {
-                el.style.maxWidth = '';
-            } else {
-                el.style.maxHeight = '';
-            }
-            const { onAfterLeave } = props;
-            if (onAfterLeave) onAfterLeave();
-        }
-        function handleEnter(el: HTMLElement): void {
-            el.style.transition = 'none';
-            if (props.width) {
-                const memorizedWidth = el.offsetWidth;
-                el.style.maxWidth = '0';
-                void el.offsetWidth;
-                el.style.transition = '';
-                el.style.maxWidth = `${memorizedWidth}px`;
-            } else {
-                if (props.reverse) {
-                    el.style.maxHeight = `${el.offsetHeight}px`;
-                    void el.offsetHeight;
-                    el.style.transition = '';
-                    el.style.maxHeight = '0';
-                } else {
-                    const memorizedHeight = el.offsetHeight;
-                    el.style.maxHeight = '0';
-                    void el.offsetWidth;
-                    el.style.transition = '';
-                    el.style.maxHeight = `${memorizedHeight}px`;
-                }
-            }
-            void el.offsetWidth;
-        }
-        function handleAfterEnter(el: HTMLElement): void {
-            if (props.width) {
-                el.style.maxWidth = '';
-            } else {
-                if (!props.reverse) {
-                    el.style.maxHeight = '';
-                }
-            }
-            props.onAfterEnter?.();
-        }
+            return !!(activeKey?.value && keys.includes(activeKey.value));
+        });
+        const selfPadding = computed(() => {
+            return checkParent(menuItemGroupIKey) ? menuItemGroupPadding + 16 : (checkParent(menuIKey) ? menuPadding : subMenuPadding) + 32;
+        });
+
+        const handleExpand = () => {
+            isExpanded.value = !isExpanded.value;
+            key && updateExpandedKeys?.(key);
+        };
+
+        provide(subMenuInjectionKey, {
+            padding: selfPadding.value
+        });
 
         // main logic...
         return () =>
-            createVNode('li', { class: 'mc-sub-menu' }, [
-                createVNode('div', { class: 'mc-sub-menu-title', onClick: () => (isExpand.value = !isExpand.value) }, [
-                    createVNode('span', { class: 'mc-sub-menu-title__content' }, [title.value]),
+            createVNode('li', { class: ['mc-sub-menu', isExpanded.value ? '' : 'mc-sub-menu--collapsed', isActive.value ? 'mc-sub-menu--child-active' : ''] }, [
+                createVNode('div', { class: 'mc-sub-menu-title', style: { paddingLeft: `${selfPadding.value}px` }, onClick: handleExpand }, [
+                    slots.icon ? createVNode('div', { class: 'mc-sub-menu-title__icon' }, [renderSlot(slots, 'icon')]) : null,
+                    createVNode('span', { class: 'mc-sub-menu-title__content' }, [slots.title ? renderSlot(slots, 'title') : title.value || '']),
                     createVNode(McIcon, { class: 'mc-sub-menu-title__arrow' }, { default: () => createVNode(ChevronDownOutline) })
                 ]),
-                createVNode(
-                    Transition,
-                    { name: 'mc-menu-expand', onEnter: handleEnter, onAfterEnter: handleAfterEnter, onBeforeLeave: handleBeforeLeave, onLeave: handleLeave, onAfterLeave: handleAfterLeave },
-                    {
-                        default: () => (isExpand.value ? createVNode('ul', { class: 'mc-sub-menu-children' }, [renderSlot(slots, 'default')]) : null)
-                    }
-                )
+                createVNode(McFadeInExpandTransition, null, {
+                    default: () => (isExpanded.value ? createVNode('ul', { class: 'mc-sub-menu-children' }, [renderSlot(slots, 'default')]) : null)
+                })
             ]);
     }
 });
