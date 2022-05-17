@@ -1,5 +1,5 @@
-import { getCurrentInstance, CustomVNodeTypes } from 'vue';
-import type { ComponentInternalInstance } from 'vue';
+import { getCurrentInstance } from 'vue';
+import type { CustomVNodeTypes, ComponentInternalInstance } from 'vue';
 
 export function checkParent(parentKey: Symbol, internalParent?: ComponentInternalInstance | null): boolean {
     const mergedParent = internalParent ?? getCurrentInstance()?.parent;

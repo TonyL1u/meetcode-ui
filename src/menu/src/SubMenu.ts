@@ -1,9 +1,11 @@
-import { defineComponent, renderSlot, createVNode, toRefs, ref, provide, inject, computed, getCurrentInstance } from 'vue';
-import { checkParent, flattenWithOptions } from '../../_utils_';
+import { defineComponent, renderSlot, createVNode, toRefs, ref, provide, inject, computed, getCurrentInstance, watch, onUnmounted, nextTick } from 'vue';
+import { checkParent, flattenWithOptions, createKey } from '../../_utils_';
+import { pausableWatch } from '@vueuse/core';
 import { menuIKey, menuItemIKey, menuItemGroupIKey, subMenuIKey, subMenuProps, menuInjectionKey, subMenuInjectionKey, menuGroupInjectionKey } from '../interface';
 import { McIcon } from '../../icon';
 import { McFadeInExpandTransition } from '../../_transition_';
 import { ChevronDownOutline } from '@vicons/ionicons5';
+import type { Fn } from '@vueuse/core';
 
 export default defineComponent({
     name: 'SubMenu',
@@ -14,12 +16,12 @@ export default defineComponent({
         //     throw new Error('[McSubMenu]: McSubMenu must be placed inside McMenu or McMenuItemGroup.');
         // }
 
+        const internalKey = createKey('subMenu');
         const instance = getCurrentInstance();
         const key = instance?.vnode.key;
-        const { title } = toRefs(props);
-        const { activeKey, expandedKeys, updateExpandedKeys } = inject(menuInjectionKey, null) ?? {};
-        const { padding: menuPadding = 0 } = inject(menuInjectionKey, null) ?? {};
-        const { padding: subMenuPadding = 0 } = inject(subMenuInjectionKey, null) ?? {};
+        const { title, unique } = toRefs(props);
+        const { activeKey, expandedKeys, updateExpandKeys, BusUniqueControl, padding: menuPadding = 0, key: menuKey, isUnique: isMenuUnique } = inject(menuInjectionKey, null) ?? {};
+        const { padding: subMenuPadding = 0, key: subMenuKey, isUnique: isSubMenuUnique } = inject(subMenuInjectionKey, null) ?? {};
         const { padding: menuItemGroupPadding = 0 } = inject(menuGroupInjectionKey, null) ?? {};
         const isExpanded = ref(expandedKeys?.value.includes(key || ''));
         const isActive = computed(() => {
@@ -32,14 +34,53 @@ export default defineComponent({
         const selfPadding = computed(() => {
             return checkParent(menuItemGroupIKey) ? menuItemGroupPadding + 16 : (checkParent(menuIKey) ? menuPadding : subMenuPadding) + 32;
         });
+        const parentKey = computed(() => {
+            return (checkParent(menuIKey, instance?.parent) ? menuKey : checkParent(subMenuIKey, instance?.parent) ? subMenuKey : '') || '';
+        });
+
+        let unsubscribe: Fn | undefined;
+
+        if ((isMenuUnique?.value && parentKey.value === menuKey) || (isSubMenuUnique?.value && parentKey.value === subMenuKey)) {
+            const createBusOn = () => {
+                return BusUniqueControl?.on(key => {
+                    if (isExpanded.value && key === parentKey.value) {
+                        pause();
+                        handleExpand();
+                        resume();
+                    }
+                });
+            };
+
+            const { pause, resume } = pausableWatch(
+                isExpanded,
+                val => {
+                    if (BusUniqueControl && parentKey.value && val) {
+                        unsubscribe?.();
+                        nextTick(() => {
+                            BusUniqueControl.emit(parentKey.value);
+                            unsubscribe = createBusOn();
+                        });
+                    }
+                },
+                {
+                    immediate: true
+                }
+            );
+        }
 
         const handleExpand = () => {
             isExpanded.value = !isExpanded.value;
-            key && updateExpandedKeys?.(key);
+            key && updateExpandKeys?.(key);
         };
 
         provide(subMenuInjectionKey, {
-            padding: selfPadding.value
+            padding: selfPadding.value,
+            key: internalKey,
+            isUnique: unique
+        });
+
+        onUnmounted(() => {
+            unsubscribe?.();
         });
 
         // main logic...

@@ -85,6 +85,7 @@ export default defineComponent({
             }
             props.onAfterEnter?.();
         }
+
         return () => {
             const type = props.group ? TransitionGroup : Transition;
             return h(

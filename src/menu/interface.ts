@@ -1,15 +1,21 @@
 import type { Key } from '../_utils_';
 import type { PropType, InjectionKey, Ref, VNodeChild } from 'vue';
+import type { UseEventBusReturn } from '@vueuse/core';
 
 interface MenuInjection {
     activeKey: Ref<Key>;
     updateKey: (key: Key) => void;
     expandedKeys: Ref<Key[]>;
-    updateExpandedKeys: (key: Key) => void;
+    updateExpandKeys: (key: Key) => void;
     padding: number;
+    key: string;
+    BusUniqueControl: UseEventBusReturn<string, any>;
+    isUnique: Ref<boolean>;
 }
 interface SubMenuInjection {
     padding: number;
+    key: string;
+    isUnique: Ref<boolean>;
 }
 interface MenuGroupInjection {
     padding: number;
@@ -26,6 +32,7 @@ export interface MenuProps {
     value?: Key;
     expandKeys?: Key[];
     indent?: number;
+    unique?: boolean;
 }
 export interface MenuItemProps {
     key?: Key;
@@ -35,6 +42,7 @@ export interface MenuItemGroupProps {
 }
 export interface SubMenuProps {
     title?: string | (() => VNodeChild);
+    unique?: boolean;
 }
 export const menuProps = {
     value: {
@@ -48,6 +56,10 @@ export const menuProps = {
     indent: {
         type: Number as PropType<MenuProps['indent']>,
         default: 32
+    },
+    unique: {
+        type: Boolean as PropType<MenuProps['unique']>,
+        default: false
     }
 };
 export const menuItemProps = {
@@ -66,5 +78,9 @@ export const subMenuProps = {
     title: {
         type: [String, Function] as PropType<SubMenuProps['title']>,
         default: undefined
+    },
+    unique: {
+        type: Boolean as PropType<SubMenuProps['unique']>,
+        default: false
     }
 };

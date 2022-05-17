@@ -1,4 +1,4 @@
-import { defineComponent, ref, createVNode, renderSlot, toRefs, computed, inject, mergeProps } from 'vue';
+import { defineComponent, ref, createVNode, renderSlot, toRefs, computed, inject, mergeProps, onUnmounted } from 'vue';
 import CheckMark from './CheckMark.vue';
 import IndeterminateMark from './IndeterminateMark.vue';
 import { or, and, not, isDefined } from '@vueuse/core';
@@ -90,6 +90,8 @@ export default defineComponent({
                 return null;
             }
         });
+
+        onUnmounted(() => {});
 
         return () => {
             const mergedProps = mergeProps(

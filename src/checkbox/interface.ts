@@ -1,5 +1,5 @@
-import { InjectionKey, Ref, VNodeChild, PropType } from 'vue';
-import { UseEventBusReturn } from '@vueuse/core';
+import type { InjectionKey, Ref, VNodeChild, PropType } from 'vue';
+import type { UseEventBusReturn } from '@vueuse/core';
 import * as CSS from 'csstype';
 
 declare module 'csstype' {

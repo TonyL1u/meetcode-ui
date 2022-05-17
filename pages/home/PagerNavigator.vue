@@ -23,7 +23,7 @@ const switchPrev = () => {
 </script>
 
 <template>
-    <div v-if="next || prev" class="mc-px-6 mc-py-7 mc-mx-auto mc-max-w-[768px] mc-flex mc-justify-between mc-w-full mc-box-border" :style="{ justifyContent: !prev ? 'flex-end' : !next ? 'flex-start' : '' }">
+    <div v-if="next || prev" class="mc-px-[18px] mc-py-7 mc-mx-auto mc-max-w-[768px] mc-flex mc-justify-between mc-w-full mc-box-border" :style="{ justifyContent: !prev ? 'flex-end' : !next ? 'flex-start' : '' }">
         <div v-if="prev" class="switcher prev" @click="switchPrev">
             <div class="mc-flex mc-items-center mc-text-xs">
                 <McIcon :size="12">
