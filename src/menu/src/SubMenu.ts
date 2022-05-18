@@ -4,7 +4,7 @@ import { pausableWatch } from '@vueuse/core';
 import { menuIKey, menuItemIKey, menuItemGroupIKey, subMenuIKey, subMenuProps, menuInjectionKey, subMenuInjectionKey, menuGroupInjectionKey } from '../interface';
 import { McIcon } from '../../icon';
 import { McFadeInExpandTransition } from '../../_transition_';
-import { ChevronDownOutline } from '@vicons/ionicons5';
+import { ChevronUpOutline } from '@vicons/ionicons5';
 import type { Fn } from '@vueuse/core';
 
 export default defineComponent({
@@ -20,9 +20,9 @@ export default defineComponent({
         const instance = getCurrentInstance();
         const key = instance?.vnode.key;
         const { title, unique, submenuAutoEmit, indent } = toRefs(props);
-        const { activeKey, expandedKeys, updateExpandKeys, BusUniqueControl, padding: menuPadding = 0, key: menuKey, isUnique: isMenuUnique, isAutoEmit: isMenuAutoEmit } = inject(menuInjectionKey, null) ?? {};
-        const { padding: subMenuPadding = 0, key: subMenuKey, isUnique: isSubMenuUnique, isAutoEmit: isSubMenuAutoEmit } = inject(subMenuInjectionKey, null) ?? {};
-        const { padding: menuItemGroupPadding = 0 } = inject(menuGroupInjectionKey, null) ?? {};
+        const { activeKey, expandedKeys, updateExpandKeys, BusUniqueControl, BusExpandControl, padding: menuPadding, key: menuKey, isUnique: isMenuUnique, isAutoEmit: isMenuAutoEmit } = inject(menuInjectionKey, null) ?? {};
+        const { padding: subMenuPadding, key: subMenuKey, isUnique: isSubMenuUnique, isAutoEmit: isSubMenuAutoEmit } = inject(subMenuInjectionKey, null) ?? {};
+        const { padding: menuItemGroupPadding } = inject(menuGroupInjectionKey, null) ?? {};
         const isExpanded = ref(expandedKeys?.value.includes(key || ''));
         const isActive = computed(() => {
             const keys = flattenWithOptions({ slots, key: menuItemIKey, infinity: true }).map(item => {
@@ -31,20 +31,21 @@ export default defineComponent({
 
             return !!(activeKey?.value && keys.includes(activeKey.value));
         });
-        const selfPadding = computed(() => (indent.value ? indent.value : checkParent(menuItemGroupIKey) ? menuItemGroupPadding + 16 : (checkParent(menuIKey) ? menuPadding : subMenuPadding) + 32));
+        const selfPadding = computed(() => (indent.value ? indent.value : checkParent(menuItemGroupIKey) ? (menuItemGroupPadding?.value || 0) + 16 : ((checkParent(menuIKey) ? menuPadding?.value : subMenuPadding?.value) || 0) + 32));
         const parentKey = computed(() => (checkParent(menuIKey, instance?.parent) ? menuKey : checkParent(subMenuIKey, instance?.parent) ? subMenuKey : '') || '');
         const watchUnique = computed(() => !!((isMenuUnique?.value && parentKey.value === menuKey) || (isSubMenuUnique?.value && parentKey.value === subMenuKey)));
         const autoEmit = computed(() => !!((isMenuAutoEmit?.value && parentKey.value === menuKey) || (isSubMenuAutoEmit?.value && parentKey.value === subMenuKey)));
-        let unsubscribe: Fn | undefined;
+        let uniqueUnsubscribe: Fn | undefined;
+        let expandUnsubscribe: Fn | undefined;
 
         const { pause, resume } = pausableWatch(
             isExpanded,
             val => {
                 if (BusUniqueControl && parentKey.value && val) {
-                    unsubscribe?.();
+                    uniqueUnsubscribe?.();
                     nextTick(() => {
                         BusUniqueControl.emit(parentKey.value);
-                        unsubscribe = createBusOn();
+                        uniqueUnsubscribe = createBusOn();
                     });
                 }
             },
@@ -67,6 +68,15 @@ export default defineComponent({
             }
         );
 
+        if (BusExpandControl) {
+            expandUnsubscribe = BusExpandControl.on(type => {
+                console.log(type);
+                if (type === isExpanded.value) {
+                    handleExpand(false);
+                }
+            });
+        }
+
         const handleExpand = (call = true) => {
             isExpanded.value = !isExpanded.value;
             call && key && updateExpandKeys?.(key);
@@ -83,14 +93,15 @@ export default defineComponent({
         };
 
         provide(subMenuInjectionKey, {
-            padding: selfPadding.value,
+            padding: selfPadding,
             key: internalKey,
             isUnique: unique,
             isAutoEmit: submenuAutoEmit
         });
 
         onUnmounted(() => {
-            unsubscribe?.();
+            uniqueUnsubscribe?.();
+            expandUnsubscribe?.();
         });
 
         // main logic...
@@ -99,7 +110,7 @@ export default defineComponent({
                 createVNode('div', { class: 'mc-sub-menu-title', style: { paddingLeft: `${selfPadding.value}px` }, onClick: handleExpand }, [
                     slots.icon ? createVNode('div', { class: 'mc-sub-menu-title__icon' }, [renderSlot(slots, 'icon')]) : null,
                     createVNode('span', { class: 'mc-sub-menu-title__content' }, [slots.title ? renderSlot(slots, 'title') : title.value || '']),
-                    createVNode(McIcon, { class: 'mc-sub-menu-title__arrow' }, { default: () => createVNode(ChevronDownOutline) })
+                    createVNode(McIcon, { class: 'mc-sub-menu-title__arrow' }, { default: () => createVNode(ChevronUpOutline) })
                 ]),
                 createVNode(McFadeInExpandTransition, null, {
                     default: () => (isExpanded.value ? createVNode('ul', { class: 'mc-sub-menu-children' }, [renderSlot(slots, 'default')]) : null)

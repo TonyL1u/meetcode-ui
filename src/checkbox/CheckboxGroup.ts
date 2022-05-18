@@ -80,6 +80,11 @@ export default defineComponent({
             BusMaxControl
         });
 
+        onUnmounted(() => {
+            BusMaxControl.reset();
+            BusSelectAll.reset();
+        });
+
         expose({
             selectAll(selectDisabled: boolean = true) {
                 BusSelectAll.emit(selectDisabled);
@@ -93,11 +98,6 @@ export default defineComponent({
             },
             status,
             el: checkboxGroupElRef
-        });
-
-        onUnmounted(() => {
-            BusMaxControl.reset();
-            BusSelectAll.reset();
         });
 
         return () =>

@@ -49,3 +49,11 @@
 <IndentControl />
 
 :::
+
+::: demo CodePreview=Collapse
+
+### 折叠
+
+<Collapse />
+
+:::

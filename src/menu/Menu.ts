@@ -11,7 +11,7 @@ export default defineComponent({
     iKey: menuIKey,
     props: menuProps,
     emits: ['update:value', 'update:expandKeys'],
-    setup(props, { slots, emit }) {
+    setup(props, { slots, emit, expose }) {
         // theme register
         onMounted(() => {
             useThemeRegister({
@@ -47,22 +47,35 @@ export default defineComponent({
         };
 
         const UniqueControlEventBusKey: EventBusKey<string> = Symbol();
+        const ExpandControlEventBusKey: EventBusKey<boolean> = Symbol();
         const BusUniqueControl = useEventBus(UniqueControlEventBusKey);
+        const BusExpandControl = useEventBus(ExpandControlEventBusKey);
 
         provide(menuInjectionKey, {
             activeKey: valueVM,
             updateKey: callUpdateValue,
             expandedKeys: mergedExpandKeys,
             updateExpandKeys: callUpdateExpandKeys,
-            padding: selfPadding.value,
             key: internalKey,
-            BusUniqueControl,
+            padding: selfPadding,
             isUnique: unique,
-            isAutoEmit: submenuAutoEmit
+            isAutoEmit: submenuAutoEmit,
+            BusUniqueControl,
+            BusExpandControl
         });
 
         onUnmounted(() => {
             BusUniqueControl.reset();
+            BusExpandControl.reset();
+        });
+
+        expose({
+            expandAll() {
+                BusExpandControl.emit(false);
+            },
+            collapseAll() {
+                BusExpandControl.emit(true);
+            }
         });
 
         // main logic...

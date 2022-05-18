@@ -104,40 +104,10 @@ const handleShowNavMenu = () => {
         props: {
             menu: [
                 {
-                    label: '过去增多，未来减少',
-                    key: 'the-past-increases-the-future-recedes'
-                },
-                {
                     type: 'group',
                     label: '文档',
                     key: 'docs',
                     children: menusMap.docs[siteLang.value]
-                },
-                {
-                    label: '舞，舞，舞',
-                    key: 'dance-dance-dance',
-                    children: [
-                        {
-                            label: '食物',
-                            key: 'food',
-                            children: [
-                                {
-                                    label: '三明治',
-                                    key: 'sandwich'
-                                }
-                            ]
-                        },
-                        {
-                            label: '过去增多，未来减少',
-                            key: 'the-past-increases-the-future-recedes'
-                        },
-                        {
-                            type: 'group',
-                            label: '文档',
-                            key: 'docs',
-                            children: menusMap.docs[siteLang.value]
-                        }
-                    ]
                 },
                 {
                     type: 'group',

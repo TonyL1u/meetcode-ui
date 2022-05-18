@@ -1,5 +1,5 @@
 import type { Key } from '../_utils_';
-import type { PropType, InjectionKey, Ref, VNodeChild } from 'vue';
+import type { PropType, InjectionKey, Ref, VNodeChild, ComputedRef } from 'vue';
 import type { UseEventBusReturn } from '@vueuse/core';
 
 interface MenuInjection {
@@ -7,20 +7,21 @@ interface MenuInjection {
     updateKey: (key: Key) => void;
     expandedKeys: Ref<Key[]>;
     updateExpandKeys: (key: Key) => void;
-    padding: number;
     key: string;
+    padding: ComputedRef<number>;
     isUnique: Ref<boolean>;
     isAutoEmit: Ref<boolean>;
     BusUniqueControl: UseEventBusReturn<string, any>;
+    BusExpandControl: UseEventBusReturn<boolean, any>;
 }
 interface SubMenuInjection {
-    padding: number;
     key: string;
+    padding: ComputedRef<number>;
     isUnique: Ref<boolean>;
     isAutoEmit: Ref<boolean>;
 }
 interface MenuGroupInjection {
-    padding: number;
+    padding: ComputedRef<number>;
 }
 export const menuInjectionKey: InjectionKey<MenuInjection> = Symbol();
 export const subMenuInjectionKey: InjectionKey<SubMenuInjection> = Symbol();
@@ -29,7 +30,10 @@ export const menuIKey = Symbol('menu');
 export const menuItemIKey = Symbol('menuItem');
 export const menuItemGroupIKey = Symbol('menuItemGroup');
 export const subMenuIKey = Symbol('subMenu');
-
+export interface MenuExposeInstance {
+    expandAll: () => void;
+    collapseAll: () => void;
+}
 export interface MenuProps {
     value?: Key;
     expandKeys?: Key[];

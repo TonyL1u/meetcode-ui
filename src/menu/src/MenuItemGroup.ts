@@ -12,12 +12,12 @@ export default defineComponent({
         // }
 
         const { title, indent } = toRefs(props);
-        const { padding: menuPadding = 0 } = inject(menuInjectionKey, null) ?? {};
-        const { padding: subMenuPadding = 0 } = inject(subMenuInjectionKey, null) ?? {};
-        const selfPadding = computed(() => (indent.value ? indent.value : checkParent(subMenuIKey) ? subMenuPadding + 16 : menuPadding + 32));
+        const { padding: menuPadding } = inject(menuInjectionKey, null) ?? {};
+        const { padding: subMenuPadding } = inject(subMenuInjectionKey, null) ?? {};
+        const selfPadding = computed(() => (indent.value ? indent.value : checkParent(subMenuIKey) ? (subMenuPadding?.value || 0) + 16 : (menuPadding?.value || 0) + 32));
 
         provide(menuGroupInjectionKey, {
-            padding: selfPadding.value
+            padding: selfPadding
         });
 
         // main logic...

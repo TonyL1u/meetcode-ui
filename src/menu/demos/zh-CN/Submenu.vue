@@ -1,8 +1,29 @@
 <template>
     <McMenu v-model:value="menuKey">
-        <McMenuItem key="html">HTML</McMenuItem>
-        <McMenuItem key="js">JavaScript</McMenuItem>
-        <McMenuItem key="css">CSS</McMenuItem>
+        <McMenuItem key="html">
+            <template #icon>
+                <McIcon>
+                    <LogoHtml5 />
+                </McIcon>
+            </template>
+            HTML
+        </McMenuItem>
+        <McMenuItem key="js">
+            <template #icon>
+                <McIcon>
+                    <LogoNodejs />
+                </McIcon>
+            </template>
+            JavaScript
+        </McMenuItem>
+        <McMenuItem key="css">
+            <template #icon>
+                <McIcon>
+                    <LogoCss3 />
+                </McIcon>
+            </template>
+            CSS
+        </McMenuItem>
         <McSubMenu title="Vue">
             <template #icon>
                 <McIcon>
@@ -44,7 +65,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { McMenu, McMenuItem, McMenuItemGroup, McSubMenu, McIcon } from 'meetcode-ui';
-import { CubeOutline, CodeSlashOutline, LogoVue, LogoReact } from '@vicons/ionicons5';
+import { LogoHtml5, LogoNodejs, LogoCss3, LogoVue, LogoReact } from '@vicons/ionicons5';
 
 const menuKey = ref('');
 </script>
