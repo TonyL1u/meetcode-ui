@@ -11,12 +11,10 @@ export default defineComponent({
         //     throw new Error('[McMenuItemGroup]: McMenuItemGroup must be placed inside McMenu or McSubMenu.');
         // }
 
-        const { title } = toRefs(props);
+        const { title, indent } = toRefs(props);
         const { padding: menuPadding = 0 } = inject(menuInjectionKey, null) ?? {};
         const { padding: subMenuPadding = 0 } = inject(subMenuInjectionKey, null) ?? {};
-        const selfPadding = computed(() => {
-            return checkParent(subMenuIKey) ? subMenuPadding + 16 : menuPadding + 32;
-        });
+        const selfPadding = computed(() => (indent.value ? indent.value : checkParent(subMenuIKey) ? subMenuPadding + 16 : menuPadding + 32));
 
         provide(menuGroupInjectionKey, {
             padding: selfPadding.value

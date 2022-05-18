@@ -214,3 +214,9 @@
 
 -   从首页切换到其他 tab，会有一个闪动，怀疑是因为，tab 的值改变了，但是 route 的值还没改导致的（这两个值修改是同步的）
 -   路由切换逻辑不太合理，跟 tab 强绑定，现在是通过 tab 影响路由，应该反过来，通过路由的改变来影响 tab 的切换
+
+2022-05-18
+
+-   Menu 的 `expand-keys` 不能加 `v-model` 修饰符（原因未知）
+-   Modal 的 `onUpdate:show` 事件无法触发 Modal 出现事件
+-   数组 emits 里如果是以 `update:` 开头用于 `v-model` 绑定的事件，变量名不能用 `-` 分隔，要采用驼峰格式。例如，不能写成 `update:expand-keys` ，要写成 `update:expandKeys` ，否则无法触发该事件。

@@ -12,15 +12,12 @@ export default defineComponent({
         // }
         const instance = getCurrentInstance();
         const key = instance?.vnode.key;
+        const { indent } = toRefs(props);
         const { activeKey, updateKey, padding: menuPadding = 0 } = inject(menuInjectionKey, null) ?? {};
         const { padding: subMenuPadding = 0 } = inject(subMenuInjectionKey, null) ?? {};
         const { padding: menuItemGroupPadding = 0 } = inject(menuGroupInjectionKey, null) ?? {};
         const isActive = computed(() => !!(key && key === activeKey?.value));
-        const selfPadding = computed(() => {
-            return checkParent(menuItemGroupIKey) ? menuItemGroupPadding + 16 : (checkParent(menuIKey) ? menuPadding : subMenuPadding) + 32;
-        });
-        // console.log(menuPadding, subMenuPadding, menuItemGroupPadding);
-        // console.log(selfPadding.value);
+        const selfPadding = computed(() => (indent.value ? indent.value : checkParent(menuItemGroupIKey) ? menuItemGroupPadding + 16 : (checkParent(menuIKey) ? menuPadding : subMenuPadding) + 32));
 
         // main logic...
         return () =>

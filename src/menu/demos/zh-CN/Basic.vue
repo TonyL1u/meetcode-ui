@@ -1,156 +1,18 @@
 <template>
-    <McMenu v-model:value="menuKey">
-        <!-- <McMenuItem :key="1">1</McMenuItem>
-        <McMenuItem :key="2">2</McMenuItem>
-        <McMenuItem :key="3">3</McMenuItem>
-        <McMenuItemGroup title="group1">
-            <McMenuItem :key="4">4</McMenuItem>
-            <McMenuItem :key="5">5</McMenuItem>
-        </McMenuItemGroup>
-        <McMenuItemGroup title="group2">
-            <McMenuItem :key="6">6</McMenuItem>
-            <McMenuItem :key="7">7</McMenuItem>
-        </McMenuItemGroup> -->
-        <McSubMenu key="sub-menu-1" title="子菜单1" unique>
-            <template #icon>
-                <McIcon>
-                    <CubeOutline />
-                </McIcon>
-            </template>
-            <McMenuItem :key="8">8</McMenuItem>
-            <McSubMenu key="sub-menu-3" title="子菜单3">
-                <template #icon>
-                    <McIcon>
-                        <CubeOutline />
-                    </McIcon>
-                </template>
-                <McMenuItem :key="16">16</McMenuItem>
-                <McSubMenu key="sub-menu-6" title="子菜单6">
-                    <template #icon>
-                        <McIcon>
-                            <CubeOutline />
-                        </McIcon>
-                    </template>
-                    <McMenuItem :key="3">3</McMenuItem>
-                </McSubMenu>
-                <McSubMenu key="sub-menu-7" title="子菜单7">
-                    <template #icon>
-                        <McIcon>
-                            <CubeOutline />
-                        </McIcon>
-                    </template>
-                    <McMenuItem :key="5">5</McMenuItem>
-                </McSubMenu>
-            </McSubMenu>
-            <McSubMenu key="sub-menu-4" title="子菜单4">
-                <template #icon>
-                    <McIcon>
-                        <CubeOutline />
-                    </McIcon>
-                </template>
-                <McMenuItem :key="1">1</McMenuItem>
-            </McSubMenu>
-            <!-- <McMenuItemGroup title="group3">
-                <McMenuItem :key="10">10</McMenuItem>
-                <McMenuItem :key="11">11</McMenuItem>
-                <McSubMenu title="子菜单2">
-                    <template #icon>
-                        <McIcon>
-                            <CubeOutline />
-                        </McIcon>
-                    </template>
-                    <McMenuItem :key="12">12</McMenuItem>
-                    <McMenuItem :key="13">13</McMenuItem>
-                    <McMenuItemGroup title="group4">
-                        <McMenuItem :key="14">14</McMenuItem>
-                        <McMenuItem :key="15">15</McMenuItem>
-                    </McMenuItemGroup>
-                    <McSubMenu title="子菜单4">
-                        <template #icon>
-                            <McIcon>
-                                <CubeOutline />
-                            </McIcon>
-                        </template>
-                        <McMenuItem :key="1">1</McMenuItem>
-                        <McMenuItem :key="2">2</McMenuItem>
-                        <McMenuItemGroup title="group4">
-                        <McMenuItem :key="14">14</McMenuItem>
-                        <McMenuItem :key="15">15</McMenuItem>
-                    </McMenuItemGroup>
-                    </McSubMenu>
-                </McSubMenu>
-            </McMenuItemGroup> -->
-            <!-- <McMenuItem :key="7">7</McMenuItem> -->
-            <!-- <McMenuItemGroup title="group4">
-                <McMenuItem :key="14">14</McMenuItem>
-                <McMenuItem :key="15">15</McMenuItem>
-            </McMenuItemGroup>
-            <McSubMenu key="sub-menu-2" title="子菜单3">
-                <template #icon>
-                    <McIcon>
-                        <CubeOutline />
-                    </McIcon>
-                </template>
-                <McMenuItem :key="16">16</McMenuItem>
-                <McMenuItem :key="17">17</McMenuItem>
-                <McMenuItemGroup title="group4">
-                        <McMenuItem :key="14">14</McMenuItem>
-                        <McMenuItem :key="15">15</McMenuItem>
-                    </McMenuItemGroup>
-            </McSubMenu> -->
-            <!-- <McSubMenu key="sub-menu-3" title="子菜单2">
-                <template #icon>
-                    <McIcon>
-                        <CubeOutline />
-                    </McIcon>
-                </template>
-                <McMenuItem :key="12">12</McMenuItem>
-                <McMenuItem :key="13">13</McMenuItem>
-            </McSubMenu> -->
-        </McSubMenu>
-        <McSubMenu key="sub-menu-2" title="子菜单2">
-            <template #icon>
-                <McIcon>
-                    <CubeOutline />
-                </McIcon>
-            </template>
-            <McMenuItem :key="10">10</McMenuItem>
-            <!-- <McMenuItem :key="11">11</McMenuItem> -->
-        </McSubMenu>
-        <McSubMenu key="sub-menu-5" title="子菜单5">
-            <template #icon>
-                <McIcon>
-                    <CubeOutline />
-                </McIcon>
-            </template>
-            <McMenuItem :key="2">2</McMenuItem>
-            <!-- <McMenuItem :key="11">11</McMenuItem> -->
-        </McSubMenu>
-        <!-- <McMenuItemGroup title="group4">
-            <McMenuItem :key="14">14</McMenuItem>
-            <McMenuItem :key="15">15</McMenuItem>
-        </McMenuItemGroup> -->
-        <!-- <McSubMenu title="子菜单2">
-            <template #icon>
-                <McIcon>
-                    <CubeOutline />
-                </McIcon>
-            </template>
-            <McMenuItem :key="12">12</McMenuItem>
-            <McMenuItem :key="13">13</McMenuItem>
-            <McMenuItemGroup title="group4">
-                <McMenuItem :key="14">14</McMenuItem>
-                <McMenuItem :key="15">15</McMenuItem>
-            </McMenuItemGroup>
-        </McSubMenu> -->
+    <McMenu v-model:value="menuKey" @update:value="handleUpdateValue">
+        <McMenuItem key="option1">Option 1</McMenuItem>
+        <McMenuItem key="option2">Option 2</McMenuItem>
+        <McMenuItem key="option3">Option 3</McMenuItem>
+        <McMenuItem key="option4">Option 4</McMenuItem>
     </McMenu>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { McMenu, McMenuItem, McMenuItemGroup, McSubMenu, McIcon } from 'meetcode-ui';
-import { CubeOutline } from '@vicons/ionicons5';
+import { McMenu, McMenuItem, McMessage } from 'meetcode-ui';
 
-const menuKey = ref(11);
-const expandSubMenuKeys = ref(['sub-menu-1', 'sub-menu-2']);
+const menuKey = ref('option1');
+const handleUpdateValue = (key: string) => {
+    McMessage.text(`当前选中的 Key = ${key}`, { card: true });
+};
 </script>

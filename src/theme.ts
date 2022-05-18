@@ -1,8 +1,12 @@
-import { computed } from 'vue';
-import { createGlobalState, useStorage, RemovableRef, createEventHook } from '@vueuse/core';
+import { computed, watch } from 'vue';
+import { createGlobalState, useStorage, RemovableRef, createEventHook, usePreferredDark } from '@vueuse/core';
 import type { EventHookOn } from '@vueuse/core';
 
 type ThemeType = 'light' | 'dark';
+interface ThemeControlOptions {
+    initialTheme?: ThemeType;
+    useOsTheme?: boolean;
+}
 const globalThemeState = createGlobalState(() => useStorage<ThemeType>('meetcode-ui-theme-local-storage', 'light'));
 export const globalTheme: RemovableRef<ThemeType> = globalThemeState();
 export const isLight = computed(() => globalTheme.value === 'light');
@@ -15,7 +19,8 @@ const globalThemeChangeEventHook = createEventHook<ThemeType>();
 /**
  * User's integrate theme controller
  */
-export function useThemeController(initialTheme?: ThemeType) {
+export function useThemeController(options: ThemeControlOptions = {}) {
+    const { initialTheme, useOsTheme } = options;
     const themeChangeEventHook = createEventHook<ThemeType>();
     const setTheme = (theme: ThemeType = 'light') => {
         if (globalTheme.value !== theme) {
@@ -25,7 +30,22 @@ export function useThemeController(initialTheme?: ThemeType) {
         }
     };
 
-    if (initialTheme) setTheme(initialTheme);
+    if (initialTheme) {
+        setTheme(initialTheme);
+    } else if (useOsTheme) {
+        const isDark = usePreferredDark();
+        watch(
+            isDark,
+            colorScheme => {
+                if (colorScheme) {
+                    setTheme('dark');
+                } else {
+                    setTheme('light');
+                }
+            },
+            { immediate: true }
+        );
+    }
 
     return {
         current: globalTheme,

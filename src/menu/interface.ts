@@ -9,13 +9,15 @@ interface MenuInjection {
     updateExpandKeys: (key: Key) => void;
     padding: number;
     key: string;
-    BusUniqueControl: UseEventBusReturn<string, any>;
     isUnique: Ref<boolean>;
+    isAutoEmit: Ref<boolean>;
+    BusUniqueControl: UseEventBusReturn<string, any>;
 }
 interface SubMenuInjection {
     padding: number;
     key: string;
     isUnique: Ref<boolean>;
+    isAutoEmit: Ref<boolean>;
 }
 interface MenuGroupInjection {
     padding: number;
@@ -33,16 +35,20 @@ export interface MenuProps {
     expandKeys?: Key[];
     indent?: number;
     unique?: boolean;
+    submenuAutoEmit?: boolean;
 }
 export interface MenuItemProps {
-    key?: Key;
+    indent?: number;
 }
 export interface MenuItemGroupProps {
     title?: string | (() => VNodeChild);
+    indent?: number;
 }
 export interface SubMenuProps {
     title?: string | (() => VNodeChild);
     unique?: boolean;
+    submenuAutoEmit?: boolean;
+    indent?: number;
 }
 export const menuProps = {
     value: {
@@ -60,17 +66,25 @@ export const menuProps = {
     unique: {
         type: Boolean as PropType<MenuProps['unique']>,
         default: false
+    },
+    submenuAutoEmit: {
+        type: Boolean as PropType<MenuProps['submenuAutoEmit']>,
+        default: true
     }
 };
 export const menuItemProps = {
-    key: {
-        type: [String, Number, Symbol] as PropType<MenuItemProps['key']>,
+    indent: {
+        type: Number as PropType<MenuItemProps['indent']>,
         default: undefined
     }
 };
 export const menuItemGroupProps = {
     title: {
         type: [String, Function] as PropType<MenuItemGroupProps['title']>,
+        default: undefined
+    },
+    indent: {
+        type: Number as PropType<MenuItemGroupProps['indent']>,
         default: undefined
     }
 };
@@ -82,5 +96,13 @@ export const subMenuProps = {
     unique: {
         type: Boolean as PropType<SubMenuProps['unique']>,
         default: false
+    },
+    submenuAutoEmit: {
+        type: Boolean as PropType<SubMenuProps['submenuAutoEmit']>,
+        default: true
+    },
+    indent: {
+        type: Number as PropType<SubMenuProps['indent']>,
+        default: undefined
     }
 };

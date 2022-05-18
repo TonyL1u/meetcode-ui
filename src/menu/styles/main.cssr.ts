@@ -22,8 +22,7 @@ export default c([
             paddingRight: '16px',
             display: 'flex',
             alignItems: 'center',
-            fontSize: '12px',
-            color: 'rgb(118, 124, 130)'
+            fontSize: '12px'
         }),
         c('&-children', {
             padding: 0
@@ -40,9 +39,6 @@ export default c([
                     transform: 'rotate(-180deg)'
                 })
             ]),
-            c('&--child-active > .mc-sub-menu-title', {
-                color: '#10b981'
-            }),
             c(
                 '&-title',
                 {

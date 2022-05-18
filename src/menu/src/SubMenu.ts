@@ -19,9 +19,9 @@ export default defineComponent({
         const internalKey = createKey('subMenu');
         const instance = getCurrentInstance();
         const key = instance?.vnode.key;
-        const { title, unique } = toRefs(props);
-        const { activeKey, expandedKeys, updateExpandKeys, BusUniqueControl, padding: menuPadding = 0, key: menuKey, isUnique: isMenuUnique } = inject(menuInjectionKey, null) ?? {};
-        const { padding: subMenuPadding = 0, key: subMenuKey, isUnique: isSubMenuUnique } = inject(subMenuInjectionKey, null) ?? {};
+        const { title, unique, submenuAutoEmit, indent } = toRefs(props);
+        const { activeKey, expandedKeys, updateExpandKeys, BusUniqueControl, padding: menuPadding = 0, key: menuKey, isUnique: isMenuUnique, isAutoEmit: isMenuAutoEmit } = inject(menuInjectionKey, null) ?? {};
+        const { padding: subMenuPadding = 0, key: subMenuKey, isUnique: isSubMenuUnique, isAutoEmit: isSubMenuAutoEmit } = inject(subMenuInjectionKey, null) ?? {};
         const { padding: menuItemGroupPadding = 0 } = inject(menuGroupInjectionKey, null) ?? {};
         const isExpanded = ref(expandedKeys?.value.includes(key || ''));
         const isActive = computed(() => {
@@ -31,52 +31,62 @@ export default defineComponent({
 
             return !!(activeKey?.value && keys.includes(activeKey.value));
         });
-        const selfPadding = computed(() => {
-            return checkParent(menuItemGroupIKey) ? menuItemGroupPadding + 16 : (checkParent(menuIKey) ? menuPadding : subMenuPadding) + 32;
-        });
-        const parentKey = computed(() => {
-            return (checkParent(menuIKey, instance?.parent) ? menuKey : checkParent(subMenuIKey, instance?.parent) ? subMenuKey : '') || '';
-        });
-
+        const selfPadding = computed(() => (indent.value ? indent.value : checkParent(menuItemGroupIKey) ? menuItemGroupPadding + 16 : (checkParent(menuIKey) ? menuPadding : subMenuPadding) + 32));
+        const parentKey = computed(() => (checkParent(menuIKey, instance?.parent) ? menuKey : checkParent(subMenuIKey, instance?.parent) ? subMenuKey : '') || '');
+        const watchUnique = computed(() => !!((isMenuUnique?.value && parentKey.value === menuKey) || (isSubMenuUnique?.value && parentKey.value === subMenuKey)));
+        const autoEmit = computed(() => !!((isMenuAutoEmit?.value && parentKey.value === menuKey) || (isSubMenuAutoEmit?.value && parentKey.value === subMenuKey)));
         let unsubscribe: Fn | undefined;
 
-        if ((isMenuUnique?.value && parentKey.value === menuKey) || (isSubMenuUnique?.value && parentKey.value === subMenuKey)) {
-            const createBusOn = () => {
-                return BusUniqueControl?.on(key => {
-                    if (isExpanded.value && key === parentKey.value) {
-                        pause();
-                        handleExpand();
-                        resume();
-                    }
-                });
-            };
-
-            const { pause, resume } = pausableWatch(
-                isExpanded,
-                val => {
-                    if (BusUniqueControl && parentKey.value && val) {
-                        unsubscribe?.();
-                        nextTick(() => {
-                            BusUniqueControl.emit(parentKey.value);
-                            unsubscribe = createBusOn();
-                        });
-                    }
-                },
-                {
-                    immediate: true
+        const { pause, resume } = pausableWatch(
+            isExpanded,
+            val => {
+                if (BusUniqueControl && parentKey.value && val) {
+                    unsubscribe?.();
+                    nextTick(() => {
+                        BusUniqueControl.emit(parentKey.value);
+                        unsubscribe = createBusOn();
+                    });
                 }
-            );
-        }
+            },
+            {
+                immediate: watchUnique.value
+            }
+        );
 
-        const handleExpand = () => {
+        watch(
+            watchUnique,
+            flag => {
+                if (flag) {
+                    resume();
+                } else {
+                    pause();
+                }
+            },
+            {
+                immediate: true
+            }
+        );
+
+        const handleExpand = (call = true) => {
             isExpanded.value = !isExpanded.value;
-            key && updateExpandKeys?.(key);
+            call && key && updateExpandKeys?.(key);
+        };
+
+        const createBusOn = () => {
+            return BusUniqueControl?.on(key => {
+                if (isExpanded.value && key === parentKey.value) {
+                    pause();
+                    handleExpand(autoEmit.value);
+                    resume();
+                }
+            });
         };
 
         provide(subMenuInjectionKey, {
             padding: selfPadding.value,
             key: internalKey,
-            isUnique: unique
+            isUnique: unique,
+            isAutoEmit: submenuAutoEmit
         });
 
         onUnmounted(() => {
