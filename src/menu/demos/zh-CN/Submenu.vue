@@ -25,7 +25,7 @@
             </template>
             CSS
         </McMenuItem>
-        <McSubMenu title="Vue">
+        <McSubMenu key="vue" title="Vue">
             <template #icon>
                 <McIcon>
                     <LogoVue />
@@ -41,7 +41,7 @@
                 <McMenuItem key="vue-essentials-reactivity-fundamentals">响应式基础</McMenuItem>
             </McMenuItemGroup>
         </McSubMenu>
-        <McSubMenu title="React">
+        <McSubMenu key="react" title="React">
             <template #icon>
                 <McIcon>
                     <LogoReact />

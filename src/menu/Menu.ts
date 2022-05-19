@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, renderSlot, createVNode, ref, provide, toRefs, onUnmounted, computed } from 'vue';
+import { defineComponent, onMounted, renderSlot, createVNode, ref, provide, toRefs, onUnmounted, computed, watch } from 'vue';
 import { useThemeRegister, flatten, createKey } from '../_utils_';
 import { useEventBus, useVModel } from '@vueuse/core';
 import { menuIKey, menuInjectionKey, subMenuIKey, menuProps } from './interface';
@@ -54,7 +54,7 @@ export default defineComponent({
         };
 
         const UniqueControlEventBusKey: EventBusKey<string> = Symbol();
-        const ExpandControlEventBusKey: EventBusKey<boolean> = Symbol();
+        const ExpandControlEventBusKey: EventBusKey<boolean | Key | Key[]> = Symbol();
         const BusUniqueControl = useEventBus(UniqueControlEventBusKey);
         const BusExpandControl = useEventBus(ExpandControlEventBusKey);
 
@@ -67,7 +67,7 @@ export default defineComponent({
             padding: selfPadding,
             isUnique: unique,
             isAutoEmit: submenuAutoEmit,
-            collapsedIconSize,
+            isCollapsed: collapsed,
             BusUniqueControl,
             BusExpandControl
         });
@@ -78,8 +78,8 @@ export default defineComponent({
         });
 
         expose({
-            expandAll() {
-                BusExpandControl.emit(false);
+            expand(keys: Key | Key[]) {
+                BusExpandControl.emit(keys);
             },
             collapseAll() {
                 BusExpandControl.emit(true);

@@ -1,6 +1,7 @@
 import { defineComponent, renderSlot, createVNode, inject, computed, toRefs, getCurrentInstance } from 'vue';
 import { checkParent } from '../../_utils_';
 import { menuIKey, menuItemGroupIKey, subMenuIKey, menuItemIKey, menuItemProps, menuInjectionKey, subMenuInjectionKey, menuGroupInjectionKey } from '../interface';
+import { McTooltip } from '../../tooltip';
 import * as CSS from 'csstype';
 
 export default defineComponent({
@@ -14,7 +15,7 @@ export default defineComponent({
         const instance = getCurrentInstance();
         const key = instance?.vnode.key;
         const { indent } = toRefs(props);
-        const { activeKey, updateKey, padding: menuPadding, collapsedIconSize } = inject(menuInjectionKey, null) ?? {};
+        const { activeKey, updateKey, padding: menuPadding, isCollapsed } = inject(menuInjectionKey, null) ?? {};
         const { padding: subMenuPadding } = inject(subMenuInjectionKey, null) ?? {};
         const { padding: menuItemGroupPadding } = inject(menuGroupInjectionKey, null) ?? {};
         const isActive = computed(() => !!(key && key === activeKey?.value));
@@ -28,15 +29,22 @@ export default defineComponent({
         // main logic...
         return () =>
             createVNode(
-                'li',
+                McTooltip,
+                { disabled: !isCollapsed?.value || !checkParent(menuIKey), content: () => renderSlot(slots, 'default'), placement: 'right' },
                 {
-                    class: ['mc-menu-item', isActive.value ? 'mc-menu-item--active' : ''],
-                    style: cssVars.value,
-                    onClick: () => {
-                        key && updateKey?.(key);
-                    }
-                },
-                [slots.icon ? createVNode('div', { class: 'mc-menu-item__icon' }, [renderSlot(slots, 'icon')]) : null, createVNode('div', { class: 'mc-menu-item__content' }, [renderSlot(slots, 'default')])]
+                    default: () =>
+                        createVNode(
+                            'li',
+                            {
+                                class: ['mc-menu-item', isActive.value ? 'mc-menu-item--active' : ''],
+                                style: cssVars.value,
+                                onClick: () => {
+                                    key && updateKey?.(key);
+                                }
+                            },
+                            [slots.icon ? createVNode('div', { class: 'mc-menu-item__icon' }, [renderSlot(slots, 'icon')]) : null, createVNode('div', { class: 'mc-menu-item__content' }, [renderSlot(slots, 'default')])]
+                        )
+                }
             );
     }
 });

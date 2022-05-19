@@ -3,6 +3,7 @@ import { checkParent, flattenWithOptions, createKey } from '../../_utils_';
 import { pausableWatch } from '@vueuse/core';
 import { menuIKey, menuItemIKey, menuItemGroupIKey, subMenuIKey, subMenuProps, menuInjectionKey, subMenuInjectionKey, menuGroupInjectionKey } from '../interface';
 import { McIcon } from '../../icon';
+import { McPopover } from '../../popover';
 import { McFadeInExpandTransition } from '../../_transition_';
 import { ChevronUpOutline } from '@vicons/ionicons5';
 import type { Fn } from '@vueuse/core';
@@ -21,7 +22,7 @@ export default defineComponent({
         const instance = getCurrentInstance();
         const key = instance?.vnode.key;
         const { title, unique, submenuAutoEmit, indent } = toRefs(props);
-        const { activeKey, expandedKeys, updateExpandKeys, BusUniqueControl, BusExpandControl, padding: menuPadding, key: menuKey, isUnique: isMenuUnique, isAutoEmit: isMenuAutoEmit } = inject(menuInjectionKey, null) ?? {};
+        const { activeKey, expandedKeys, updateExpandKeys, BusUniqueControl, BusExpandControl, padding: menuPadding, key: menuKey, isUnique: isMenuUnique, isAutoEmit: isMenuAutoEmit, isCollapsed: isMenuCollapsed } = inject(menuInjectionKey, null) ?? {};
         const { padding: subMenuPadding, key: subMenuKey, isUnique: isSubMenuUnique, isAutoEmit: isSubMenuAutoEmit } = inject(subMenuInjectionKey, null) ?? {};
         const { padding: menuItemGroupPadding } = inject(menuGroupInjectionKey, null) ?? {};
         const isExpanded = ref(expandedKeys?.value.includes(key || ''));
@@ -76,8 +77,11 @@ export default defineComponent({
 
         if (BusExpandControl) {
             expandUnsubscribe = BusExpandControl.on(type => {
-                console.log(type);
-                if (type === isExpanded.value) {
+                if (typeof type === 'boolean' && isExpanded.value) {
+                    handleExpand(false);
+                } else if (key && !isExpanded.value && typeof type === 'string' && key === type) {
+                    handleExpand(false);
+                } else if (key && !isExpanded.value && Array.isArray(type) && type.includes(key)) {
                     handleExpand(false);
                 }
             });
@@ -113,13 +117,34 @@ export default defineComponent({
         // main logic...
         return () =>
             createVNode('li', { class: ['mc-sub-menu', isExpanded.value ? '' : 'mc-sub-menu--collapsed', isActive.value ? 'mc-sub-menu--child-active' : ''] }, [
-                createVNode('div', { class: 'mc-sub-menu-title', style: cssVars.value, onClick: handleExpand }, [
-                    slots.icon ? createVNode('div', { class: 'mc-sub-menu-title__icon' }, [renderSlot(slots, 'icon')]) : null,
-                    createVNode('span', { class: 'mc-sub-menu-title__content' }, [slots.title ? renderSlot(slots, 'title') : title.value || '']),
-                    createVNode(McIcon, { class: 'mc-sub-menu-title__arrow' }, { default: () => createVNode(ChevronUpOutline) })
-                ]),
+                createVNode(
+                    McPopover,
+                    { disabled: !isMenuCollapsed?.value, placement: 'right-start', withArrow: false, style: { padding: '4px' } },
+                    {
+                        content: () => {
+                            return createVNode('ul', { class: 'mc-sub-menu-children', style: { margin: 0 } }, [renderSlot(slots, 'default')]);
+                        },
+                        default: () =>
+                            createVNode(
+                                'div',
+                                {
+                                    class: 'mc-sub-menu-title',
+                                    style: cssVars.value,
+                                    onClick: () => {
+                                        if (isMenuCollapsed?.value) return;
+                                        handleExpand();
+                                    }
+                                },
+                                [
+                                    slots.icon ? createVNode('div', { class: 'mc-sub-menu-title__icon' }, [renderSlot(slots, 'icon')]) : null,
+                                    createVNode('span', { class: 'mc-sub-menu-title__content' }, [slots.title ? renderSlot(slots, 'title') : title.value || '']),
+                                    createVNode(McIcon, { class: 'mc-sub-menu-title__arrow' }, { default: () => createVNode(ChevronUpOutline) })
+                                ]
+                            )
+                    }
+                ),
                 createVNode(McFadeInExpandTransition, null, {
-                    default: () => (isExpanded.value ? createVNode('ul', { class: 'mc-sub-menu-children' }, [renderSlot(slots, 'default')]) : null)
+                    default: () => (isExpanded.value && !isMenuCollapsed?.value ? createVNode('ul', { class: 'mc-sub-menu-children' }, [renderSlot(slots, 'default')]) : null)
                 })
             ]);
     }

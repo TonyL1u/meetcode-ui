@@ -20,9 +20,9 @@ interface MenuInjection {
     padding: ComputedRef<number>;
     isUnique: Ref<boolean>;
     isAutoEmit: Ref<boolean>;
-    collapsedIconSize: Ref<number>;
+    isCollapsed: Ref<boolean>;
     BusUniqueControl: UseEventBusReturn<string, any>;
-    BusExpandControl: UseEventBusReturn<boolean, any>;
+    BusExpandControl: UseEventBusReturn<boolean | Key | Key[], any>;
 }
 interface SubMenuInjection {
     key: string;
@@ -41,7 +41,7 @@ export const menuItemIKey = Symbol('menuItem');
 export const menuItemGroupIKey = Symbol('menuItemGroup');
 export const subMenuIKey = Symbol('subMenu');
 export interface MenuExposeInstance {
-    expandAll: () => void;
+    expand: (keys: Key | Key[]) => void;
     collapseAll: () => void;
 }
 export interface MenuProps {

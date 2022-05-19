@@ -16,7 +16,7 @@
                 <McMenuItem key="vue-essentials-reactivity-fundamentals">响应式基础</McMenuItem>
             </McSubMenu>
         </McSubMenu>
-        <McSubMenu key="react" title="React" unique :submenu-auto-emit="false">
+        <McSubMenu key="react" title="React" unique>
             <template #icon>
                 <McIcon>
                     <LogoReact />
