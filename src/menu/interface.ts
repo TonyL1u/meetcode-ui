@@ -1,7 +1,16 @@
+import * as CSS from 'csstype';
 import type { Key } from '../_utils_';
 import type { PropType, InjectionKey, Ref, VNodeChild, ComputedRef } from 'vue';
 import type { UseEventBusReturn } from '@vueuse/core';
 
+declare module 'csstype' {
+    interface Properties {
+        '--menu-collapsed-icon-size'?: string;
+        '--menu-collapsed-padding'?: string;
+        '--menu-submenu-padding-left'?: string;
+        '--menu-item-padding-left'?: string;
+    }
+}
 interface MenuInjection {
     activeKey: Ref<Key>;
     updateKey: (key: Key) => void;
@@ -11,6 +20,7 @@ interface MenuInjection {
     padding: ComputedRef<number>;
     isUnique: Ref<boolean>;
     isAutoEmit: Ref<boolean>;
+    collapsedIconSize: Ref<number>;
     BusUniqueControl: UseEventBusReturn<string, any>;
     BusExpandControl: UseEventBusReturn<boolean, any>;
 }
@@ -40,6 +50,8 @@ export interface MenuProps {
     indent?: number;
     unique?: boolean;
     submenuAutoEmit?: boolean;
+    collapsed?: boolean;
+    collapsedIconSize?: number;
 }
 export interface MenuItemProps {
     indent?: number;
@@ -74,6 +86,14 @@ export const menuProps = {
     submenuAutoEmit: {
         type: Boolean as PropType<MenuProps['submenuAutoEmit']>,
         default: true
+    },
+    collapsed: {
+        type: Boolean as PropType<MenuProps['collapsed']>,
+        default: false
+    },
+    collapsedIconSize: {
+        type: Number as PropType<MenuProps['collapsedIconSize']>,
+        default: 20
     }
 };
 export const menuItemProps = {

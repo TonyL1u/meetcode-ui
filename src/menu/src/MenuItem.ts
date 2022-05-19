@@ -1,6 +1,7 @@
 import { defineComponent, renderSlot, createVNode, inject, computed, toRefs, getCurrentInstance } from 'vue';
 import { checkParent } from '../../_utils_';
 import { menuIKey, menuItemGroupIKey, subMenuIKey, menuItemIKey, menuItemProps, menuInjectionKey, subMenuInjectionKey, menuGroupInjectionKey } from '../interface';
+import * as CSS from 'csstype';
 
 export default defineComponent({
     name: 'MenuItem',
@@ -13,11 +14,16 @@ export default defineComponent({
         const instance = getCurrentInstance();
         const key = instance?.vnode.key;
         const { indent } = toRefs(props);
-        const { activeKey, updateKey, padding: menuPadding } = inject(menuInjectionKey, null) ?? {};
+        const { activeKey, updateKey, padding: menuPadding, collapsedIconSize } = inject(menuInjectionKey, null) ?? {};
         const { padding: subMenuPadding } = inject(subMenuInjectionKey, null) ?? {};
         const { padding: menuItemGroupPadding } = inject(menuGroupInjectionKey, null) ?? {};
         const isActive = computed(() => !!(key && key === activeKey?.value));
         const selfPadding = computed(() => (indent.value ? indent.value : checkParent(menuItemGroupIKey) ? (menuItemGroupPadding?.value || 0) + 16 : ((checkParent(menuIKey) ? menuPadding?.value : subMenuPadding?.value) || 0) + 32));
+        const cssVars = computed<CSS.Properties>(() => {
+            return {
+                '--menu-item-padding-left': `${selfPadding.value}px`
+            };
+        });
 
         // main logic...
         return () =>
@@ -25,7 +31,7 @@ export default defineComponent({
                 'li',
                 {
                     class: ['mc-menu-item', isActive.value ? 'mc-menu-item--active' : ''],
-                    style: { paddingLeft: `${selfPadding.value}px` },
+                    style: cssVars.value,
                     onClick: () => {
                         key && updateKey?.(key);
                     }

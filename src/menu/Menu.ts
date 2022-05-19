@@ -5,6 +5,7 @@ import { menuIKey, menuInjectionKey, subMenuIKey, menuProps } from './interface'
 import { mainCssr, lightCssr, darkCssr } from './styles';
 import type { Key } from '../_utils_';
 import type { EventBusKey } from '@vueuse/core';
+import * as CSS from 'csstype';
 
 export default defineComponent({
     name: 'Menu',
@@ -23,10 +24,16 @@ export default defineComponent({
         });
 
         const internalKey = createKey('menu');
-        const { value: valueVM, expandKeys, indent, unique, submenuAutoEmit } = toRefs(props);
+        const { value: valueVM, expandKeys, indent, unique, submenuAutoEmit, collapsed, collapsedIconSize } = toRefs(props);
         const internalExpandKeys = ref<Key[]>([]);
         const mergedExpandKeys = expandKeys.value ? expandKeys : internalExpandKeys;
         const selfPadding = computed(() => indent.value! - 32);
+        const cssVars = computed<CSS.Properties>(() => {
+            return {
+                '--menu-collapsed-icon-size': collapsedIconSize.value + 'px',
+                '--menu-collapsed-padding': `0px ${(64 - collapsedIconSize.value!) / 2}px`
+            };
+        });
 
         const callUpdateValue = (value: Key) => {
             if (valueVM.value !== value) {
@@ -60,6 +67,7 @@ export default defineComponent({
             padding: selfPadding,
             isUnique: unique,
             isAutoEmit: submenuAutoEmit,
+            collapsedIconSize,
             BusUniqueControl,
             BusExpandControl
         });
@@ -79,6 +87,6 @@ export default defineComponent({
         });
 
         // main logic...
-        return () => createVNode('ul', { class: 'mc-menu' }, [renderSlot(slots, 'default')]);
+        return () => createVNode('ul', { class: ['mc-menu', collapsed.value ? 'mc-menu--collapsed' : ''], style: cssVars.value }, [renderSlot(slots, 'default')]);
     }
 });

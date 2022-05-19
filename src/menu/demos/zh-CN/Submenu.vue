@@ -1,5 +1,6 @@
 <template>
-    <McMenu v-model:value="menuKey">
+    <McButton @click="collapsed = !collapsed">折叠</McButton>
+    <McMenu v-model:value="menuKey" :collapsed="collapsed">
         <McMenuItem key="html">
             <template #icon>
                 <McIcon>
@@ -64,8 +65,9 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { McMenu, McMenuItem, McMenuItemGroup, McSubMenu, McIcon } from 'meetcode-ui';
+import { McMenu, McMenuItem, McMenuItemGroup, McSubMenu, McIcon, McButton } from 'meetcode-ui';
 import { LogoHtml5, LogoNodejs, LogoCss3, LogoVue, LogoReact } from '@vicons/ionicons5';
 
 const menuKey = ref('');
+const collapsed = ref(false);
 </script>

@@ -6,6 +6,7 @@ import { McIcon } from '../../icon';
 import { McFadeInExpandTransition } from '../../_transition_';
 import { ChevronUpOutline } from '@vicons/ionicons5';
 import type { Fn } from '@vueuse/core';
+import * as CSS from 'csstype';
 
 export default defineComponent({
     name: 'SubMenu',
@@ -35,6 +36,11 @@ export default defineComponent({
         const parentKey = computed(() => (checkParent(menuIKey, instance?.parent) ? menuKey : checkParent(subMenuIKey, instance?.parent) ? subMenuKey : '') || '');
         const watchUnique = computed(() => !!((isMenuUnique?.value && parentKey.value === menuKey) || (isSubMenuUnique?.value && parentKey.value === subMenuKey)));
         const autoEmit = computed(() => !!((isMenuAutoEmit?.value && parentKey.value === menuKey) || (isSubMenuAutoEmit?.value && parentKey.value === subMenuKey)));
+        const cssVars = computed<CSS.Properties>(() => {
+            return {
+                '--menu-submenu-padding-left': `${selfPadding.value}px`
+            };
+        });
         let uniqueUnsubscribe: Fn | undefined;
         let expandUnsubscribe: Fn | undefined;
 
@@ -107,7 +113,7 @@ export default defineComponent({
         // main logic...
         return () =>
             createVNode('li', { class: ['mc-sub-menu', isExpanded.value ? '' : 'mc-sub-menu--collapsed', isActive.value ? 'mc-sub-menu--child-active' : ''] }, [
-                createVNode('div', { class: 'mc-sub-menu-title', style: { paddingLeft: `${selfPadding.value}px` }, onClick: handleExpand }, [
+                createVNode('div', { class: 'mc-sub-menu-title', style: cssVars.value, onClick: handleExpand }, [
                     slots.icon ? createVNode('div', { class: 'mc-sub-menu-title__icon' }, [renderSlot(slots, 'icon')]) : null,
                     createVNode('span', { class: 'mc-sub-menu-title__content' }, [slots.title ? renderSlot(slots, 'title') : title.value || '']),
                     createVNode(McIcon, { class: 'mc-sub-menu-title__arrow' }, { default: () => createVNode(ChevronUpOutline) })
