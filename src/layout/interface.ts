@@ -56,6 +56,7 @@ export interface LayoutSiderProps {
     bordered?: boolean;
     collapsed?: boolean;
     collapsable?: boolean;
+    collapsedWidth?: string | number;
     triggerPosition?: { top?: CSS.Properties['top']; bottom?: CSS.Properties['bottom'] };
     triggerType?: 'button' | 'bar';
     transitionMode?: 'width' | 'transform';
@@ -201,6 +202,10 @@ export const layoutSiderProps = {
     collapsable: {
         type: Boolean as PropType<LayoutSiderProps['collapsable']>,
         default: false
+    },
+    collapsedWidth: {
+        type: [String, Number] as PropType<LayoutSiderProps['collapsedWidth']>,
+        default: 64
     },
     triggerPosition: {
         type: Object as PropType<LayoutSiderProps['triggerPosition']>,

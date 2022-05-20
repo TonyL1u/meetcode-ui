@@ -24,14 +24,15 @@ export default defineComponent({
         });
 
         const internalKey = createKey('menu');
-        const { value: valueVM, expandKeys, indent, unique, submenuAutoEmit, collapsed, collapsedIconSize } = toRefs(props);
+        const { value: valueVM, expandKeys, indent, unique, submenuAutoEmit, collapsed, collapsedWidth, collapsedIconSize } = toRefs(props);
         const internalExpandKeys = ref<Key[]>([]);
         const mergedExpandKeys = expandKeys.value ? expandKeys : internalExpandKeys;
         const selfPadding = computed(() => indent.value! - 32);
         const cssVars = computed<CSS.Properties>(() => {
             return {
+                '--menu-collapsed-width': collapsedWidth.value + 'px',
                 '--menu-collapsed-icon-size': collapsedIconSize.value + 'px',
-                '--menu-collapsed-padding': `0px ${(64 - collapsedIconSize.value!) / 2}px`
+                '--menu-collapsed-padding': `0px ${(collapsedWidth.value! - collapsedIconSize.value!) / 2}px`
             };
         });
 

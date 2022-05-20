@@ -16,9 +16,9 @@ export default defineComponent({
         if (parent && (parent.type as CustomVNodeTypes).iKey !== layoutIKey) {
             throw new Error('[McLayoutSider]: McLayoutHeader must be placed inside McLayout.');
         }
-        const { width, bordered, collapsed, collapsable, triggerPosition, triggerType, transitionMode, onBeforeToggle } = toRefs(props);
+        const { width, bordered, collapsed, collapsable, collapsedWidth, triggerPosition, triggerType, transitionMode, onBeforeToggle } = toRefs(props);
         const isCollapsed = ref(!!collapsed.value);
-        const mergedWidth = computed(() => (isCollapsed.value ? '0px' : cssUnitTransform(width.value)));
+        const mergedWidth = computed(() => cssUnitTransform(isCollapsed.value ? collapsedWidth.value : width.value));
         const cssVars = computed<CSS.Properties>(() => {
             const { top, bottom } = triggerPosition.value ?? {};
 

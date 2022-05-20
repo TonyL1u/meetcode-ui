@@ -19,7 +19,7 @@ export default c([
             c(
                 '&--collapsed',
                 {
-                    width: '64px'
+                    width: 'var(--menu-collapsed-width)'
                 },
                 [
                     c('& > .mc-menu-item, & > .mc-sub-menu .mc-sub-menu-title', {
@@ -66,6 +66,7 @@ export default c([
     c('.mc-menu-item-group', [
         c('&-title', {
             height: '32px',
+            paddingLeft: 'var(--menu-item-group-padding-left)',
             paddingRight: '16px',
             display: 'flex',
             alignItems: 'center',
@@ -139,6 +140,16 @@ export default c([
                     marginBottom: '4px'
                 })
             ]
-        )
+        ),
+        c('&--in-popover', [
+            c('.mc-menu-item, .mc-sub-menu-title, .mc-menu-item-group-title', {
+                padding: '0 16px'
+            }),
+            c('.mc-menu-item-group-children', [
+                c('.mc-menu-item, .mc-sub-menu-title', {
+                    padding: '0 16px 0 32px'
+                })
+            ])
+        ])
     ])
 ]);

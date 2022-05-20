@@ -28,6 +28,16 @@
 
 :::
 
+::: demo CodePreview=Collapse
+
+### 折叠
+
+可以把菜单折叠起来，一般配合 `McLayout` 使用。
+
+<Collapse />
+
+:::
+
 ::: demo CodePreview=Accordion
 
 ### 手风琴菜单
@@ -47,13 +57,5 @@
 所有菜单组件均可以设置 `indent` 属性，用于控制项目缩进。
 
 <IndentControl />
-
-:::
-
-::: demo CodePreview=Collapse
-
-### 折叠
-
-<Collapse />
 
 :::

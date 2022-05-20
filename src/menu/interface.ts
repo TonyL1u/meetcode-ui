@@ -5,10 +5,12 @@ import type { UseEventBusReturn } from '@vueuse/core';
 
 declare module 'csstype' {
     interface Properties {
+        '--menu-collapsed-width'?: string;
         '--menu-collapsed-icon-size'?: string;
         '--menu-collapsed-padding'?: string;
         '--menu-submenu-padding-left'?: string;
         '--menu-item-padding-left'?: string;
+        '--menu-item-group-padding-left'?: string;
     }
 }
 interface MenuInjection {
@@ -51,6 +53,7 @@ export interface MenuProps {
     unique?: boolean;
     submenuAutoEmit?: boolean;
     collapsed?: boolean;
+    collapsedWidth?: number;
     collapsedIconSize?: number;
 }
 export interface MenuItemProps {
@@ -90,6 +93,10 @@ export const menuProps = {
     collapsed: {
         type: Boolean as PropType<MenuProps['collapsed']>,
         default: false
+    },
+    collapsedWidth: {
+        type: Number as PropType<MenuProps['collapsedWidth']>,
+        default: 64
     },
     collapsedIconSize: {
         type: Number as PropType<MenuProps['collapsedIconSize']>,

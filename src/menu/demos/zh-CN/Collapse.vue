@@ -1,127 +1,81 @@
 <template>
-    <n-space vertical>
-        <n-switch v-model:value="collapsed" />
-        <n-layout has-sider>
-            <n-layout-sider bordered collapse-mode="width" :collapsed-width="64" :width="240" :collapsed="collapsed" show-trigger @collapse="collapsed = true" @expand="collapsed = false">
-                <n-menu v-model:value="activeKey" :collapsed="collapsed" :collapsed-width="64" :collapsed-icon-size="22" :options="menuOptions" />
-            </n-layout-sider>
-            <n-layout>
-                <span>内容</span>
-            </n-layout>
-        </n-layout>
-    </n-space>
+    <McLayout>
+        <McLayoutSider :width="240" bordered collapsable trigger-type="bar" style="padding-right: 12px" @toggled="handleToggled">
+            <McMenu v-model:value="menuKey" :collapsed="collapsed">
+                <McMenuItem key="html">
+                    <template #icon>
+                        <McIcon>
+                            <LogoHtml5 />
+                        </McIcon>
+                    </template>
+                    HTML
+                </McMenuItem>
+                <McMenuItem key="js">
+                    <template #icon>
+                        <McIcon>
+                            <LogoNodejs />
+                        </McIcon>
+                    </template>
+                    JavaScript
+                </McMenuItem>
+                <McMenuItem key="css">
+                    <template #icon>
+                        <McIcon>
+                            <LogoCss3 />
+                        </McIcon>
+                    </template>
+                    CSS
+                </McMenuItem>
+                <McSubMenu key="vue" title="Vue">
+                    <template #icon>
+                        <McIcon>
+                            <LogoVue />
+                        </McIcon>
+                    </template>
+                    <McMenuItemGroup title="开始">
+                        <McMenuItem key="vue-intro">简介</McMenuItem>
+                        <McMenuItem key="vue-intro-quick-start">快速开始</McMenuItem>
+                    </McMenuItemGroup>
+                    <McMenuItemGroup title="基础">
+                        <McMenuItem key="vue-essentials-creating-a-Vue-application">创建一个应用</McMenuItem>
+                        <McMenuItem key="vue-essentials-template-syntax">模板语法</McMenuItem>
+                        <McMenuItem key="vue-essentials-reactivity-fundamentals">响应式基础</McMenuItem>
+                    </McMenuItemGroup>
+                </McSubMenu>
+                <McSubMenu key="react" title="React">
+                    <template #icon>
+                        <McIcon>
+                            <LogoReact />
+                        </McIcon>
+                    </template>
+                    <McSubMenu key="react-installation" title="安装">
+                        <McMenuItem key="react-installation-getting-started">开始</McMenuItem>
+                        <McMenuItem key="react-installation-add-react-to-a-website">在网站中添加 React</McMenuItem>
+                    </McSubMenu>
+                    <McSubMenu key="react-main-concepts" title="核心概念">
+                        <McMenuItem key="react-main-concepts-hello-world">Hello World</McMenuItem>
+                        <McMenuItem key="react-main-concepts-introducing-jsx">JSX 简介</McMenuItem>
+                    </McSubMenu>
+                    <McSubMenu key="react-hooks" title="Hook">
+                        <McMenuItem key="react-hooks-introducing-hooks">Hook 简介</McMenuItem>
+                        <McMenuItem key="react-hooks-hooks-at-a-glance">Hook 概览</McMenuItem>
+                    </McSubMenu>
+                </McSubMenu>
+            </McMenu>
+        </McLayoutSider>
+        <McLayoutContent />
+    </McLayout>
 </template>
 
-<script lang="ts">
-import { defineComponent, h, ref, Component } from 'vue';
-import { NIcon, NLayout, NLayoutSider, NMenu, NSpace, NSwitch } from 'naive-ui';
-import type { MenuOption } from 'naive-ui';
-import { BookOutline as BookIcon, PersonOutline as PersonIcon, WineOutline as WineIcon } from '@vicons/ionicons5';
+<script lang="ts" setup>
+import { ref } from 'vue';
+import { McMenu, McMenuItem, McMenuItemGroup, McSubMenu, McIcon, McLayout, McLayoutSider, McLayoutContent } from 'meetcode-ui';
+import { LogoHtml5, LogoNodejs, LogoCss3, LogoVue, LogoReact } from '@vicons/ionicons5';
 
-function renderIcon(icon: Component) {
-    return () => h(NIcon, null, { default: () => h(icon) });
-}
-
-const menuOptions: MenuOption[] = [
-    {
-        type: 'group',
-        label: '人物',
-        key: 'people',
-        children: [
-            {
-                label: '叙事者',
-                key: 'narrator',
-                icon: renderIcon(PersonIcon)
-            },
-            {
-                label: '羊男',
-                key: 'sheep-man',
-                icon: renderIcon(PersonIcon)
-            }
-        ]
-    },
-    {
-        label: '且听风吟',
-        key: 'hear-the-wind-sing',
-        icon: renderIcon(BookIcon)
-    },
-    {
-        label: '1973年的弹珠玩具',
-        key: 'pinball-1973',
-        // icon: renderIcon(BookIcon),
-        disabled: true,
-        children: [
-            {
-                label: '鼠',
-                key: 'rat'
-            }
-        ]
-    },
-    {
-        label: '寻羊冒险记',
-        key: 'a-wild-sheep-chase',
-        disabled: true
-        // icon: renderIcon(BookIcon)
-    },
-    {
-        label: '舞，舞，舞',
-        key: 'dance-dance-dance',
-        icon: renderIcon(BookIcon),
-        children: [
-            {
-                type: 'group',
-                label: '人物',
-                key: 'people',
-                children: [
-                    {
-                        label: '叙事者',
-                        key: 'narrator',
-                        icon: renderIcon(PersonIcon)
-                    },
-                    {
-                        label: '羊男',
-                        key: 'sheep-man',
-                        icon: renderIcon(PersonIcon)
-                    }
-                ]
-            },
-            {
-                label: '饮品',
-                key: 'beverage',
-                icon: renderIcon(WineIcon),
-                children: [
-                    {
-                        label: '威士忌',
-                        key: 'whisky'
-                    }
-                ]
-            },
-            {
-                label: '食物',
-                key: 'food',
-                children: [
-                    {
-                        label: '三明治',
-                        key: 'sandwich'
-                    }
-                ]
-            },
-            {
-                label: '过去增多，未来减少',
-                key: 'the-past-increases-the-future-recedes'
-            }
-        ]
-    }
-];
-
-export default defineComponent({
-    components: { NIcon, NLayout, NLayoutSider, NMenu, NSpace, NSwitch },
-    setup() {
-        return {
-            activeKey: ref<string | null>(null),
-            collapsed: ref(true),
-            menuOptions
-        };
-    }
-});
+const menuKey = ref('');
+const collapsed = ref(false);
+const handleToggled = (isCollapsed: boolean) => {
+    console.log(isCollapsed);
+    collapsed.value = isCollapsed;
+};
 </script>

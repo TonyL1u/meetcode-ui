@@ -5,7 +5,8 @@ import { menuIKey, menuItemIKey, menuItemGroupIKey, subMenuIKey, subMenuProps, m
 import { McIcon } from '../../icon';
 import { McPopover } from '../../popover';
 import { McFadeInExpandTransition } from '../../_transition_';
-import { ChevronUpOutline } from '@vicons/ionicons5';
+import { ChevronUpOutline, ChevronForwardOutline } from '@vicons/ionicons5';
+import type { FunctionalComponent } from 'vue';
 import type { Fn } from '@vueuse/core';
 import * as CSS from 'csstype';
 
@@ -102,6 +103,12 @@ export default defineComponent({
             });
         };
 
+        const menuChildrenVNode: FunctionalComponent<{ mode: 'normal' | 'in-popover' }> = props => {
+            const { mode } = props;
+
+            return createVNode('ul', { class: ['mc-sub-menu-children', `mc-sub-menu-children-${mode}`], style: { margin: 0 } }, [renderSlot(slots, 'default')]);
+        };
+
         provide(subMenuInjectionKey, {
             padding: selfPadding,
             key: internalKey,
@@ -116,10 +123,10 @@ export default defineComponent({
 
         // main logic...
         return () =>
-            createVNode('li', { class: ['mc-sub-menu', isExpanded.value ? '' : 'mc-sub-menu--collapsed', isActive.value ? 'mc-sub-menu--child-active' : ''] }, [
+            createVNode('li', { class: ['mc-sub-menu', isExpanded.value || isMenuCollapsed?.value ? '' : 'mc-sub-menu--collapsed', isActive.value ? 'mc-sub-menu--child-active' : ''] }, [
                 createVNode(
                     McPopover,
-                    { disabled: !isMenuCollapsed?.value, placement: 'right-start', withArrow: false, style: { padding: '4px' } },
+                    { disabled: !isMenuCollapsed?.value, placement: 'right-start', withArrow: false, style: { padding: '4px', width: '200px' }, class: 'mc-sub-menu mc-sub-menu--in-popover' },
                     {
                         content: () => {
                             return createVNode('ul', { class: 'mc-sub-menu-children', style: { margin: 0 } }, [renderSlot(slots, 'default')]);
@@ -138,7 +145,7 @@ export default defineComponent({
                                 [
                                     slots.icon ? createVNode('div', { class: 'mc-sub-menu-title__icon' }, [renderSlot(slots, 'icon')]) : null,
                                     createVNode('span', { class: 'mc-sub-menu-title__content' }, [slots.title ? renderSlot(slots, 'title') : title.value || '']),
-                                    createVNode(McIcon, { class: 'mc-sub-menu-title__arrow' }, { default: () => createVNode(ChevronUpOutline) })
+                                    createVNode(McIcon, { class: 'mc-sub-menu-title__arrow' }, { default: () => createVNode(isMenuCollapsed?.value ? ChevronForwardOutline : ChevronUpOutline) })
                                 ]
                             )
                     }
