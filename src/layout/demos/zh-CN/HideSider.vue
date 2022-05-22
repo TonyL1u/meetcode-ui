@@ -1,6 +1,6 @@
 <template>
     <McLayout>
-        <McLayoutSider bordered collapsed collapsable transition-mode="transform" trigger-type="bar">Sider</McLayoutSider>
+        <McLayoutSider bordered collapsable :collapsed-width="0" transition-mode="transform" trigger-type="bar">Sider</McLayoutSider>
         <McLayout>
             <McLayoutContent />
             <McLayoutSider bordered collapsable @before-toggle="handleBeforeToggle" @toggled="handleToggled" />

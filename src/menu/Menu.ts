@@ -1,10 +1,9 @@
-import { defineComponent, onMounted, renderSlot, createVNode, ref, provide, toRefs, onUnmounted, computed, watch } from 'vue';
-import { useThemeRegister, flatten, createKey } from '../_utils_';
-import { useEventBus, useVModel } from '@vueuse/core';
-import { menuIKey, menuInjectionKey, subMenuIKey, menuProps } from './interface';
+import { defineComponent, onMounted, renderSlot, createVNode, ref, provide, toRefs, computed, watch } from 'vue';
+import { useThemeRegister, createKey } from '../_utils_';
+import { menuIKey, menuInjectionKey, menuProps } from './interface';
+import { createKeyTree, createMenu, findPath } from './src/utils';
 import { mainCssr, lightCssr, darkCssr } from './styles';
 import type { Key } from '../_utils_';
-import type { EventBusKey } from '@vueuse/core';
 import * as CSS from 'csstype';
 
 export default defineComponent({
@@ -23,10 +22,13 @@ export default defineComponent({
             });
         });
 
+        const keyTree = slots.default ? createKeyTree(slots.default()) : [];
         const internalKey = createKey('menu');
-        const { value: valueVM, expandKeys, indent, unique, submenuAutoEmit, collapsed, collapsedWidth, collapsedIconSize } = toRefs(props);
+        const { value: valueVM, expandKeys, indent, unique, collapsed, collapsedWidth, collapsedIconSize, horizontal, options } = toRefs(props);
         const internalExpandKeys = ref<Key[]>([]);
         const mergedExpandKeys = expandKeys.value ? expandKeys : internalExpandKeys;
+        const menuUpdateKey = ref(0);
+        const menuElRef = ref<HTMLElement>();
         const selfPadding = computed(() => indent.value! - 32);
         const cssVars = computed<CSS.Properties>(() => {
             return {
@@ -36,28 +38,30 @@ export default defineComponent({
             };
         });
 
+        // force rerender menu when options is changed
+        watch(options, () => {
+            menuUpdateKey.value++;
+        });
+
         const callUpdateValue = (value: Key) => {
             if (valueVM.value !== value) {
                 emit('update:value', value);
             }
         };
-        const callUpdateExpandKeys = (key: Key) => {
-            if (mergedExpandKeys.value) {
+        const callUpdateExpandKeys = (key: Key | Key[]) => {
+            if (Array.isArray(key)) {
+                mergedExpandKeys.value = key;
+            } else if (mergedExpandKeys.value) {
                 const index = mergedExpandKeys.value.findIndex(item => item === key);
                 if (index > -1) {
                     mergedExpandKeys.value.splice(index, 1);
                 } else {
                     mergedExpandKeys.value.push(key);
                 }
-
-                emit('update:expandKeys', mergedExpandKeys.value);
             }
-        };
 
-        const UniqueControlEventBusKey: EventBusKey<string> = Symbol();
-        const ExpandControlEventBusKey: EventBusKey<boolean | Key | Key[]> = Symbol();
-        const BusUniqueControl = useEventBus(UniqueControlEventBusKey);
-        const BusExpandControl = useEventBus(ExpandControlEventBusKey);
+            emit('update:expandKeys', mergedExpandKeys.value);
+        };
 
         provide(menuInjectionKey, {
             activeKey: valueVM,
@@ -65,29 +69,31 @@ export default defineComponent({
             expandedKeys: mergedExpandKeys,
             updateExpandKeys: callUpdateExpandKeys,
             key: internalKey,
+            keyTree,
             padding: selfPadding,
             isUnique: unique,
-            isAutoEmit: submenuAutoEmit,
             isCollapsed: collapsed,
-            BusUniqueControl,
-            BusExpandControl
-        });
-
-        onUnmounted(() => {
-            BusUniqueControl.reset();
-            BusExpandControl.reset();
+            isHorizontal: horizontal
         });
 
         expose({
-            expand(keys: Key | Key[]) {
-                BusExpandControl.emit(keys);
+            el: menuElRef,
+            expand(key: Key | Key[], autoSelect = false) {
+                autoSelect && !Array.isArray(key) && callUpdateValue(key);
+                const expandKeys = [...new Set((Array.isArray(key) ? key : [key]).map(key => findPath(keyTree, key) ?? []).flat())];
+                callUpdateExpandKeys([...new Set([...mergedExpandKeys.value!, ...expandKeys])]);
             },
             collapseAll() {
-                BusExpandControl.emit(true);
+                callUpdateExpandKeys([]);
             }
         });
 
         // main logic...
-        return () => createVNode('ul', { class: ['mc-menu', collapsed.value ? 'mc-menu--collapsed' : ''], style: cssVars.value }, [renderSlot(slots, 'default')]);
+        return () =>
+            createVNode(
+                'ul',
+                { ref: menuElRef, key: menuUpdateKey.value, class: ['mc-menu', collapsed.value ? 'mc-menu--collapsed' : '', horizontal.value ? 'mc-menu--horizontal' : ''], style: cssVars.value },
+                options.value ? options.value.map(option => createMenu(option)) : [renderSlot(slots, 'default')]
+            );
     }
 });

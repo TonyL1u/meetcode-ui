@@ -220,3 +220,7 @@
 -   Menu 的 `expand-keys` 不能加 `v-model` 修饰符（原因未知）
 -   Modal 的 `onUpdate:show` 事件无法触发 Modal 出现事件
 -   数组 emits 里如果是以 `update:` 开头用于 `v-model` 绑定的事件，变量名不能用 `-` 分隔，要采用驼峰格式。例如，不能写成 `update:expand-keys` ，要写成 `update:expandKeys` ，否则无法触发该事件。
+
+2022-05-22
+
+-   Menu 的 group title 利用伪元素进行 hover 背景色，设置`z-index`会导致文字被覆盖

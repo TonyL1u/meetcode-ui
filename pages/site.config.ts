@@ -6,6 +6,7 @@ export const componentNameMap: Record<string, string> = {
     icon: '图标',
     layout: '布局',
     loading: '加载',
+    menu: '菜单',
     message: '信息',
     modal: '模态框',
     popconfirm: '弹出确认',

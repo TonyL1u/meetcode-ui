@@ -1,7 +1,6 @@
-import * as CSS from 'csstype';
 import type { Key } from '../_utils_';
 import type { PropType, InjectionKey, Ref, VNodeChild, ComputedRef } from 'vue';
-import type { UseEventBusReturn } from '@vueuse/core';
+import * as CSS from 'csstype';
 
 declare module 'csstype' {
     interface Properties {
@@ -13,27 +12,32 @@ declare module 'csstype' {
         '--menu-item-group-padding-left'?: string;
     }
 }
+
 interface MenuInjection {
     activeKey: Ref<Key>;
     updateKey: (key: Key) => void;
     expandedKeys: Ref<Key[]>;
-    updateExpandKeys: (key: Key) => void;
+    updateExpandKeys: (key: Key | Key[]) => void;
     key: string;
+    keyTree: KeyTree[];
     padding: ComputedRef<number>;
     isUnique: Ref<boolean>;
-    isAutoEmit: Ref<boolean>;
     isCollapsed: Ref<boolean>;
-    BusUniqueControl: UseEventBusReturn<string, any>;
-    BusExpandControl: UseEventBusReturn<boolean | Key | Key[], any>;
+    isHorizontal: Ref<boolean>;
 }
 interface SubMenuInjection {
     key: string;
     padding: ComputedRef<number>;
     isUnique: Ref<boolean>;
-    isAutoEmit: Ref<boolean>;
+    hidePopover: () => void;
 }
 interface MenuGroupInjection {
     padding: ComputedRef<number>;
+    hidePopover: () => void;
+}
+export interface KeyTree {
+    key: Key;
+    children?: KeyTree[];
 }
 export const menuInjectionKey: InjectionKey<MenuInjection> = Symbol();
 export const subMenuInjectionKey: InjectionKey<SubMenuInjection> = Symbol();
@@ -43,18 +47,29 @@ export const menuItemIKey = Symbol('menuItem');
 export const menuItemGroupIKey = Symbol('menuItemGroup');
 export const subMenuIKey = Symbol('subMenu');
 export interface MenuExposeInstance {
-    expand: (keys: Key | Key[]) => void;
+    el: HTMLElement;
+    expand: (key: Key | Key[], autoSelect?: boolean) => void;
     collapseAll: () => void;
+}
+export interface MenuOption {
+    key?: Key;
+    label?: string | (() => VNodeChild);
+    icon?: () => VNodeChild;
+    intent?: number;
+    unique?: boolean;
+    group?: boolean;
+    children?: MenuOption[];
 }
 export interface MenuProps {
     value?: Key;
     expandKeys?: Key[];
     indent?: number;
     unique?: boolean;
-    submenuAutoEmit?: boolean;
     collapsed?: boolean;
     collapsedWidth?: number;
     collapsedIconSize?: number;
+    horizontal?: boolean;
+    options: MenuOption[];
 }
 export interface MenuItemProps {
     indent?: number;
@@ -66,7 +81,6 @@ export interface MenuItemGroupProps {
 export interface SubMenuProps {
     title?: string | (() => VNodeChild);
     unique?: boolean;
-    submenuAutoEmit?: boolean;
     indent?: number;
 }
 export const menuProps = {
@@ -80,15 +94,11 @@ export const menuProps = {
     },
     indent: {
         type: Number as PropType<MenuProps['indent']>,
-        default: 32
+        default: 28
     },
     unique: {
         type: Boolean as PropType<MenuProps['unique']>,
         default: false
-    },
-    submenuAutoEmit: {
-        type: Boolean as PropType<MenuProps['submenuAutoEmit']>,
-        default: true
     },
     collapsed: {
         type: Boolean as PropType<MenuProps['collapsed']>,
@@ -101,6 +111,14 @@ export const menuProps = {
     collapsedIconSize: {
         type: Number as PropType<MenuProps['collapsedIconSize']>,
         default: 20
+    },
+    horizontal: {
+        type: Boolean as PropType<MenuProps['horizontal']>,
+        default: false
+    },
+    options: {
+        type: Array as PropType<MenuProps['options']>,
+        default: undefined
     }
 };
 export const menuItemProps = {
@@ -127,10 +145,6 @@ export const subMenuProps = {
     unique: {
         type: Boolean as PropType<SubMenuProps['unique']>,
         default: false
-    },
-    submenuAutoEmit: {
-        type: Boolean as PropType<SubMenuProps['submenuAutoEmit']>,
-        default: true
     },
     indent: {
         type: Number as PropType<SubMenuProps['indent']>,

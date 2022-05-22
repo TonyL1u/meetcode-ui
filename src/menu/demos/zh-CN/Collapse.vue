@@ -1,23 +1,7 @@
 <template>
     <McLayout>
-        <McLayoutSider :width="240" bordered collapsable trigger-type="bar" style="padding-right: 12px" @toggled="handleToggled">
-            <McMenu v-model:value="menuKey" :collapsed="collapsed">
-                <McMenuItem key="html">
-                    <template #icon>
-                        <McIcon>
-                            <LogoHtml5 />
-                        </McIcon>
-                    </template>
-                    HTML
-                </McMenuItem>
-                <McMenuItem key="js">
-                    <template #icon>
-                        <McIcon>
-                            <LogoNodejs />
-                        </McIcon>
-                    </template>
-                    JavaScript
-                </McMenuItem>
+        <McLayoutSider :width="240" bordered collapsable :collapsed-width="72" trigger-type="bar" @toggled="handleToggled">
+            <McMenu v-model:value="menuKey" :collapsed="collapsed" :collapsed-width="72">
                 <McMenuItem key="css">
                     <template #icon>
                         <McIcon>
@@ -26,22 +10,42 @@
                     </template>
                     CSS
                 </McMenuItem>
-                <McSubMenu key="vue" title="Vue">
-                    <template #icon>
-                        <McIcon>
-                            <LogoVue />
-                        </McIcon>
-                    </template>
-                    <McMenuItemGroup title="开始">
-                        <McMenuItem key="vue-intro">简介</McMenuItem>
-                        <McMenuItem key="vue-intro-quick-start">快速开始</McMenuItem>
-                    </McMenuItemGroup>
-                    <McMenuItemGroup title="基础">
-                        <McMenuItem key="vue-essentials-creating-a-Vue-application">创建一个应用</McMenuItem>
-                        <McMenuItem key="vue-essentials-template-syntax">模板语法</McMenuItem>
-                        <McMenuItem key="vue-essentials-reactivity-fundamentals">响应式基础</McMenuItem>
-                    </McMenuItemGroup>
-                </McSubMenu>
+                <McMenuItemGroup title="基础">
+                    <McMenuItem key="html">
+                        <template #icon>
+                            <McIcon>
+                                <LogoHtml5 />
+                            </McIcon>
+                        </template>
+                        HTML
+                    </McMenuItem>
+                    <McMenuItem key="js">
+                        <template #icon>
+                            <McIcon>
+                                <LogoNodejs />
+                            </McIcon>
+                        </template>
+                        JavaScript
+                    </McMenuItem>
+                </McMenuItemGroup>
+                <McMenuItemGroup title="进阶">
+                    <McSubMenu key="vue" title="Vue">
+                        <template #icon>
+                            <McIcon>
+                                <LogoVue />
+                            </McIcon>
+                        </template>
+                        <McMenuItemGroup title="开始">
+                            <McMenuItem key="vue-intro">简介</McMenuItem>
+                            <McMenuItem key="vue-intro-quick-start">快速开始</McMenuItem>
+                        </McMenuItemGroup>
+                        <McMenuItemGroup title="基础">
+                            <McMenuItem key="vue-essentials-creating-a-Vue-application">创建一个应用</McMenuItem>
+                            <McMenuItem key="vue-essentials-template-syntax">模板语法</McMenuItem>
+                            <McMenuItem key="vue-essentials-reactivity-fundamentals">响应式基础</McMenuItem>
+                        </McMenuItemGroup>
+                    </McSubMenu>
+                </McMenuItemGroup>
                 <McSubMenu key="react" title="React">
                     <template #icon>
                         <McIcon>
@@ -75,7 +79,6 @@ import { LogoHtml5, LogoNodejs, LogoCss3, LogoVue, LogoReact } from '@vicons/ion
 const menuKey = ref('');
 const collapsed = ref(false);
 const handleToggled = (isCollapsed: boolean) => {
-    console.log(isCollapsed);
     collapsed.value = isCollapsed;
 };
 </script>

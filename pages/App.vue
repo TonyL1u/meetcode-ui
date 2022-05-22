@@ -15,7 +15,7 @@
             </Header>
         </McLayoutHeader>
         <McLayout v-if="currentTab !== 'home'" style="flex: 1">
-            <McLayoutSider class="menu-sider" :width="300" transition-mode="transform" trigger-type="bar" bordered collapsable>
+            <McLayoutSider class="menu-sider" :width="300" transition-mode="transform" trigger-type="bar" :collapsed-width="0" bordered collapsable>
                 <MenuVNode :menu="menu" />
             </McLayoutSider>
             <McLayout style="position: relative">
@@ -65,8 +65,7 @@
 
 <script lang="ts" setup>
 import { computed, ref, createVNode, nextTick } from 'vue';
-import { NMenu, darkTheme } from 'naive-ui';
-import { McTabs, McTab, McIcon, McPopup, McLayout, McLayoutContent, McLayoutHeader, McLayoutFooter, McLayoutSider, useThemeController, useI18nController } from 'meetcode-ui';
+import { McTabs, McTab, McIcon, McPopup, McLayout, McLayoutContent, McLayoutHeader, McLayoutSider, McMenu, useThemeController, useI18nController } from 'meetcode-ui';
 import { MenuOutline as IconMenu } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';
 import { useTitle } from '@vueuse/core';
@@ -77,26 +76,28 @@ import PagerNavigator from './home/PagerNavigator.vue';
 import { menusMap, routesMap } from './menu';
 import type { FunctionalComponent } from 'vue';
 import type { MenuTab, RouteMetaData } from './menu';
-import type { MenuOption } from 'naive-ui';
+import type { MenuOption } from 'meetcode-ui';
 
 const router = useRouter();
 const { current: siteTheme } = useThemeController({ useOsTheme: true });
 const { current: siteLang } = useI18nController();
 const { onRouteChange } = useRouterEventHook();
-const currentTab = ref<MenuTab>();
+const currentTab = ref<'home' | MenuTab>();
 const currentMenuKey = ref<string>();
-const menu = computed<MenuOption[]>(() => menusMap[currentTab.value!][siteLang.value]);
+const menu = computed<MenuOption[]>(() => {
+    if (currentTab.value === 'home') return [];
+    return menusMap[currentTab.value!][siteLang.value];
+});
 const MenuVNode: FunctionalComponent<{ menu: MenuOption[] }> = props => {
     const { menu } = props;
-    return createVNode(NMenu, {
+    return createVNode(McMenu, {
         value: currentMenuKey.value,
         'onUpdate:value': (key: string) => {
             if (currentMenuKey.value === key) return;
             currentMenuKey.value = key;
             router.push(`/${siteLang.value}/${key}`);
         },
-        options: menu,
-        accordion: true
+        options: menu
     });
 };
 const handleShowNavMenu = () => {
@@ -104,21 +105,18 @@ const handleShowNavMenu = () => {
         props: {
             menu: [
                 {
-                    type: 'group',
+                    group: true,
                     label: '文档',
-                    key: 'docs',
                     children: menusMap.docs[siteLang.value]
                 },
                 {
-                    type: 'group',
+                    group: true,
                     label: '组件',
-                    key: 'components',
                     children: menusMap.components[siteLang.value]
                 },
                 {
-                    type: 'group',
+                    group: true,
                     label: '开发指南',
-                    key: 'develop',
                     children: menusMap.develop[siteLang.value]
                 }
             ]

@@ -1,5 +1,5 @@
 <template>
-    <McMenu v-model:value="menuKey" unique @update:expand-keys="handleUpdateExpandKeys">
+    <McMenu v-model:value="menuKey" unique>
         <McSubMenu key="vue" title="Vue">
             <template #icon>
                 <McIcon>
@@ -40,11 +40,8 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { McMenu, McMenuItem, McMenuItemGroup, McSubMenu, McIcon, McMessage } from 'meetcode-ui';
-import { CubeOutline, CodeSlashOutline, LogoVue, LogoReact } from '@vicons/ionicons5';
+import { McMenu, McMenuItem, McSubMenu, McIcon } from 'meetcode-ui';
+import { LogoVue, LogoReact } from '@vicons/ionicons5';
 
 const menuKey = ref('');
-const handleUpdateExpandKeys = (keys: string[]) => {
-    McMessage.text(`当前展开的子菜单 Keys = ${JSON.stringify(keys)}`, { card: true });
-};
 </script>

@@ -1,8 +1,29 @@
 <template>
     <McMenu v-model:value="menuKey" v-model:expand-keys="expandKeys" @update:expand-keys="handleUpdateExpandKeys">
-        <McMenuItem key="html">HTML</McMenuItem>
-        <McMenuItem key="js">JavaScript</McMenuItem>
-        <McMenuItem key="css">CSS</McMenuItem>
+        <McMenuItem key="html">
+            <template #icon>
+                <McIcon>
+                    <LogoHtml5 />
+                </McIcon>
+            </template>
+            HTML
+        </McMenuItem>
+        <McMenuItem key="js">
+            <template #icon>
+                <McIcon>
+                    <LogoNodejs />
+                </McIcon>
+            </template>
+            JavaScript
+        </McMenuItem>
+        <McMenuItem key="css">
+            <template #icon>
+                <McIcon>
+                    <LogoCss3 />
+                </McIcon>
+            </template>
+            CSS
+        </McMenuItem>
         <McSubMenu key="vue" title="Vue">
             <template #icon>
                 <McIcon>
@@ -42,9 +63,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { McMenu, McMenuItem, McMenuItemGroup, McSubMenu, McIcon, McMessage } from 'meetcode-ui';
-import { CubeOutline, CodeSlashOutline, LogoVue, LogoReact } from '@vicons/ionicons5';
+import { LogoHtml5, LogoNodejs, LogoCss3, LogoVue, LogoReact } from '@vicons/ionicons5';
 
 const menuKey = ref('react-hooks-introducing-hooks');
 const expandKeys = ref(['react', 'react-hooks']);
