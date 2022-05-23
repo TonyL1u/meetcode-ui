@@ -23,8 +23,7 @@ export default defineComponent({
         });
 
         const keyTree = slots.default ? createKeyTree(slots.default()) : [];
-        const internalKey = createKey('menu');
-        const { value: valueVM, expandKeys, indent, unique, collapsed, collapsedWidth, collapsedIconSize, horizontal, options } = toRefs(props);
+        const { value: valueVM, expandKeys, disabled, indent, unique, collapsed, collapsedWidth, collapsedIconSize, horizontal, options } = toRefs(props);
         const internalExpandKeys = ref<Key[]>([]);
         const mergedExpandKeys = expandKeys.value ? expandKeys : internalExpandKeys;
         const menuUpdateKey = ref(0);
@@ -68,9 +67,9 @@ export default defineComponent({
             updateKey: callUpdateValue,
             expandedKeys: mergedExpandKeys,
             updateExpandKeys: callUpdateExpandKeys,
-            key: internalKey,
             keyTree,
             padding: selfPadding,
+            isDisabled: disabled,
             isUnique: unique,
             isCollapsed: collapsed,
             isHorizontal: horizontal
@@ -92,7 +91,7 @@ export default defineComponent({
         return () =>
             createVNode(
                 'ul',
-                { ref: menuElRef, key: menuUpdateKey.value, class: ['mc-menu', collapsed.value ? 'mc-menu--collapsed' : '', horizontal.value ? 'mc-menu--horizontal' : ''], style: cssVars.value },
+                { ref: menuElRef, key: menuUpdateKey.value, class: ['mc-menu', collapsed.value ? 'mc-menu--collapsed' : '', horizontal.value ? 'mc-menu--horizontal' : '', disabled.value ? 'mc-menu--disabled' : ''], style: cssVars.value },
                 options.value ? options.value.map(option => createMenu(option)) : [renderSlot(slots, 'default')]
             );
     }

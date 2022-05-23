@@ -1,6 +1,6 @@
 <template>
-    <McMenu v-model:value="menuKey" horizontal @update:value="handleUpdateValue">
-        <McMenuItem key="html">
+    <McMenu v-model:value="menuKey">
+        <McMenuItem key="html" disabled>
             <template #icon>
                 <McIcon>
                     <LogoHtml5 />
@@ -40,7 +40,7 @@
                 <McMenuItem key="vue-essentials-reactivity-fundamentals">响应式基础</McMenuItem>
             </McMenuItemGroup>
         </McSubMenu>
-        <McSubMenu key="react" title="React">
+        <McSubMenu key="react" title="React" disabled>
             <template #icon>
                 <McIcon>
                     <LogoReact />
@@ -64,11 +64,8 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { McMenu, McMenuItem, McMenuItemGroup, McSubMenu, McIcon, McMessage } from 'meetcode-ui';
+import { McMenu, McMenuItem, McMenuItemGroup, McSubMenu, McIcon } from 'meetcode-ui';
 import { LogoHtml5, LogoNodejs, LogoCss3, LogoVue, LogoReact } from '@vicons/ionicons5';
 
 const menuKey = ref('');
-const handleUpdateValue = (key: string) => {
-    McMessage.text(`当前选中的 Key = ${key}`, { card: true });
-};
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <McMenu v-model:value="menuKey" horizontal @update:value="handleUpdateValue">
+    <McMenu v-model:value="menuKey" v-model:expand-keys="expandKeys" @update:expand-keys="handleUpdateExpandKeys">
         <McMenuItem key="html">
             <template #icon>
                 <McIcon>
@@ -67,8 +67,10 @@ import { ref } from 'vue';
 import { McMenu, McMenuItem, McMenuItemGroup, McSubMenu, McIcon, McMessage } from 'meetcode-ui';
 import { LogoHtml5, LogoNodejs, LogoCss3, LogoVue, LogoReact } from '@vicons/ionicons5';
 
-const menuKey = ref('');
-const handleUpdateValue = (key: string) => {
-    McMessage.text(`当前选中的 Key = ${key}`, { card: true });
+const menuKey = ref('react-hooks-introducing-hooks');
+const expandKeys = ref(['react', 'react-hooks']);
+
+const handleUpdateExpandKeys = (keys: string[]) => {
+    McMessage.text(`当前展开的子菜单 Keys = ${JSON.stringify(keys)}`, { card: true });
 };
 </script>

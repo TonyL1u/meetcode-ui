@@ -7,7 +7,7 @@ export default c('.mc-popselect', [
         }),
         c('&--selected', {
             background: '#1f2430',
-            color: '#10b981'
+            color: '#63e2b7'
         }),
         c('&--disabled', {
             color: '#7a7d85'

@@ -1,46 +1,22 @@
 <template>
-    <McMenu v-model:value="menuKey" horizontal @update:value="handleUpdateValue">
-        <McMenuItem key="html">
-            <template #icon>
-                <McIcon>
-                    <LogoHtml5 />
-                </McIcon>
-            </template>
-            HTML
-        </McMenuItem>
-        <McMenuItem key="js">
-            <template #icon>
-                <McIcon>
-                    <LogoNodejs />
-                </McIcon>
-            </template>
-            JavaScript
-        </McMenuItem>
-        <McMenuItem key="css">
-            <template #icon>
-                <McIcon>
-                    <LogoCss3 />
-                </McIcon>
-            </template>
-            CSS
-        </McMenuItem>
+    <McMenu v-model:value="menuKey" unique>
         <McSubMenu key="vue" title="Vue">
             <template #icon>
                 <McIcon>
                     <LogoVue />
                 </McIcon>
             </template>
-            <McMenuItemGroup title="开始">
-                <McMenuItem key="vue-intro">简介</McMenuItem>
-                <McMenuItem key="vue-intro-quick-start">快速开始</McMenuItem>
-            </McMenuItemGroup>
-            <McMenuItemGroup title="基础">
+            <McSubMenu key="vue-getting-started" title="开始">
+                <McMenuItem key="vue-getting-started-intro">简介</McMenuItem>
+                <McMenuItem key="vue-getting-started-quick-start">快速开始</McMenuItem>
+            </McSubMenu>
+            <McSubMenu key="vue-essentials" title="基础">
                 <McMenuItem key="vue-essentials-creating-a-Vue-application">创建一个应用</McMenuItem>
                 <McMenuItem key="vue-essentials-template-syntax">模板语法</McMenuItem>
                 <McMenuItem key="vue-essentials-reactivity-fundamentals">响应式基础</McMenuItem>
-            </McMenuItemGroup>
+            </McSubMenu>
         </McSubMenu>
-        <McSubMenu key="react" title="React">
+        <McSubMenu key="react" title="React" unique>
             <template #icon>
                 <McIcon>
                     <LogoReact />
@@ -64,11 +40,8 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { McMenu, McMenuItem, McMenuItemGroup, McSubMenu, McIcon, McMessage } from 'meetcode-ui';
-import { LogoHtml5, LogoNodejs, LogoCss3, LogoVue, LogoReact } from '@vicons/ionicons5';
+import { McMenu, McMenuItem, McSubMenu, McIcon } from 'meetcode-ui';
+import { LogoVue, LogoReact } from '@vicons/ionicons5';
 
 const menuKey = ref('');
-const handleUpdateValue = (key: string) => {
-    McMessage.text(`当前选中的 Key = ${key}`, { card: true });
-};
 </script>

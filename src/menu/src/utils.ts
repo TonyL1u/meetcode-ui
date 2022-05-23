@@ -29,11 +29,11 @@ export function createKeyTree(children: VNode[], result: KeyTree[] = []) {
 }
 
 export function createMenu(option: MenuOption) {
-    const { key, label, icon, intent, unique, group, children } = option;
+    const { key, label, icon, indent, unique, group, children } = option;
     if (group) {
         return createVNode(
             McMenuItemGroup,
-            { intent, title: label },
+            { indent, title: label },
             {
                 default: () => (children ?? []).map(item => createMenu(item))
             }
@@ -41,7 +41,7 @@ export function createMenu(option: MenuOption) {
     } else if (children) {
         return createVNode(
             McSubMenu,
-            { key, intent, unique, title: label },
+            { key, indent, unique, title: label },
             {
                 icon,
                 default: () => children.map(item => createMenu(item))
@@ -50,7 +50,7 @@ export function createMenu(option: MenuOption) {
     } else {
         return createVNode(
             McMenuItem,
-            { key, intent },
+            { key, indent },
             {
                 icon,
                 default: typeof label === 'string' ? () => label : label

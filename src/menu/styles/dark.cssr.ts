@@ -6,11 +6,11 @@ export default c([
             c('&:hover::before', {
                 background: '#1f2430'
             }),
-            c('&--active', {
-                color: '#63e2b7'
-            }),
             c('&--active::before', {
                 background: '#1f2430'
+            }),
+            c('&--active', {
+                color: '#63e2b7'
             })
         ]),
         c('.mc-menu-item-group', [
@@ -38,6 +38,30 @@ export default c([
                     background: '#1f2430'
                 })
             ])
+        ]),
+        c(
+            '.mc-menu-item.mc-menu-item--disabled',
+            {
+                color: '#7a7d85'
+            },
+            [
+                c('&::before', {
+                    background: 'none'
+                })
+            ]
+        ),
+        c('.mc-sub-menu.mc-sub-menu--disabled, .mc-menu-item-group.mc-menu-item-group--disabled', [
+            c(
+                '.mc-menu-item, .mc-sub-menu-title, .mc-menu-item-group-title',
+                {
+                    color: '#7a7d85'
+                },
+                [
+                    c('&::before', {
+                        background: 'none'
+                    })
+                ]
+            )
         ])
     ]),
     c('.mc-menu.mc-menu--horizontal', [
@@ -50,6 +74,14 @@ export default c([
             c('&--child-active, & > .mc-sub-menu-title:hover', {
                 color: '#63e2b7'
             })
-        ])
+        ]),
+        c('& > .mc-menu-item-group', [
+            c('&--child-active, & > .mc-menu-item-group-title:hover', {
+                color: '#63e2b7'
+            })
+        ]),
+        c('& > .mc-menu-item.mc-menu-item--disabled, & > .mc-sub-menu.mc-sub-menu--disabled .mc-sub-menu-title, & > .mc-menu-item-group.mc-menu-item-group--disabled .mc-menu-item-group-title', {
+            color: '#7a7d85'
+        })
     ])
 ]);

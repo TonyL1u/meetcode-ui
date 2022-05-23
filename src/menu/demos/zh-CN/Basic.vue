@@ -8,25 +8,23 @@
             </template>
             HTML
         </McMenuItem>
-        <McMenuItemGroup title="基础">
-            <McMenuItem key="js">
-                <template #icon>
-                    <McIcon>
-                        <LogoNodejs />
-                    </McIcon>
-                </template>
-                JavaScript
-            </McMenuItem>
-            <McMenuItem key="css">
-                <template #icon>
-                    <McIcon>
-                        <LogoCss3 />
-                    </McIcon>
-                </template>
-                CSS
-            </McMenuItem>
-        </McMenuItemGroup>
-        <McSubMenu key="vue" title="Vue">
+        <McMenuItem key="js">
+            <template #icon>
+                <McIcon>
+                    <LogoNodejs />
+                </McIcon>
+            </template>
+            JavaScript
+        </McMenuItem>
+        <McMenuItem key="css">
+            <template #icon>
+                <McIcon>
+                    <LogoCss3 />
+                </McIcon>
+            </template>
+            CSS
+        </McMenuItem>
+        <McSubMenu key="vue" title="Vue" disabled>
             <template #icon>
                 <McIcon>
                     <LogoVue />

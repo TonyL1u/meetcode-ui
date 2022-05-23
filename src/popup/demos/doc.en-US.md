@@ -87,7 +87,6 @@ The `show()` method will open a modal box by default. If you want to open a draw
 
 ```ts
 export declare function McPopup<P extends Record<string, any>, E extends ObjectEmitsOptions>(source: Component | string, options?: PopupSourceOptions<P, E>): PopupInstance;
-
 export declare interface PopupInstance {
     show(): void;
     show<T extends PopupType>(type: T): void;

@@ -87,7 +87,6 @@ const show = ref(false);
 
 ```ts
 export declare function McPopup<P extends Record<string, any>, E extends ObjectEmitsOptions>(source: Component | string, options?: PopupSourceOptions<P, E>): PopupInstance;
-
 export declare interface PopupInstance {
     show(): void;
     show<T extends PopupType>(type: T): void;

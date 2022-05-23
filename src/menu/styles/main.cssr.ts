@@ -30,7 +30,12 @@ export default c([
                         fontSize: 'var(--menu-collapsed-icon-size)'
                     })
                 ]
-            )
+            ),
+            c('&--disabled', [
+                c('.mc-menu-item, .mc-sub-menu-title, .mc-menu-item-group-title', {
+                    cursor: 'not-allowed'
+                })
+            ])
         ]
     ),
     c(
@@ -47,6 +52,9 @@ export default c([
             position: 'relative'
         },
         [
+            c('&--disabled', {
+                cursor: 'not-allowed'
+            }),
             c(
                 '&__icon',
                 {
@@ -79,6 +87,14 @@ export default c([
         ]
     ),
     c('.mc-menu-item-group', [
+        c('&--disabled', [
+            c('.mc-menu-item, .mc-sub-menu-title', {
+                cursor: 'not-allowed'
+            })
+        ]),
+        c('&--disabled&--collapsed > .mc-menu-item-group-title', {
+            cursor: 'not-allowed'
+        }),
         c('&-title', {
             height: '32px',
             paddingLeft: 'var(--menu-item-group-padding-left)',
@@ -104,15 +120,20 @@ export default c([
         c(
             '&--collapsed > .mc-menu-item-group-title',
             {
+                fontSize: '14px',
                 cursor: 'pointer',
                 padding: 0,
                 justifyContent: 'center',
-                position: 'relative'
+                position: 'relative',
+                transition: '0.2s'
             },
             [
+                c('& > *', {
+                    zIndex: 1
+                }),
                 c('&::before', {
                     content: '""',
-                    zIndex: '-1',
+                    zIndex: 'auto',
                     position: 'absolute',
                     left: '4px',
                     right: '4px',
@@ -142,6 +163,11 @@ export default c([
         )
     ]),
     c('.mc-sub-menu', [
+        c('&--disabled', [
+            c('.mc-menu-item, .mc-sub-menu-title, .mc-menu-item-group-title', {
+                cursor: 'not-allowed'
+            })
+        ]),
         c('&--collapsed > .mc-sub-menu-title', [
             c('.mc-sub-menu-title__arrow', {
                 transform: 'rotate(180deg)'
@@ -162,6 +188,9 @@ export default c([
                 position: 'relative'
             },
             [
+                c('& > *', {
+                    zIndex: 1
+                }),
                 c(
                     '&__icon',
                     {
@@ -176,8 +205,7 @@ export default c([
                 ),
                 c('&__content', {
                     flex: 1,
-                    overflow: 'hidden',
-                    zIndex: 1
+                    overflow: 'hidden'
                 }),
                 c('&__arrow', {
                     transition: 'transform 0.2s'
