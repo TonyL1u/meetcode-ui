@@ -24,7 +24,7 @@
             </template>
             CSS
         </McMenuItem>
-        <McSubMenu key="vue" title="Vue" disabled>
+        <McSubMenu key="vue" title="Vue">
             <template #icon>
                 <McIcon>
                     <LogoVue />

@@ -2,7 +2,7 @@ import { createGlobalState, useStorage, RemovableRef, createEventHook } from '@v
 import type { EventHookOn } from '@vueuse/core';
 
 export type LanguageType = 'zh-CN' | 'en-US';
-const useGlobalLanguageState = createGlobalState(() => useStorage<LanguageType>('meetcode-ui-language-local-storage', 'en-US'));
+const useGlobalLanguageState = createGlobalState(() => useStorage<LanguageType>('meetcode-ui-language-local-storage', 'zh-CN'));
 export const globalLanguage: RemovableRef<LanguageType> = useGlobalLanguageState();
 
 /**

@@ -5,7 +5,7 @@
                 <McIcon class="nav-menu-trigger" :size="24" @click="handleShowNavMenu">
                     <IconMenu />
                 </McIcon>
-                <div class="title mc-text-2xl mc-leading-6">Meetcode UI</div>
+                <div class="title">Meetcode UI</div>
                 <McTabs v-model:value="currentTab" :show-line="false" class="header-tabs mc-absolute mc-left-[268px]" :header-style="{ height: '55px' }" :content-style="{ padding: 0 }" @tab-click="handleTabClick">
                     <McTab name="home">{{ siteLang === 'zh-CN' ? '首页' : 'Home' }}</McTab>
                     <McTab name="docs">{{ siteLang === 'zh-CN' ? '文档' : 'Docs' }}</McTab>
@@ -79,7 +79,7 @@ import type { MenuTab, RouteMetaData } from './menu';
 import type { MenuOption } from 'meetcode-ui';
 
 const router = useRouter();
-const { current: siteTheme } = useThemeController({ useOsTheme: true });
+const { current: siteTheme } = useThemeController();
 const { current: siteLang } = useI18nController();
 const { onRouteChange } = useRouterEventHook();
 const currentTab = ref<'home' | MenuTab>();
@@ -165,6 +165,7 @@ body {
     margin: 0;
     padding: 0;
     line-height: 1.5;
+    font-size: 14px;
 }
 
 #app {
@@ -172,6 +173,11 @@ body {
     // -webkit-font-smoothing: antialiased;
     // -moz-osx-font-smoothing: grayscale;
     height: 100vh;
+
+    .title {
+        font-size: 24px;
+        line-height: 24px;
+    }
 
     .main-content {
         padding-right: 164px;
