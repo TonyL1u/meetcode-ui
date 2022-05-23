@@ -1,5 +1,6 @@
 import { defineComponent, renderSlot, createVNode, toRefs, ref, provide, inject, computed, getCurrentInstance } from 'vue';
 import { checkParent, flattenWithOptions, propsMergeSlots } from '../../_utils_';
+import { logicAnd, logicNot, logicOr } from '@vueuse/core';
 import { menuIKey, menuItemIKey, menuItemGroupIKey, subMenuIKey, menuInjectionKey, subMenuInjectionKey, menuGroupInjectionKey, subMenuProps, SubMenuProps } from '../interface';
 import { findParent } from './utils';
 import { McIcon } from '../../icon';
@@ -33,8 +34,8 @@ export default defineComponent({
             return !!(activeKey?.value && keys.includes(activeKey.value));
         });
         const selfPadding = computed(() => (indent.value ? indent.value : isParentMenuItemGroup.value ? (menuItemGroupPadding?.value || 0) + 16 : ((isParentMenu.value ? menuPadding?.value : subMenuPadding?.value) || 0) + 32));
-        const mergedDisabled = computed(() => isMenuDisabled?.value || (isParentMenuItemGroup.value ? isMenuItemGroupDisabled?.value : isSubMenuDisabled?.value) || disabled.value);
-        const watchUnique = computed(() => !!((isMenuUnique?.value && isParentMenu.value) || (isSubMenuUnique?.value && isParentSubMenu.value)));
+        const mergedDisabled = logicOr(isMenuDisabled, isParentMenuItemGroup.value ? isMenuItemGroupDisabled?.value : isSubMenuDisabled?.value, disabled);
+        const watchUnique = logicOr(logicAnd(isMenuUnique, isParentMenu), logicAnd(isSubMenuUnique, isParentSubMenu));
         const menuPopoverPlacement = computed(() => {
             if (isMenuHorizontal?.value) {
                 return isParentMenu.value ? 'bottom' : 'right-start';
@@ -42,7 +43,7 @@ export default defineComponent({
                 return 'right-start';
             }
         });
-        const menuPopoverDisabled = computed(() => mergedDisabled.value || (!isMenuCollapsed?.value && !isMenuHorizontal?.value));
+        const menuPopoverDisabled = logicOr(mergedDisabled, logicAnd(logicNot(isMenuCollapsed), logicNot(isMenuHorizontal)));
         const menuPopoverRef = ref<PopoverExposeInstance>();
         const cssVars = computed<CSS.Properties>(() => {
             return {
@@ -65,7 +66,7 @@ export default defineComponent({
 
         // main logic...
         return () =>
-            createVNode('li', { class: ['mc-sub-menu', !isExpanded.value && menuPopoverDisabled.value ? 'mc-sub-menu--collapsed' : '', isActive.value ? 'mc-sub-menu--child-active' : '', disabled.value ? 'mc-sub-menu--disabled' : ''] }, [
+            createVNode('li', { class: ['mc-sub-menu', logicAnd(logicNot(isExpanded), menuPopoverDisabled).value ? 'mc-sub-menu--collapsed' : '', isActive.value ? 'mc-sub-menu--child-active' : '', disabled.value ? 'mc-sub-menu--disabled' : ''] }, [
                 createVNode(
                     McPopover,
                     {
@@ -85,8 +86,8 @@ export default defineComponent({
                                     class: 'mc-sub-menu-title',
                                     style: cssVars.value,
                                     onClick: () => {
-                                        if (isMenuCollapsed?.value || isMenuHorizontal?.value || mergedDisabled.value) return;
-                                        if (!watchUnique.value || isExpanded.value) {
+                                        if (logicOr(isMenuCollapsed, isMenuHorizontal, mergedDisabled).value) return;
+                                        if (logicOr(logicNot(watchUnique), isExpanded).value) {
                                             updateExpandKeys?.(key);
                                         } else {
                                             const keys = isParentMenu.value ? keyTree!.map(item => item.children && item.key).filter(Boolean) : findParent(keyTree!, key)?.children?.map(item => item.key) ?? [];
@@ -99,7 +100,7 @@ export default defineComponent({
                                     createVNode('span', { class: 'mc-sub-menu-title__content' }, [propsMergeSlots<SubMenuProps, 'title'>(props, slots, 'title')]),
                                     isMenuHorizontal?.value && isParentMenu.value
                                         ? null
-                                        : createVNode(McIcon, { class: 'mc-sub-menu-title__arrow' }, { default: () => createVNode(isMenuCollapsed?.value || menuPopoverPlacement.value === 'right-start' ? ChevronForwardOutline : ChevronUpOutline) })
+                                        : createVNode(McIcon, { class: 'mc-sub-menu-title__arrow' }, { default: () => createVNode(logicOr(isMenuCollapsed, menuPopoverPlacement.value === 'right-start').value ? ChevronForwardOutline : ChevronUpOutline) })
                                 ]
                             )
                     }
@@ -107,7 +108,7 @@ export default defineComponent({
                 isMenuHorizontal?.value
                     ? null
                     : createVNode(McFadeInExpandTransition, null, {
-                          default: () => (isExpanded.value && !isMenuCollapsed?.value ? createVNode('ul', { class: 'mc-sub-menu-children' }, [renderSlot(slots, 'default')]) : null)
+                          default: () => (logicAnd(isExpanded, logicNot(isMenuCollapsed)).value ? createVNode('ul', { class: 'mc-sub-menu-children' }, [renderSlot(slots, 'default')]) : null)
                       })
             ]);
     }

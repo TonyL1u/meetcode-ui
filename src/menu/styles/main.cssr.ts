@@ -32,7 +32,7 @@ export default c([
                 ]
             ),
             c('&--disabled', [
-                c('.mc-menu-item, .mc-sub-menu-title, .mc-menu-item-group-title', {
+                c('.mc-menu-item, .mc-sub-menu-title, .mc-menu-item-group > .mc-menu-item-group-title', {
                     cursor: 'not-allowed'
                 })
             ])
@@ -92,9 +92,6 @@ export default c([
                 cursor: 'not-allowed'
             })
         ]),
-        c('&--disabled&--collapsed > .mc-menu-item-group-title', {
-            cursor: 'not-allowed'
-        }),
         c('&-title', {
             height: '32px',
             paddingLeft: 'var(--menu-item-group-padding-left)',
@@ -117,11 +114,16 @@ export default c([
                 })
             ]
         ),
+        c('&--collapsed&--disabled > .mc-menu-item-group-title', {
+            cursor: 'not-allowed'
+        }),
+        c('&--collapsed > .mc-menu-item-group-title', {
+            cursor: 'pointer'
+        }),
         c(
             '&--collapsed > .mc-menu-item-group-title',
             {
                 fontSize: '14px',
-                cursor: 'pointer',
                 padding: 0,
                 justifyContent: 'center',
                 position: 'relative',

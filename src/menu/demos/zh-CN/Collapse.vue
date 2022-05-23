@@ -10,7 +10,7 @@
                     </template>
                     CSS
                 </McMenuItem>
-                <McMenuItemGroup title="基础" disabled>
+                <McMenuItemGroup title="基础">
                     <McMenuItem key="html">
                         <template #icon>
                             <McIcon>
@@ -35,7 +35,7 @@
                                 <LogoVue />
                             </McIcon>
                         </template>
-                        <McMenuItemGroup title="开始" disabled>
+                        <McMenuItemGroup title="开始">
                             <McMenuItem key="vue-intro">简介</McMenuItem>
                             <McMenuItem key="vue-intro-quick-start">快速开始</McMenuItem>
                         </McMenuItemGroup>
