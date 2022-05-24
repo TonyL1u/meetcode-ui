@@ -10,18 +10,18 @@ export interface RouteMetaData extends RouteMeta {
     title: string;
     tab: 'home' | MenuTab;
     route: string;
+    chinese?: string;
+}
+export interface Route {
+    path: string;
+    component: Component;
+    meta: RouteMetaData;
 }
 type RouteLang = 'zh-CN' | 'en-US';
 type MapType<T> = Record<MenuTab, Record<RouteLang, T>>;
 type ModulesMap = MapType<Record<string, () => Promise<{ [key: string]: any }>>>;
 type RoutesMap = MapType<Route[]>;
 type MenusMap = MapType<MenuOption[]>;
-
-interface Route {
-    path: string;
-    component: Component;
-    meta: RouteMetaData;
-}
 
 const modulesMap: ModulesMap = {
     docs: {
@@ -47,7 +47,7 @@ function createRoutes(tab: MenuTab, lang: RouteLang, matcher?: RegExp): Route[] 
         return {
             path: `/${lang}/${tab}/${route}`,
             component: module,
-            meta: { title, tab, route }
+            meta: { title, tab, route, chinese: tab === 'components' ? componentNameMap[route] : '' }
         };
     });
 }

@@ -6,7 +6,7 @@
                     <IconMenu />
                 </McIcon>
                 <div class="title">Meetcode UI</div>
-                <McTabs v-model:value="currentTab" :show-line="false" class="header-tabs mc-absolute mc-left-[268px]" :header-style="{ height: '55px' }" :content-style="{ padding: 0 }" @tab-click="handleTabClick">
+                <McTabs :default-tab="currentTab" :show-line="false" class="header-tabs mc-absolute mc-left-[268px]" :header-style="{ height: '55px' }" :content-style="{ padding: 0 }" @tab-click="handleTabClick">
                     <McTab name="home">{{ siteLang === 'zh-CN' ? '首页' : 'Home' }}</McTab>
                     <McTab name="docs">{{ siteLang === 'zh-CN' ? '文档' : 'Docs' }}</McTab>
                     <McTab name="components">{{ siteLang === 'zh-CN' ? '组件' : 'Components' }}</McTab>
@@ -35,7 +35,7 @@
                 <McLayoutContent class="main-content">
                     <div class="mc-flex mc-flex-col mc-justify-between mc-w-full mc-min-h-full">
                         <router-view :class="siteTheme" />
-                        <PagerNavigator v-if="false" :menu="menu" :tab="currentTab" :current-key="currentMenuKey" />
+                        <PagerNavigator :routes="routesMap[currentTab][siteLang]" :tab="currentTab" :current-key="currentMenuKey" />
                     </div>
                 </McLayoutContent>
                 <McLayoutSider class="sider-navigator" style="width: 164px; position: absolute; right: 0; height: 100%">
@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, createVNode, nextTick } from 'vue';
+import { computed, ref, createVNode } from 'vue';
 import { McTabs, McTab, McIcon, McPopup, McLayout, McLayoutContent, McLayoutHeader, McLayoutSider, McMenu, useThemeController, useI18nController } from 'meetcode-ui';
 import { MenuOutline as IconMenu } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';
@@ -128,15 +128,7 @@ const handleShowNavMenu = () => {
 };
 const handleTabClick = (tab: 'home' | MenuTab) => {
     if (currentTab.value === tab) return;
-    if (tab === 'home') {
-        router.push(`/${siteLang.value}/home`);
-        return;
-    }
-    // 等待 currentTab 同步更新后执行
-    nextTick(() => {
-        router.push(routesMap[tab][siteLang.value][0].path);
-        currentMenuKey.value = menu.value[0].key! as string;
-    });
+    router.push(tab === 'home' ? `/${siteLang.value}/home` : routesMap[tab][siteLang.value][0].path);
 };
 const handleToggled = (isCollapsed: boolean) => {
     collapsed.value = isCollapsed;
@@ -147,7 +139,6 @@ onRouteChange('meta', ({ meta }) => {
     currentTab.value = tab;
     currentMenuKey.value = `${tab}/${route}`;
     useTitle(`Meetcode UI - ${title}`);
-    console.log(+new Date());
 });
 </script>
 

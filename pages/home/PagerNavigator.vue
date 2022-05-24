@@ -1,29 +1,26 @@
 <script lang="ts" setup>
 import { computed, toRefs } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { McIcon, useI18nController } from 'meetcode-ui';
 import { ChevronBackSharp as IconPrev, ChevronForwardSharp as IconNext } from '@vicons/ionicons5';
-import { componentNameMap } from '../site.config';
-import type { MenuTab } from '../menu';
-import type { MenuOption } from 'meetcode-ui';
+import type { MenuTab, Route } from '../menu';
 
-const props = defineProps<{ menu: MenuOption[]; currentKey: string; tab: MenuTab }>();
-const { menu, currentKey, tab } = toRefs(props);
+const props = defineProps<{ routes: Route[]; tab: MenuTab }>();
+const { routes, tab } = toRefs(props);
 const router = useRouter();
+const route = useRoute();
 const { current: siteLang } = useI18nController();
-const allMenus = computed(() => (tab.value === 'components' ? menu.value.map(item => item.children!).flat() : menu.value));
-console.log(allMenus.value);
-const currentIndex = computed(() => allMenus.value.findIndex(item => item.key === currentKey.value));
-const next = computed(() => allMenus.value[currentIndex.value + 1] ?? null);
-const prev = computed(() => allMenus.value[currentIndex.value - 1] ?? null);
+const currentIndex = computed(() => routes.value.findIndex(item => item.path === route.path));
+const next = computed(() => routes.value[currentIndex.value + 1] ?? null);
+const prev = computed(() => routes.value[currentIndex.value - 1] ?? null);
 const getLabel = (type: 'prev' | 'next') => {
-    const label = (type === 'prev' ? prev.value.label : next.value.label) as string;
-    const text = [componentNameMap[label.toLowerCase()], label];
-    return tab.value === 'components' && siteLang.value === 'zh-CN' ? (type === 'prev' ? text.join(' ') : text.reverse().join(' ')) : label;
+    const meta = type === 'prev' ? prev.value.meta : next.value.meta;
+    const { title, chinese } = meta;
+    return tab.value === 'components' && siteLang.value === 'zh-CN' ? (type === 'prev' ? [chinese, title].join(' ') : [chinese, title].reverse().join(' ')) : title;
 };
 const switchTo = (type: 'prev' | 'next') => {
-    const key = (type === 'prev' ? prev.value.key : next.value.key) as string;
-    if (key) router.push(`/${siteLang.value}/${key}`);
+    const path = type === 'prev' ? prev.value.path : next.value.path;
+    router.push(path);
 };
 </script>
 
