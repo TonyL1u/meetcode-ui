@@ -28,12 +28,31 @@ export function createKeyTree(children: VNode[], result: KeyTree[] = []) {
     return result;
 }
 
+export function createKeyTreeByOptions(options: MenuOption[], result: KeyTree[] = []) {
+    options.forEach(option => {
+        const { key = '', children, group } = option;
+        if (group) {
+            const items: MenuOption[] = (children ?? []).map(({ key = '', children }) => ({ key, children }));
+            createKeyTreeByOptions(items, result);
+        } else if (children) {
+            result.push({
+                key,
+                children: createKeyTreeByOptions(children ?? [])
+            });
+        } else {
+            result.push({ key });
+        }
+    });
+
+    return result;
+}
+
 export function createMenu(option: MenuOption) {
-    const { key, label, icon, indent, unique, group, children } = option;
+    const { key, label, icon, indent, disabled, unique, group, children } = option;
     if (group) {
         return createVNode(
             McMenuItemGroup,
-            { indent, title: label },
+            { indent, disabled, title: label },
             {
                 default: () => (children ?? []).map(item => createMenu(item))
             }
@@ -41,7 +60,7 @@ export function createMenu(option: MenuOption) {
     } else if (children) {
         return createVNode(
             McSubMenu,
-            { key, indent, unique, title: label },
+            { key, indent, disabled, unique, title: label },
             {
                 icon,
                 default: () => children.map(item => createMenu(item))
@@ -50,7 +69,7 @@ export function createMenu(option: MenuOption) {
     } else {
         return createVNode(
             McMenuItem,
-            { key, indent },
+            { key, indent, disabled },
             {
                 icon,
                 default: typeof label === 'string' ? () => label : label
@@ -81,7 +100,7 @@ export function findNode(tree: KeyTree[], key: Key): KeyTree | undefined {
     }
 }
 
-export function findParent(tree: KeyTree[], key: Key): KeyTree | undefined {
+export function findParent(tree: KeyTree[] | MenuOption[], key: Key): KeyTree | MenuOption | undefined {
     for (let i = 0; i < tree.length; i++) {
         if (tree[i].children) {
             const index = tree[i].children!.findIndex(item => item.key === key);

@@ -4,7 +4,7 @@
         <McButton @click="handleExpand('react-hooks-hooks-at-a-glance', true)">展开并选中</McButton>
         <McButton @click="handleCollapseAll">收起全部</McButton>
     </McSpace>
-    <McMenu ref="menuRef" v-model:value="menuKey">
+    <McMenu ref="menuRef" v-model:value="menuKey" @update:value="handleUpdateValue" @update:expand-keys="handleUpdateExpandKeys">
         <McSubMenu key="vue" title="Vue">
             <template #icon>
                 <McIcon>
@@ -45,16 +45,24 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { McMenu, McMenuItem, McSubMenu, McIcon, McButton, McSpace } from 'meetcode-ui';
+import { McMenu, McMenuItem, McSubMenu, McIcon, McButton, McSpace, McMessage } from 'meetcode-ui';
 import { LogoVue, LogoReact } from '@vicons/ionicons5';
 import type { MenuExposeInstance } from 'meetcode-ui';
 
 const menuKey = ref('');
 const menuRef = ref<MenuExposeInstance>();
+
 const handleExpand = (key: string, autoSelect?: boolean) => {
     menuRef.value?.expand(key, autoSelect);
 };
 const handleCollapseAll = () => {
     menuRef.value?.collapseAll();
+};
+
+const handleUpdateValue = (key: string) => {
+    McMessage.text(`当前选中的 Key = ${key}`, { card: true });
+};
+const handleUpdateExpandKeys = (keys: string[]) => {
+    McMessage.text(`当前展开的子菜单 Keys = ${JSON.stringify(keys)}`, { card: true });
 };
 </script>

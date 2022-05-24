@@ -6,7 +6,7 @@ const { current } = useI18nController();
 const { docs, components, develop } = routesMap;
 const router = createRouter({
     // 指定路由模式
-    history: createWebHistory('meetcode-ui'),
+    history: createWebHistory(),
     // 路由地址
     routes: [
         ...docs['zh-CN'],

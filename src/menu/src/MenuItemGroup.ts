@@ -1,5 +1,6 @@
 import { defineComponent, toRefs, renderSlot, createVNode, inject, provide, computed, ref, getCurrentInstance } from 'vue';
 import { checkParent, flattenWithOptions, propsMergeSlots } from '../../_utils_';
+import { and, not, or } from '@vueuse/core';
 import { menuIKey, subMenuIKey, menuItemGroupIKey, menuItemIKey, subMenuInjectionKey, menuInjectionKey, menuGroupInjectionKey, menuItemGroupProps, MenuItemGroupProps } from '../interface';
 import { McPopover } from '../../popover';
 import { McFadeInExpandTransition } from '../../_transition_';
@@ -26,8 +27,8 @@ export default defineComponent({
 
             return !!(activeKey?.value && keys.includes(activeKey.value));
         });
-        const selfPadding = computed(() => (indent.value ? indent.value : isParentSubMenu.value ? (subMenuPadding?.value || 0) + 16 : (menuPadding?.value || 0) + 32));
-        const mergedDisabled = computed(() => isMenuDisabled?.value || isSubMenuDisabled?.value || disabled.value);
+        const selfPadding = computed(() => (typeof indent.value === 'number' ? indent.value : isParentSubMenu.value ? (subMenuPadding?.value || 0) + 16 : (menuPadding?.value || 0) + 32));
+        const mergedDisabled = or(isMenuDisabled, isSubMenuDisabled, disabled);
         const menuPopoverPlacement = computed(() => {
             if (isMenuHorizontal?.value) {
                 return 'bottom';
@@ -35,7 +36,7 @@ export default defineComponent({
                 return 'right-start';
             }
         });
-        const menuPopoverDisabled = computed(() => mergedDisabled.value || !(isParentMenu.value && (isMenuHorizontal?.value || isMenuCollapsed?.value)));
+        const menuPopoverDisabled = or(mergedDisabled, not(and(isParentMenu, or(isMenuHorizontal, isMenuCollapsed))));
         const menuPopoverRef = ref<PopoverExposeInstance>();
         const cssVars = computed<CSS.Properties>(() => {
             return {
@@ -57,7 +58,7 @@ export default defineComponent({
         return () =>
             createVNode(
                 'li',
-                { class: ['mc-menu-item-group', hasCollapsed.value ? 'mc-menu-item-group--collapsed' : '', isActive.value && !menuPopoverDisabled.value ? 'mc-menu-item-group--child-active' : '', disabled.value ? 'mc-menu-item-group--disabled' : ''] },
+                { class: ['mc-menu-item-group', hasCollapsed.value ? 'mc-menu-item-group--collapsed' : '', and(isActive, not(menuPopoverDisabled)).value ? 'mc-menu-item-group--child-active' : '', disabled.value ? 'mc-menu-item-group--disabled' : ''] },
                 [
                     createVNode(
                         McPopover,
@@ -75,7 +76,7 @@ export default defineComponent({
                                 createVNode('div', { class: 'mc-menu-item-group-title', style: cssVars.value }, [createVNode('span', { class: 'mc-menu-item-group-title__content' }, [propsMergeSlots<MenuItemGroupProps, 'title'>(props, slots, 'title')])])
                         }
                     ),
-                    isMenuHorizontal?.value && isParentMenu.value
+                    and(isMenuHorizontal, isParentMenu).value
                         ? null
                         : createVNode(
                               McFadeInExpandTransition,
@@ -84,7 +85,7 @@ export default defineComponent({
                                   onEnter: () => (hasCollapsed.value = false)
                               },
                               {
-                                  default: () => (isMenuCollapsed?.value && isParentMenu.value ? null : createVNode('ul', { class: 'mc-menu-item-group-children' }, [renderSlot(slots, 'default')]))
+                                  default: () => (and(isMenuCollapsed, isParentMenu).value ? null : createVNode('ul', { class: 'mc-menu-item-group-children' }, [renderSlot(slots, 'default')]))
                               }
                           )
                 ]

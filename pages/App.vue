@@ -34,33 +34,6 @@
             <router-view :class="siteTheme" />
         </McLayoutContent>
     </McLayout>
-    <!-- <McLayout v-if="currentMenuKey && currentTab" preset="holy" style="height: 100vh">
-        <template #header>
-            <Header class="header">
-                <McIcon class="nav-menu-trigger" :size="24" @click="handleShowNavMenu">
-                    <IconMenu />
-                </McIcon>
-                <div class="title mc-text-2xl mc-leading-6">Meetcode UI</div>
-                <McTabs v-model:value="currentTab" :show-line="false" class="header-tabs mc-absolute mc-left-[276px]" :content-style="{ padding: 0 }" @tab-click="handleTabClick">
-                    <McTab name="docs">{{ siteLang === 'zh-CN' ? '文档' : 'Docs' }}</McTab>
-                    <McTab name="components">{{ siteLang === 'zh-CN' ? '组件' : 'Components' }}</McTab>
-                    <McTab name="develop">{{ siteLang === 'zh-CN' ? '开发指南' : 'Develop' }}</McTab>
-                </McTabs>
-            </Header>
-        </template>
-        <template #left-sider>
-            <MenuVNode :menu="menu" />
-        </template>
-        <template #content>
-            <div class="mc-flex mc-flex-col mc-justify-between mc-w-full mc-min-h-full">
-                <router-view :class="siteTheme" />
-                <PagerNavigator :menu="menu" :tab="currentTab" :current-key="currentMenuKey" />
-            </div>
-        </template>
-        <template #right-sider>
-            <Navigator />
-        </template>
-    </McLayout> -->
 </template>
 
 <script lang="ts" setup>

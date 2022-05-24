@@ -22,7 +22,7 @@ export default defineComponent({
         const isParentMenuItemGroup = computed(() => checkParent(menuItemGroupIKey, instance?.parent));
 
         const { unique, indent, disabled } = toRefs(props);
-        const { activeKey, expandedKeys, updateExpandKeys, padding: menuPadding, keyTree, isUnique: isMenuUnique, isCollapsed: isMenuCollapsed, isHorizontal: isMenuHorizontal, isDisabled: isMenuDisabled } = inject(menuInjectionKey, null) ?? {};
+        const { activeKey, expandedKeys, updateExpandKeys, padding: menuPadding, keyTree, options, isUnique: isMenuUnique, isCollapsed: isMenuCollapsed, isHorizontal: isMenuHorizontal, isDisabled: isMenuDisabled } = inject(menuInjectionKey, null) ?? {};
         const { padding: subMenuPadding, isUnique: isSubMenuUnique, isDisabled: isSubMenuDisabled, hidePopover: hideSubMenuPopover } = inject(subMenuInjectionKey, null) ?? {};
         const { padding: menuItemGroupPadding, isDisabled: isMenuItemGroupDisabled, hidePopover: hideMenuItemGroupPopover } = inject(menuGroupInjectionKey, null) ?? {};
         const isExpanded = computed(() => expandedKeys?.value.includes(key || ''));
@@ -33,7 +33,7 @@ export default defineComponent({
 
             return !!(activeKey?.value && keys.includes(activeKey.value));
         });
-        const selfPadding = computed(() => (indent.value ? indent.value : isParentMenuItemGroup.value ? (menuItemGroupPadding?.value || 0) + 16 : ((isParentMenu.value ? menuPadding?.value : subMenuPadding?.value) || 0) + 32));
+        const selfPadding = computed(() => (typeof indent.value === 'number' ? indent.value : isParentMenuItemGroup.value ? (menuItemGroupPadding?.value || 0) + 16 : ((isParentMenu.value ? menuPadding?.value : subMenuPadding?.value) || 0) + 32));
         const mergedDisabled = or(isMenuDisabled, isParentMenuItemGroup.value ? isMenuItemGroupDisabled?.value : isSubMenuDisabled?.value, disabled);
         const watchUnique = or(and(isMenuUnique, isParentMenu), and(isSubMenuUnique, isParentSubMenu));
         const menuPopoverPlacement = computed(() => {
@@ -90,7 +90,7 @@ export default defineComponent({
                                         if (or(not(watchUnique), isExpanded).value) {
                                             updateExpandKeys?.(key);
                                         } else {
-                                            const keys = isParentMenu.value ? keyTree!.map(item => item.children && item.key).filter(Boolean) : findParent(keyTree!, key)?.children?.map(item => item.key) ?? [];
+                                            const keys = isParentMenu.value ? keyTree!.map(item => item.children && item.key).filter(Boolean) : findParent(options?.value ?? keyTree!, key)?.children?.map(item => item.key) ?? [];
                                             updateExpandKeys?.([...expandedKeys?.value.filter(key => !keys.includes(key))!, key]);
                                         }
                                     }

@@ -17,7 +17,8 @@ const options: MenuOption[] = [
     {
         key: 'html',
         icon: renderIcon(LogoHtml5),
-        label: 'HTML'
+        label: 'HTML',
+        disabled: true
     },
     {
         key: 'js',
@@ -72,6 +73,7 @@ const options: MenuOption[] = [
         key: 'react',
         icon: renderIcon(LogoReact),
         label: 'React',
+        unique: true,
         children: [
             {
                 key: 'react-installation',

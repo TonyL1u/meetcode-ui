@@ -19,6 +19,7 @@ interface MenuInjection {
     expandedKeys: Ref<Key[]>;
     updateExpandKeys: (key: Key | Key[]) => void;
     keyTree: KeyTree[];
+    options: Ref<MenuOption[]>;
     padding: ComputedRef<number>;
     isDisabled: Ref<boolean>;
     isUnique: Ref<boolean>;
@@ -57,6 +58,7 @@ export interface MenuOption {
     label?: string | (() => VNodeChild);
     icon?: () => VNodeChild;
     indent?: number;
+    disabled?: boolean;
     unique?: boolean;
     group?: boolean;
     children?: MenuOption[];
@@ -75,17 +77,17 @@ export interface MenuProps {
 }
 export interface MenuItemProps {
     disabled?: boolean;
-    indent?: number;
+    indent?: number | 'auto';
 }
 export interface MenuItemGroupProps {
     title?: string | (() => VNodeChild);
     disabled?: boolean;
-    indent?: number;
+    indent?: number | 'auto';
 }
 export interface SubMenuProps {
     title?: string | (() => VNodeChild);
     disabled?: boolean;
-    indent?: number;
+    indent?: number | 'auto';
     unique?: boolean;
 }
 export const menuProps = {
@@ -136,7 +138,7 @@ export const menuItemProps = {
         default: false
     },
     indent: {
-        type: Number as PropType<MenuItemProps['indent']>,
+        type: [Number, String] as PropType<MenuItemProps['indent']>,
         default: undefined
     }
 };
@@ -150,7 +152,7 @@ export const menuItemGroupProps = {
         default: false
     },
     indent: {
-        type: Number as PropType<MenuItemGroupProps['indent']>,
+        type: [Number, String] as PropType<MenuItemGroupProps['indent']>,
         default: undefined
     }
 };
@@ -164,7 +166,7 @@ export const subMenuProps = {
         default: false
     },
     indent: {
-        type: Number as PropType<SubMenuProps['indent']>,
+        type: [Number, String] as PropType<SubMenuProps['indent']>,
         default: undefined
     },
     unique: {

@@ -1,5 +1,5 @@
 import { defineComponent, onMounted, renderSlot, createVNode, ref, provide, toRefs, computed, watch } from 'vue';
-import { useThemeRegister, createKey } from '../_utils_';
+import { useThemeRegister } from '../_utils_';
 import { menuIKey, menuInjectionKey, menuProps } from './interface';
 import { createKeyTree, createMenu, findPath } from './src/utils';
 import { mainCssr, lightCssr, darkCssr } from './styles';
@@ -68,6 +68,7 @@ export default defineComponent({
             expandedKeys: mergedExpandKeys,
             updateExpandKeys: callUpdateExpandKeys,
             keyTree,
+            options,
             padding: selfPadding,
             isDisabled: disabled,
             isUnique: unique,
