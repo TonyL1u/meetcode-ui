@@ -1,12 +1,14 @@
+import { createVNode, Fragment } from 'vue';
 import { upperFirstLetter } from './utils';
+import { componentNameMap, componentCategoryMap } from './site.config';
 import type { RouteMeta } from 'vue-router';
 import type { Component } from 'vue';
-import type { MenuOption } from 'naive-ui';
+import type { MenuOption } from 'meetcode-ui';
 
 export type MenuTab = 'docs' | 'components' | 'develop';
 export interface RouteMetaData extends RouteMeta {
     title: string;
-    tab: MenuTab;
+    tab: 'home' | MenuTab;
     route: string;
 }
 type RouteLang = 'zh-CN' | 'en-US';
@@ -14,6 +16,7 @@ type MapType<T> = Record<MenuTab, Record<RouteLang, T>>;
 type ModulesMap = MapType<Record<string, () => Promise<{ [key: string]: any }>>>;
 type RoutesMap = MapType<Route[]>;
 type MenusMap = MapType<MenuOption[]>;
+
 interface Route {
     path: string;
     component: Component;
@@ -54,11 +57,12 @@ function createMenus(tab: MenuTab, lang: RouteLang, matcher?: RegExp) {
         const pathMatcher = matcher ? path.match(matcher) : lang === 'zh-CN' ? path.match(/\/zh-CN\/(.*).md/) : path.match(/\/en-US\/(.*).md/);
         const info = pathMatcher![1].split('_');
         const [menu, route] = info.length > 1 ? info : [info[0], info[0]];
+        const label = upperFirstLetter(menu)
+            .split('-')
+            .reduce((prev, cur) => `${prev} ${upperFirstLetter(cur)}`);
 
         return {
-            label: upperFirstLetter(menu)
-                .split('-')
-                .reduce((prev, cur) => `${prev} ${upperFirstLetter(cur)}`),
+            label,
             key: `${tab}/${route}`
         };
     });
@@ -85,11 +89,43 @@ export const menusMap: MenusMap = {
         'en-US': createMenus('docs', 'en-US')
     },
     components: {
-        'zh-CN': createMenus('components', 'zh-CN', /\/src\/(.*)\/demos/),
-        'en-US': createMenus('components', 'en-US', /\/src\/(.*)\/demos/)
+        'zh-CN': componentsMenuWrap(createMenus('components', 'zh-CN', /\/src\/(.*)\/demos/)),
+        'en-US': componentsMenuWrap(createMenus('components', 'en-US', /\/src\/(.*)\/demos/))
     },
     develop: {
         'zh-CN': createMenus('develop', 'zh-CN'),
         'en-US': createMenus('develop', 'en-US')
     }
 };
+
+function componentsMenuWrap(menus: MenuOption[]): MenuOption[] {
+    const group1: MenuOption = { group: true, label: '通用', children: [] };
+    const group2: MenuOption = { group: true, label: '反馈', children: [] };
+    const group3: MenuOption = { group: true, label: '数据录入', children: [] };
+    const group4: MenuOption = { group: true, label: '数据展示', children: [] };
+    const group5: MenuOption = { group: true, label: '布局', children: [] };
+
+    menus.forEach(item => {
+        const label = (item.label as string).toLowerCase();
+        switch (componentCategoryMap[label]) {
+            case '通用':
+                item.label = () => createVNode(Fragment, null, [createVNode('span', null, [label]), createVNode('span', { style: { marginLeft: '4px', fontSize: '12px', opacity: 0.67 } }, [componentNameMap[label]])]);
+                group1.children?.push(item);
+                break;
+            case '反馈':
+                group2.children?.push(item);
+                break;
+            case '数据录入':
+                group3.children?.push(item);
+                break;
+            case '数据展示':
+                group4.children?.push(item);
+                break;
+            case '布局':
+                group5.children?.push(item);
+                break;
+        }
+    });
+
+    return [group1, group2, group3, group4, group5];
+}

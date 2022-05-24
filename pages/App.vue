@@ -1,5 +1,5 @@
 <template>
-    <McLayout v-if="currentMenuKey && currentTab" style="height: 100vh; overflow: hidden">
+    <McLayout v-if="currentTab" style="height: 100vh; overflow: hidden">
         <McLayoutHeader bordered>
             <Header class="header">
                 <McIcon class="nav-menu-trigger" :size="24" @click="handleShowNavMenu">
@@ -14,15 +14,28 @@
                 </McTabs>
             </Header>
         </McLayoutHeader>
-        <McLayout v-if="currentTab !== 'home'" style="flex: 1">
-            <McLayoutSider class="menu-sider" :width="300" transition-mode="transform" trigger-type="bar" :collapsed-width="0" bordered collapsable>
+        <McLayoutContent v-if="currentTab === 'home'" style="flex: 1; overflow: hidden">
+            <router-view :class="siteTheme" />
+        </McLayoutContent>
+        <McLayout v-else style="flex: 1">
+            <McLayoutSider
+                class="menu-sider"
+                :collapsed="collapsed"
+                :width="300"
+                trigger-type="bar"
+                :collapsed-width="currentTab === 'components' ? 92 : 0"
+                :transition-mode="currentTab === 'components' ? 'width' : 'transform'"
+                bordered
+                collapsable
+                @toggled="handleToggled"
+            >
                 <MenuVNode :menu="menu" />
             </McLayoutSider>
             <McLayout style="position: relative">
                 <McLayoutContent class="main-content">
                     <div class="mc-flex mc-flex-col mc-justify-between mc-w-full mc-min-h-full">
                         <router-view :class="siteTheme" />
-                        <PagerNavigator :menu="menu" :tab="currentTab" :current-key="currentMenuKey" />
+                        <PagerNavigator v-if="false" :menu="menu" :tab="currentTab" :current-key="currentMenuKey" />
                     </div>
                 </McLayoutContent>
                 <McLayoutSider class="sider-navigator" style="width: 164px; position: absolute; right: 0; height: 100%">
@@ -30,9 +43,6 @@
                 </McLayoutSider>
             </McLayout>
         </McLayout>
-        <McLayoutContent v-else style="flex: 1; overflow: hidden">
-            <router-view :class="siteTheme" />
-        </McLayoutContent>
     </McLayout>
 </template>
 
@@ -57,42 +67,51 @@ const { current: siteLang } = useI18nController();
 const { onRouteChange } = useRouterEventHook();
 const currentTab = ref<'home' | MenuTab>();
 const currentMenuKey = ref<string>();
+const collapsed = ref(false);
 const menu = computed<MenuOption[]>(() => {
     if (currentTab.value === 'home') return [];
     return menusMap[currentTab.value!][siteLang.value];
 });
-const MenuVNode: FunctionalComponent<{ menu: MenuOption[] }> = props => {
-    const { menu } = props;
+const MenuVNode: FunctionalComponent<{ menu: MenuOption[]; defaultExpandKeys?: string[] }> = props => {
+    const { menu, defaultExpandKeys = [] } = props;
+    const expandKeys = ref(defaultExpandKeys);
     return createVNode(McMenu, {
         value: currentMenuKey.value,
+        expandKeys: expandKeys.value,
+        collapsed: currentTab.value === 'components' ? collapsed.value : false,
+        collapsedWidth: 92,
         'onUpdate:value': (key: string) => {
             if (currentMenuKey.value === key) return;
             currentMenuKey.value = key;
             router.push(`/${siteLang.value}/${key}`);
         },
+        'onUpdate:expandKeys': (keys: string[]) => {
+            expandKeys.value = keys;
+        },
         options: menu
     });
 };
 const handleShowNavMenu = () => {
-    const { show, hide } = McPopup<{ menu: MenuOption[] }, { 'update:value': (key: string) => void }>(MenuVNode, {
+    const { show, hide } = McPopup<{ menu: MenuOption[]; defaultExpandKeys?: string[] }, { 'update:value': (key: string) => void }>(MenuVNode, {
         props: {
             menu: [
                 {
-                    group: true,
+                    key: 'docs',
                     label: '文档',
                     children: menusMap.docs[siteLang.value]
                 },
                 {
-                    group: true,
+                    key: 'components',
                     label: '组件',
                     children: menusMap.components[siteLang.value]
                 },
                 {
-                    group: true,
+                    key: 'develop',
                     label: '开发指南',
                     children: menusMap.develop[siteLang.value]
                 }
-            ]
+            ],
+            defaultExpandKeys: ['docs', 'components', 'develop']
         },
         on: {
             'update:value': () => {
@@ -107,17 +126,20 @@ const handleShowNavMenu = () => {
         bodyStyle: { padding: '0px' }
     });
 };
-const handleTabClick = (tab: MenuTab | 'home') => {
+const handleTabClick = (tab: 'home' | MenuTab) => {
+    if (currentTab.value === tab) return;
     if (tab === 'home') {
         router.push(`/${siteLang.value}/home`);
         return;
     }
-    if (currentTab.value === tab) return;
     // 等待 currentTab 同步更新后执行
     nextTick(() => {
         router.push(routesMap[tab][siteLang.value][0].path);
         currentMenuKey.value = menu.value[0].key! as string;
     });
+};
+const handleToggled = (isCollapsed: boolean) => {
+    collapsed.value = isCollapsed;
 };
 
 onRouteChange('meta', ({ meta }) => {
@@ -125,6 +147,7 @@ onRouteChange('meta', ({ meta }) => {
     currentTab.value = tab;
     currentMenuKey.value = `${tab}/${route}`;
     useTitle(`Meetcode UI - ${title}`);
+    console.log(+new Date());
 });
 </script>
 
@@ -165,7 +188,7 @@ body {
         width: 100%;
         max-width: 768px;
         margin: 0 auto;
-        padding: 0 18px;
+        padding: 0 18px 18px 18px;
         box-sizing: border-box;
 
         @include custom-markdown-style;

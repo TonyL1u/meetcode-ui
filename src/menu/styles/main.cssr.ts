@@ -123,11 +123,9 @@ export default c([
         c(
             '&--collapsed > .mc-menu-item-group-title',
             {
-                fontSize: '14px',
                 padding: 0,
                 justifyContent: 'center',
-                position: 'relative',
-                transition: '0.2s'
+                position: 'relative'
             },
             [
                 c('& > *', {

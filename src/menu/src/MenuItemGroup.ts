@@ -19,7 +19,7 @@ export default defineComponent({
         const { indent, disabled } = toRefs(props);
         const { activeKey, padding: menuPadding, isCollapsed: isMenuCollapsed, isHorizontal: isMenuHorizontal, isDisabled: isMenuDisabled } = inject(menuInjectionKey, null) ?? {};
         const { padding: subMenuPadding, isDisabled: isSubMenuDisabled } = inject(subMenuInjectionKey, null) ?? {};
-        const hasCollapsed = ref(false);
+        const hasCollapsed = ref(isMenuCollapsed?.value);
         const isActive = computed(() => {
             const keys = flattenWithOptions({ slots, key: menuItemIKey, infinity: true }).map(item => {
                 return item.key;
@@ -58,7 +58,9 @@ export default defineComponent({
         return () =>
             createVNode(
                 'li',
-                { class: ['mc-menu-item-group', hasCollapsed.value ? 'mc-menu-item-group--collapsed' : '', and(isActive, not(menuPopoverDisabled)).value ? 'mc-menu-item-group--child-active' : '', disabled.value ? 'mc-menu-item-group--disabled' : ''] },
+                {
+                    class: ['mc-menu-item-group', hasCollapsed.value ? 'mc-menu-item-group--collapsed' : '', and(isActive, not(menuPopoverDisabled)).value ? 'mc-menu-item-group--child-active' : '', disabled.value ? 'mc-menu-item-group--disabled' : '']
+                },
                 [
                     createVNode(
                         McPopover,
