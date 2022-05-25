@@ -33,7 +33,7 @@ export default c([
             })
         ]),
         c('&-bar', {
-            transition: '0.3s',
+            transition: '0.2s',
             position: 'absolute',
             width: '8192px'
         })

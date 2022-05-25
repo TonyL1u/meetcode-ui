@@ -78,12 +78,12 @@ export default c([
             borderRadius: 'var(--button-radius)',
             color: 'var(--button-default-color)',
             fontSize: 'var(--button-font-size)',
-            transition: 'background-color 0.3s',
+            transition: 'background-color 0.2s',
             flexDirection: 'var(--button-flex-direction)' as any
         },
         [
             c('&__icon, &__content', {
-                transition: 'color 0.3s',
+                transition: 'color 0.2s',
                 fontSize: 'inherit',
                 lineHeight: 1
             }),
@@ -99,7 +99,7 @@ export default c([
                 width: '14px',
                 height: '14px',
                 animation: 'mc-button-icon-loading-spin 1.2s linear infinite',
-                transition: 'background-color 0.3s'
+                transition: 'background-color 0.2s'
             }),
             c('& > span.left:not(:last-child)', {
                 marginRight: 'var(--button-icon-margin)'
@@ -122,7 +122,7 @@ export default c([
                 border: ' 1px solid var(--button-default-border-color)'
             }),
             c('&::after', {
-                transition: 'border-color 0.3s'
+                transition: 'border-color 0.2s'
             }),
             c(
                 '&:hover',

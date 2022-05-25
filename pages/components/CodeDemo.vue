@@ -38,30 +38,17 @@
             </McTooltip>
         </McSpace>
     </div>
-
-    <McModal
-        v-model:show="showModal"
-        style="border-radius: 8px"
-        :appear-from-cursor="false"
-        pure
-        :body-style="{ height: '75vh', width: '75vw', minWidth: '1280px', minHeight: '768px', padding: '8px', boxSizing: 'border-box' }"
-        @after-leave="isLoading = true"
-    >
-        <McLoading size="large" type="ripple" :show="isLoading" :mask-style="{ background: isLight ? '#fff' : '#313540' }" :content-style="{ height: '100%' }" style="height: 100%">
-            <Playground @render-finished="isLoading = false" />
-        </McLoading>
-    </McModal>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { McTooltip, McTabs, McTabPane, McModal, McButton, McIcon, McSpace, McMessage, McLoading, useThemeController } from 'meetcode-ui';
+import { McTooltip, McTabs, McTabPane, McButton, McIcon, McSpace, McMessage, McPopup } from 'meetcode-ui';
 import { Code as IconCode, CopyOutline as IconCopy, CubeOutline as IconEdit } from '@vicons/ionicons5';
 import { useClipboard } from '@vueuse/core';
 import { useRouterEventHook } from '../utils';
 import { loadInitialState } from '@playground/orchestrator';
 import hljs from 'highlight.js';
-import Playground from '@playground/Playground.vue';
+import Playground from './functional/playground';
 
 interface CodeSource {
     name: string;
@@ -72,18 +59,29 @@ const props = defineProps<{ codeSources?: string; hash?: string }>();
 const codes: CodeSource[] = props.codeSources ? JSON.parse(props.codeSources) : [];
 const showToolbox = codes.length > 0;
 const codePreviewVisible = ref(false);
-const showModal = ref(false);
 const tabIndex = ref(0);
-const isLoading = ref(true);
 const isHashed = ref(false);
 const { copy } = useClipboard();
 const { onRouteChange } = useRouterEventHook();
-const { isLight } = useThemeController();
 const handleShowModal = () => {
-    setTimeout(() => {
-        loadInitialState(codes[tabIndex.value].compressedSource);
-        showModal.value = true;
-    }, 0);
+    loadInitialState(codes[tabIndex.value].compressedSource);
+    const isLoading = ref(true);
+    const { show } = McPopup(Playground, {
+        props: { isLoading },
+        on: {
+            cancelLoading: () => {
+                isLoading.value = false;
+            }
+        }
+    });
+    show({
+        style: 'border-radius: 8px',
+        pure: true,
+        bodyStyle: { height: '75vh', width: '75vw', minWidth: '1280px', minHeight: '768px', padding: '8px', boxSizing: 'border-box' },
+        onAfterLeave: () => {
+            isLoading.value = true;
+        }
+    });
 };
 const highlighted = (content: string) => {
     return hljs.highlight(content, { language: 'html' }).value;

@@ -22,7 +22,7 @@ export default c([
             display: 'flex',
             alignItems: 'center',
             marginTop: '8px',
-            transition: 'all 0.3s ease'
+            transition: 'all 0.2s ease'
         },
         [
             c('&--loading', [

@@ -165,5 +165,5 @@
 
 |   名称   |                类型                 |       说明        |
 | :------: | :---------------------------------: | :---------------: |
-| switchTo | `(value: string \| number) => void` |  切换至指定 tab   |
 |    el    |            `HTMLElement`            | 标签页的 Dom 节点 |
+| switchTo | `(value: string \| number) => void` |  切换至指定 tab   |

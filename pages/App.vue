@@ -1,12 +1,12 @@
 <template>
-    <McLayout v-if="currentTab" style="height: 100vh; overflow: hidden">
-        <McLayoutHeader bordered>
+    <McLayout class="mc-h-full mc-overflow-hidden">
+        <McLayoutHeader v-if="currentTab" bordered>
             <Header class="header">
                 <McIcon class="nav-menu-trigger" :size="24" @click="handleShowNavMenu">
                     <IconMenu />
                 </McIcon>
                 <div class="title">Meetcode UI</div>
-                <McTabs :default-tab="currentTab" :show-line="false" class="header-tabs mc-absolute mc-left-[268px]" :header-style="{ height: '55px' }" :content-style="{ padding: 0 }" @tab-click="handleTabClick">
+                <McTabs ref="tabsRef" :default-tab="currentTab" :show-line="false" class="header-tabs mc-absolute mc-left-[268px]" :header-style="{ height: '55px' }" :content-style="{ padding: 0 }" @tab-click="handleTabClick">
                     <McTab name="home">{{ siteLang === 'zh-CN' ? '首页' : 'Home' }}</McTab>
                     <McTab name="docs">{{ siteLang === 'zh-CN' ? '文档' : 'Docs' }}</McTab>
                     <McTab name="components">{{ siteLang === 'zh-CN' ? '组件' : 'Components' }}</McTab>
@@ -17,7 +17,7 @@
         <McLayoutContent v-if="currentTab === 'home'" style="flex: 1; overflow: hidden">
             <router-view :class="siteTheme" />
         </McLayoutContent>
-        <McLayout v-else style="flex: 1">
+        <McLayout v-else-if="currentTab" style="flex: 1">
             <McLayoutSider
                 class="menu-sider"
                 :collapsed="collapsed"
@@ -35,7 +35,7 @@
                 <McLayoutContent class="main-content">
                     <div class="mc-flex mc-flex-col mc-justify-between mc-w-full mc-min-h-full">
                         <router-view :class="siteTheme" />
-                        <PagerNavigator :routes="routesMap[currentTab][siteLang]" :tab="currentTab" :current-key="currentMenuKey" />
+                        <PagerNavigator v-if="currentMenuKey" :menu="menu" :menu-key="currentMenuKey" :tab="currentTab" :current-key="currentMenuKey" />
                     </div>
                 </McLayoutContent>
                 <McLayoutSider class="sider-navigator" style="width: 164px; position: absolute; right: 0; height: 100%">
@@ -59,7 +59,7 @@ import PagerNavigator from './home/PagerNavigator.vue';
 import { menusMap, routesMap } from './menu';
 import type { FunctionalComponent } from 'vue';
 import type { MenuTab, RouteMetaData } from './menu';
-import type { MenuOption } from 'meetcode-ui';
+import type { MenuOption, TabsExposeInstance } from 'meetcode-ui';
 
 const router = useRouter();
 const { current: siteTheme } = useThemeController();
@@ -68,6 +68,7 @@ const { onRouteChange } = useRouterEventHook();
 const currentTab = ref<'home' | MenuTab>();
 const currentMenuKey = ref<string>();
 const collapsed = ref(false);
+const tabsRef = ref<TabsExposeInstance>();
 const menu = computed<MenuOption[]>(() => {
     if (currentTab.value === 'home') return [];
     return menusMap[currentTab.value!][siteLang.value];
@@ -136,9 +137,12 @@ const handleToggled = (isCollapsed: boolean) => {
 
 onRouteChange('meta', ({ meta }) => {
     const { title, tab, route } = meta as RouteMetaData;
-    currentTab.value = tab;
-    currentMenuKey.value = `${tab}/${route}`;
     useTitle(`Meetcode UI - ${title}`);
+    currentMenuKey.value = `${tab}/${route}`;
+    if (currentTab.value !== tab) {
+        currentTab.value = tab;
+        tabsRef.value?.switchTo(tab);
+    }
 });
 </script>
 
@@ -179,14 +183,14 @@ body {
         width: 100%;
         max-width: 768px;
         margin: 0 auto;
-        padding: 0 18px 18px 18px;
+        padding: 0 18px;
         box-sizing: border-box;
 
         @include custom-markdown-style;
 
         a.header-anchor {
             text-decoration: none;
-            color: var(--text-color);
+            color: inherit;
         }
 
         &.dark {

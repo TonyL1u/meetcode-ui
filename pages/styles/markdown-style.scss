@@ -6,7 +6,7 @@
     blockquote {
         padding-left: 12px;
         margin-left: 0;
-        transition: color 0.3s var(--bezier), border-color 0.3s var(--bezier);
+        transition: color 0.2s, border-color 0.2s;
     }
 
     table {
@@ -15,10 +15,12 @@
         border-spacing: 0;
         overflow: hidden;
         font-family: v-mono;
+        transition: color 0.2s, border-color 0.2s;
 
         th,
         td {
             padding: 12px;
+            transition: background 0.2s, border-color 0.2s;
         }
     }
 
@@ -97,6 +99,10 @@
             background: #f2f4f5;
             border: 1px solid #f0f0f0;
         }
+
+        pre code {
+            border: none;
+        }
     }
 
     &.dark {
@@ -124,6 +130,10 @@
         code {
             background: rgba(255, 255, 255, 0.12);
             border: 1px solid #0000;
+        }
+
+        pre code {
+            border: none;
         }
     }
 }

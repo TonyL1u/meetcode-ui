@@ -17,6 +17,10 @@ export type TabsType = 'bar' | 'empty' | 'card' | 'segment';
 export type TabPaneName = string | number;
 export type OnBeforeTabSwitchImpl = (from: TabPaneName, to: TabPaneName) => Promise<boolean | undefined | void> | boolean | undefined | void;
 export type MaybeTabPaneProps = TabPaneProps & TabProps & Record<string, unknown>;
+export interface TabsExposeInstance {
+    el: HTMLElement;
+    switchTo: (key: string | number) => void;
+}
 
 export interface TabsProps {
     value?: TabPaneName;

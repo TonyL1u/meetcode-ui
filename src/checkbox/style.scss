@@ -38,7 +38,7 @@
     padding: 6px 8px;
     border-radius: 6px;
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
 }
@@ -64,7 +64,7 @@
     border-radius: 4px;
     transform: var(--checkbox-scale-size);
     border: 1px solid #cccfdb;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .checkbox > span:first-child svg {
@@ -75,7 +75,7 @@
     stroke: #fff;
     stroke-dasharray: 16px;
     stroke-dashoffset: 16px;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     transform: translate3d(0, 0, 0);
 }
 
@@ -91,7 +91,7 @@
 .checkbox-input:checked + .checkbox > span:first-child {
     background: var(--checkbox-checked-color);
     border-color: var(--checkbox-checked-color);
-    animation: zoom-in-out 0.3s ease;
+    animation: zoom-in-out 0.2s ease;
 }
 
 .checkbox-input:checked + .checkbox > span:first-child svg {

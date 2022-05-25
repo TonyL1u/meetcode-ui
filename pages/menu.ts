@@ -1,16 +1,15 @@
 import { createVNode, Fragment } from 'vue';
-import { upperFirstLetter } from './utils';
-import { componentNameMap, componentCategoryMap } from './site.config';
+import { componentNameMap, categoryNameMap, componentGroupMap } from './site.config';
 import type { RouteMeta } from 'vue-router';
 import type { Component } from 'vue';
 import type { MenuOption } from 'meetcode-ui';
+import type { ComponentCategory } from './site.config';
 
 export type MenuTab = 'docs' | 'components' | 'develop';
 export interface RouteMetaData extends RouteMeta {
     title: string;
     tab: 'home' | MenuTab;
     route: string;
-    chinese?: string;
 }
 export interface Route {
     path: string;
@@ -47,23 +46,21 @@ function createRoutes(tab: MenuTab, lang: RouteLang, matcher?: RegExp): Route[] 
         return {
             path: `/${lang}/${tab}/${route}`,
             component: module,
-            meta: { title, tab, route, chinese: tab === 'components' ? componentNameMap[route] : '' }
+            meta: { title, tab, route }
         };
     });
 }
 
-function createMenus(tab: MenuTab, lang: RouteLang, matcher?: RegExp) {
+function createMenus(tab: MenuTab, lang: RouteLang, matcher?: RegExp): MenuOption[] {
     return Object.entries(modulesMap[tab][lang]).map(([path]) => {
         const pathMatcher = matcher ? path.match(matcher) : lang === 'zh-CN' ? path.match(/\/zh-CN\/(.*).md/) : path.match(/\/en-US\/(.*).md/);
         const info = pathMatcher![1].split('_');
         const [menu, route] = info.length > 1 ? info : [info[0], info[0]];
-        const label = upperFirstLetter(menu)
-            .split('-')
-            .reduce((prev, cur) => `${prev} ${upperFirstLetter(cur)}`);
 
         return {
-            label,
-            key: `${tab}/${route}`
+            label: menu,
+            key: `${tab}/${route}`,
+            extra: { key: route }
         };
     });
 }
@@ -89,7 +86,7 @@ export const menusMap: MenusMap = {
         'en-US': createMenus('docs', 'en-US')
     },
     components: {
-        'zh-CN': componentsMenuWrap(createMenus('components', 'zh-CN', /\/src\/(.*)\/demos/)),
+        'zh-CN': componentsMenuWrap(createMenus('components', 'zh-CN', /\/src\/(.*)\/demos/), true),
         'en-US': componentsMenuWrap(createMenus('components', 'en-US', /\/src\/(.*)\/demos/))
     },
     develop: {
@@ -98,34 +95,23 @@ export const menusMap: MenusMap = {
     }
 };
 
-function componentsMenuWrap(menus: MenuOption[]): MenuOption[] {
-    const group1: MenuOption = { group: true, label: '通用', children: [] };
-    const group2: MenuOption = { group: true, label: '反馈', children: [] };
-    const group3: MenuOption = { group: true, label: '数据录入', children: [] };
-    const group4: MenuOption = { group: true, label: '数据展示', children: [] };
-    const group5: MenuOption = { group: true, label: '布局', children: [] };
-
-    menus.forEach(item => {
-        const label = (item.label as string).toLowerCase();
-        switch (componentCategoryMap[label]) {
-            case '通用':
-                item.label = () => createVNode(Fragment, null, [createVNode('span', null, [label]), createVNode('span', { style: { marginLeft: '4px', fontSize: '12px', opacity: 0.67 } }, [componentNameMap[label]])]);
-                group1.children?.push(item);
-                break;
-            case '反馈':
-                group2.children?.push(item);
-                break;
-            case '数据录入':
-                group3.children?.push(item);
-                break;
-            case '数据展示':
-                group4.children?.push(item);
-                break;
-            case '布局':
-                group5.children?.push(item);
-                break;
-        }
-    });
-
-    return [group1, group2, group3, group4, group5];
+function componentsMenuWrap(menus: MenuOption[], isZh: boolean = false): MenuOption[] {
+    return Object.entries(componentGroupMap)
+        .map(([group, components]) => {
+            return {
+                group: true,
+                label: isZh ? categoryNameMap[group as ComponentCategory] : group,
+                children: menus
+                    .filter(menu => components.includes(menu.extra?.key))
+                    .map(item => {
+                        if (isZh) {
+                            const label = (item.label as string).toLowerCase();
+                            item.label = () =>
+                                createVNode(Fragment, null, [createVNode('span', { style: 'text-transform: capitalize' }, [label]), createVNode('span', { style: { marginLeft: '4px', fontSize: '12px', opacity: 0.67 } }, [componentNameMap[label]])]);
+                        }
+                        return item;
+                    })
+            };
+        })
+        .filter(option => option.children.length > 0);
 }

@@ -106,7 +106,7 @@ export default defineComponent({
             barEl!.style.left = `${offsetLeft}px`;
             barEl!.style.maxWidth = `${offsetWidth}px`;
             barUpdatedTimer.value = window.setTimeout(() => {
-                barEl!.style.transition = '0.3s';
+                barEl!.style.transition = '0.2s';
             }, 64);
         };
 

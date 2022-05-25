@@ -62,6 +62,7 @@ export interface MenuOption {
     unique?: boolean;
     group?: boolean;
     children?: MenuOption[];
+    extra?: Record<string, any>;
 }
 export interface MenuProps {
     value?: Key;

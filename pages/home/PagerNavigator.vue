@@ -3,24 +3,26 @@ import { computed, toRefs } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { McIcon, useI18nController } from 'meetcode-ui';
 import { ChevronBackSharp as IconPrev, ChevronForwardSharp as IconNext } from '@vicons/ionicons5';
+import { componentNameMap } from '../site.config';
 import type { MenuTab, Route } from '../menu';
+import type { MenuOption } from 'meetcode-ui';
 
-const props = defineProps<{ routes: Route[]; tab: MenuTab }>();
-const { routes, tab } = toRefs(props);
+const props = defineProps<{ menu: MenuOption[]; menuKey: string; tab: MenuTab }>();
+const { menu, menuKey, tab } = toRefs(props);
 const router = useRouter();
-const route = useRoute();
 const { current: siteLang } = useI18nController();
-const currentIndex = computed(() => routes.value.findIndex(item => item.path === route.path));
-const next = computed(() => routes.value[currentIndex.value + 1] ?? null);
-const prev = computed(() => routes.value[currentIndex.value - 1] ?? null);
+const allMenus = computed(() => (tab.value === 'components' ? menu.value.map(item => item.children!).flat() : menu.value));
+const currentIndex = computed(() => allMenus.value.findIndex(item => item.key === menuKey.value));
+const next = computed(() => allMenus.value[currentIndex.value + 1] ?? null);
+const prev = computed(() => allMenus.value[currentIndex.value - 1] ?? null);
 const getLabel = (type: 'prev' | 'next') => {
-    const meta = type === 'prev' ? prev.value.meta : next.value.meta;
-    const { title, chinese } = meta;
-    return tab.value === 'components' && siteLang.value === 'zh-CN' ? (type === 'prev' ? [chinese, title].join(' ') : [chinese, title].reverse().join(' ')) : title;
+    const { label, extra } = type === 'prev' ? prev.value : next.value;
+    const text = [componentNameMap[extra!.key], extra!.key];
+    return tab.value === 'components' && siteLang.value === 'zh-CN' ? (type === 'prev' ? text.join(' ') : text.reverse().join(' ')) : label;
 };
 const switchTo = (type: 'prev' | 'next') => {
-    const path = type === 'prev' ? prev.value.path : next.value.path;
-    router.push(path);
+    const key = (type === 'prev' ? prev.value.key : next.value.key) as string;
+    if (key) router.push(`/${siteLang.value}/${key}`);
 };
 </script>
 
@@ -33,7 +35,7 @@ const switchTo = (type: 'prev' | 'next') => {
                 </McIcon>
                 Previous
             </div>
-            <span class="mc-text-base mc-text-green-500">{{ getLabel('prev') }}</span>
+            <span class="mc-text-base mc-text-green-500 mc-capitalize">{{ getLabel('prev') }}</span>
         </div>
         <div v-if="next" class="switcher next" @click="switchTo('next')">
             <div class="mc-flex mc-items-center mc-text-xs">
@@ -42,7 +44,7 @@ const switchTo = (type: 'prev' | 'next') => {
                     <IconNext />
                 </McIcon>
             </div>
-            <span class="mc-text-base mc-text-green-500">{{ getLabel('next') }}</span>
+            <span class="mc-text-base mc-text-green-500 mc-capitalize">{{ getLabel('next') }}</span>
         </div>
     </div>
 </template>

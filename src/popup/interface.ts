@@ -1,8 +1,6 @@
-import { Ref, VNodeChild, InjectionKey } from 'vue';
-import type { ObjectEmitsOptions } from 'vue';
-import type { RouteLocationNormalizedLoaded } from 'vue-router';
-import { ModalExposeInstance, ModalProps, ModalObjectEmits } from '../modal';
-import { DrawerExposeInstance, DrawerProps, DrawerObjectEmits } from '../drawer';
+import type { Ref, VNodeChild, ObjectEmitsOptions } from 'vue';
+import type { ModalExposeInstance, ModalProps, ModalObjectEmits } from '../modal';
+import type { DrawerExposeInstance, DrawerProps, DrawerObjectEmits } from '../drawer';
 
 export type PopupType = 'modal' | 'drawer';
 export interface PopupModalSlots {
@@ -24,8 +22,8 @@ export interface PopupSourceOptions<P extends Record<string, any>, E extends Obj
 export interface PopupInstance {
     show(): void;
     show<T extends PopupType>(type: T): void;
-    show(config: PopupModalConfig): void;
-    show<T extends PopupType>(type: T, config: T extends 'modal' ? PopupModalConfig : PopupDrawerConfig): void;
+    show(config: PopupModalConfig & Record<string, any>): void;
+    show<T extends PopupType>(type: T, config: (T extends 'modal' ? PopupModalConfig : PopupDrawerConfig) & Record<string, any>): void;
     hide: () => void;
     destroy: () => void;
     instance: Ref<ModalExposeInstance | DrawerExposeInstance | undefined | null>;
