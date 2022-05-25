@@ -35,7 +35,7 @@
                 <McLayoutContent class="main-content">
                     <div class="mc-flex mc-flex-col mc-justify-between mc-w-full mc-min-h-full">
                         <router-view :class="siteTheme" />
-                        <PagerNavigator v-if="currentMenuKey" :menu="menu" :menu-key="currentMenuKey" :tab="currentTab" :current-key="currentMenuKey" />
+                        <PagerNavigator v-if="currentMenuKey" :menu="menu" :menu-key="currentMenuKey" :tab="currentTab" />
                     </div>
                 </McLayoutContent>
                 <McLayoutSider class="sider-navigator" style="width: 164px; position: absolute; right: 0; height: 100%">
