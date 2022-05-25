@@ -1,5 +1,5 @@
 <template>
-    <McLayout class="mc-h-full mc-overflow-hidden">
+    <McLayout class="container">
         <McLayoutHeader v-if="currentTab" bordered>
             <Header class="header">
                 <McIcon class="nav-menu-trigger" :size="24" @click="handleShowNavMenu">
@@ -164,6 +164,11 @@ body {
     // -webkit-font-smoothing: antialiased;
     // -moz-osx-font-smoothing: grayscale;
     height: 100vh;
+
+    .container {
+        height: 100%;
+        overflow: hidden;
+    }
 
     .title {
         font-size: 24px;
