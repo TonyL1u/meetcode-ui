@@ -1,6 +1,7 @@
 export type ComponentCategory = 'General' | 'Layout' | 'Navigation' | 'Data Entry' | 'Data Display' | 'Feedback' | 'Other';
 
 export const componentNameMap: Record<string, string> = {
+    anchor: '锚点',
     button: '按钮',
     checkbox: '复选框',
     drawer: '抽屉',
@@ -40,3 +41,5 @@ export const categoryNameMap: Record<ComponentCategory, string> = {
     Feedback: '反馈',
     Other: '其他'
 };
+
+export const ENV = import.meta.env;

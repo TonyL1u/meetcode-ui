@@ -8,6 +8,7 @@ src
 .vscode
 dist
 dist-ssr
+static
 *.local
 *.ts
 *.js

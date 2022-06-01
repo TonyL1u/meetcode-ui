@@ -8,12 +8,15 @@ interface RouterUtils {
     route: RouteLocationNormalizedLoaded;
 }
 type HookPayload<T extends keyof RouteLocationNormalizedLoaded> = Record<T, RouteLocationNormalizedLoaded[T]> & { route: RouteLocationNormalizedLoaded };
+interface ChangeHookOptions {
+    immediate?: boolean;
+}
 interface UseRouterEventHookReturn {
     onRouterReady(): Promise<RouterUtils> | undefined;
     onRouterReady(cb: (router: Router, route: RouteLocationNormalizedLoaded) => void): void;
     onRoutePathChange: EventHookOn<{ path: string; route: RouteLocationNormalizedLoaded }>;
     // ToDo -- 这里可以考虑使用柯里化...
-    onRouteChange<T extends keyof RouteLocationNormalizedLoaded>(key: T, cb: (payload: HookPayload<T>) => void): { off: () => void };
+    onRouteChange<T extends keyof RouteLocationNormalizedLoaded>(key: T, cb: (payload: HookPayload<T>) => void, options?: ChangeHookOptions): { off: () => void };
 }
 
 export function useRouterEventHook(): UseRouterEventHookReturn {
@@ -52,7 +55,10 @@ export function useRouterEventHook(): UseRouterEventHookReturn {
             }
         },
         onRoutePathChange: createRouteChangeEventHook('path').on,
-        onRouteChange<T extends keyof RouteLocationNormalizedLoaded>(key: T, cb: (payload: HookPayload<T>) => void) {
+        onRouteChange<T extends keyof RouteLocationNormalizedLoaded>(key: T, cb: (payload: HookPayload<T>) => void, options?: ChangeHookOptions) {
+            if (options?.immediate) {
+                cb({ [key]: route[key], route } as HookPayload<T>);
+            }
             return createRouteChangeEventHook(key).on(cb);
         }
     };

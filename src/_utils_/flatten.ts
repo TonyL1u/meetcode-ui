@@ -1,4 +1,5 @@
 import { Fragment, Comment } from 'vue';
+import { omit } from 'lodash-es';
 import type { CustomVNodeTypes, Slots } from 'vue';
 import type { SpecificVNode } from './tsutils';
 
@@ -49,4 +50,15 @@ export function flattenWithOptions<T = Record<string, unknown>>(options: Flatten
     if (!slots?.[name || 'default']) return result;
 
     return flatten<T>(slots[name || 'default']?.() as SpecificVNode<T>[], key, mode, result, !!infinity);
+}
+
+export function flattenTree<T extends Partial<object & Record<K, T[]>>, K extends keyof T>(tree: T[], key: K, result: Omit<T, K>[] = []) {
+    tree.forEach(item => {
+        result.push(omit(item, key));
+        if (item[key]) {
+            flattenTree(item[key]!, key, result);
+        }
+    });
+
+    return result;
 }

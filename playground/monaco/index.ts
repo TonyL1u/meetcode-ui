@@ -46,7 +46,7 @@ const setup = createSingletonPromise(async () => {
         typeRoots: ['node_modules/@types']
     });
 
-    const registered: string[] = ['vue', '@vueuse/core', 'meetcode-ui', '@vicons/ionicons5'];
+    const registered: string[] = ['vue', '@vueuse/core', '@vicons/ionicons5', 'meetcode-ui'];
 
     monaco.languages.typescript.javascriptDefaults.addExtraLib(
         `
@@ -64,17 +64,19 @@ const setup = createSingletonPromise(async () => {
 
     monaco.languages.typescript.javascriptDefaults.addExtraLib(
         `
-        declare module 'meetcode-ui' { ${await getAllMeetcodeTypes()} }
-      `,
-        'ts:meetcode-ui'
-    );
-
-    monaco.languages.typescript.javascriptDefaults.addExtraLib(
-        `
         declare module '@vicons/ionicons5' { ${iconTypes} }
       `,
         'ts:vicons'
     );
+
+    if (!import.meta.env.PROD) {
+        monaco.languages.typescript.javascriptDefaults.addExtraLib(
+            `
+            declare module 'meetcode-ui' { ${await getAllMeetcodeTypes()} }
+          `,
+            'ts:meetcode-ui'
+        );
+    }
 
     watch(
         () => orchestrator.packages,

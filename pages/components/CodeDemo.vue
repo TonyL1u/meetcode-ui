@@ -92,9 +92,13 @@ const copyCode = () => {
     McMessage.success(`${code.name}.vue代码已复制到剪贴板`, { card: true });
 };
 
-onRouteChange('hash', ({ hash }) => {
-    isHashed.value = hash.slice(1) === props.hash;
-});
+onRouteChange(
+    'hash',
+    ({ hash }) => {
+        isHashed.value = !!(hash && hash.slice(1) === props.hash);
+    },
+    { immediate: true }
+);
 </script>
 
 <style lang="scss" scoped>

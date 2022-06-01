@@ -40,10 +40,4 @@ const router = createRouter({
     ]
 });
 
-router.afterEach((to, from) => {
-    // scroll to top
-    const scrollContent = document.querySelector('.main-content');
-    if (scrollContent) scrollContent.scrollTop = 0;
-});
-
 export default router;

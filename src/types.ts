@@ -8,4 +8,7 @@ declare module '@vue/runtime-core' {
 
     export type CustomVNodeTypes = VNodeTypes & VNodeCustomProperties;
     export type MaybeComputedRef<T> = ComputedRef<T> | T;
+    export interface VueDefaultExposeInstance {
+        $el: HTMLElement;
+    }
 }

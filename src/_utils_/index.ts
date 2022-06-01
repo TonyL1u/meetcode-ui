@@ -4,7 +4,7 @@ export { createKey } from './createKey';
 export { c } from './cssr';
 export { cssUnitTransform } from './cssUnitTransform';
 export { checkParent } from './checkParent';
-export { flatten, flattenWithOptions } from './flatten';
+export { flatten, flattenWithOptions, flattenTree } from './flatten';
 export { getSlotFirstVNode, getSlotVNodeIndex } from './getSlotFirstVNode';
 export { kebabCaseEscape } from './kebabCaseEscape';
 export { propsMergeSlots } from './propsMergeSlots';

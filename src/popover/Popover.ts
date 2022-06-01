@@ -251,7 +251,6 @@ export default defineComponent({
             if (trigger.value === 'follow') {
                 const { x, y, isOutside, elementHeight, elementWidth, elementX, elementY } = useMouseInElement(triggerEl.value);
                 const isFirstEnter = ref(true);
-                const enterDelay = () => new Promise<void>(resolve => setTimeout(resolve, 2000));
 
                 const clickCallEvent = (evt: MouseEvent) => {
                     if (showRef.value) {

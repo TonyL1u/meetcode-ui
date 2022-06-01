@@ -3,6 +3,7 @@ import { ref, onMounted, onUnmounted, watchEffect, watch } from 'vue';
 import type { WatchStopHandle } from 'vue';
 // import { useElementSize, useCssVar } from '@vueuse/core'
 import srcdoc from './source/template.html?raw';
+import srcdocProd from './source/template.prod.html?raw';
 import { PreviewProxy } from './logic/PreviewProxy';
 import { MAIN_FILE, vueRuntimeUrl } from './compiler/sfcCompiler';
 import { compileModulesForPreview } from './compiler/moduleCompiler';
@@ -76,7 +77,7 @@ function createSandbox() {
     if (!importMap.imports) importMap.imports = {};
 
     importMap.imports.vue = vueRuntimeUrl.value;
-    const sandboxSrc = srcdoc.replace(/<!--IMPORT_MAP-->/, JSON.stringify(importMap));
+    const sandboxSrc = (import.meta.env.PROD ? srcdocProd : srcdoc).replace(/<!--IMPORT_MAP-->/, JSON.stringify(importMap));
     sandbox.srcdoc = sandboxSrc;
     container.value.appendChild(sandbox);
     proxy = new PreviewProxy(sandbox, {

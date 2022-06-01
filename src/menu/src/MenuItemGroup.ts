@@ -59,7 +59,12 @@ export default defineComponent({
             createVNode(
                 'li',
                 {
-                    class: ['mc-menu-item-group', hasCollapsed.value ? 'mc-menu-item-group--collapsed' : '', and(isActive, not(menuPopoverDisabled)).value ? 'mc-menu-item-group--child-active' : '', disabled.value ? 'mc-menu-item-group--disabled' : '']
+                    class: [
+                        'mc-menu-item-group',
+                        and(hasCollapsed, isParentMenu).value ? 'mc-menu-item-group--collapsed' : '',
+                        and(isActive, not(menuPopoverDisabled)).value ? 'mc-menu-item-group--child-active' : '',
+                        disabled.value ? 'mc-menu-item-group--disabled' : ''
+                    ]
                 },
                 [
                     createVNode(

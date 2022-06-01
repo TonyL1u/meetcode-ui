@@ -6,5 +6,6 @@ dist
 dist-ssr
 lib
 lib-ssr
+static
 *.local
 package-lock.json

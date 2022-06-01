@@ -8,8 +8,7 @@ function build() {
 
 # copy files on build
 function copyExt() {
-    cp lib/meetcode-ui.esm.js dist/assets
-    cp node_modules/vue/dist/vue.runtime.esm-browser.js dist/assets
+    cp -r static/* dist/assets
 }
 
 clean

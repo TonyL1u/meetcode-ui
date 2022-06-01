@@ -34,5 +34,5 @@ export default {
             plugins: [postcssImport(), tailwindcss()]
         })
     ],
-    external: ['vue', 'lodash-es'] // 规定哪些是外部引用的模块
+    external: ['vue'] // 规定哪些是外部引用的模块
 };

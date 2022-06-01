@@ -10,7 +10,7 @@
                     <McTab name="home">{{ siteLang === 'zh-CN' ? '首页' : 'Home' }}</McTab>
                     <McTab name="docs">{{ siteLang === 'zh-CN' ? '文档' : 'Docs' }}</McTab>
                     <McTab name="components">{{ siteLang === 'zh-CN' ? '组件' : 'Components' }}</McTab>
-                    <McTab name="develop">{{ siteLang === 'zh-CN' ? '开发指南' : 'Develop' }}</McTab>
+                    <McTab v-if="ENV.DEV" name="develop">{{ siteLang === 'zh-CN' ? '开发指南' : 'Develop' }}</McTab>
                 </McTabs>
             </Header>
         </McLayoutHeader>
@@ -32,7 +32,7 @@
                 <MenuVNode :menu="menu" />
             </McLayoutSider>
             <McLayout style="position: relative">
-                <McLayoutContent class="main-content">
+                <McLayoutContent ref="mainContentRef" class="main-content">
                     <div class="mc-flex mc-flex-col mc-justify-between mc-w-full mc-min-h-full">
                         <router-view :class="siteTheme" />
                         <PagerNavigator v-if="currentMenuKey" :menu="menu" :menu-key="currentMenuKey" :tab="currentTab" />
@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, createVNode } from 'vue';
+import { computed, ref, reactive, createVNode } from 'vue';
 import { McTabs, McTab, McIcon, McPopup, McLayout, McLayoutContent, McLayoutHeader, McLayoutSider, McMenu, useThemeController, useI18nController } from 'meetcode-ui';
 import { MenuOutline as IconMenu } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';
@@ -56,8 +56,9 @@ import { useRouterEventHook } from './utils';
 import Header from './home/Header.vue';
 import Navigator from './home/Navigator.vue';
 import PagerNavigator from './home/PagerNavigator.vue';
-import { menusMap, routesMap } from './menu';
-import type { FunctionalComponent } from 'vue';
+import { menusMap } from './menu';
+import { ENV } from './site.config';
+import type { FunctionalComponent, VueDefaultExposeInstance } from 'vue';
 import type { MenuTab, RouteMetaData } from './menu';
 import type { MenuOption, TabsExposeInstance } from 'meetcode-ui';
 
@@ -68,7 +69,13 @@ const { onRouteChange } = useRouterEventHook();
 const currentTab = ref<'home' | MenuTab>();
 const currentMenuKey = ref<string>();
 const collapsed = ref(false);
+const mainContentRef = ref<VueDefaultExposeInstance>();
 const tabsRef = ref<TabsExposeInstance>();
+const tabHistoryRoute = reactive<Record<MenuTab, string>>({
+    docs: 'theme',
+    components: 'button',
+    develop: 'start'
+});
 const menu = computed<MenuOption[]>(() => {
     if (currentTab.value === 'home') return [];
     return menusMap[currentTab.value!][siteLang.value];
@@ -85,6 +92,9 @@ const MenuVNode: FunctionalComponent<{ menu: MenuOption[]; defaultExpandKeys?: s
             if (currentMenuKey.value === key) return;
             currentMenuKey.value = key;
             router.push(`/${siteLang.value}/${key}`);
+            // 记录历史
+            const [tab, name] = key.split('/');
+            tabHistoryRoute[tab as MenuTab] = name;
         },
         'onUpdate:expandKeys': (keys: string[]) => {
             expandKeys.value = keys;
@@ -129,7 +139,7 @@ const handleShowNavMenu = () => {
 };
 const handleTabClick = (tab: 'home' | MenuTab) => {
     if (currentTab.value === tab) return;
-    router.push(tab === 'home' ? `/${siteLang.value}/home` : routesMap[tab][siteLang.value][0].path);
+    router.push(tab === 'home' ? `/${siteLang.value}/home` : `/${siteLang.value}/${tab}/${tabHistoryRoute[tab]}`);
 };
 const handleToggled = (isCollapsed: boolean) => {
     collapsed.value = isCollapsed;
@@ -143,6 +153,21 @@ onRouteChange('meta', ({ meta }) => {
         currentTab.value = tab;
         tabsRef.value?.switchTo(tab);
     }
+});
+onRouteChange('path', () => {
+    const scrollContentEl = mainContentRef.value?.$el;
+    if (scrollContentEl) {
+        scrollContentEl.scrollTop = 0;
+    }
+});
+onRouteChange('hash', () => {
+    requestAnimationFrame(() => {
+        // fix anchor locate offset
+        const scrollContentEl = mainContentRef.value?.$el;
+        if (scrollContentEl) {
+            scrollContentEl.scrollTop = scrollContentEl.scrollTop - 13;
+        }
+    });
 });
 </script>
 

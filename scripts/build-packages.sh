@@ -15,6 +15,11 @@ function buildAll() {
     buildUMD
 }
 
+function copy() {
+    cp lib/meetcode-ui.esm.js static
+    cp lib/meetcode-ui.esm.css static
+}
+
 clean
 
 if [ -z $1 ]; then
@@ -27,3 +32,4 @@ else
     buildAll
 fi
 
+copy
