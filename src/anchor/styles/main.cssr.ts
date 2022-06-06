@@ -13,7 +13,7 @@ export default c([
         },
         [
             c('&--active > &-title', {
-                background: '#f2fcf8',
+                // background: '#f2fcf8',
                 color: '#10b981'
             })
         ]
@@ -40,18 +40,19 @@ export default c([
             width: '4px',
             height: '100%',
             top: 0,
-            left: 0,
-            background: '#f0f0f0',
-            borderRadius: '4px',
-            overflow: 'hidden'
+            left: 0
         },
         [
-            c('&::before', {
-                content: '""',
+            c('&-track', {
+                width: '100%',
+                height: '100%',
+                background: '#f0f0f0',
+                borderRadius: '4px'
+            }),
+            c('&-marker', {
                 position: 'absolute',
                 width: '100%',
                 height: '21px',
-                top: 'var(--anchor-indicator-bar-offset-top)',
                 left: 0,
                 background: '#10b981',
                 transition: 'top 0.2s',

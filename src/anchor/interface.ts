@@ -11,6 +11,8 @@ export interface AnchorProps {
     bound?: number;
     offsetTop?: number;
     offsetBottom?: number;
+    showTrack?: boolean;
+    showBar?: boolean;
 }
 
 export const anchorProps = {

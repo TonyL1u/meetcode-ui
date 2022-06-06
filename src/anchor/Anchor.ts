@@ -1,5 +1,5 @@
-import { defineComponent, onMounted, createVNode, toRefs, shallowReactive, Fragment, ref, computed } from 'vue';
-import { useThemeRegister, flattenTree } from '../_utils_';
+import { defineComponent, onMounted, createVNode, toRefs, shallowReactive, Fragment, ref, renderList, normalizeClass, normalizeStyle, createElementVNode, createElementBlock } from 'vue';
+import { useThemeRegister, flattenTree, PatchFlags } from '../_utils_';
 import { useElementBounding, throttledWatch, useTemplateRefsList, useThrottleFn, pausableWatch } from '@vueuse/core';
 import { anchorProps } from './interface';
 import { mainCssr, lightCssr, darkCssr } from './styles';
@@ -52,13 +52,13 @@ export default defineComponent({
         const createAnchorLink = (option: AnchorOption): VNodeChild => {
             const { href, title, children } = option;
 
-            return createVNode(
+            return createElementVNode(
                 'div',
                 {
-                    class: ['mc-anchor-link', activeKey.value === href ? 'mc-anchor-link--active' : '']
+                    class: normalizeClass(['mc-anchor-link', activeKey.value === href ? 'mc-anchor-link--active' : ''])
                 },
                 [
-                    createVNode(
+                    createElementVNode(
                         'a',
                         {
                             ref: anchorLinkElRefs.value.set,
@@ -83,10 +83,18 @@ export default defineComponent({
                                 });
                             }
                         },
-                        [title]
+                        title,
+                        PatchFlags.TEXT | PatchFlags.PROPS,
+                        ['href']
                     ),
-                    createVNode(Fragment, null, children ? children.map(item => createAnchorLink(item)) : [])
-                ]
+                    createElementBlock(
+                        Fragment,
+                        null,
+                        renderList(children ?? [], item => createAnchorLink(item)),
+                        PatchFlags.UNKEYED_FRAGMENT
+                    )
+                ],
+                PatchFlags.CLASS
             );
         };
 
@@ -132,13 +140,22 @@ export default defineComponent({
 
         // main logic...
         return () =>
-            createVNode('div', { ref: anchorElRef, class: 'mc-anchor' }, [
-                createVNode(
-                    Fragment,
-                    null,
-                    (options.value ?? []).map(item => createAnchorLink(item))
-                ),
-                createVNode('div', { class: 'mc-anchor-indicator' }, [createVNode('div', { class: 'mc-anchor-indicator-track' }), createVNode('div', { class: 'mc-anchor-indicator-marker', style: { top: `${indicatorBarOffsetTop.value + 4}px` } })])
-            ]);
+            createElementVNode(
+                'div',
+                { ref_key: 'anchorElRef', ref: anchorElRef, class: 'mc-anchor' },
+                [
+                    createElementBlock(
+                        Fragment,
+                        null,
+                        renderList(options.value ?? [], item => createAnchorLink(item)),
+                        PatchFlags.UNKEYED_FRAGMENT
+                    ),
+                    createElementVNode('div', { class: 'mc-anchor-indicator' }, [
+                        createElementVNode('div', { class: 'mc-anchor-indicator-track' }, null, PatchFlags.HOISTED),
+                        createElementVNode('div', { class: 'mc-anchor-indicator-marker', style: normalizeStyle({ top: `${indicatorBarOffsetTop.value + 4}px` }) }, null, PatchFlags.STYLE)
+                    ])
+                ],
+                PatchFlags.NEED_PATCH
+            );
     }
 });

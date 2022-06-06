@@ -25,7 +25,7 @@ export const componentNameMap: Record<string, string> = {
 export const componentGroupMap: Record<ComponentCategory, string[]> = {
     General: ['button', 'icon', 'space'],
     Layout: ['grid', 'layout'],
-    Navigation: ['menu'],
+    Navigation: ['anchor', 'menu'],
     'Data Entry': ['checkbox'],
     'Data Display': ['text link', 'tooltip'],
     Feedback: ['drawer', 'message', 'modal', 'popconfirm', 'popover', 'popselect', 'popup', 'tabs'],

@@ -37,7 +37,7 @@ export type Add<X extends number, Y extends number> = [...CreateArray<X, 1>, ...
  */
 export type SpecificVNode<T> = VNode<RendererNode, RendererElement, T>;
 
-export declare const enum PatchFlags {
+export const enum PatchFlags {
     /**
      * Indicates an element with dynamic textContent (children fast path)
      */
