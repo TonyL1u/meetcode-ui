@@ -11,8 +11,8 @@ export interface AnchorProps {
     bound?: number;
     offsetTop?: number;
     offsetBottom?: number;
+    type?: 'background' | 'bar';
     showTrack?: boolean;
-    showBar?: boolean;
 }
 
 export const anchorProps = {
@@ -31,5 +31,13 @@ export const anchorProps = {
     offsetBottom: {
         type: Number as PropType<AnchorProps['offsetBottom']>,
         default: 0
+    },
+    type: {
+        type: String as PropType<AnchorProps['type']>,
+        default: 'background'
+    },
+    showTrack: {
+        type: Boolean as PropType<AnchorProps['showTrack']>,
+        default: true
     }
 };

@@ -1,5 +1,5 @@
-import { defineComponent, createVNode, toRefs } from 'vue';
-import { flattenWithOptions } from '../_utils_';
+import { defineComponent, createVNode, toRefs, renderList } from 'vue';
+import { flattenWithOptions, PatchFlags } from '../_utils_';
 import { buttonIKey, ButtonProps, buttonGroupProps } from './interface';
 
 export default defineComponent({
@@ -13,7 +13,7 @@ export default defineComponent({
             return createVNode(
                 'div',
                 { class: ['mc-button-group', { 'mc-button-group--vertical': vertical.value }], role: 'group' },
-                buttons.map(button => {
+                renderList(buttons, button => {
                     return createVNode(button, {
                         type: type.value,
                         size: size.value,
@@ -22,7 +22,8 @@ export default defineComponent({
                         dashed: dashed.value,
                         render: render.value
                     });
-                })
+                }),
+                PatchFlags.CLASS | PatchFlags.UNKEYED_FRAGMENT
             );
         };
     }

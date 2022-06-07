@@ -1,7 +1,7 @@
-import { defineComponent, createVNode, renderSlot, ref, computed, toRefs, onMounted } from 'vue';
+import { defineComponent, createVNode, renderSlot, ref, computed, toRefs, onMounted, normalizeClass } from 'vue';
 import { ButtonColorSet, ButtonSizeSet, ButtonSizeMap, buttonProps, buttonIKey } from './interface';
 import { or, and, not } from '@vueuse/core';
-import { useColorFactory, setColorAlpha, useThemeRegister } from '../_utils_';
+import { useColorFactory, setColorAlpha, useThemeRegister, PatchFlags } from '../_utils_';
 import { buttonColorMap, defaultButtonColorMap } from './color';
 import { mainCssr } from './styles';
 import * as CSS from 'csstype';
@@ -137,9 +137,9 @@ export default defineComponent({
 
         const iconVNode = computed(() => {
             return loading.value
-                ? createVNode('span', { class: ['mc-button__icon-loading', iconRight.value ? 'right' : 'left'] })
+                ? createVNode('span', { class: ['mc-button__icon-loading', iconRight.value ? 'right' : 'left'] }, null, PatchFlags.CLASS)
                 : slots.icon
-                ? createVNode('span', { class: ['mc-button__icon', iconRight.value ? 'right' : 'left'] }, [renderSlot(slots, 'icon')])
+                ? createVNode('span', { class: ['mc-button__icon', iconRight.value ? 'right' : 'left'] }, [renderSlot(slots, 'icon')], PatchFlags.CLASS)
                 : null;
         });
 
@@ -155,6 +155,7 @@ export default defineComponent({
             createVNode(
                 'button',
                 {
+                    ref_key: 'buttonElRef',
                     ref: buttonElRef,
                     class: [
                         'mc-button',
@@ -171,8 +172,8 @@ export default defineComponent({
                             'mc-button--rippling': isRippling.value
                         }
                     ],
-                    disabled: disabled.value,
                     style: cssVars.value,
+                    disabled: disabled.value,
                     onMousedown() {
                         if (isRippling.value) isRippling.value = false;
                     },
@@ -185,7 +186,9 @@ export default defineComponent({
                         }
                     }
                 },
-                [iconVNode.value, contentVNode.value]
+                [iconVNode.value, contentVNode.value],
+                PatchFlags.CLASS | PatchFlags.STYLE | PatchFlags.PROPS,
+                ['disabled']
             );
     }
 });

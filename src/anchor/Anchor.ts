@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, createVNode, toRefs, shallowReactive, Fragment, ref, renderList, normalizeClass, normalizeStyle, createElementVNode, createElementBlock } from 'vue';
+import { defineComponent, onMounted, createVNode, toRefs, shallowReactive, Fragment, ref, renderList, normalizeClass, normalizeStyle, createElementVNode, createElementBlock, watch } from 'vue';
 import { useThemeRegister, flattenTree, PatchFlags } from '../_utils_';
 import { useElementBounding, throttledWatch, useTemplateRefsList, useThrottleFn, pausableWatch } from '@vueuse/core';
 import { anchorProps } from './interface';
@@ -20,7 +20,7 @@ export default defineComponent({
             });
         });
 
-        const { options, bound, offsetTop, offsetBottom } = toRefs(props);
+        const { options, bound, offsetTop, offsetBottom, type, showTrack } = toRefs(props);
         const prevKey = ref<string>();
         const activeKey = ref<string>();
         const indicatorBarOffsetTop = ref<number>(0);
@@ -41,7 +41,7 @@ export default defineComponent({
         };
         const handleScroll = useThrottleFn(
             () => {
-                console.log(Object.entries(topList).map(([key, item]) => item.value));
+                // console.log(Object.entries(topList).map(([key, item]) => item.value));
                 const activeLink = Object.entries(topList).find(([key, item]) => item.value <= bound.value! + offsetTop.value! && item.value >= bound.value! - offsetBottom.value!);
                 setActiveLink(activeLink?.[0] || '');
             },
@@ -100,17 +100,40 @@ export default defineComponent({
 
         const { pause, resume } = pausableWatch(topList, handleScroll, { immediate: true });
 
-        onMounted(() => {
-            const flattenData = flattenTree<AnchorOption, 'children'>(options.value ?? [], 'children');
-            flattenData.forEach(item => {
-                const id = item.href;
-                const el = document.getElementById(id.slice(1));
-                if (el) {
-                    const { top } = useElementBounding(el);
-                    topList[id] = top;
-                }
-            });
+        watch(
+            options,
+            () => {
+                const flattenData = flattenTree<AnchorOption, 'children'>(options.value ?? [], 'children');
+                flattenData.forEach(item => {
+                    const id = item.href;
+                    const el = document.getElementById(id.slice(1));
+                    if (el) {
+                        const { top } = useElementBounding(el);
+                        topList[id] = top;
+                    }
+                });
+            },
+            {
+                immediate: true,
+                deep: true
+            }
+        );
 
+        onMounted(() => {
+            // watch(options, () => {
+            //     const flattenData = flattenTree<AnchorOption, 'children'>(options.value ?? [], 'children');
+            //     console.log(flattenData);
+            //     flattenData.forEach(item => {
+            //         const id = item.href;
+            //         const el = document.getElementById(id.slice(1));
+            //         if (el) {
+            //             const { top } = useElementBounding(el);
+            //             topList[id] = top;
+            //         }
+            //     });
+            // }, {
+            //     immediate: true
+            // })
             // throttledWatch(
             //     topList,
             //     () => {
@@ -119,13 +142,11 @@ export default defineComponent({
             //             if (item.value <= bound.value! + offsetTop.value! && item.value >= bound.value! - offsetBottom.value!) {
             //                 activeKey.value = key;
             //                 window.history.replaceState(history.state, '', key);
-
             //                 const activeLinkEl = anchorLinkElRefs.value.find(link => link.hash === key);
             //                 if (activeLinkEl) {
             //                     const { top } = activeLinkEl.getBoundingClientRect();
             //                     indicatorBarOffsetTop.value = top - anchorTop.value;
             //                 }
-
             //                 break;
             //             } else {
             //                 activeKey.value = '';
@@ -142,7 +163,7 @@ export default defineComponent({
         return () =>
             createElementVNode(
                 'div',
-                { ref_key: 'anchorElRef', ref: anchorElRef, class: 'mc-anchor' },
+                { ref_key: 'anchorElRef', ref: anchorElRef, class: normalizeClass(['mc-anchor', { 'mc-anchor-background': type.value === 'background' }]) },
                 [
                     createElementBlock(
                         Fragment,
@@ -150,12 +171,14 @@ export default defineComponent({
                         renderList(options.value ?? [], item => createAnchorLink(item)),
                         PatchFlags.UNKEYED_FRAGMENT
                     ),
-                    createElementVNode('div', { class: 'mc-anchor-indicator' }, [
-                        createElementVNode('div', { class: 'mc-anchor-indicator-track' }, null, PatchFlags.HOISTED),
-                        createElementVNode('div', { class: 'mc-anchor-indicator-marker', style: normalizeStyle({ top: `${indicatorBarOffsetTop.value + 4}px` }) }, null, PatchFlags.STYLE)
-                    ])
+                    type.value === 'bar'
+                        ? createElementVNode('div', { class: 'mc-anchor-indicator' }, [
+                              showTrack.value ? createElementVNode('div', { class: 'mc-anchor-indicator-track' }, null, PatchFlags.HOISTED) : null,
+                              createElementVNode('div', { class: 'mc-anchor-indicator-marker', style: normalizeStyle({ top: `${indicatorBarOffsetTop.value + 4}px` }) }, null, PatchFlags.STYLE)
+                          ])
+                        : null
                 ],
-                PatchFlags.NEED_PATCH
+                PatchFlags.CLASS
             );
     }
 });

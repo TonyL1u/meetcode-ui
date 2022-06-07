@@ -1,6 +1,6 @@
 <template>
     <a href="#target2" @click="handleClick">test</a>
-    <McAnchor :options="options" :bound="55" :offset-top="30" :offset-bottom="30" style="position: fixed" />
+    <McAnchor :options="options" :bound="55" :offset-top="30" :offset-bottom="30" type="bar" :show-track="false" style="position: fixed" />
 </template>
 
 <script lang="ts" setup>

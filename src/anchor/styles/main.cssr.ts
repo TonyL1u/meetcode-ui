@@ -6,6 +6,9 @@ export default c([
         flexDirection: 'column',
         position: 'relative'
     }),
+    c('.mc-anchor-background .mc-anchor-link--active > .mc-anchor-link-title', {
+        background: '#f2fcf8'
+    }),
     c(
         '.mc-anchor-link',
         {
@@ -13,7 +16,6 @@ export default c([
         },
         [
             c('&--active > &-title', {
-                // background: '#f2fcf8',
                 color: '#10b981'
             })
         ]
@@ -45,9 +47,11 @@ export default c([
         [
             c('&-track', {
                 width: '100%',
-                height: '100%',
+                height: 'calc(100% - 8px)',
                 background: '#f0f0f0',
-                borderRadius: '4px'
+                borderRadius: '4px',
+                position: 'relative',
+                top: '4px'
             }),
             c('&-marker', {
                 position: 'absolute',
