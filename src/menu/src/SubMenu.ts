@@ -1,5 +1,5 @@
 import { defineComponent, renderSlot, createVNode, toRefs, ref, provide, inject, computed, getCurrentInstance } from 'vue';
-import { checkParent, flattenWithOptions, propsMergeSlots } from '../../_utils_';
+import { checkParent, flattenWithOptions, propsMergeSlots, createComponentVNode, createElementVNode, PatchFlags, SlotFlags } from '../../_utils_';
 import { and, not, or } from '@vueuse/core';
 import { menuIKey, menuItemIKey, menuItemGroupIKey, subMenuIKey, menuInjectionKey, subMenuInjectionKey, menuGroupInjectionKey, subMenuProps, SubMenuProps } from '../interface';
 import { findParent } from './utils';
@@ -7,7 +7,7 @@ import { McIcon } from '../../icon';
 import { McPopover } from '../../popover';
 import { McFadeInExpandTransition } from '../../_transition_';
 import { ChevronUpOutline, ChevronForwardOutline } from '@vicons/ionicons5';
-import type { PopoverExposeInstance } from '../../popover';
+import type { PopoverExposeInstance, PopoverProps } from '../../popover';
 import * as CSS from 'csstype';
 
 export default defineComponent({
@@ -67,7 +67,7 @@ export default defineComponent({
         // main logic...
         return () =>
             createVNode('li', { class: ['mc-sub-menu', and(not(isExpanded), menuPopoverDisabled).value ? 'mc-sub-menu--collapsed' : '', isActive.value ? 'mc-sub-menu--child-active' : '', disabled.value ? 'mc-sub-menu--disabled' : ''] }, [
-                createVNode(
+                createComponentVNode<PopoverProps, 'default' | 'content'>(
                     McPopover,
                     {
                         ref: menuPopoverRef,
@@ -80,7 +80,7 @@ export default defineComponent({
                     {
                         content: () => createVNode('ul', { class: 'mc-sub-menu-children', style: { margin: 0 } }, [renderSlot(slots, 'default')]),
                         default: () =>
-                            createVNode(
+                            createElementVNode(
                                 'div',
                                 {
                                     class: 'mc-sub-menu-title',
@@ -101,14 +101,18 @@ export default defineComponent({
                                     isMenuHorizontal?.value && isParentMenu.value
                                         ? null
                                         : createVNode(McIcon, { class: 'mc-sub-menu-title__arrow' }, { default: () => createVNode(or(isMenuCollapsed, menuPopoverPlacement.value === 'right-start').value ? ChevronForwardOutline : ChevronUpOutline) })
-                                ]
+                                ],
+                                PatchFlags.STYLE
                             )
-                    }
+                    },
+                    PatchFlags.CLASS | PatchFlags.STYLE | PatchFlags.PROPS,
+                    ['disabled', 'placement', 'withArrow']
                 ),
                 isMenuHorizontal?.value
                     ? null
-                    : createVNode(McFadeInExpandTransition, null, {
-                          default: () => (and(isExpanded, not(isMenuCollapsed)).value ? createVNode('ul', { class: 'mc-sub-menu-children' }, [renderSlot(slots, 'default')]) : null)
+                    : createComponentVNode(McFadeInExpandTransition, null, {
+                          default: () => (and(isExpanded, not(isMenuCollapsed)).value ? createVNode('ul', { class: 'mc-sub-menu-children' }, [renderSlot(slots, 'default')]) : null),
+                          _: SlotFlags.FORWARDED
                       })
             ]);
     }

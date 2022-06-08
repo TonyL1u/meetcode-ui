@@ -4,11 +4,12 @@
 
 <script lang="ts" setup>
 import { nextTick, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import { useRouterEventHook } from '../utils';
 import { McAnchor } from 'meetcode-ui';
 import type { AnchorOption } from 'meetcode-ui';
 
-const { onRoutePathChange } = useRouterEventHook();
+const { onRoutePathChange, onRouteChange } = useRouterEventHook();
 const anchorLinks = ref<AnchorOption[]>([]);
 const updateNavigator = () => {
     anchorLinks.value = [];
@@ -107,6 +108,11 @@ onRoutePathChange(() => {
 });
 
 onMounted(() => {
-    updateNavigator();
+    const route = useRoute();
+    const target = document.getElementById(encodeURI(route.hash.slice(1)));
+    target?.scrollIntoView(true);
+    requestAnimationFrame(() => {
+        updateNavigator();
+    });
 });
 </script>

@@ -47,5 +47,3 @@ function makeMap(str: string, expectsLowerCase?: boolean): (key: string) => bool
 }
 
 const isReservedProp = makeMap(',key,ref,ref_for,ref_key,' + 'onVnodeBeforeMount,onVnodeMounted,' + 'onVnodeBeforeUpdate,onVnodeUpdated,' + 'onVnodeBeforeUnmount,onVnodeUnmounted');
-
-createVNode('1');

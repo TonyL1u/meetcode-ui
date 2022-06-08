@@ -160,9 +160,9 @@ onRouteChange('path', () => {
         scrollContentEl.scrollTop = 0;
     }
 });
-onRouteChange('hash', () => {
+onRouteChange('hash', ({ hash }) => {
+    // fix anchor locate offset
     requestAnimationFrame(() => {
-        // fix anchor locate offset
         const scrollContentEl = mainContentRef.value?.$el;
         if (scrollContentEl) {
             scrollContentEl.scrollTop = scrollContentEl.scrollTop - 13;

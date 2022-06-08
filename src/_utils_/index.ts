@@ -1,4 +1,5 @@
 export * from './tsutils';
+export * from './renderFunction';
 export { createHoverColor, createActiveColor, createDisabledColor, useColorFactory, setColorAlpha } from './color';
 export { createKey } from './createKey';
 export { c } from './cssr';
