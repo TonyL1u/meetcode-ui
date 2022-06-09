@@ -1,5 +1,5 @@
 import { ref, toRefs, createVNode, nextTick, renderSlot, mergeProps, defineComponent, toRaw, PropType, onMounted, computed } from 'vue';
-import { useThemeRegister } from '../_utils_';
+import { PatchFlags, useThemeRegister } from '../_utils_';
 import { CheckmarkSharp as IconCheck } from '@vicons/ionicons5';
 import { useVirtualList } from '@vueuse/core';
 import { omit } from 'lodash-es';
@@ -133,8 +133,8 @@ export default defineComponent({
                 },
                 {
                     default: () => renderSlot(slots, 'default'),
-                    content: () => {
-                        return createVNode(
+                    content: () =>
+                        createVNode(
                             'div',
                             {
                                 ...containerProps,
@@ -149,9 +149,9 @@ export default defineComponent({
                                         return getOptionVNode(data);
                                     })
                                 )
-                            ]
-                        );
-                    }
+                            ],
+                            PatchFlags.STYLE
+                        )
                 }
             );
         };

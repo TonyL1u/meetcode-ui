@@ -1,5 +1,5 @@
 import { defineComponent, onMounted, toRefs, shallowReactive, ref, renderList, watch } from 'vue';
-import { useThemeRegister, flattenTree, PatchFlags, createElementVNode, createFragment } from '../_utils_';
+import { useThemeRegister, flattenTree, PatchFlags, createElementVNode, createFragment, createDirectives } from '../_utils_';
 import { useElementBounding, throttledWatch, useTemplateRefsList } from '@vueuse/core';
 import { anchorProps } from './interface';
 import { mainCssr, lightCssr, darkCssr } from './styles';
@@ -63,14 +63,11 @@ export default defineComponent({
                                 setIndicatorBarOffset(e.target as HTMLAnchorElement);
                             }
                         },
-                        title,
-                        PatchFlags.TEXT | PatchFlags.PROPS,
+                        [title],
+                        PatchFlags.PROPS,
                         ['href']
                     ),
-                    createFragment(
-                        renderList(children ?? [], item => createAnchorLink(item)),
-                        PatchFlags.UNKEYED_FRAGMENT
-                    )
+                    createDirectives('v-for', children ?? [], item => createAnchorLink(item))
                 ],
                 PatchFlags.CLASS
             );
@@ -112,10 +109,7 @@ export default defineComponent({
                 'div',
                 { ref_key: 'anchorElRef', ref: anchorElRef, class: ['mc-anchor', { 'mc-anchor-background': type.value === 'background' }] },
                 [
-                    createFragment(
-                        renderList(options.value ?? [], item => createAnchorLink(item)),
-                        PatchFlags.UNKEYED_FRAGMENT
-                    ),
+                    createDirectives('v-for', options.value ?? [], item => createAnchorLink(item)),
                     type.value === 'bar'
                         ? createElementVNode('div', { class: 'mc-anchor-indicator' }, [
                               showTrack.value ? createElementVNode('div', { class: 'mc-anchor-indicator-track' }) : null,

@@ -1,14 +1,33 @@
-import { createVNode as _createVNode, createElementVNode as _createElementVNode, createTextVNode as _createTextVNode, createElementBlock as _createElementBlock, Fragment, toDisplayString, normalizeProps, withCtx, createSlots } from 'vue';
+import {
+    createVNode as _createVNode,
+    createElementVNode as _createElementVNode,
+    createTextVNode as _createTextVNode,
+    createElementBlock as _createElementBlock,
+    createCommentVNode as _createCommentVNode,
+    Fragment,
+    toDisplayString,
+    normalizeProps,
+    withCtx,
+    renderList,
+    withDirectives,
+    vShow
+} from 'vue';
 import { PatchFlags, SlotFlags } from './tsutils';
-import { omit } from 'lodash-es';
-import type { Component, VNodeProps, VNodeChild } from 'vue';
-import type { IntrinsicElementAttributes, ElementClassSet, ElementStyleSet, SpecificVNode } from './tsutils';
+import type { Component, VNodeProps, VNode, VNodeChild } from 'vue';
+import type { IntrinsicElementAttributes, ElementClassSet, ElementStyleSet, SpecificVNode, Merge } from './tsutils';
 
 type ComponentProps<T extends object> = (T & Record<string, unknown> & VNodeProps & Partial<{ class: ElementClassSet; style: ElementStyleSet }>) | null;
 type ElementProps<T extends keyof IntrinsicElementAttributes> = (IntrinsicElementAttributes[T] & Record<string, unknown> & VNodeProps) | null;
 type ComponentChildren<S extends string> = SlotChildren<S> | ArrayChildren;
-type SlotChildren<S extends string> = { [K in S & '_']: K extends '_' ? typeof SlotFlags : () => VNodeChild };
+type SlotChildren<S extends string> = Partial<Merge<Record<S, Function | VNodeChild>, { _: SlotFlags }>>;
 type ArrayChildren = unknown[];
+type DirectivesType = 'v-if' | 'v-show' | 'v-for';
+interface DirectivesConfig {
+    condition: boolean;
+    trueStatement: VNodeChild;
+    falseStatement?: VNodeChild;
+    commentText?: string;
+}
 
 /**
  * 创建组件VNode
@@ -20,21 +39,16 @@ type ArrayChildren = unknown[];
  * @returns VNode
  */
 export function createComponentVNode<T extends object, S extends string = 'default'>(type: Component, props?: ComponentProps<T>, children?: ComponentChildren<S>, patchFlag?: PatchFlags, dynamicProps?: (keyof T)[] | null) {
-    let normalizeChildren: ComponentChildren<S> = [];
-    if (Array.isArray(children)) {
-        normalizeChildren = children;
-    } else if (children) {
-        normalizeChildren = {} as SlotChildren<string>;
+    if (children && !Array.isArray(children)) {
         Object.entries(children as SlotChildren<string>).forEach(([key, child]) => {
-            if (key === '_') {
-                (normalizeChildren as SlotChildren<string>)[key] = child as SlotFlags;
-            } else {
-                (normalizeChildren as SlotChildren<string>)[key] = withCtx(child as Function) as () => VNodeChild;
+            if (key !== '_') {
+                // ！！！设置 SlotFlags 之后必须使用 withCtx
+                (children as SlotChildren<string>)[key] = typeof child === 'object' ? withCtx(() => [child as VNodeChild]) : children._ ? withCtx(() => [(child as Function)()]) : child;
             }
         });
     }
 
-    return _createVNode(type, props, normalizeChildren, patchFlag, dynamicProps as string[]) as SpecificVNode<T>;
+    return _createVNode(type, props, children, patchFlag, dynamicProps as string[]) as SpecificVNode<T>;
 }
 
 /**
@@ -53,7 +67,7 @@ export function createElementVNode<T extends keyof IntrinsicElementAttributes>(t
 /**
  * 创建文本VNode
  */
-export function createTextVNode(source: string | object | unknown[], patch?: boolean) {
+export function createTextVNode(source: string | object | unknown, patch?: boolean) {
     return patch ? _createTextVNode(toDisplayString(source), PatchFlags.TEXT) : _createTextVNode(toDisplayString(source));
 }
 
@@ -76,4 +90,23 @@ export function createTextVNode(source: string | object | unknown[], patch?: boo
  */
 export function createFragment(children?: unknown[], patchFlag?: PatchFlags.STABLE_FRAGMENT | PatchFlags.KEYED_FRAGMENT | PatchFlags.UNKEYED_FRAGMENT) {
     return _createElementBlock(Fragment, null, children, patchFlag);
+}
+
+/**
+ * 通过 `v-for` `v-if` `v-show` 指令创建VNode
+ * @param type
+ * @param config
+ */
+export function createDirectives(type: 'v-if' | 'v-show', config: DirectivesConfig): VNodeChild;
+export function createDirectives<S extends unknown>(type: 'v-for', source: S[], cb: (value: S, index: number) => VNodeChild, keyed?: boolean): VNodeChild;
+export function createDirectives<S extends unknown>(type: DirectivesType, maybeSource: S[] | DirectivesConfig, cb?: (value: S, index: number) => VNodeChild, keyed: boolean = false): VNodeChild {
+    if (type === 'v-for' && cb) {
+        return createFragment(renderList(maybeSource as S[], cb), keyed ? PatchFlags.KEYED_FRAGMENT : PatchFlags.UNKEYED_FRAGMENT);
+    } else if (type === 'v-if') {
+        const { condition, trueStatement, falseStatement, commentText = 'v-if' } = maybeSource as DirectivesConfig;
+        return condition ? trueStatement : falseStatement ?? _createCommentVNode(commentText, true);
+    } else if (type === 'v-show') {
+        const { condition, trueStatement } = maybeSource as DirectivesConfig;
+        return withDirectives(trueStatement as VNode, [[vShow, condition]]);
+    }
 }

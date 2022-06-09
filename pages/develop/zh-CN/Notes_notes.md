@@ -228,3 +228,7 @@
 2022-05-23
 
 -   Menu 样式写的比较复杂，需要进行优化
+
+2022-06-09
+
+-   Popover 的 default slot 的 VNode 加上 PatchFlags 后无法弹出
