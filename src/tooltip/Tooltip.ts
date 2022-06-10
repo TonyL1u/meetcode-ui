@@ -1,5 +1,5 @@
-import { defineComponent, renderSlot, createVNode, mergeProps, onMounted } from 'vue';
-import { propsMergeSlots, useThemeRegister } from '../_utils_';
+import { defineComponent, renderSlot, mergeProps, onMounted } from 'vue';
+import { propsMergeSlots, useThemeRegister, createComponentVNode, PatchFlags, SlotFlags } from '../_utils_';
 import { omit } from 'lodash-es';
 import { McPopover } from '../popover';
 import { popoverProps } from '../popover/interface';
@@ -27,10 +27,16 @@ export default defineComponent({
                 class: 'mc-tooltip'
             });
 
-            return createVNode(McPopover, mergedProps, {
-                default: () => renderSlot(slots, 'default'),
-                content: () => propsMergeSlots<TooltipMergedProps, 'content'>(props, slots, 'content')
-            });
+            return createComponentVNode<TooltipMergedProps, 'default' | 'content'>(
+                McPopover,
+                mergedProps,
+                {
+                    default: () => renderSlot(slots, 'default'),
+                    content: () => propsMergeSlots<TooltipMergedProps, 'content'>(props, slots, 'content'),
+                    _: SlotFlags.FORWARDED
+                },
+                PatchFlags.FULL_PROPS
+            );
         };
     }
 });

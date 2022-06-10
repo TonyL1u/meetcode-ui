@@ -1,5 +1,5 @@
-import { defineComponent, onMounted, renderSlot, createVNode, ref, provide, toRefs, computed, watch } from 'vue';
-import { useThemeRegister } from '../_utils_';
+import { defineComponent, onMounted, renderSlot, createVNode, createElementBlock, ref, provide, toRefs, computed, watch } from 'vue';
+import { useThemeRegister, createElementVNode, createDirectives, PatchFlags } from '../_utils_';
 import { menuIKey, menuInjectionKey, menuProps } from './interface';
 import { createKeyTree, createMenu, findPath } from './src/utils';
 import { mainCssr, lightCssr, darkCssr } from './styles';
@@ -90,10 +90,18 @@ export default defineComponent({
 
         // main logic...
         return () =>
-            createVNode(
+            createElementVNode(
                 'ul',
-                { ref: menuElRef, key: menuUpdateKey.value, class: ['mc-menu', collapsed.value ? 'mc-menu--collapsed' : '', horizontal.value ? 'mc-menu--horizontal' : '', disabled.value ? 'mc-menu--disabled' : ''], style: cssVars.value },
-                options.value ? options.value.map(option => createMenu(option)) : [renderSlot(slots, 'default')]
+                {
+                    ref_key: 'menuElRef',
+                    ref: menuElRef,
+                    key: menuUpdateKey.value,
+                    class: ['mc-menu', collapsed.value ? 'mc-menu--collapsed' : '', horizontal.value ? 'mc-menu--horizontal' : '', disabled.value ? 'mc-menu--disabled' : ''],
+                    style: cssVars.value
+                },
+                [options.value ? createDirectives('v-for', options.value, option => createMenu(option)) : renderSlot(slots, 'default')],
+                PatchFlags.CLASS | PatchFlags.STYLE | PatchFlags.PROPS,
+                ['key']
             );
     }
 });

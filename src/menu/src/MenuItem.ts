@@ -1,5 +1,5 @@
-import { defineComponent, renderSlot, createVNode, inject, computed, toRefs, getCurrentInstance } from 'vue';
-import { checkParent } from '../../_utils_';
+import { defineComponent, renderSlot, createVNode, inject, computed, toRefs, getCurrentInstance, withCtx } from 'vue';
+import { checkParent, createComponentVNode, createElementVNode, PatchFlags, SlotFlags } from '../../_utils_';
 import { and, not, or } from '@vueuse/core';
 import { menuIKey, subMenuIKey, menuItemGroupIKey, menuItemIKey, menuItemProps, menuInjectionKey, subMenuInjectionKey, menuGroupInjectionKey } from '../interface';
 import { McTooltip } from '../../tooltip';
@@ -30,12 +30,12 @@ export default defineComponent({
 
         // main logic...
         return () =>
-            createVNode(
+            createComponentVNode(
                 McTooltip,
                 { disabled: or(not(isCollapsed), not(isParentMenu), mergedDisabled).value, content: () => renderSlot(slots, 'default'), placement: 'right' },
                 {
                     default: () =>
-                        createVNode(
+                        createElementVNode(
                             'li',
                             {
                                 class: ['mc-menu-item', isActive.value ? 'mc-menu-item--active' : '', disabled.value ? 'mc-menu-item--disabled' : ''],
@@ -47,9 +47,13 @@ export default defineComponent({
                                     hideMenuItemGroupPopover?.();
                                 }
                             },
-                            [slots.icon ? createVNode('div', { class: 'mc-menu-item__icon' }, [renderSlot(slots, 'icon')]) : null, createVNode('div', { class: 'mc-menu-item__content' }, [renderSlot(slots, 'default')])]
-                        )
-                }
+                            [slots.icon ? createVNode('div', { class: 'mc-menu-item__icon' }, [renderSlot(slots, 'icon')]) : null, createVNode('div', { class: 'mc-menu-item__content' }, [renderSlot(slots, 'default')])],
+                            PatchFlags.CLASS | PatchFlags.STYLE | PatchFlags.FULL_PROPS
+                        ),
+                    _: SlotFlags.FORWARDED
+                },
+                PatchFlags.PROPS,
+                ['disabled', 'content']
             );
     }
 });

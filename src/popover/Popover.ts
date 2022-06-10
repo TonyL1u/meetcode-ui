@@ -1,5 +1,5 @@
-import { ref, createVNode, Text, cloneVNode, computed, withDirectives, vShow, watch, toRefs, nextTick, Transition, mergeProps, defineComponent, onMounted, provide, inject } from 'vue';
-import { getSlotFirstVNode, propsMergeSlots, useThemeRegister } from '../_utils_';
+import { ref, createVNode, Text, cloneVNode, computed, watch, toRefs, nextTick, Transition, mergeProps, defineComponent, onMounted, provide, inject } from 'vue';
+import { getSlotFirstVNode, propsMergeSlots, useThemeRegister, createComponentVNode, createElementVNode, createDirectives, PatchFlags, SlotFlags } from '../_utils_';
 import { VBinder, VTarget, VFollower } from 'vueuc';
 import { useElementBounding, useMouseInElement, useThrottleFn, pausableWatch, onClickOutside } from '@vueuse/core';
 import { PopoverTriggerBorder, PopoverProps, popoverProps, popoverEmits, popoverInjectionKey } from './interface';
@@ -200,35 +200,6 @@ export default defineComponent({
             return tempVNode;
         });
 
-        const contentVNode = computed(() => {
-            if (disabled.value) return null;
-
-            const { top = '', right = '', bottom = '', left = '' } = offset?.value ?? {};
-            const mergedProps = mergeProps(attrs, {
-                ref: contentElRef,
-                class: ['mc-popover', { 'mc-popover--with-arrow': withArrow.value }],
-                style: {
-                    '--popover-offset-top': top,
-                    '--popover-offset-right': right,
-                    '--popover-offset-bottom': bottom,
-                    '--popover-offset-left': left
-                },
-                ...contentHoverControl.value
-            });
-            const tempVNode = createVNode('div', mergedProps, [
-                title.value ? createVNode('div', { class: 'mc-popover__title' }, [title.value]) : null,
-                propsMergeSlots<PopoverProps, 'content'>(props, slots, 'content'),
-                withArrow.value ? createVNode('div', { class: 'mc-popover__arrow' }) : null
-            ]);
-
-            if (destroyWhenHide.value) {
-                if (!showRef.value) return null;
-                return tempVNode;
-            } else {
-                return withDirectives(tempVNode, [[vShow, showRef.value]]);
-            }
-        });
-
         const triggerEl = computed(() => {
             return (triggerVNode.value?.el as HTMLElement) || null;
         });
@@ -352,40 +323,74 @@ export default defineComponent({
         });
 
         return () =>
-            createVNode(VBinder, null, {
-                default: () => {
-                    return [
-                        createVNode(VTarget, null, { default: () => triggerVNode.value }),
-                        createVNode(
-                            VFollower,
-                            {
-                                ref: followerRef,
-                                x: mergedX.value,
-                                y: mergedY.value,
-                                zIndex: zIndex?.value,
-                                show: showRef.value,
-                                enabled: showRef.value,
-                                placement: placement.value,
-                                width: matchTrigger.value ? 'target' : undefined,
-                                teleportDisabled: teleportDisabled.value
-                            },
-                            {
-                                default: () => {
-                                    return createVNode(
-                                        Transition,
-                                        {
-                                            name: 'mc-popover-fade',
-                                            appear: true
-                                        },
-                                        {
-                                            default: () => contentVNode.value
-                                        }
-                                    );
-                                }
-                            }
-                        )
-                    ];
-                }
+            createComponentVNode(VBinder, null, {
+                default: () => [
+                    createComponentVNode(VTarget, null, { default: () => triggerVNode.value }),
+                    createComponentVNode(
+                        VFollower,
+                        {
+                            ref: followerRef,
+                            x: mergedX.value,
+                            y: mergedY.value,
+                            zIndex: zIndex?.value,
+                            show: showRef.value,
+                            enabled: showRef.value,
+                            placement: placement.value,
+                            width: matchTrigger.value ? 'target' : undefined,
+                            teleportDisabled: teleportDisabled.value
+                        },
+                        {
+                            default: () =>
+                                createComponentVNode(
+                                    Transition,
+                                    {
+                                        name: 'mc-popover-fade',
+                                        appear: true
+                                    },
+                                    {
+                                        default: () =>
+                                            createDirectives('v-if', {
+                                                condition: !disabled.value,
+                                                node: () => {
+                                                    const { top = '', right = '', bottom = '', left = '' } = offset?.value ?? {};
+                                                    const mergedProps = mergeProps(attrs, {
+                                                        ref_key: 'contentElRef',
+                                                        ref: contentElRef,
+                                                        class: ['mc-popover', { 'mc-popover--with-arrow': withArrow.value }],
+                                                        style: {
+                                                            '--popover-offset-top': top,
+                                                            '--popover-offset-right': right,
+                                                            '--popover-offset-bottom': bottom,
+                                                            '--popover-offset-left': left
+                                                        },
+                                                        ...contentHoverControl.value
+                                                    });
+                                                    const tempVNode = createElementVNode(
+                                                        'div',
+                                                        mergedProps,
+                                                        [
+                                                            title.value ? createVNode('div', { class: 'mc-popover__title' }, [title.value]) : null,
+                                                            propsMergeSlots<PopoverProps, 'content'>(props, slots, 'content'),
+                                                            withArrow.value ? createVNode('div', { class: 'mc-popover__arrow' }) : null
+                                                        ],
+                                                        PatchFlags.CLASS | PatchFlags.STYLE
+                                                    );
+
+                                                    return createDirectives(destroyWhenHide.value ? 'v-if' : 'v-show', {
+                                                        condition: showRef.value,
+                                                        node: tempVNode
+                                                    });
+                                                }
+                                            }),
+                                        _: SlotFlags.DYNAMIC
+                                    }
+                                )
+                        },
+                        PatchFlags.PROPS,
+                        ['x', 'y', 'zIndex', 'show', 'enabled', 'placement', 'width', 'teleportDisabled']
+                    )
+                ],
+                _: SlotFlags.FORWARDED
             });
     }
 });

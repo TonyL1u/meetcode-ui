@@ -4,8 +4,8 @@ import type { SpecificVNode } from './tsutils';
 
 type TupleData<T> = [SpecificVNode<T> | null, SpecificVNode<T>[] | null];
 
-export function getSlotFirstVNode<T = Record<string, any>>(slots: Slot | undefined, identificationKey: Symbol | Symbol[], flattenedData: true): TupleData<T>;
-export function getSlotFirstVNode<T = Record<string, any>>(slots: Slot | undefined, identificationKey?: Symbol | Symbol[], flattenedData?: false): SpecificVNode<T> | null;
+export function getSlotFirstVNode<T = Record<string, unknown>>(slots: Slot | undefined, identificationKey: Symbol | Symbol[], flattenedData: true): TupleData<T>;
+export function getSlotFirstVNode<T = Record<string, unknown>>(slots: Slot | undefined, identificationKey?: Symbol | Symbol[], flattenedData?: false): SpecificVNode<T> | null;
 export function getSlotFirstVNode(slots: Slot | undefined, identificationKey?: Symbol | Symbol[], flattenedData = false) {
     const flattened = slots ? flatten(slots(), identificationKey) : null;
     const firstVNode = flattened?.[0] ?? null;

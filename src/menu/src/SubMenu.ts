@@ -1,4 +1,4 @@
-import { defineComponent, renderSlot, createVNode, toRefs, ref, provide, inject, computed, getCurrentInstance, withCtx, createSlots, createCommentVNode } from 'vue';
+import { defineComponent, renderSlot, createVNode, toRefs, ref, provide, inject, computed, getCurrentInstance } from 'vue';
 import { checkParent, flattenWithOptions, propsMergeSlots, createComponentVNode, createElementVNode, createDirectives, PatchFlags, SlotFlags } from '../../_utils_';
 import { and, not, or } from '@vueuse/core';
 import { menuIKey, menuItemIKey, menuItemGroupIKey, subMenuIKey, menuInjectionKey, subMenuInjectionKey, menuGroupInjectionKey, subMenuProps, SubMenuProps } from '../interface';
@@ -81,49 +81,51 @@ export default defineComponent({
                             class: ['mc-sub-menu mc-sub-menu--dropdown', `mc-sub-menu--placement-${menuPopoverPlacement.value}`]
                         },
                         {
-                            content: createElementVNode('ul', { class: 'mc-sub-menu-children', style: { margin: 0 } }, [renderSlot(slots, 'default')]),
-                            default: createElementVNode(
-                                'div',
-                                {
-                                    class: 'mc-sub-menu-title',
-                                    style: cssVars.value,
-                                    onClick: () => {
-                                        if (or(isMenuCollapsed, isMenuHorizontal, mergedDisabled).value) return;
-                                        if (or(not(watchUnique), isExpanded).value) {
-                                            updateExpandKeys?.(key);
-                                        } else {
-                                            const keys = isParentMenu.value ? keyTree!.map(item => item.children && item.key).filter(Boolean) : findParent(options?.value ?? keyTree!, key)?.children?.map(item => item.key) ?? [];
-                                            updateExpandKeys?.([...expandedKeys?.value.filter(key => !keys.includes(key))!, key]);
+                            content: () => createElementVNode('ul', { class: 'mc-sub-menu-children', style: { margin: 0 } }, [renderSlot(slots, 'default')]),
+                            default: () =>
+                                createElementVNode(
+                                    'div',
+                                    {
+                                        class: 'mc-sub-menu-title',
+                                        style: cssVars.value,
+                                        onClick: () => {
+                                            if (or(isMenuCollapsed, isMenuHorizontal, mergedDisabled).value) return;
+                                            if (or(not(watchUnique), isExpanded).value) {
+                                                updateExpandKeys?.(key);
+                                            } else {
+                                                const keys = isParentMenu.value ? keyTree!.map(item => item.children && item.key).filter(Boolean) : findParent(options?.value ?? keyTree!, key)?.children?.map(item => item.key) ?? [];
+                                                updateExpandKeys?.([...expandedKeys?.value.filter(key => !keys.includes(key))!, key]);
+                                            }
                                         }
-                                    }
-                                },
-                                [
-                                    slots.icon ? createElementVNode('div', { class: 'mc-sub-menu-title__icon' }, [renderSlot(slots, 'icon')]) : null,
-                                    createElementVNode('span', { class: 'mc-sub-menu-title__content' }, [propsMergeSlots<SubMenuProps, 'title'>(props, slots, 'title')]),
-                                    and(isMenuHorizontal, isParentMenu).value
-                                        ? null
-                                        : createComponentVNode(
-                                              McIcon,
-                                              { class: 'mc-sub-menu-title__arrow' },
-                                              {
-                                                  default: () => createComponentVNode(or(isMenuCollapsed, menuPopoverPlacement.value === 'right-start').value ? ChevronForwardOutline : ChevronUpOutline)
-                                              }
-                                          )
-                                ],
-                                PatchFlags.NEED_PATCH
-                            ),
+                                    },
+                                    [
+                                        slots.icon ? createElementVNode('div', { class: 'mc-sub-menu-title__icon' }, [renderSlot(slots, 'icon')]) : null,
+                                        createElementVNode('span', { class: 'mc-sub-menu-title__content' }, [propsMergeSlots<SubMenuProps, 'title'>(props, slots, 'title')]),
+                                        and(isMenuHorizontal, isParentMenu).value
+                                            ? null
+                                            : createComponentVNode(
+                                                  McIcon,
+                                                  { class: 'mc-sub-menu-title__arrow' },
+                                                  {
+                                                      default: () => createComponentVNode(or(isMenuCollapsed, menuPopoverPlacement.value === 'right-start').value ? ChevronForwardOutline : ChevronUpOutline)
+                                                  }
+                                              )
+                                    ],
+                                    PatchFlags.STYLE | PatchFlags.FULL_PROPS
+                                ),
                             _: SlotFlags.FORWARDED
                         },
                         PatchFlags.CLASS | PatchFlags.STYLE | PatchFlags.PROPS,
-                        ['disabled', 'placement', 'withArrow']
+                        ['disabled', 'placement']
                     ),
                     isMenuHorizontal?.value
                         ? null
                         : createComponentVNode(McFadeInExpandTransition, null, {
-                              default: createDirectives('v-if', {
-                                  condition: and(isExpanded, not(isMenuCollapsed)).value,
-                                  trueStatement: createVNode('ul', { class: 'mc-sub-menu-children' }, [renderSlot(slots, 'default')])
-                              }),
+                              default: () =>
+                                  createDirectives('v-if', {
+                                      condition: and(isExpanded, not(isMenuCollapsed)).value,
+                                      node: createVNode('ul', { class: 'mc-sub-menu-children' }, [renderSlot(slots, 'default')])
+                                  }),
                               _: SlotFlags.FORWARDED
                           })
                 ],

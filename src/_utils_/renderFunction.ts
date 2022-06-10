@@ -13,19 +13,18 @@ import {
     vShow
 } from 'vue';
 import { PatchFlags, SlotFlags } from './tsutils';
-import type { Component, VNodeProps, VNode, VNodeChild } from 'vue';
+import type { Component, VNodeProps, VNode, VNodeChild, HTMLAttributes } from 'vue';
 import type { IntrinsicElementAttributes, ElementClassSet, ElementStyleSet, SpecificVNode, Merge } from './tsutils';
 
 type ComponentProps<T extends object> = (T & Record<string, unknown> & VNodeProps & Partial<{ class: ElementClassSet; style: ElementStyleSet }>) | null;
 type ElementProps<T extends keyof IntrinsicElementAttributes> = (IntrinsicElementAttributes[T] & Record<string, unknown> & VNodeProps) | null;
 type ComponentChildren<S extends string> = SlotChildren<S> | ArrayChildren;
-type SlotChildren<S extends string> = Partial<Merge<Record<S, Function | VNodeChild>, { _: SlotFlags }>>;
+type SlotChildren<S extends string> = Partial<Merge<Record<S, () => VNodeChild>, { _: SlotFlags }>>;
 type ArrayChildren = unknown[];
 type DirectivesType = 'v-if' | 'v-show' | 'v-for';
 interface DirectivesConfig {
-    condition: boolean;
-    trueStatement: VNodeChild;
-    falseStatement?: VNodeChild;
+    condition?: boolean;
+    node: VNodeChild | (() => VNodeChild);
     commentText?: string;
 }
 
@@ -38,17 +37,21 @@ interface DirectivesConfig {
  * @param dynamicProps
  * @returns VNode
  */
-export function createComponentVNode<T extends object, S extends string = 'default'>(type: Component, props?: ComponentProps<T>, children?: ComponentChildren<S>, patchFlag?: PatchFlags, dynamicProps?: (keyof T)[] | null) {
+export function createComponentVNode<T extends object, S extends string = 'default'>(type: Component, props?: ComponentProps<T>, children?: ComponentChildren<S>, patchFlag?: PatchFlags, dynamicProps?: (keyof (T & HTMLAttributes & VNodeProps))[] | null) {
     if (children && !Array.isArray(children)) {
         Object.entries(children as SlotChildren<string>).forEach(([key, child]) => {
-            if (key !== '_') {
-                // ！！！设置 SlotFlags 之后必须使用 withCtx
-                (children as SlotChildren<string>)[key] = typeof child === 'object' ? withCtx(() => [child as VNodeChild]) : children._ ? withCtx(() => [(child as Function)()]) : child;
+            if (key !== '_' && child) {
+                // ！！！强制使用 withCtx
+                (children as SlotChildren<string>)[key] = withCtx(() => (Array.isArray(child()) ? child() : [child()])) as () => VNodeChild;
             }
         });
+
+        if (!children._) {
+            children._ = SlotFlags.STABLE;
+        }
     }
 
-    return _createVNode(type, props, children, patchFlag, dynamicProps as string[]) as SpecificVNode<T>;
+    return _createVNode(type, normalizeProps(props as Record<string, unknown>), children, patchFlag, dynamicProps as string[]) as SpecificVNode<T>;
 }
 
 /**
@@ -60,8 +63,8 @@ export function createComponentVNode<T extends object, S extends string = 'defau
  * @param dynamicProps
  * @returns VNode
  */
-export function createElementVNode<T extends keyof IntrinsicElementAttributes>(type: T, props?: ElementProps<T>, children?: unknown, patchFlag?: PatchFlags, dynamicProps?: string[] | null) {
-    return _createElementVNode(type, normalizeProps(props as Record<string, unknown>), children, patchFlag, dynamicProps);
+export function createElementVNode<T extends keyof IntrinsicElementAttributes>(type: T, props?: ElementProps<T>, children?: unknown, patchFlag?: PatchFlags, dynamicProps?: (keyof (IntrinsicElementAttributes[T] & VNodeProps))[] | null) {
+    return _createElementVNode(type, normalizeProps(props as Record<string, unknown>), children, patchFlag, dynamicProps as string[]);
 }
 
 /**
@@ -103,10 +106,10 @@ export function createDirectives<S extends unknown>(type: DirectivesType, maybeS
     if (type === 'v-for' && cb) {
         return createFragment(renderList(maybeSource as S[], cb), keyed ? PatchFlags.KEYED_FRAGMENT : PatchFlags.UNKEYED_FRAGMENT);
     } else if (type === 'v-if') {
-        const { condition, trueStatement, falseStatement, commentText = 'v-if' } = maybeSource as DirectivesConfig;
-        return condition ? trueStatement : falseStatement ?? _createCommentVNode(commentText, true);
+        const { condition, node, commentText = 'v-if' } = maybeSource as DirectivesConfig;
+        return !!condition ? (typeof node === 'function' ? node() : node) : _createCommentVNode(commentText, true);
     } else if (type === 'v-show') {
-        const { condition, trueStatement } = maybeSource as DirectivesConfig;
-        return withDirectives(trueStatement as VNode, [[vShow, condition]]);
+        const { condition, node } = maybeSource as DirectivesConfig;
+        return withDirectives(node as VNode, [[vShow, condition]]);
     }
 }
