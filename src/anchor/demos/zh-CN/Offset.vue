@@ -1,5 +1,5 @@
 <template>
-    <McAnchor :options="options" />
+    <McAnchor :options="options" :bound="55" :offset-top="30" :offset-bottom="30" />
 </template>
 
 <script lang="ts" setup>

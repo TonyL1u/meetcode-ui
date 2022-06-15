@@ -232,3 +232,7 @@
 2022-06-09
 
 -   Popover 的 default slot 的 VNode 加上 PatchFlags 后无法弹出
+
+2022-06-15
+
+-   Menu 在水平样式下的禁用状态样式不对

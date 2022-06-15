@@ -1,5 +1,5 @@
 <template>
-    <McAnchor :options="options" />
+    <McAnchor :options="options" :bound="55" :offset-top="30" :offset-bottom="30" @change="handleChange" />
 </template>
 
 <script lang="ts" setup>
@@ -44,4 +44,7 @@ const options: AnchorOption[] = [
         ]
     }
 ];
+const handleChange = (target: string) => {
+    console.log(target);
+};
 </script>

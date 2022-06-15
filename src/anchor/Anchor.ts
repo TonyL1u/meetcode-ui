@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, toRefs, shallowReactive, ref, renderList, watch } from 'vue';
+import { defineComponent, onMounted, toRefs, shallowReactive, ref, watch } from 'vue';
 import { useThemeRegister, flattenTree, PatchFlags, createElementVNode, createFragment, createDirectives } from '../_utils_';
 import { useElementBounding, throttledWatch, useTemplateRefsList } from '@vueuse/core';
 import { anchorProps } from './interface';
@@ -9,7 +9,8 @@ import type { AnchorOption } from './interface';
 export default defineComponent({
     name: 'Anchor',
     props: anchorProps,
-    setup(props, { slots }) {
+    emits: ['change'],
+    setup(props, { emit, expose }) {
         // theme register
         onMounted(() => {
             useThemeRegister({
@@ -20,7 +21,7 @@ export default defineComponent({
             });
         });
 
-        const { options, bound, offsetTop, offsetBottom, type, showTrack } = toRefs(props);
+        const { options, bound, offsetTop, offsetBottom, type, showTrack, showMarker } = toRefs(props);
         const activeKey = ref<string>();
         const indicatorBarOffsetTop = ref<number>(0);
         const topList = shallowReactive<Record<string, Ref<number>>>({});
@@ -28,6 +29,9 @@ export default defineComponent({
         const anchorLinkElRefs = useTemplateRefsList<HTMLAnchorElement>();
         const { top: anchorTop } = useElementBounding(anchorElRef);
 
+        const callChange = (target: string) => {
+            emit('change', target);
+        };
         const setActiveLink = (key: string) => {
             activeKey.value = key;
             const activeLinkEl = anchorLinkElRefs.value.find(link => link.hash === key);
@@ -60,6 +64,7 @@ export default defineComponent({
                                 window.location.hash = hash;
                                 const target = document.getElementById(hash.slice(1));
                                 target?.scrollIntoView();
+                                callChange(hash);
                                 setIndicatorBarOffset(e.target as HTMLAnchorElement);
                             }
                         },
@@ -72,10 +77,22 @@ export default defineComponent({
                 PatchFlags.CLASS
             );
         };
+        const setTargetElement = (options: AnchorOption[]) => {
+            const flattenData = flattenTree<AnchorOption, 'children'>(options, 'children');
+            flattenData.forEach(item => {
+                const id = item.href;
+                const el = document.getElementById(id.slice(1));
+                if (el) {
+                    const { top } = useElementBounding(el);
+                    topList[id] = top;
+                }
+            });
+        };
 
         throttledWatch(
             topList,
             () => {
+                // console.log(Object.entries(topList).map(([key, value]) => value.value));
                 const activeLink = Object.entries(topList).find(([key, item]) => item.value <= bound.value! + offsetTop.value! && item.value >= bound.value! - offsetBottom.value!);
                 setActiveLink(activeLink?.[0] || '');
             },
@@ -87,33 +104,39 @@ export default defineComponent({
         watch(
             options,
             () => {
-                const flattenData = flattenTree<AnchorOption, 'children'>(options.value ?? [], 'children');
-                flattenData.forEach(item => {
-                    const id = item.href;
-                    const el = document.getElementById(id.slice(1));
-                    if (el) {
-                        const { top } = useElementBounding(el);
-                        topList[id] = top;
-                    }
-                });
+                setTargetElement(options.value ?? []);
             },
             {
-                immediate: true,
                 deep: true
             }
         );
+
+        onMounted(() => {
+            setTargetElement(options.value ?? []);
+        });
+
+        expose({
+            el: anchorElRef.value,
+            scrollTo(href: string) {
+                const target = document.getElementById(href.slice(1));
+                target?.scrollIntoView({
+                    behavior: 'smooth'
+                });
+                callChange(href);
+            }
+        });
 
         // main logic...
         return () =>
             createElementVNode(
                 'div',
-                { ref_key: 'anchorElRef', ref: anchorElRef, class: ['mc-anchor', { 'mc-anchor-background': type.value === 'background' }] },
+                { ref_key: 'anchorElRef', ref: anchorElRef, class: ['mc-anchor', `mc-anchor-type-${type.value}`] },
                 [
                     createDirectives('v-for', options.value ?? [], item => createAnchorLink(item)),
                     type.value === 'bar'
                         ? createElementVNode('div', { class: 'mc-anchor-indicator' }, [
                               showTrack.value ? createElementVNode('div', { class: 'mc-anchor-indicator-track' }) : null,
-                              createElementVNode('div', { class: 'mc-anchor-indicator-marker', style: { top: `${indicatorBarOffsetTop.value + 4}px` } }, null, PatchFlags.STYLE)
+                              showMarker.value ? createElementVNode('div', { class: 'mc-anchor-indicator-marker', style: { top: `${indicatorBarOffsetTop.value + 4}px` } }, null, PatchFlags.STYLE) : null
                           ])
                         : null
                 ],

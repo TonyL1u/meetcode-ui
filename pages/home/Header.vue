@@ -26,7 +26,7 @@
                     </McIcon>
                 </template>
             </McButton>
-            <McPopselect v-model:value="mainVersion" trigger="click" :options="versions" placement="bottom-end" :with-arrow="false">
+            <McPopselect v-model:value="mainVersion" trigger="hover" :options="versions" placement="bottom-end" :with-arrow="false">
                 <McButton render="text">{{ mainVersion }}</McButton>
             </McPopselect>
         </div>
@@ -44,7 +44,7 @@ const router = useRouter();
 const { switchTheme, isDark } = useThemeController();
 const { switchLanguage, onLanguageChange } = useI18nController();
 const mainVersion = ref('0.0.20');
-const versions = ref([
+const versions = [
     {
         label: '0.0.20',
         value: '0.0.20'
@@ -57,7 +57,7 @@ const versions = ref([
         label: '0.0.18',
         value: '0.0.18'
     }
-]);
+];
 const handleRouteToGithub = () => {
     window.open(repository.url);
 };

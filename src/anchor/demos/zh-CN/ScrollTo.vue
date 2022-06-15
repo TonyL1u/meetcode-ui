@@ -1,12 +1,17 @@
 <template>
-    <McAnchor :options="options" />
+    <McAnchor ref="anchor" :options="anchorOptions" :bound="55" :offset-top="30" :offset-bottom="30" />
+    <McPopselect :options="selectOptions" :auto-close="false" @select="handleSelect">
+        <McButton style="margin-top: 16px" type="success" ghost>滚动到</McButton>
+    </McPopselect>
 </template>
 
 <script lang="ts" setup>
-import { McAnchor } from 'meetcode-ui';
-import type { AnchorOption } from 'meetcode-ui';
+import { ref } from 'vue';
+import { McAnchor, McPopselect, McButton } from 'meetcode-ui';
+import type { AnchorOption, AnchorExposeInstance, PopselectOption } from 'meetcode-ui';
 
-const options: AnchorOption[] = [
+const anchor = ref<AnchorExposeInstance>();
+const anchorOptions: AnchorOption[] = [
     {
         title: 'Anchor 锚点',
         href: encodeURI('#anchor-锚点'),
@@ -44,4 +49,21 @@ const options: AnchorOption[] = [
         ]
     }
 ];
+const selectOptions = [
+    {
+        label: '基础用法',
+        value: encodeURI('#基础用法')
+    },
+    {
+        label: '偏移',
+        value: encodeURI('#偏移')
+    },
+    {
+        label: '调整样式',
+        value: encodeURI('#调整样式')
+    }
+];
+const handleSelect = (value: string) => {
+    anchor.value?.scrollTo(value);
+};
 </script>

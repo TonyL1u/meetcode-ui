@@ -64,7 +64,7 @@ export function createComponentVNode<T extends object, S extends string = 'defau
  * @returns VNode
  */
 export function createElementVNode<T extends keyof IntrinsicElementAttributes>(type: T, props?: ElementProps<T>, children?: unknown, patchFlag?: PatchFlags, dynamicProps?: (keyof (IntrinsicElementAttributes[T] & VNodeProps))[] | null) {
-    return _createElementVNode(type, normalizeProps(props as Record<string, unknown>), children, patchFlag, dynamicProps as string[]);
+    return _createElementVNode(type, normalizeProps(props as Record<string, unknown>), Array.isArray(children) ? children : [children], patchFlag, dynamicProps as string[]);
 }
 
 /**

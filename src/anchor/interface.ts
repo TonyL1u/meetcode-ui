@@ -6,6 +6,11 @@ export interface AnchorOption {
     children?: AnchorOption[];
 }
 
+export interface AnchorExposeInstance {
+    el: HTMLElement;
+    scrollTo: (href: string) => void;
+}
+
 export interface AnchorProps {
     options?: AnchorOption[];
     bound?: number;
@@ -13,6 +18,7 @@ export interface AnchorProps {
     offsetBottom?: number;
     type?: 'background' | 'bar';
     showTrack?: boolean;
+    showMarker?: boolean;
 }
 
 export const anchorProps = {
@@ -26,11 +32,11 @@ export const anchorProps = {
     },
     offsetTop: {
         type: Number as PropType<AnchorProps['offsetTop']>,
-        default: 0
+        default: 5
     },
     offsetBottom: {
         type: Number as PropType<AnchorProps['offsetBottom']>,
-        default: 0
+        default: 5
     },
     type: {
         type: String as PropType<AnchorProps['type']>,
@@ -38,6 +44,10 @@ export const anchorProps = {
     },
     showTrack: {
         type: Boolean as PropType<AnchorProps['showTrack']>,
+        default: true
+    },
+    showMarker: {
+        type: Boolean as PropType<AnchorProps['showMarker']>,
         default: true
     }
 };

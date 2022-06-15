@@ -1,5 +1,5 @@
-import { ref, toRefs, createVNode, nextTick, renderSlot, mergeProps, defineComponent, toRaw, PropType, onMounted, computed } from 'vue';
-import { PatchFlags, useThemeRegister } from '../_utils_';
+import { ref, reactive, toRefs, createVNode, nextTick, renderSlot, mergeProps, defineComponent, toRaw, PropType, onMounted, computed, isReactive } from 'vue';
+import { PatchFlags, useThemeRegister, createComponentVNode, createElementVNode, createDirectives } from '../_utils_';
 import { CheckmarkSharp as IconCheck } from '@vicons/ionicons5';
 import { useVirtualList } from '@vueuse/core';
 import { omit } from 'lodash-es';
@@ -38,6 +38,11 @@ export default defineComponent({
 
         const { value: valueVM, options, multiple, maxHeight, autoClose, autoScroll, truncate, matchTrigger } = toRefs(props);
         const popoverRef = ref<PopoverExposeInstance>();
+        const cssVars = computed<CSS.Properties>(() => {
+            return {
+                '--popselect-inner-max-width': typeof truncate.value === 'number' ? `${truncate.value}px` : '200px'
+            };
+        });
         let scrollToOption: (index: number) => void;
 
         const handleShow = () => {
@@ -55,64 +60,61 @@ export default defineComponent({
             }
         };
 
-        const cssVars = computed<CSS.Properties>(() => {
-            return {
-                '--popselect-inner-max-width': typeof truncate.value === 'number' ? `${truncate.value}px` : '200px'
-            };
-        });
-
-        const getOptionVNode = (data: PopselectOption) => {
+        const createOptionVNode = (data: PopselectOption) => {
             const { label, value, disabled } = data;
             const isDisabled = !!disabled;
             const isSelected = multiple.value ? (valueVM.value as (string | number)[]).includes(value) : valueVM.value === value;
-            const checkIconVNode = multiple.value && isSelected ? createVNode(McIcon, { size: 16, style: 'margin-left: 8px' }, { default: () => createVNode(IconCheck) }) : null;
+            const checkIconVNode = multiple.value && isSelected ? createComponentVNode(McIcon, { size: 16, style: 'margin-left: 8px' }, { default: () => createComponentVNode(IconCheck) }) : null;
             const option = toRaw(options.value?.find(e => e.value === value));
-            const handleClick = multiple.value
-                ? () => {
-                      const index = (valueVM.value as (string | number)[]).indexOf(value);
-                      if (index === -1) {
-                          (valueVM.value as (string | number)[]).push(value);
-                      } else {
-                          (valueVM.value as (string | number)[]).splice(index, 1);
-                      }
-                      emit('update:value', toRaw(valueVM.value), option);
-                  }
-                : () => {
-                      emit('update:value', value, option);
-                  };
+            const handleUpdateValue = (value: string | number) => {
+                if (multiple.value) {
+                    const index = (valueVM.value as (string | number)[]).indexOf(value);
+                    if (index === -1) {
+                        (valueVM.value as (string | number)[]).push(value);
+                    } else {
+                        (valueVM.value as (string | number)[]).splice(index, 1);
+                    }
+                    emit('update:value', toRaw(valueVM.value), option);
+                } else {
+                    emit('update:value', value, option);
+                }
+            };
 
-            return createVNode(
+            return createElementVNode(
                 'div',
                 {
                     class: ['mc-popselect-option', { 'mc-popselect-option--selected': isSelected, 'mc-popselect-option--disabled': isDisabled }],
                     onClick: () => {
                         if (isDisabled) return;
-                        handleClick();
+                        valueVM.value && handleUpdateValue(value);
+                        emit('select', value);
                         handleHide();
                     }
                 },
                 [
-                    createVNode(
+                    createElementVNode(
                         'div',
                         {
                             class: 'mc-popselect-option__inner'
                         },
-                        [createVNode('div', { class: { truncate: truncate.value } }, [typeof label === 'string' ? label : label()]), checkIconVNode]
+                        [createElementVNode('div', { class: { truncate: truncate.value } }, [label], PatchFlags.CLASS), checkIconVNode]
                     )
-                ]
+                ],
+                PatchFlags.CLASS
             );
         };
 
         return () => {
             const itemHeight = 41;
             const listHeight = options.value ? Math.min(options.value.length * itemHeight, maxHeight.value ?? 0) : 0;
-            const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(options.value ?? [], {
+            const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(isReactive(options.value) ? options.value! : reactive(options.value!), {
                 // Keep `itemHeight` in sync with the item's row.
                 itemHeight
             });
             scrollToOption = scrollTo;
 
             const mergedProps = mergeProps(omit(props, Object.keys(popselectProps)), {
+                ref_key: 'popoverRef',
                 ref: popoverRef,
                 class: 'mc-popselect',
                 style: {
@@ -122,7 +124,7 @@ export default defineComponent({
                 }
             });
 
-            return createVNode(
+            return createComponentVNode(
                 McPopover,
                 {
                     ...mergedProps,
@@ -134,7 +136,7 @@ export default defineComponent({
                 {
                     default: () => renderSlot(slots, 'default'),
                     content: () =>
-                        createVNode(
+                        createElementVNode(
                             'div',
                             {
                                 ...containerProps,
@@ -142,17 +144,17 @@ export default defineComponent({
                                 style: { height: listHeight + 'px', overflow: 'auto', padding: '4px 4px 0px 4px' }
                             },
                             [
-                                createVNode(
+                                createElementVNode(
                                     'div',
                                     wrapperProps.value,
-                                    list.value.map(({ data, index }: { data: PopselectOption; index: number }) => {
-                                        return getOptionVNode(data);
-                                    })
+                                    createDirectives('v-for', list.value, item => createOptionVNode(item.data)),
+                                    PatchFlags.STYLE
                                 )
                             ],
                             PatchFlags.STYLE
                         )
-                }
+                },
+                PatchFlags.FULL_PROPS
             );
         };
     }

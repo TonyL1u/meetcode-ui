@@ -8,7 +8,7 @@ declare module 'csstype' {
     }
 }
 
-export type PopselectValue = string | number | Array<string | number>;
+export type PopselectValue = string | number | (string | number)[];
 export type PopselectMergedProps = PopselectProps & PopoverProps;
 export interface PopselectOption {
     value: string | number;
@@ -55,4 +55,4 @@ export const popselectProps = {
         default: 200
     }
 };
-export const popselectEmits = ['update:value'];
+export const popselectEmits = ['update:value', 'select'];

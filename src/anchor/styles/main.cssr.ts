@@ -6,7 +6,7 @@ export default c([
         flexDirection: 'column',
         position: 'relative'
     }),
-    c('.mc-anchor-background .mc-anchor-link--active > .mc-anchor-link-title', {
+    c('.mc-anchor-type-background .mc-anchor-link--active > .mc-anchor-link-title', {
         background: '#f2fcf8'
     }),
     c(
