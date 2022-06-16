@@ -14,11 +14,19 @@
         "moduleResolution": "node",
         "strict": true,
         "jsx": "preserve",
-        "sourceMap": true,
+        "jsxFactory": "h",
+        "jsxFragmentFactory": "Fragment",
+        "sourceMap": false,
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "lib": ["esnext", "dom"],
         "declaration": true,
-        "plugins": [{ "name": "typescript-plugin-css-modules" }]
+        "strictNullChecks": true,
+        "noImplicitAny": true,
+        "noUnusedLocals": false,
+        "forceConsistentCasingInFileNames": true,
+        "composite": true,
+        "incremental": true,
+        "diagnostics": true
     }
 }

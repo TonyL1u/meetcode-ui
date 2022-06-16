@@ -2,10 +2,14 @@ coverage
 node_modules
 .DS_Store
 .vscode
+es
+es-ssr
 dist
 dist-ssr
 lib
 lib-ssr
 static
+site
 *.local
+*.tsbuildinfo
 package-lock.json

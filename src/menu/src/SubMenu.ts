@@ -8,6 +8,7 @@ import { McPopover } from '../../popover';
 import { McFadeInExpandTransition } from '../../_transition_';
 import { ChevronUpOutline, ChevronForwardOutline } from '@vicons/ionicons5';
 import type { PopoverExposeInstance, PopoverProps } from '../../popover';
+import type { MenuOption, KeyTree } from '../interface';
 import * as CSS from 'csstype';
 
 export default defineComponent({
@@ -93,7 +94,7 @@ export default defineComponent({
                                             if (or(not(watchUnique), isExpanded).value) {
                                                 updateExpandKeys?.(key);
                                             } else {
-                                                const keys = isParentMenu.value ? keyTree!.map(item => item.children && item.key).filter(Boolean) : findParent(options?.value ?? keyTree!, key)?.children?.map(item => item.key) ?? [];
+                                                const keys = isParentMenu.value ? keyTree!.map(item => item.children && item.key).filter(Boolean) : findParent(options?.value ?? keyTree!, key)?.children?.map((item: MenuOption | KeyTree) => item.key) ?? [];
                                                 updateExpandKeys?.([...expandedKeys?.value.filter(key => !keys.includes(key))!, key]);
                                             }
                                         }

@@ -1,10 +1,11 @@
 {
     "extends": "../tsconfig.json",
-    "exclude": ["./**/__tests__"],
+    "exclude": ["./**/__tests__", "./checkbox", "./loading"],
     "compilerOptions": {
         "rootDir": ".",
         "outDir": "../lib",
         "module": "CommonJS",
-        "target": "ES6"
+        "target": "ES6",
+        "tsBuildInfoFile": "../meetcode-ui.cjs.tsbuildinfo"
     }
 }

@@ -103,7 +103,7 @@ export function findNode(tree: KeyTree[], key: Key): KeyTree | undefined {
 export function findParent(tree: KeyTree[] | MenuOption[], key: Key): KeyTree | MenuOption | undefined {
     for (let i = 0; i < tree.length; i++) {
         if (tree[i].children) {
-            const index = tree[i].children!.findIndex(item => item.key === key);
+            const index = tree[i].children!.findIndex((item: KeyTree | MenuOption) => item.key === key);
             if (index > -1) return tree[i];
             const result = findParent(tree[i].children!, key);
             if (result) return result;

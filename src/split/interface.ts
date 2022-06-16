@@ -16,7 +16,7 @@ export interface ResizeBusArgs {
 export interface SplitInjection {
     parentWidth: Ref<number>;
     splitPaneInitialWidth: Ref<string>;
-    BusResize: UseEventBusReturn<ResizeBusArgs>;
+    BusResize: UseEventBusReturn<ResizeBusArgs, any>;
 }
 export const splitInjectionKey: InjectionKey<SplitInjection> = Symbol();
 export const SplitIKey = Symbol('Split');

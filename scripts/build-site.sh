@@ -1,5 +1,5 @@
 function clean() {
-    rimraf dist
+    rimraf site
 }
 
 function build() {
@@ -8,7 +8,7 @@ function build() {
 
 # copy files on build
 function copyExt() {
-    cp -r static/* dist/assets
+    cp -r static/* site/assets
 }
 
 clean

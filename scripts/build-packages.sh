@@ -1,12 +1,14 @@
 function clean() {
-    rimraf lib
+    rimraf es lib dist
 }
 
 function buildESM() {
+    tsc -b --force tsconfig.esm.json
     rollup --config scripts/build/rollup.esm.config.js
 }
 
 function buildUMD() {
+    tsc -b --force tsconfig.cjs.json
     rollup --config scripts/build/rollup.umd.config.js
 }
 
@@ -16,8 +18,8 @@ function buildAll() {
 }
 
 function copy() {
-    cp lib/meetcode-ui.esm.js static
-    cp lib/meetcode-ui.esm.css static
+    cp dist/meetcode-ui.esm.js static
+    cp dist/meetcode-ui.esm.css static
 }
 
 clean
