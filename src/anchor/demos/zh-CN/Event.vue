@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import { McAnchor } from 'meetcode-ui';
+import { McAnchor, McMessage } from 'meetcode-ui';
 import type { AnchorOption } from 'meetcode-ui';
 
 const options: AnchorOption[] = [
@@ -24,8 +24,16 @@ const options: AnchorOption[] = [
                         href: encodeURI('#偏移')
                     },
                     {
+                        title: '事件',
+                        href: encodeURI('#事件')
+                    },
+                    {
                         title: '调整样式',
                         href: encodeURI('#调整样式')
+                    },
+                    {
+                        title: '滚动到',
+                        href: encodeURI('#滚动到')
                     }
                 ]
             },
@@ -45,6 +53,6 @@ const options: AnchorOption[] = [
     }
 ];
 const handleChange = (target: string) => {
-    console.log(target);
+    McMessage.text(decodeURI(target));
 };
 </script>

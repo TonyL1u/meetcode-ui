@@ -1,5 +1,5 @@
 <template>
-    <McAnchor ref="anchor" :options="anchorOptions" :bound="55" :offset-top="30" :offset-bottom="30" />
+    <McAnchor ref="anchor" :options="anchorOptions" :bound="55" :offset-top="30" :offset-bottom="30" type="bar" :show-track="false" />
     <McPopselect :options="selectOptions" :auto-close="false" @select="handleSelect">
         <McButton style="margin-top: 16px" type="success" ghost>滚动到</McButton>
     </McPopselect>
@@ -29,8 +29,16 @@ const anchorOptions: AnchorOption[] = [
                         href: encodeURI('#偏移')
                     },
                     {
+                        title: '事件',
+                        href: encodeURI('#事件')
+                    },
+                    {
                         title: '调整样式',
                         href: encodeURI('#调整样式')
+                    },
+                    {
+                        title: '滚动到',
+                        href: encodeURI('#滚动到')
                     }
                 ]
             },
@@ -49,7 +57,7 @@ const anchorOptions: AnchorOption[] = [
         ]
     }
 ];
-const selectOptions = [
+const selectOptions: PopselectOption[] = [
     {
         label: '基础用法',
         value: encodeURI('#基础用法')

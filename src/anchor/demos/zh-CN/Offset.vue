@@ -24,8 +24,16 @@ const options: AnchorOption[] = [
                         href: encodeURI('#偏移')
                     },
                     {
+                        title: '事件',
+                        href: encodeURI('#事件')
+                    },
+                    {
                         title: '调整样式',
                         href: encodeURI('#调整样式')
+                    },
+                    {
+                        title: '滚动到',
+                        href: encodeURI('#滚动到')
                     }
                 ]
             },

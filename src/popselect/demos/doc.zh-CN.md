@@ -45,6 +45,7 @@
 |      名称       |                            类型                            |        说明        |
 | :-------------: | :--------------------------------------------------------: | :----------------: |
 | on-update:value | `(value: PopselectValue, option: PopselectOption) => void` | 选中的值改变时触发 |
+|    on-select    |             `(value: PopselectValue) => void`              | 点击下拉选项时触发 |
 
 更多 Event 请参考 <McTextLink to="Popover#event">Popover Event</McTextLink> 。
 

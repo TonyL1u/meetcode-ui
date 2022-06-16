@@ -6,35 +6,16 @@ export default c([
         flexDirection: 'column',
         position: 'relative'
     }),
-    c('.mc-anchor-type-background .mc-anchor-link--active > .mc-anchor-link-title', {
-        background: '#f2fcf8'
+    c('.mc-anchor-link', {
+        paddingLeft: '10px'
     }),
-    c(
-        '.mc-anchor-link',
-        {
-            paddingLeft: '10px'
-        },
-        [
-            c('&--active > &-title', {
-                color: '#10b981'
-            })
-        ]
-    ),
-    c(
-        '.mc-anchor-link-title',
-        {
-            textDecoration: 'none',
-            color: 'inherit',
-            borderRadius: '4px',
-            transition: 'background 0.2s, color 0.2s',
-            padding: '4px 8px'
-        },
-        [
-            c('&:hover', {
-                color: '#10b981'
-            })
-        ]
-    ),
+    c('.mc-anchor-link-title', {
+        textDecoration: 'none',
+        color: 'inherit',
+        borderRadius: '4px',
+        transition: 'background 0.2s, color 0.2s',
+        padding: '4px 8px'
+    }),
     c(
         '.mc-anchor-indicator',
         {
@@ -48,7 +29,6 @@ export default c([
             c('&-track', {
                 width: '100%',
                 height: 'calc(100% - 8px)',
-                background: '#f0f0f0',
                 borderRadius: '4px',
                 position: 'relative',
                 top: '4px'
@@ -58,7 +38,6 @@ export default c([
                 width: '100%',
                 height: '21px',
                 left: 0,
-                background: '#10b981',
                 transition: 'top 0.2s',
                 borderRadius: '4px'
             })

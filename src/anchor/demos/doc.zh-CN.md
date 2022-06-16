@@ -13,6 +13,8 @@
 
 ### 偏移
 
+一般配合 `bound` 、 `offset-top` 和 `offset-bottom` 使用。用于控制激活 Anchor 时，项目距离屏幕顶部的距离。
+
 <Offset />
 :::
 
@@ -39,25 +41,21 @@
 
 ## Props
 
-|         名称         |               类型               |   默认值    |             说明             |
-| :------------------: | :------------------------------: | :---------: | :--------------------------: |
-|    (v-model)value    |   `string \| number \| Symbol`   | `undefined` |      Menu 绑定的 key 值      |
-| (v-modal)expand-keys | `(string \| number \| Symbol)[]` | `undefined` |     展开的子菜单 key 值      |
-|       disabled       |            `boolean`             |   `false`   |         是否禁用菜单         |
-|        indent        |             `number`             |    `28`     |             缩进             |
-|        unique        |            `boolean`             |   `false`   | 是否只允许同时展开一项子菜单 |
-|      collapsed       |            `boolean`             |   `false`   |         是否收起菜单         |
-|   collapsed-width    |             `number`             |    `64`     |       菜单收起时的宽度       |
-| collapsed-icon-size  |             `number`             |    `20`     |    菜单收起时的 icon 大小    |
-|      horizontal      |            `boolean`             |   `false`   |      是否展示为水平菜单      |
-|       options        |          `MenuOption[]`          | `undefined` |       通过选项生成菜单       |
+|     名称      |          类型           |     默认值     |               说明               |
+| :-----------: | :---------------------: | :------------: | :------------------------------: |
+|    options    |    `AnchorOption[]`     |  `undefined`   |           Anchor 选项            |
+|     bound     |        `number`         |      `0`       | 触发 Anchor 时距离窗口顶部的偏移 |
+|  offset-top   |        `number`         |      `5`       |       激活 Anchor 的上偏移       |
+| offset-bottom |        `number`         |      `5`       |       激活 Anchor 的下偏移       |
+|     type      | `'background' \| 'bar'` | `'background'` |           Anchor 类型            |
+|  show-track   |        `boolean`        |     `true`     | `type = 'bar'` 时，是否显示轨道  |
+|  show-marker  |        `boolean`        |     `true`     | `type = 'bar'` 时，是否显示标记  |
 
 ## Event
 
-|         名称          |                       类型                       |             说明             |
-| :-------------------: | :----------------------------------------------: | :--------------------------: |
-|    on-update:value    |    `(key:string \| number \| Symbol) => void`    | Menu 绑定的 key 值更新时触发 |
-| on-update:expand-keys | `(keys: (string \| number \| Symbol)[]) => void` |    展开的子菜单变化时触发    |
+|   名称    |           类型           |         说明         |
+| :-------: | :----------------------: | :------------------: |
+| on-change | `(href: string) => void` | 点击 Anchor 项时触发 |
 
 ## 类型声明
 
