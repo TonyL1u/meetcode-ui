@@ -97,7 +97,7 @@ export default defineComponent({
                         {
                             class: 'mc-popselect-option__inner'
                         },
-                        [createElementVNode('div', { class: { truncate: truncate.value } }, [label], PatchFlags.CLASS), checkIconVNode]
+                        [createElementVNode('div', { class: { truncate: truncate.value } }, [typeof label === 'string' ? label : label()], PatchFlags.CLASS), checkIconVNode]
                     )
                 ],
                 PatchFlags.CLASS

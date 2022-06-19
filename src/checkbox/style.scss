@@ -9,12 +9,12 @@
     &--disabled {
         color: #bbb;
 
-        .checkbox,
-        .checkbox:hover {
+        .mc-checkbox__label,
+        .mc-checkbox__label:hover {
             background: rgba(0, 0, 0, 0.02);
         }
 
-        .checkbox span:first-child svg {
+        .mc-checkbox__label span:first-child svg {
             stroke: #cccfdb;
         }
 
@@ -28,11 +28,11 @@
     box-sizing: border-box;
 }
 
-.checkbox-input {
+.mc-checkbox__input {
     display: none;
 }
 
-.checkbox {
+.mc-checkbox__label {
     user-select: none;
     cursor: pointer;
     padding: 6px 8px;
@@ -43,20 +43,20 @@
     align-items: center;
 }
 
-.checkbox:not(:last-child) {
+.mc-checkbox__label:not(:last-child) {
     margin-right: 6px;
 }
 
-.checkbox:hover {
+.mc-checkbox__label:hover {
     background: var(--checkbox-hover-color);
 }
 
-.checkbox > span {
+.mc-checkbox__label > span {
     vertical-align: middle;
     transform: translate3d(0, 0, 0);
 }
 
-.checkbox > span:first-child {
+.mc-checkbox__label > span:first-child {
     position: relative;
     flex: 0 0 18px;
     width: 18px;
@@ -67,7 +67,7 @@
     transition: all 0.2s ease;
 }
 
-.checkbox > span:first-child svg {
+.mc-checkbox__label > span:first-child svg {
     position: absolute;
     top: 3px;
     left: 2px;
@@ -79,22 +79,22 @@
     transform: translate3d(0, 0, 0);
 }
 
-.checkbox > span:last-child {
+.mc-checkbox__label > span:last-child {
     padding-left: 8px;
     line-height: 18px;
 }
 
-.checkbox:hover > span:first-child {
+.mc-checkbox__label:hover > span:first-child {
     border-color: var(--checkbox-checked-color);
 }
 
-.checkbox-input:checked + .checkbox > span:first-child {
+.mc-checkbox__input:checked + .mc-checkbox__label > span:first-child {
     background: var(--checkbox-checked-color);
     border-color: var(--checkbox-checked-color);
     animation: zoom-in-out 0.2s ease;
 }
 
-.checkbox-input:checked + .checkbox > span:first-child svg {
+.mc-checkbox__input:checked + .mc-checkbox__label > span:first-child svg {
     stroke-dashoffset: 0;
 }
 

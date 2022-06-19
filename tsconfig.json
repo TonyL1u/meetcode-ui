@@ -6,7 +6,8 @@
             "@/*": ["src/*"],
             "@lib/*": ["lib/*"],
             "@playground/*": ["playground/*"],
-            "@pages/*": ["pages/*"]
+            "@pages/*": ["pages/*"],
+            "@static/*": ["static/*"]
         },
         "target": "esnext",
         "useDefineForClassFields": true,

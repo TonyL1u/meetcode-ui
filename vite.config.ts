@@ -22,7 +22,8 @@ export default defineConfig({
             '@': resolve('src'),
             '@lib': resolve('lib'),
             '@playground': resolve('playground'),
-            '@pages': resolve('pages')
+            '@pages': resolve('pages'),
+            '@static': resolve('static')
         }
     },
     plugins: [

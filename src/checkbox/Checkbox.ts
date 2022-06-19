@@ -1,8 +1,8 @@
-import { defineComponent, ref, createVNode, renderSlot, toRefs, computed, inject, mergeProps, onUnmounted } from 'vue';
-import CheckMark from './CheckMark.vue';
-import IndeterminateMark from './IndeterminateMark.vue';
+import { defineComponent, ref, createVNode, renderSlot, toRefs, computed, inject, mergeProps, onMounted, onUnmounted } from 'vue';
 import { or, and, not, isDefined } from '@vueuse/core';
-import { createKey } from '../_utils_';
+import { useThemeRegister, createKey, createElementVNode, PatchFlags } from '../_utils_';
+import { mainCssr, lightCssr, darkCssr } from './styles';
+import { IconCheckMark, IconIndeterminateMark } from './icon';
 import { CheckboxValue, checkboxIKey, checkboxGroupInjectionKey, checkboxProps } from './interface';
 import * as CSS from 'csstype';
 
@@ -12,6 +12,14 @@ export default defineComponent({
     props: checkboxProps,
     emits: ['update:value'],
     setup(props, { slots, attrs, emit }) {
+        onMounted(() => {
+            useThemeRegister({
+                key: 'McCheckbox',
+                main: mainCssr,
+                light: lightCssr,
+                dark: darkCssr
+            });
+        });
         const key = createKey('checkbox');
         const { value: valueVM, label, size, checkedValue, uncheckedValue, disabled, indeterminate, checkedColor } = toRefs(props);
         const { groupValue, groupCheckedColor, groupDisabled, updateGroupValue, BusSelectAll, BusMaxControl } = inject(checkboxGroupInjectionKey, null) ?? {};
@@ -102,22 +110,32 @@ export default defineComponent({
                 },
                 attrs
             );
-            return createVNode('div', mergedProps, [
-                createVNode('input', { class: 'checkbox-input', value: mergedValue.value, id: key, type: 'checkbox', onChange: handleChange, checked: mergedChecked.value, disabled: mergedDisabled.value }),
-                createVNode('label', { class: 'checkbox', for: key }, [
-                    createVNode(
-                        'span',
-                        {
-                            style: {
-                                background: mergedDisabled.value ? 'rgba(0, 0, 0, 0.02)' : '',
-                                borderColor: mergedDisabled.value ? '#cccfdb' : ''
-                            }
-                        },
-                        [createVNode(indeterminate.value ? IndeterminateMark : CheckMark)]
-                    ),
-                    labelVNode.value
-                ])
-            ]);
+            return createElementVNode(
+                'div',
+                mergedProps,
+                [
+                    createElementVNode('input', { class: 'mc-checkbox__input', value: mergedValue.value, id: key, type: 'checkbox', onChange: handleChange, checked: mergedChecked.value, disabled: mergedDisabled.value }, null, PatchFlags.PROPS, [
+                        'value',
+                        'checked',
+                        'disabled'
+                    ]),
+                    createElementVNode('label', { class: 'mc-checkbox__label', for: key }, [
+                        createElementVNode(
+                            'span',
+                            {
+                                style: {
+                                    background: mergedDisabled.value ? 'rgba(0, 0, 0, 0.02)' : '',
+                                    borderColor: mergedDisabled.value ? '#cccfdb' : ''
+                                }
+                            },
+                            [createVNode(indeterminate.value ? IconIndeterminateMark : IconCheckMark)],
+                            PatchFlags.STYLE
+                        ),
+                        labelVNode.value
+                    ])
+                ],
+                PatchFlags.FULL_PROPS
+            );
         };
     }
 });

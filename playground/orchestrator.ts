@@ -160,7 +160,7 @@ const initialPackages = [
     },
     {
         name: 'meetcode-ui',
-        url: import.meta.env.PROD ? '/public/meetcode-ui/assets/meetcode-ui.esm.js' : '/lib/meetcode-ui.esm.js'
+        url: import.meta.env.PROD ? '/public/meetcode-ui/assets/meetcode-ui.esm.js' : '/dist/meetcode-ui.esm.js'
     },
     {
         name: '@vicons/ionicons5',

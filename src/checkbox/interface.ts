@@ -1,5 +1,6 @@
 import type { InjectionKey, Ref, VNodeChild, PropType } from 'vue';
 import type { UseEventBusReturn } from '@vueuse/core';
+import type { UISize } from '../_utils_';
 import * as CSS from 'csstype';
 
 declare module 'csstype' {
@@ -21,7 +22,7 @@ export interface CheckboxGroupInjection {
 export const checkboxGroupInjectionKey: InjectionKey<CheckboxGroupInjection> = Symbol();
 export const checkboxIKey = Symbol('checkbox');
 export type CheckboxValue = string | number | boolean;
-export type CheckboxSize = 'small' | 'medium' | 'large';
+export type CheckboxSize = UISize;
 export type CheckboxGroupStatus = {
     all: boolean;
     indeterminate: boolean;

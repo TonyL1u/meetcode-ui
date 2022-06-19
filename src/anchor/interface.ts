@@ -1,7 +1,7 @@
-import type { VNodeChild, PropType } from 'vue';
+import type { VNodeChild, PropType, RenderFunction } from 'vue';
 
 export interface AnchorOption {
-    title?: string | (() => VNodeChild);
+    title?: string | RenderFunction;
     href: string;
     children?: AnchorOption[];
 }
