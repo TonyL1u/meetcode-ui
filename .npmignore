@@ -9,9 +9,11 @@ src
 dist
 dist-ssr
 static
+site
 *.local
 *.ts
 *.js
 *.html
 *.json
+*.tsbuildinfo
 !package.json

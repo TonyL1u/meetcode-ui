@@ -18,3 +18,4 @@ export * from './layout';
 // export * from './split';
 export * from './menu';
 export * from './anchor';
+export * from './switch';
