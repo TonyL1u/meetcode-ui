@@ -1,2 +1,2 @@
-export { default as IconCheckMark } from './IconCheckMark';
-export { default as IconIndeterminateMark } from './IconIndeterminateMark';
+export { default as IconCheckMark } from './CheckMark';
+export { default as IconIndeterminateMark } from './IndeterminateMark';

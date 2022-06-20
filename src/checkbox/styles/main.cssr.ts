@@ -16,7 +16,7 @@ export default c([
                 boxSizing: 'border-box'
             }),
             c('&--disabled', [
-                c('*', {
+                c('*, .mc-checkbox__label, .mc-checkbox__label *', {
                     cursor: 'not-allowed'
                 })
             ])

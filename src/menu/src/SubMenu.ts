@@ -1,4 +1,4 @@
-import { defineComponent, renderSlot, createVNode, toRefs, ref, provide, inject, computed, getCurrentInstance } from 'vue';
+import { defineComponent, renderSlot, createVNode, toRefs, ref, provide, inject, computed, getCurrentInstance, mergeProps } from 'vue';
 import { checkParent, flattenWithOptions, propsMergeSlots, createComponentVNode, createElementVNode, createDirectives, PatchFlags, SlotFlags } from '../../_utils_';
 import { and, not, or } from '@vueuse/core';
 import { menuIKey, menuItemIKey, menuItemGroupIKey, subMenuIKey, menuInjectionKey, subMenuInjectionKey, menuGroupInjectionKey, subMenuProps, SubMenuProps } from '../interface';
@@ -15,7 +15,7 @@ export default defineComponent({
     name: 'SubMenu',
     iKey: subMenuIKey,
     props: subMenuProps,
-    setup(props, { slots }) {
+    setup(props, { slots, attrs }) {
         const instance = getCurrentInstance();
         const key = instance?.vnode.key ?? '';
         const isParentMenu = computed(() => checkParent(menuIKey, instance?.parent));
@@ -82,7 +82,7 @@ export default defineComponent({
                             class: ['mc-sub-menu mc-sub-menu--dropdown', `mc-sub-menu--placement-${menuPopoverPlacement.value}`]
                         },
                         {
-                            content: () => createElementVNode('ul', { class: 'mc-sub-menu-children', style: { margin: 0 } }, [renderSlot(slots, 'default')]),
+                            content: () => createElementVNode('ul', mergeProps({ class: 'mc-sub-menu-children', style: { margin: 0 } }, attrs), [renderSlot(slots, 'default')]),
                             default: () =>
                                 createElementVNode(
                                     'div',
@@ -112,7 +112,7 @@ export default defineComponent({
                                                   }
                                               )
                                     ],
-                                    PatchFlags.STYLE | PatchFlags.FULL_PROPS
+                                    PatchFlags.FULL_PROPS
                                 ),
                             _: SlotFlags.FORWARDED
                         },
@@ -125,7 +125,7 @@ export default defineComponent({
                               default: () =>
                                   createDirectives('v-if', {
                                       condition: and(isExpanded, not(isMenuCollapsed)).value,
-                                      node: createVNode('ul', { class: 'mc-sub-menu-children' }, [renderSlot(slots, 'default')])
+                                      node: createElementVNode('ul', mergeProps({ class: 'mc-sub-menu-children' }, attrs), [renderSlot(slots, 'default')])
                                   }),
                               _: SlotFlags.FORWARDED
                           })

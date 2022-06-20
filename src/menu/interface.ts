@@ -1,4 +1,4 @@
-import type { Key } from '../_utils_';
+import type { Key, ElementClassSet, ElementStyleSet } from '../_utils_';
 import type { PropType, InjectionKey, Ref, VNodeChild, ComputedRef } from 'vue';
 import * as CSS from 'csstype';
 
@@ -63,6 +63,8 @@ export interface MenuOption {
     group?: boolean;
     children?: MenuOption[];
     extra?: Record<string, any>;
+    style?: ElementStyleSet;
+    class?: ElementClassSet;
 }
 export interface MenuProps {
     value?: Key;
@@ -74,7 +76,7 @@ export interface MenuProps {
     collapsedWidth?: number;
     collapsedIconSize?: number;
     horizontal?: boolean;
-    options: MenuOption[];
+    options?: MenuOption[];
 }
 export interface MenuItemProps {
     disabled?: boolean;

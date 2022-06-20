@@ -176,6 +176,8 @@ export interface MenuOption {
     unique?: boolean;
     group?: boolean;
     children?: MenuOption[];
+    style?: ElementStyleSet;
+    class?: ElementClassSet;
 }
 export interface MenuExposeInstance {
     el: HTMLElement;

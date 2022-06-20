@@ -3,12 +3,10 @@
 </template>
 
 <script lang="ts" setup>
-import { nextTick, onMounted, ref } from 'vue';
-import { useRouterEventHook } from '../utils';
+import { onMounted, ref } from 'vue';
 import { McAnchor } from 'meetcode-ui';
 import type { AnchorOption } from 'meetcode-ui';
 
-const { onRoutePathChange } = useRouterEventHook();
 const anchorLinks = ref<AnchorOption[]>([]);
 const updateNavigator = () => {
     anchorLinks.value = [];
@@ -102,12 +100,5 @@ const updateNavigator = () => {
 
 onMounted(() => {
     updateNavigator();
-
-    onRoutePathChange(() => {
-        nextTick(() => {
-            updateNavigator();
-            console.log(anchorLinks.value);
-        });
-    });
 });
 </script>

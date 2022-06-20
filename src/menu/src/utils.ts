@@ -1,5 +1,5 @@
 import { createVNode } from 'vue';
-import { flatten } from '../../_utils_';
+import { flatten, createComponentVNode, PatchFlags } from '../../_utils_';
 import { subMenuIKey, menuItemIKey, menuItemGroupIKey } from '../interface';
 import McMenuItem from './MenuItem';
 import McMenuItemGroup from './MenuItemGroup';
@@ -48,11 +48,11 @@ export function createKeyTreeByOptions(options: MenuOption[], result: KeyTree[] 
 }
 
 export function createMenu(option: MenuOption) {
-    const { key, label, icon, indent, disabled, unique, group, children } = option;
+    const { key, label, icon, indent, disabled, unique, group, children, style, class: itemClass } = option;
     if (group) {
         return createVNode(
             McMenuItemGroup,
-            { indent, disabled, title: label },
+            { indent, disabled, title: label, style, class: itemClass },
             {
                 default: () => (children ?? []).map(item => createMenu(item))
             }
@@ -60,7 +60,7 @@ export function createMenu(option: MenuOption) {
     } else if (children) {
         return createVNode(
             McSubMenu,
-            { key, indent, disabled, unique, title: label },
+            { key, indent, disabled, unique, title: label, style, class: itemClass },
             {
                 icon,
                 default: () => children.map(item => createMenu(item))
@@ -69,7 +69,7 @@ export function createMenu(option: MenuOption) {
     } else {
         return createVNode(
             McMenuItem,
-            { key, indent, disabled },
+            { key, indent, disabled, style, class: itemClass },
             {
                 icon,
                 default: typeof label === 'string' ? () => label : label

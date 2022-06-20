@@ -1,5 +1,5 @@
 <template>
-    <McAnchor :options="anchorLinks" :bound="55" :offset-top="30" :offset-bottom="30" type="bar" :show-track="false" style="position: fixed; top: 78px" />
+    <McAnchor v-if="anchorLinks.length > 0" :options="anchorLinks" :bound="55" :offset-top="30" :offset-bottom="30" type="bar" :show-track="false" style="position: fixed; top: 78px" />
 </template>
 
 <script lang="ts" setup>
@@ -9,7 +9,7 @@ import { useRouterEventHook } from '../utils';
 import { McAnchor } from 'meetcode-ui';
 import type { AnchorOption } from 'meetcode-ui';
 
-const { onRoutePathChange, onRouteChange } = useRouterEventHook();
+const { onRoutePathChange } = useRouterEventHook();
 const anchorLinks = ref<AnchorOption[]>([]);
 const updateNavigator = () => {
     anchorLinks.value = [];
