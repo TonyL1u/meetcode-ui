@@ -26,7 +26,7 @@ export default defineComponent({
         const { value: valueVM, expandKeys, disabled, indent, unique, collapsed, collapsedWidth, collapsedIconSize, horizontal, options } = toRefs(props);
         const internalExpandKeys = ref<Key[]>([]);
         const mergedExpandKeys = expandKeys.value ? expandKeys : internalExpandKeys;
-        // const menuUpdateKey = ref(0);
+        const menuUpdateKey = ref(0);
         const menuElRef = ref<HTMLElement>();
         const selfPadding = computed(() => indent.value! - 32);
         const cssVars = computed<CSS.Properties>(() => {
@@ -37,10 +37,10 @@ export default defineComponent({
             };
         });
 
-        // force rerender menu when options is changed
-        // watch(options, () => {
-        //     menuUpdateKey.value++;
-        // });
+        // force rerender menu when options changed
+        watch(options, () => {
+            menuUpdateKey.value++;
+        });
 
         const callUpdateValue = (value: Key) => {
             if (valueVM.value !== value) {
@@ -95,12 +95,13 @@ export default defineComponent({
                 {
                     ref_key: 'menuElRef',
                     ref: menuElRef,
-                    // key: menuUpdateKey.value,
+                    key: menuUpdateKey.value,
                     class: ['mc-menu', collapsed.value ? 'mc-menu--collapsed' : '', horizontal.value ? 'mc-menu--horizontal' : '', disabled.value ? 'mc-menu--disabled' : ''],
                     style: cssVars.value
                 },
                 [options.value ? createDirectives('v-for', options.value, option => createMenu(option)) : renderSlot(slots, 'default')],
-                PatchFlags.CLASS | PatchFlags.STYLE
+                PatchFlags.CLASS | PatchFlags.STYLE | PatchFlags.PROPS,
+                ['key']
             );
     }
 });

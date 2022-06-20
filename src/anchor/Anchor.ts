@@ -14,7 +14,7 @@ export default defineComponent({
         // theme register
         onMounted(() => {
             useThemeRegister({
-                key: 'Anchor',
+                key: 'McAnchor',
                 main: mainCssr,
                 light: lightCssr,
                 dark: darkCssr
@@ -68,7 +68,7 @@ export default defineComponent({
                                 setIndicatorBarOffset(e.target as HTMLAnchorElement);
                             }
                         },
-                        [title],
+                        [typeof title === 'string' ? title : title?.()],
                         PatchFlags.PROPS,
                         ['href']
                     ),

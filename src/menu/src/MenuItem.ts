@@ -1,4 +1,4 @@
-import { defineComponent, renderSlot, createVNode, inject, computed, toRefs, getCurrentInstance, withCtx } from 'vue';
+import { defineComponent, renderSlot, createVNode, inject, computed, toRefs, getCurrentInstance, mergeProps } from 'vue';
 import { checkParent, createComponentVNode, createElementVNode, PatchFlags, SlotFlags } from '../../_utils_';
 import { and, not, or } from '@vueuse/core';
 import { menuIKey, subMenuIKey, menuItemGroupIKey, menuItemIKey, menuItemProps, menuInjectionKey, subMenuInjectionKey, menuGroupInjectionKey } from '../interface';
@@ -9,7 +9,7 @@ export default defineComponent({
     name: 'MenuItem',
     props: menuItemProps,
     iKey: menuItemIKey,
-    setup(props, { slots }) {
+    setup(props, { slots, attrs }) {
         const instance = getCurrentInstance();
         const key = instance?.vnode.key ?? '';
         const isParentMenu = computed(() => checkParent(menuIKey, instance?.parent));
@@ -47,7 +47,7 @@ export default defineComponent({
                                     hideMenuItemGroupPopover?.();
                                 }
                             },
-                            [slots.icon ? createVNode('div', { class: 'mc-menu-item__icon' }, [renderSlot(slots, 'icon')]) : null, createVNode('div', { class: 'mc-menu-item__content' }, [renderSlot(slots, 'default')])],
+                            [slots.icon ? createVNode('div', { class: 'mc-menu-item__icon' }, [renderSlot(slots, 'icon')]) : null, createVNode('div', mergeProps({ class: 'mc-menu-item__content' }, attrs), [renderSlot(slots, 'default')])],
                             PatchFlags.CLASS | PatchFlags.STYLE | PatchFlags.FULL_PROPS
                         ),
                     _: SlotFlags.FORWARDED

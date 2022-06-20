@@ -12,6 +12,9 @@ const resolve = (dir: string) => path.join(__dirname, dir);
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    build: {
+        outDir: 'site'
+    },
     base: isProduction ? '/public/meetcode-ui/' : '/',
     resolve: {
         alias: {
@@ -19,7 +22,8 @@ export default defineConfig({
             '@': resolve('src'),
             '@lib': resolve('lib'),
             '@playground': resolve('playground'),
-            '@pages': resolve('pages')
+            '@pages': resolve('pages'),
+            '@static': resolve('static')
         }
     },
     plugins: [
@@ -46,8 +50,4 @@ export default defineConfig({
     optimizeDeps: {
         include: [`${prefix}/language/css/css.worker`, `${prefix}/language/html/html.worker`, `${prefix}/language/typescript/ts.worker`, `${prefix}/editor/editor.worker`]
     }
-    // esbuild: {
-    //     jsxFactory: 'h',
-    //     jsxFragment: 'Fragment'
-    // }
 });

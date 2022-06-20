@@ -1,5 +1,5 @@
-import { defineComponent, toRefs, renderSlot, createVNode, inject, provide, computed, ref, getCurrentInstance } from 'vue';
-import { checkParent, flattenWithOptions, propsMergeSlots } from '../../_utils_';
+import { defineComponent, toRefs, renderSlot, createVNode, inject, provide, computed, ref, getCurrentInstance, mergeProps } from 'vue';
+import { checkParent, flattenWithOptions, propsMergeSlots, createComponentVNode, createElementVNode, PatchFlags, createDirectives, SlotFlags } from '../../_utils_';
 import { and, not, or } from '@vueuse/core';
 import { menuIKey, subMenuIKey, menuItemGroupIKey, menuItemIKey, subMenuInjectionKey, menuInjectionKey, menuGroupInjectionKey, menuItemGroupProps, MenuItemGroupProps } from '../interface';
 import { McPopover } from '../../popover';
@@ -11,7 +11,7 @@ export default defineComponent({
     name: 'MenuItemGroup',
     iKey: menuItemGroupIKey,
     props: menuItemGroupProps,
-    setup(props, { slots }) {
+    setup(props, { slots, attrs }) {
         const instance = getCurrentInstance();
         const isParentMenu = computed(() => checkParent(menuIKey, instance?.parent));
         const isParentSubMenu = computed(() => checkParent(subMenuIKey, instance?.parent));
@@ -56,7 +56,7 @@ export default defineComponent({
 
         // main logic...
         return () =>
-            createVNode(
+            createElementVNode(
                 'li',
                 {
                     class: [
@@ -67,9 +67,10 @@ export default defineComponent({
                     ]
                 },
                 [
-                    createVNode(
+                    createComponentVNode(
                         McPopover,
                         {
+                            ref_key: 'menuPopoverRef',
                             ref: menuPopoverRef,
                             disabled: menuPopoverDisabled.value,
                             placement: menuPopoverPlacement.value,
@@ -78,24 +79,37 @@ export default defineComponent({
                             class: ['mc-menu-item-group mc-menu-item-group--dropdown']
                         },
                         {
-                            content: () => createVNode('ul', { class: 'mc-menu-item-group-children' }, [renderSlot(slots, 'default')]),
+                            content: () => createElementVNode('ul', mergeProps({ class: 'mc-menu-item-group-children' }, attrs), [renderSlot(slots, 'default')]),
                             default: () =>
-                                createVNode('div', { class: 'mc-menu-item-group-title', style: cssVars.value }, [createVNode('span', { class: 'mc-menu-item-group-title__content' }, [propsMergeSlots<MenuItemGroupProps, 'title'>(props, slots, 'title')])])
-                        }
+                                createElementVNode(
+                                    'div',
+                                    { class: 'mc-menu-item-group-title', style: cssVars.value },
+                                    [createElementVNode('span', { class: 'mc-menu-item-group-title__content' }, [propsMergeSlots<MenuItemGroupProps, 'title'>(props, slots, 'title')])],
+                                    PatchFlags.FULL_PROPS
+                                )
+                        },
+                        PatchFlags.CLASS | PatchFlags.STYLE | PatchFlags.PROPS,
+                        ['disabled', 'placement']
                     ),
                     and(isMenuHorizontal, isParentMenu).value
                         ? null
-                        : createVNode(
+                        : createComponentVNode(
                               McFadeInExpandTransition,
                               {
                                   onAfterLeave: () => (hasCollapsed.value = true),
                                   onEnter: () => (hasCollapsed.value = false)
                               },
                               {
-                                  default: () => (and(isMenuCollapsed, isParentMenu).value ? null : createVNode('ul', { class: 'mc-menu-item-group-children' }, [renderSlot(slots, 'default')]))
+                                  default: () =>
+                                      createDirectives('v-if', {
+                                          condition: not(and(isMenuCollapsed, isParentMenu)).value,
+                                          node: createElementVNode('ul', mergeProps({ class: 'mc-menu-item-group-children' }, attrs), [renderSlot(slots, 'default')])
+                                      }),
+                                  _: SlotFlags.FORWARDED
                               }
                           )
-                ]
+                ],
+                PatchFlags.CLASS
             );
     }
 });

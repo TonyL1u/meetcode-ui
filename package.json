@@ -2,12 +2,11 @@
     "name": "meetcode-ui",
     "version": "0.0.21",
     "private": false,
-    "files": [
-        "lib/*"
-    ],
-    "main": "lib/meetcode-ui.umd.js",
-    "module": "lib/meetcode-ui.esm.js",
-    "types": "lib/index.d.ts",
+    "main": "lib/index.js",
+    "module": "es/index.js",
+    "types": "es/index.d.ts",
+    "unpkg": "dist/meetcode-ui.umd.js",
+    "jsdelivr": "dist/meetcode-ui.umd.js",
     "scripts": {
         "dev": "vite",
         "serve": "vite preview",
@@ -84,7 +83,6 @@
         "ts-jest": "^26.5.6",
         "ts-node": "^10.4.0",
         "typescript": "^4.5.2",
-        "typescript-plugin-css-modules": "^3.4.0",
         "vite": "^2.6.14",
         "vite-plugin-compression": "^0.3.5",
         "vite-plugin-md": "^0.11.0",

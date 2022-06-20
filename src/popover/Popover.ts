@@ -140,7 +140,7 @@ export default defineComponent({
         });
 
         // list of events
-        const triggerEvent = computed(() => {
+        const triggerEvent = computed<Record<string, ((args?: unknown) => void) | undefined>>(() => {
             if (trigger.value === 'hover') {
                 return {
                     onMouseenter: handleContentShow,
@@ -192,7 +192,7 @@ export default defineComponent({
                 tempVNode.props[name] = originalHandler
                     ? (...args: unknown[]) => {
                           originalHandler(...args);
-                          handler(...args);
+                          handler?.(...args);
                       }
                     : handler;
             }
