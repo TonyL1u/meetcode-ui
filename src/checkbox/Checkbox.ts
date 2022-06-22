@@ -99,8 +99,6 @@ export default defineComponent({
             }
         });
 
-        onUnmounted(() => {});
-
         return () => {
             const mergedProps = mergeProps(
                 {

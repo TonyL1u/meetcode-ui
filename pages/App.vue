@@ -132,7 +132,7 @@ const handleShowNavMenu = () => {
     });
     show('drawer', {
         appearDirection: 'left',
-        size: '85vw',
+        size: 300,
         showHeader: false,
         bodyStyle: { padding: '0px' }
     });
@@ -241,7 +241,8 @@ body {
         }
 
         .nav-menu-trigger {
-            display: inline-block;
+            cursor: pointer;
+            display: inline-flex;
         }
 
         .title {

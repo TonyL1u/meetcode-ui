@@ -1,7 +1,10 @@
 <template>
-    <McSwitch />
+    <McSpace>
+        <McSwitch />
+        <McSwitch disabled />
+    </McSpace>
 </template>
 
 <script lang="ts" setup>
-import { McSwitch } from 'meetcode-ui';
+import { McSpace, McSwitch } from 'meetcode-ui';
 </script>

@@ -1,4 +1,4 @@
-import { h, Transition, TransitionGroup, defineComponent, PropType, onMounted } from 'vue';
+import { createVNode, Transition, TransitionGroup, defineComponent, PropType, onMounted } from 'vue';
 import { useThemeRegister } from '../_utils_';
 import widthCssr from '../_styles_/fade-in-width-expand-transition.cssr';
 import heightCssr from '../_styles_/fade-in-height-expand-transition.cssr';
@@ -88,7 +88,7 @@ export default defineComponent({
 
         return () => {
             const type = props.group ? TransitionGroup : Transition;
-            return h(
+            return createVNode(
                 type as any,
                 {
                     name: props.width ? 'fade-in-width-expand-transition' : 'fade-in-height-expand-transition',

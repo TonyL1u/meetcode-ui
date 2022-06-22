@@ -62,18 +62,11 @@ export declare function useThemeController(initialTheme?: ThemeType): {
 <ThemeSwitcher-zh />
 
 ```xml
-<template>
-    <McSpace>
-        <McButton @click="switchTheme">当前：{{ current }}</McButton>
-        <McButton @click="setTheme('light')">亮色模式</McButton>
-        <McButton @click="setTheme('dark')">暗色模式</McButton>
-    </McSpace>
-</template>
-
 <script lang="ts" setup>
-import { McSpace, McButton, McMessage, useThemeController } from 'meetcode-ui';
+import { McSpace, McButton, McSwitch, McMessage, useThemeController } from 'meetcode-ui';
+import { MoonOutline, SunnyOutline } from '@vicons/ionicons5';
 
-const { switchTheme, setTheme, current, onThemeChange } = useThemeController();
+const { switchTheme, setTheme, current, onThemeChange, isDark } = useThemeController();
 onThemeChange(theme => {
     McMessage.success({
         message: `切换至 ${theme} 模式`,
@@ -81,6 +74,22 @@ onThemeChange(theme => {
     });
 });
 </script>
+
+<template>
+    <McSpace>
+        <McSwitch v-model:value="current" checked-value="dark" checked-text="dark" unchecked-value="light" unchecked-text="light">
+            <template #icon>
+                <McIcon :size="14" color="#000">
+                    <SunnyOutline v-if="isDark" />
+                    <MoonOutline v-else />
+                </McIcon>
+            </template>
+        </McSwitch>
+        <McButton @click="switchTheme">当前：{{ current }}</McButton>
+        <McButton @click="setTheme('light')">亮色模式</McButton>
+        <McButton @click="setTheme('dark')">暗色模式</McButton>
+    </McSpace>
+</template>
 ```
 
 ## 自定义主题
