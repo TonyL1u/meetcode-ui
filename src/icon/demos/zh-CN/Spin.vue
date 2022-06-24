@@ -1,20 +1,9 @@
 <template>
     <McSpace>
-        <McIcon :size="30">
-            <IconCog />
-        </McIcon>
-
-        <McIcon :size="30" spin speed="slow">
-            <IconCog />
-        </McIcon>
-
-        <McIcon :size="30" spin speed="normal">
-            <IconCog />
-        </McIcon>
-
-        <McIcon :size="30" spin speed="fast">
-            <IconCog />
-        </McIcon>
+        <McIcon :icon="IconCog" :size="30" />
+        <McIcon :icon="IconCog" :size="30" speed="slow" spin />
+        <McIcon :icon="IconCog" :size="30" speed="normal" spin />
+        <McIcon :icon="IconCog" :size="30" speed="fast" spin />
     </McSpace>
 </template>
 

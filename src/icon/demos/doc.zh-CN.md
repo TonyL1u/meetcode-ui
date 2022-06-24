@@ -6,6 +6,8 @@
 
 ### 基础用法
 
+通过 `icon` 属性或者默认 `slot` 来传入一个图标。
+
 <Basic />
 
 <Color />
@@ -24,6 +26,7 @@
 
 | 名称  |              类型              |   默认值    |     说明     |
 | :---: | :----------------------------: | :---------: | :----------: |
+| icon  |          `Component`           | `undefined` |   图标组件   |
 | size  |            `number`            | `undefined` |   图标尺寸   |
 | color |            `string`            | `undefined` |     颜色     |
 | spin  |           `boolean`            |   `false`   | 是否开启旋转 |

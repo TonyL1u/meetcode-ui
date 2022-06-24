@@ -1,6 +1,7 @@
-import { computed, toRefs, renderSlot, createVNode, defineComponent } from 'vue';
-import { getSlotFirstVNode, useColorFactory } from '../_utils_';
+import { computed, toRefs, renderSlot, createVNode, defineComponent, onMounted } from 'vue';
+import { getSlotFirstVNode, useColorFactory, useThemeRegister } from '../_utils_';
 import { TextLinkType, TextLinkColorSet, textLinkProps } from './interface';
+import { mainCssr } from './styles/index';
 import * as CSS from 'csstype';
 
 const BASE_COLOR_MAP: Record<TextLinkType, TextLinkColorSet> = {
@@ -25,8 +26,13 @@ export default defineComponent({
     name: 'TextLink',
     props: textLinkProps,
     setup(props, { slots }) {
+        onMounted(() => {
+            useThemeRegister({
+                key: 'McTextLink',
+                main: mainCssr
+            });
+        });
         const { type, to, underline, trigger, color, hoverColor, block, raw } = toRefs(props);
-
         const showUnderline = computed(() => {
             if (!underline.value) return '';
 

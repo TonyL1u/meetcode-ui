@@ -3,16 +3,16 @@ import { c } from '../../_utils_';
 export default c([
     c('.mc-switch', [
         c('&--checked .mc-switch-label-text--right, &:not(&--checked) .mc-switch-label-text--left', {
-            color: '#059669'
+            color: 'var(--switch-checked-color, #059669)'
         }),
         c('&--checked > &-label', {
-            background: '#059669'
+            background: 'var(--switch-checked-color, #059669)'
         })
     ]),
     c(
         '.mc-switch-label',
         {
-            background: '#313540'
+            background: 'var(--switch-unchecked-color, #313540)'
         },
         [
             c('&__content', {

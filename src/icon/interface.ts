@@ -1,4 +1,4 @@
-import { PropType } from 'vue';
+import type { PropType, Component } from 'vue';
 import * as CSS from 'csstype';
 
 declare module 'csstype' {
@@ -14,6 +14,7 @@ export interface IconProps {
     color?: string;
     spin?: boolean;
     speed?: 'slow' | 'normal' | 'fast';
+    icon?: Component;
 }
 
 export const iconProps = {
@@ -32,5 +33,9 @@ export const iconProps = {
     speed: {
         type: String as PropType<IconProps['speed']>,
         default: 'normal'
+    },
+    icon: {
+        type: Object as PropType<IconProps['icon']>,
+        default: undefined
     }
 };

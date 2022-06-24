@@ -107,7 +107,7 @@ function componentsMenuWrap(menus: MenuOption[], isZh: boolean = false): MenuOpt
                         item.style = { textTransform: 'capitalize' };
                         if (isZh) {
                             const label = (item.label as string).toLowerCase();
-                            item.label = () => createVNode(Fragment, null, [createVNode('span', null, [label]), createVNode('span', { style: { marginLeft: '4px', fontSize: '12px', opacity: 0.67 } }, [componentNameMap[label]])]);
+                            item.label = () => createVNode(Fragment, null, [createVNode('span', null, [label.replaceAll('-', ' ')]), createVNode('span', { style: { marginLeft: '4px', fontSize: '12px', opacity: 0.67 } }, [componentNameMap[label]])]);
                         }
                         return item;
                     })

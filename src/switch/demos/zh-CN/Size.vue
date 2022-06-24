@@ -1,7 +1,8 @@
 <template>
     <McSpace>
-        <McSwitch />
-        <McSwitch disabled inelastic />
+        <McSwitch size="small" />
+        <McSwitch size="medium" />
+        <McSwitch size="large" />
     </McSpace>
 </template>
 

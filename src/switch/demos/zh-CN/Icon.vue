@@ -2,18 +2,15 @@
     <McSpace>
         <McSwitch v-model:value="checked">
             <template #icon>
-                <McIcon :size="16">
-                    <ArrowBackOutline v-if="checked" />
-                    <ArrowForwardOutline v-else />
-                </McIcon>
+                <McIcon :icon="checked ? ArrowBackOutline : ArrowForwardOutline" />
             </template>
         </McSwitch>
-        <McSwitch v-model:value="checked" checked-text="Dark" unchecked-text="Light">
-            <template #icon>
-                <McIcon :size="16">
-                    <MoonOutline v-if="checked" />
-                    <SunnyOutline v-else />
-                </McIcon>
+        <McSwitch checked-text="Dark" unchecked-text="Light">
+            <template #checked-icon>
+                <McIcon :icon="Moon" />
+            </template>
+            <template #unchecked-icon>
+                <McIcon :icon="Sunny" />
             </template>
         </McSwitch>
     </McSpace>
@@ -21,8 +18,8 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { McSpace, McSwitch } from 'meetcode-ui';
-import { ArrowForwardOutline, ArrowBackOutline, MoonOutline, SunnyOutline } from '@vicons/ionicons5';
+import { McSpace, McIcon, McSwitch } from 'meetcode-ui';
+import { ArrowForwardOutline, ArrowBackOutline, Moon, Sunny } from '@vicons/ionicons5';
 
 const checked = ref(false);
 </script>

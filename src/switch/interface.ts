@@ -1,25 +1,44 @@
-import type { PropType } from 'vue';
+import type { PropType, RenderFunction } from 'vue';
+import type { UISize, UnionOmit } from '../_utils_';
 import * as CSS from 'csstype';
 
 declare module 'csstype' {
     interface Properties {
+        '--switch-font-size'?: string;
         '--switch-checked-color'?: string;
         '--switch-unchecked-color'?: string;
         '--switch-handler-color'?: string;
+        '--switch-ripple-color'?: string;
+        '--switch-label-height'?: string;
+        '--switch-label-min-width'?: string;
         '--switch-label-border-radius'?: string;
-        '--switch-label-handler-border-radius'?: string;
+        '--switch-text-checked-padding'?: string;
+        '--switch-text-unchecked-padding'?: string;
+        '--switch-handler-size'?: string;
+        '--switch-handler-border-radius'?: string;
     }
 }
 
+export interface SwitchSizeSet {
+    labelHeight: string;
+    labelMinWidth: string;
+    fontSize: string;
+    handlerSize: string;
+    textCheckedPadding: string;
+    textUncheckedPadding: string;
+}
 export type OnBeforeSwitchImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
+export type SwitchSize = UnionOmit<UISize, 'mini'>;
 export type SwitchValue = string | number | boolean;
+export type SwitchSizeMap = Record<SwitchSize, SwitchSizeSet>;
 export interface SwitchProps {
     value?: SwitchValue;
     disabled?: boolean;
+    size?: SwitchSize;
     checkedValue?: SwitchValue;
     uncheckedValue?: SwitchValue;
-    checkedText?: string;
-    uncheckedText?: string;
+    checkedText?: string | RenderFunction;
+    uncheckedText?: string | RenderFunction;
     checkedColor?: string;
     uncheckedColor?: string;
     handlerColor?: string;
@@ -27,7 +46,12 @@ export interface SwitchProps {
     square?: boolean;
     checked?: boolean;
     loading?: boolean;
+    inelastic?: boolean;
     onBeforeSwitch?: OnBeforeSwitchImpl;
+}
+export interface SwitchExposeInstance {
+    el: HTMLElement;
+    switch: () => void;
 }
 
 export const switchProps = {
@@ -38,6 +62,10 @@ export const switchProps = {
     disabled: {
         type: Boolean as PropType<SwitchProps['disabled']>,
         default: false
+    },
+    size: {
+        type: String as PropType<SwitchProps['size']>,
+        default: 'medium'
     },
     checkedValue: {
         type: [String, Number, Boolean] as PropType<SwitchProps['checkedValue']>,
@@ -57,11 +85,11 @@ export const switchProps = {
     },
     checkedColor: {
         type: String as PropType<SwitchProps['checkedColor']>,
-        default: '#10b981'
+        default: undefined
     },
     uncheckedColor: {
         type: String as PropType<SwitchProps['uncheckedColor']>,
-        default: 'rgba(0, 0, 0, 0.25)'
+        default: undefined
     },
     handlerColor: {
         type: String as PropType<SwitchProps['handlerColor']>,
@@ -81,6 +109,10 @@ export const switchProps = {
     },
     loading: {
         type: Boolean as PropType<SwitchProps['loading']>,
+        default: false
+    },
+    inelastic: {
+        type: Boolean as PropType<SwitchProps['inelastic']>,
         default: false
     },
     onBeforeSwitch: {

@@ -4,6 +4,7 @@ import {
     createTextVNode as _createTextVNode,
     createElementBlock as _createElementBlock,
     createCommentVNode as _createCommentVNode,
+    renderSlot as _renderSlot,
     Fragment,
     toDisplayString,
     normalizeProps,
@@ -13,7 +14,8 @@ import {
     vShow
 } from 'vue';
 import { PatchFlags, SlotFlags } from './tsutils';
-import type { Component, VNodeProps, VNode, VNodeChild, HTMLAttributes } from 'vue';
+import { kebabToCamel } from './kebabCaseEscape';
+import type { Component, VNodeProps, VNode, VNodeChild, VNodeArrayChildren, HTMLAttributes, Slots } from 'vue';
 import type { IntrinsicElementAttributes, ElementClassSet, ElementStyleSet, SpecificVNode, Merge } from './tsutils';
 
 type ComponentProps<T extends object> = (T & Record<string, unknown> & VNodeProps & Partial<{ class: ElementClassSet; style: ElementStyleSet }>) | null;
@@ -93,6 +95,11 @@ export function createTextVNode(source: string | object | unknown, patch?: boole
  */
 export function createFragment(children?: unknown[], patchFlag?: PatchFlags.STABLE_FRAGMENT | PatchFlags.KEYED_FRAGMENT | PatchFlags.UNKEYED_FRAGMENT) {
     return _createElementBlock(Fragment, null, children, patchFlag);
+}
+
+export function renderSlot(slots: Slots, name: string, props?: Record<string, unknown>, fallback?: () => VNodeArrayChildren, noSlotted?: boolean) {
+    const camelKey = kebabToCamel(name);
+    return _renderSlot(slots, slots[camelKey] ? camelKey : name, props, fallback, noSlotted);
 }
 
 /**

@@ -7,7 +7,7 @@ export { cssUnitTransform } from './cssUnitTransform';
 export { checkParent } from './checkParent';
 export { flatten, flattenWithOptions, flattenTree } from './flatten';
 export { getSlotFirstVNode, getSlotVNodeIndex } from './getSlotFirstVNode';
-export { kebabCaseEscape } from './kebabCaseEscape';
+export { kebabCaseEscape, kebabToCamel, camelToKebab } from './kebabCaseEscape';
 export { propsMergeSlots } from './propsMergeSlots';
 export { reactiveOmit } from './reactiveOmit';
 export { responsiveTarget } from './responsiveTarget';

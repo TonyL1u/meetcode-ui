@@ -1,6 +1,6 @@
 <template>
     <McTooltip :content="checked">
-        <McSwitch v-model:value="checked" checked-value="OK" unchecked-value="NO" />
+        <McSwitch v-model:value="checked" checked-value="Yes" unchecked-value="No" />
     </McTooltip>
 </template>
 
@@ -8,5 +8,5 @@
 import { ref } from 'vue';
 import { McSwitch, McTooltip } from 'meetcode-ui';
 
-const checked = ref('NO');
+const checked = ref('No');
 </script>

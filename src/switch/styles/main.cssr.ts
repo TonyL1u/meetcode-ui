@@ -8,7 +8,8 @@ export default c([
             cursor: 'pointer',
             position: 'relative',
             alignItems: 'center',
-            lineHeight: '22px'
+            lineHeight: 'var(--switch-label-height)',
+            fontSize: 'var(--switch-font-size)'
         },
         [
             c('&--disabled', {
@@ -21,15 +22,25 @@ export default c([
                     animation: 'mc-switch-border-ripple-out 0.5s'
                 },
                 [
-                    c('span', {
-                        padding: '0px 26px 0px 10px'
+                    c('.mc-switch-label__content', {
+                        padding: 'var(--switch-text-checked-padding)'
                     }),
                     c('.mc-switch-label__handler', {
-                        transform: 'translateX(-100%)',
-                        left: 'calc(100% - 2px)'
+                        left: '100%',
+                        marginLeft: 'calc(-2px - var(--switch-handler-size))'
                     })
                 ]
-            )
+            ),
+            c('&:not(&--inelastic)', [
+                c('.mc-switch-label:active  .mc-switch-label__handler', {
+                    width: 'calc(var(--switch-handler-size) + 4px)'
+                })
+            ]),
+            c('&:not(&--inelastic).mc-switch--checked', [
+                c('.mc-switch-label:active  .mc-switch-label__handler', {
+                    marginLeft: 'calc(-6px - var(--switch-handler-size))'
+                })
+            ])
         ]
     ),
     c(
@@ -37,10 +48,11 @@ export default c([
         {
             cursor: 'inherit',
             position: 'relative',
-            minWidth: '44px',
-            height: '22px',
+            minWidth: 'var(--switch-label-min-width)',
+            height: 'var(--switch-label-height)',
             borderRadius: 'var(--switch-label-border-radius)',
-            transition: 'all 0.2s'
+            transition: 'all 0.2s',
+            userSelect: 'none'
         },
         [
             c('&-text--left, &-text--right', {
@@ -53,60 +65,40 @@ export default c([
                 marginLeft: '6px'
             }),
             c('&__content', {
-                padding: '0px 10px 0px 26px',
+                padding: 'var(--switch-text-unchecked-padding)',
                 width: '100%',
+                height: '100%',
                 transition: 'all 0.2s',
                 display: 'flex',
-                boxSizing: 'border-box'
+                boxSizing: 'border-box',
+                alignItems: 'center'
             }),
             c('&__handler', {
                 position: 'absolute',
-                width: '18px',
-                height: '18px',
-                borderRadius: 'var(--switch-label-handler-border-radius)',
+                width: 'var(--switch-handler-size)',
+                height: 'var(--switch-handler-size)',
+                borderRadius: 'var(--switch-handler-border-radius)',
                 top: '2px',
                 left: '2px',
                 transition: 'all 0.2s',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center'
-            }),
-            c('&:active &__handler', {
-                width: '22px'
             })
         ]
     ),
-    c(
-        '.mc-switch-input',
-        {
-            opacity: 0,
-            width: 0,
-            margin: 0
-        },
-        [
-            // c(
-            //     '&:checked ~ .mc-switch-label',
-            //     {
-            //         animation: 'mc-switch-border-ripple-out 0.5s'
-            //     },
-            //     [
-            //         c('span', {
-            //             padding: '0px 26px 0px 10px'
-            //         }),
-            //         c('.mc-switch-label__handler', {
-            //             transform: 'translateX(-100%)',
-            //             left: 'calc(100% - 2px)'
-            //         })
-            //     ]
-            // )
-        ]
-    ),
+    c('.mc-switch-input', {
+        opacity: 0,
+        width: 0,
+        margin: 0,
+        outline: 'none'
+    }),
     c('@keyframes mc-switch-border-ripple-out', {
         from: {
-            boxShadow: '0 0 0.5px 0 #15803d'
+            boxShadow: '0 0 0.5px 0 var(--switch-checked-color, #10b981)'
         },
         to: {
-            boxShadow: '0 0 0.5px 4px #15803d00'
+            boxShadow: '0 0 0.5px 4px var(--switch-ripple-color, #10b98100)'
         }
     })
 ]);

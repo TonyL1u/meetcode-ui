@@ -25,7 +25,9 @@ export default c([
     c(
         '.mc-checkbox__input',
         {
-            display: 'none'
+            opacity: 0,
+            width: 0,
+            margin: 0
         },
         [
             c(
@@ -33,7 +35,7 @@ export default c([
                 {
                     background: 'var(--checkbox-checked-color)',
                     borderColor: 'var(--checkbox-checked-color)',
-                    animation: 'zoom-in-out 0.2s ease'
+                    animation: 'mc-checkbox-zoom-in-out 0.2s ease'
                 },
                 [
                     c('svg', {
@@ -98,5 +100,10 @@ export default c([
                 borderColor: 'var(--checkbox-checked-color)'
             })
         ]
-    )
+    ),
+    c('@keyframes mc-checkbox-zoom-in-out', {
+        '50%': {
+            transform: 'scale(0.81)'
+        }
+    })
 ]);

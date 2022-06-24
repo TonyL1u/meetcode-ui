@@ -1,8 +1,8 @@
 import { defineComponent, toRefs, createVNode, computed, onMounted } from 'vue';
-import { getSlotFirstVNode, useThemeRegister } from '../_utils_';
+import { getSlotFirstVNode, useThemeRegister, createComponentVNode, createElementVNode, PatchFlags } from '../_utils_';
+import { mainCssr } from './styles';
 import { iconProps } from './interface';
 import * as CSS from 'csstype';
-import { mainCssr } from './styles';
 
 export default defineComponent({
     name: 'Icon',
@@ -16,7 +16,7 @@ export default defineComponent({
             });
         });
 
-        const { size, color, spin, speed } = toRefs(props);
+        const { size, color, spin, speed, icon } = toRefs(props);
 
         const spinningSpeed = computed(() => {
             switch (speed.value) {
@@ -40,14 +40,15 @@ export default defineComponent({
         });
 
         return () =>
-            createVNode(
+            createElementVNode(
                 'i',
                 {
                     role: 'img',
                     class: ['mc-icon', { 'mc-icon--spinning': spin.value }],
                     style: cssVars.value
                 },
-                [getSlotFirstVNode(slots.default)]
+                [icon.value ? createComponentVNode(icon.value) : getSlotFirstVNode(slots.default)],
+                PatchFlags.CLASS | PatchFlags.STYLE
             );
     }
 });

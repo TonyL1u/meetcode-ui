@@ -19,12 +19,12 @@ export const componentNameMap: Record<string, string> = {
     space: '间隔',
     switch: '开关',
     tabs: '标签页',
-    'text link': '文字链接',
+    'text-link': '文字链接',
     tooltip: '文字提示'
 };
 
 export const componentGroupMap: Record<ComponentCategory, string[]> = {
-    General: ['button', 'icon', 'space'],
+    General: ['button', 'icon', 'space', 'text-link'],
     Layout: ['grid', 'layout'],
     Navigation: ['anchor', 'menu'],
     'Data Entry': ['checkbox', 'switch'],

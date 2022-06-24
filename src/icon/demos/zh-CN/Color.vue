@@ -1,24 +1,10 @@
 <template>
     <McSpace>
-        <McIcon :size="20" color="#3b82f6">
-            <IconCloud />
-        </McIcon>
-
-        <McIcon :size="25" color="#3b82f6">
-            <IconCloud />
-        </McIcon>
-
-        <McIcon :size="30" color="#3b82f6">
-            <IconCloud />
-        </McIcon>
-
-        <McIcon :size="35" color="#3b82f6">
-            <IconCloud />
-        </McIcon>
-
-        <McIcon :size="40" color="#3b82f6">
-            <IconCloud />
-        </McIcon>
+        <McIcon :icon="IconCloud" :size="20" color="#3b82f6" />
+        <McIcon :icon="IconCloud" :size="25" color="#3b82f6" />
+        <McIcon :icon="IconCloud" :size="30" color="#3b82f6" />
+        <McIcon :icon="IconCloud" :size="35" color="#3b82f6" />
+        <McIcon :icon="IconCloud" :size="40" color="#3b82f6" />
     </McSpace>
 </template>
 
