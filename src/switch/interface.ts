@@ -10,6 +10,7 @@ declare module 'csstype' {
         '--switch-handler-color'?: string;
         '--switch-ripple-color'?: string;
         '--switch-label-height'?: string;
+        '--switch-label-width'?: string;
         '--switch-label-min-width'?: string;
         '--switch-label-border-radius'?: string;
         '--switch-text-checked-padding'?: string;
@@ -47,6 +48,7 @@ export interface SwitchProps {
     checked?: boolean;
     loading?: boolean;
     inelastic?: boolean;
+    width?: string | number;
     onBeforeSwitch?: OnBeforeSwitchImpl;
 }
 export interface SwitchExposeInstance {
@@ -114,6 +116,10 @@ export const switchProps = {
     inelastic: {
         type: Boolean as PropType<SwitchProps['inelastic']>,
         default: false
+    },
+    width: {
+        type: [String, Number] as PropType<SwitchProps['width']>,
+        default: undefined
     },
     onBeforeSwitch: {
         type: Function as PropType<SwitchProps['onBeforeSwitch']>,

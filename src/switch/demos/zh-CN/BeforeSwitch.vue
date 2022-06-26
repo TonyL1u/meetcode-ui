@@ -18,6 +18,7 @@ import { RadioButtonOff, CloseOutline, CheckmarkOutline } from '@vicons/ionicons
 const loading = ref(false);
 const isError = ref(false);
 const isFetched = ref(false);
+
 const handleBeforeSwitch1 = () => {
     McMessage.error('不允许切换', {
         card: true
@@ -25,7 +26,6 @@ const handleBeforeSwitch1 = () => {
 
     return false;
 };
-
 const handleBeforeSwitch2 = async () => {
     if (loading.value || isFetched.value) return false;
 

@@ -12,7 +12,7 @@ const handleEditOnGithub = () => {
 <template>
     <h1 class="main-heading">
         <slot></slot>
-        <McTooltip content="在 Github 上编辑" placement="right">
+        <McTooltip content="在 Github 上编辑此页" placement="right">
             <McIcon :size="16" class="edit-icon mc-transition-all" @click="handleEditOnGithub">
                 <IconEdit />
             </McIcon>

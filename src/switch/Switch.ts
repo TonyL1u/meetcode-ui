@@ -1,6 +1,6 @@
-import { defineComponent, onMounted, toRefs, ref, computed, mergeProps } from 'vue';
+import { defineComponent, onMounted, toRefs, ref, computed } from 'vue';
 import { or, and, not, isDefined } from '@vueuse/core';
-import { useThemeRegister, propsMergeSlots, setColorAlpha, createElementVNode, createComponentVNode, createKey, renderSlot, PatchFlags } from '../_utils_';
+import { useThemeRegister, propsMergeSlots, setColorAlpha, createElementVNode, createComponentVNode, createKey, cssUnitTransform, renderSlot, PatchFlags } from '../_utils_';
 import { McBaseLoading } from '../_internal_';
 import { McIconSwitchTransition } from '../_transition_';
 import { mainCssr, lightCssr, darkCssr } from './styles';
@@ -50,11 +50,15 @@ export default defineComponent({
             });
         });
         const key = createKey('switch');
-        const { value: valueVM, disabled, size, checkedValue, uncheckedValue, checkedText, uncheckedText, checkedColor, uncheckedColor, handlerColor, textPlacement, square, checked, onBeforeSwitch, loading, inelastic } = toRefs(props);
+        const { value: valueVM, disabled, size, checkedValue, uncheckedValue, checkedText, uncheckedText, checkedColor, uncheckedColor, handlerColor, textPlacement, square, checked, onBeforeSwitch, loading, inelastic, width } = toRefs(props);
         const switchElRef = ref<HTMLElement>();
         const internalValue = ref(checked.value!);
         const mergedValue = isDefined(valueVM) ? valueVM : internalValue;
         const isChecked = computed(() => mergedValue.value === checkedValue.value);
+        const showInnerText = computed(() => textPlacement.value === 'both' || textPlacement.value === 'in');
+        const showOuterText = computed(() => textPlacement.value === 'both' || textPlacement.value === 'out');
+        const showCheckedText = computed(() => !!(checkedText.value || slots['checked-text'] || slots['checkedText']));
+        const showUncheckedText = computed(() => !!(uncheckedText.value || slots['unchecked-text'] || slots['uncheckedText']));
         const cssVars = computed<CSS.Properties>(() => {
             const { labelHeight, labelMinWidth, handlerSize, fontSize, textUncheckedPadding, textCheckedPadding } = SIZE_MAP[size.value!] ?? SIZE_MAP.medium;
 
@@ -65,7 +69,8 @@ export default defineComponent({
                 '--switch-ripple-color': setColorAlpha(checkedColor.value!, 0),
                 '--switch-font-size': fontSize,
                 '--switch-label-height': labelHeight,
-                '--switch-label-min-width': labelMinWidth,
+                '--switch-label-width': cssUnitTransform(width.value),
+                '--switch-label-min-width': width.value ? cssUnitTransform(width.value) : labelMinWidth,
                 '--switch-label-border-radius': square.value ? '3px' : labelHeight,
                 '--switch-text-checked-padding': textCheckedPadding,
                 '--switch-text-unchecked-padding': textUncheckedPadding,
@@ -92,6 +97,12 @@ export default defineComponent({
                     callUpdateValue();
                 }
             } catch (error) {}
+        };
+        const innerCheckedText = () => {
+            return and(isChecked, showCheckedText).value ? createElementVNode('span', { class: 'mc-switch-label__content' }, propsMergeSlots<SwitchProps, 'checkedText'>(props, slots, 'checkedText')) : null;
+        };
+        const innerUncheckedText = () => {
+            return and(not(isChecked), showUncheckedText).value ? createElementVNode('span', { class: 'mc-switch-label__content' }, propsMergeSlots<SwitchProps, 'uncheckedText'>(props, slots, 'uncheckedText')) : null;
         };
 
         expose({
@@ -125,17 +136,9 @@ export default defineComponent({
                         'checked',
                         'disabled'
                     ]),
-                    and(uncheckedText, textPlacement.value === 'both' || textPlacement.value === 'out').value
-                        ? createElementVNode('span', { class: 'mc-switch-label-text--left', onClick: handleChange }, [propsMergeSlots<SwitchProps, 'uncheckedText'>(props, slots, 'uncheckedText')])
-                        : null,
+                    and(showUncheckedText, showOuterText).value ? createElementVNode('span', { class: 'mc-switch-label-text--left', onClick: handleChange }, [propsMergeSlots<SwitchProps, 'uncheckedText'>(props, slots, 'uncheckedText')]) : null,
                     createElementVNode('label', { class: 'mc-switch-label', for: key }, [
-                        and(textPlacement.value === 'both' || textPlacement.value === 'in', or(checkedText, uncheckedText)).value
-                            ? createElementVNode(
-                                  'span',
-                                  { class: 'mc-switch-label__content' },
-                                  isChecked.value ? propsMergeSlots<SwitchProps, 'checkedText'>(props, slots, 'checkedText') : propsMergeSlots<SwitchProps, 'uncheckedText'>(props, slots, 'uncheckedText')
-                              )
-                            : null,
+                        showInnerText.value ? innerCheckedText() ?? innerUncheckedText() : null,
                         createElementVNode('div', { class: 'mc-switch-label__handler' }, [
                             createComponentVNode(McIconSwitchTransition, null, {
                                 default: () => {
@@ -150,9 +153,7 @@ export default defineComponent({
                             })
                         ])
                     ]),
-                    and(checkedText, textPlacement.value === 'both' || textPlacement.value === 'out').value
-                        ? createElementVNode('span', { class: 'mc-switch-label-text--right', onClick: handleChange }, [propsMergeSlots<SwitchProps, 'checkedText'>(props, slots, 'checkedText')])
-                        : null
+                    and(showCheckedText, showOuterText).value ? createElementVNode('span', { class: 'mc-switch-label-text--right', onClick: handleChange }, [propsMergeSlots<SwitchProps, 'checkedText'>(props, slots, 'checkedText')]) : null
                 ],
                 PatchFlags.CLASS | PatchFlags.STYLE
             );

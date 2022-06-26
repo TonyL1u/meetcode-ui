@@ -27,7 +27,7 @@
 
 ### 描述
 
-通过 `checked-text` 和 `unchecked-text` 来添加开关的描述。
+通过 `checked-text` 和 `unchecked-text` 来添加描述。
 
 <Content />
 :::

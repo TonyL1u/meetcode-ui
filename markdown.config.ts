@@ -46,6 +46,7 @@ export default {
 
                         return {
                             name: manuallyPath ? manuallyPath[1] : name,
+                            path,
                             importSource,
                             compressedSource
                         };

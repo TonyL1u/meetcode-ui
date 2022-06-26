@@ -23,7 +23,8 @@ export default c([
                 },
                 [
                     c('.mc-switch-label__content', {
-                        padding: 'var(--switch-text-checked-padding)'
+                        padding: 'var(--switch-text-checked-padding)',
+                        justifyContent: 'flex-start'
                     }),
                     c('.mc-switch-label__handler', {
                         left: '100%',
@@ -48,6 +49,7 @@ export default c([
         {
             cursor: 'inherit',
             position: 'relative',
+            width: 'var(--switch-label-width)',
             minWidth: 'var(--switch-label-min-width)',
             height: 'var(--switch-label-height)',
             borderRadius: 'var(--switch-label-border-radius)',
@@ -71,7 +73,8 @@ export default c([
                 transition: 'all 0.2s',
                 display: 'flex',
                 boxSizing: 'border-box',
-                alignItems: 'center'
+                alignItems: 'center',
+                justifyContent: 'flex-end'
             }),
             c('&__handler', {
                 position: 'absolute',

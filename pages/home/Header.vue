@@ -4,6 +4,11 @@
             <slot></slot>
         </div>
         <div class="mc-flex mc-items-center">
+            <!-- <McInput style="width: 200px" placeholder="搜索">
+                <template #suffix>
+                    <McIcon :icon="SearchOutline" :size="18" />
+                </template>
+            </McInput> -->
             <McButton render="text" @click="switchTheme">
                 <template #icon>
                     <McIcon :size="18">
@@ -35,9 +40,9 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { McButton, McIcon, McPopselect, useI18nController, useThemeController } from 'meetcode-ui';
+import { McButton, McIcon, McInput, McPopselect, useI18nController, useThemeController } from 'meetcode-ui';
 import { useRouter } from 'vue-router';
-import { LanguageOutline, LogoGithub, MoonOutline, SunnyOutline } from '@vicons/ionicons5';
+import { LanguageOutline, LogoGithub, MoonOutline, SunnyOutline, SearchOutline } from '@vicons/ionicons5';
 import { repository } from '../../package.json';
 
 const router = useRouter();

@@ -5,7 +5,7 @@
                 <McIcon :icon="checked ? ArrowBackOutline : ArrowForwardOutline" />
             </template>
         </McSwitch>
-        <McSwitch checked-text="Dark" unchecked-text="Light">
+        <McSwitch v-model:value="checked" checked-text="Dark" unchecked-text="Light">
             <template #checked-icon>
                 <McIcon :icon="Moon" />
             </template>

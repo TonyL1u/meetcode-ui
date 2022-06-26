@@ -1,5 +1,5 @@
-import { createVNode, Transition, defineComponent, onMounted, renderSlot } from 'vue';
-import { useThemeRegister } from '../_utils_';
+import { Transition, defineComponent, onMounted, renderSlot } from 'vue';
+import { useThemeRegister, createComponentVNode } from '../_utils_';
 import iconSwitchCssr from '../_styles_/icon-switch-transition.cssr';
 
 export default defineComponent({
@@ -13,7 +13,7 @@ export default defineComponent({
         });
 
         return () =>
-            createVNode(
+            createComponentVNode(
                 Transition,
                 { name: 'icon-switch-transition' },
                 {

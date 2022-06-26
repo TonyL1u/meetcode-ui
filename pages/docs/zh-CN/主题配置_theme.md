@@ -77,12 +77,12 @@ onThemeChange(theme => {
 
 <template>
     <McSpace>
-        <McSwitch v-model:value="current" checked-value="dark" checked-text="dark" unchecked-value="light" unchecked-text="light">
-            <template #icon>
-                <McIcon :size="14" color="#000">
-                    <SunnyOutline v-if="isDark" />
-                    <MoonOutline v-else />
-                </McIcon>
+        <McSwitch v-model:value="current" checked-value="dark" unchecked-value="light" checked-text="Dark" unchecked-text="Light">
+            <template #checked-icon>
+                <McIcon :icon="Moon" />
+            </template>
+            <template #unchecked-icon>
+                <McIcon :icon="Sunny" />
             </template>
         </McSwitch>
         <McButton @click="switchTheme">当前：{{ current }}</McButton>

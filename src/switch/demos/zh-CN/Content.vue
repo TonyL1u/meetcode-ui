@@ -1,8 +1,8 @@
 <template>
     <McSpace vertical>
-        <McSwitch checked-text="上班">
+        <McSwitch :width="48">
             <template #unchecked-text>
-                <McIcon :icon="RadioButtonOff" />
+                <McIcon :icon="RadioButtonOff" :size="12" />
             </template>
         </McSwitch>
         <McSwitch checked-text="上班" unchecked-text="下班" text-placement="out" />

@@ -20,7 +20,7 @@ import type { IntrinsicElementAttributes, ElementClassSet, ElementStyleSet, Spec
 
 type ComponentProps<T extends object> = (T & Record<string, unknown> & VNodeProps & Partial<{ class: ElementClassSet; style: ElementStyleSet }>) | null;
 type ElementProps<T extends keyof IntrinsicElementAttributes> = (IntrinsicElementAttributes[T] & Record<string, unknown> & VNodeProps) | null;
-type ComponentChildren<S extends string> = SlotChildren<S> | ArrayChildren;
+type ComponentChildren<S extends string> = SlotChildren<S> | ArrayChildren | null;
 type SlotChildren<S extends string> = Partial<Merge<Record<S, () => VNodeChild>, { _: SlotFlags }>>;
 type ArrayChildren = unknown[];
 type DirectivesType = 'v-if' | 'v-show' | 'v-for';

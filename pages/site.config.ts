@@ -7,6 +7,7 @@ export const componentNameMap: Record<string, string> = {
     drawer: '抽屉',
     grid: '网格布局',
     icon: '图标',
+    input: '输入框',
     layout: '布局',
     loading: '加载',
     menu: '菜单',
@@ -27,7 +28,7 @@ export const componentGroupMap: Record<ComponentCategory, string[]> = {
     General: ['button', 'icon', 'space', 'text-link'],
     Layout: ['grid', 'layout'],
     Navigation: ['anchor', 'menu'],
-    'Data Entry': ['checkbox', 'switch'],
+    'Data Entry': ['checkbox', 'input', 'switch'],
     'Data Display': ['text link', 'tooltip'],
     Feedback: ['drawer', 'message', 'modal', 'popconfirm', 'popover', 'popselect', 'popup', 'tabs'],
     Other: []

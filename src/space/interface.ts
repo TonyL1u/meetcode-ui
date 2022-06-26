@@ -1,4 +1,4 @@
-import { PropType, CSSProperties } from 'vue';
+import type { PropType, CSSProperties } from 'vue';
 import * as CSS from 'csstype';
 
 declare module 'csstype' {

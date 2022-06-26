@@ -21,8 +21,15 @@
             <McTooltip :content="codePreviewVisible ? '隐藏代码' : '展开代码'">
                 <McButton render="text" size="mini" @click="codePreviewVisible = !codePreviewVisible">
                     <template #icon>
+                        <McIcon :icon="codePreviewVisible ? IconCodeSlash : IconCode" :size="12" />
+                    </template>
+                </McButton>
+            </McTooltip>
+            <McTooltip content="在 Github 上编辑">
+                <McButton render="text" size="mini" @click="handleEditOnGithub">
+                    <template #icon>
                         <McIcon :size="12">
-                            <IconCode />
+                            <IconEdit />
                         </McIcon>
                     </template>
                 </McButton>
@@ -31,7 +38,7 @@
                 <McButton render="text" size="mini" @click="handleShowModal">
                     <template #icon>
                         <McIcon :size="12">
-                            <IconEdit />
+                            <IconRunning />
                         </McIcon>
                     </template>
                 </McButton>
@@ -41,17 +48,19 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { McTooltip, McTabs, McTabPane, McButton, McIcon, McSpace, McMessage, McPopup } from 'meetcode-ui';
-import { Code as IconCode, CopyOutline as IconCopy, CubeOutline as IconEdit } from '@vicons/ionicons5';
+import { Code as IconCode, CodeSlash as IconCodeSlash, CopyOutline as IconCopy, CubeOutline as IconRunning, CreateOutline as IconEdit } from '@vicons/ionicons5';
 import { useClipboard } from '@vueuse/core';
 import { useRouterEventHook } from '../utils';
 import { loadInitialState } from '@playground/orchestrator';
 import hljs from 'highlight.js';
 import Playground from './functional/playground';
+import { repository } from '../../package.json';
 
 interface CodeSource {
     name: string;
+    path: string;
     importSource: string;
     compressedSource: string;
 }
@@ -61,10 +70,14 @@ const showToolbox = codes.length > 0;
 const codePreviewVisible = ref(false);
 const tabIndex = ref(0);
 const isHashed = ref(false);
+const currentCode = computed(() => codes[tabIndex.value]);
 const { copy } = useClipboard();
 const { onRouteChange } = useRouterEventHook();
+const handleEditOnGithub = () => {
+    window.open(`${repository.url}/blob/develop/${currentCode.value.path}`);
+};
 const handleShowModal = () => {
-    loadInitialState(codes[tabIndex.value].compressedSource);
+    loadInitialState(currentCode.value.compressedSource);
     const isLoading = ref(true);
     const { show } = McPopup(Playground, {
         props: { isLoading },
@@ -87,9 +100,9 @@ const highlighted = (content: string) => {
     return hljs.highlight(content, { language: 'html' }).value;
 };
 const copyCode = () => {
-    const code = codes[tabIndex.value];
-    copy(code.importSource);
-    McMessage.success(`${code.name}.vue代码已复制到剪贴板`, { card: true });
+    const { importSource, name } = currentCode.value;
+    copy(importSource);
+    McMessage.success(`${name}.vue代码已复制到剪贴板`, { card: true });
 };
 
 onRouteChange(
