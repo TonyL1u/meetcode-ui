@@ -27,13 +27,12 @@ setLanguage('en-US');
 
 3. Others
 
-|          名称          |              类型               |                           说明                           |
-| :--------------------: | :-----------------------------: | :------------------------------------------------------: |
-|        current         |  `RemovableRef<LanguageType>`   |                 Current language in use                  |
-|      setLanguage       | `(theme: LanguageType) => void` |                  Set language manually                   |
-|     switchLanguage     |          `() => void`           |                     Switch language                      |
-|    onLanguageChange    |   `EventHookOn<LanguageType>`   |     The callback function when language has changed      |
-| onGlobalLanguageChange |   `EventHookOn<LanguageType>`   | The globally callback function when language has changed |
+|       名称       |              类型               |                      说明                       |
+| :--------------: | :-----------------------------: | :---------------------------------------------: |
+|     current      |  `RemovableRef<LanguageType>`   |             Current language in use             |
+|   setLanguage    | `(theme: LanguageType) => void` |              Set language manually              |
+|  switchLanguage  |          `() => void`           |                 Switch language                 |
+| onLanguageChange |   `EventHookOn<LanguageType>`   | The callback function when language has changed |
 
 4. Type declarations
 
@@ -47,7 +46,6 @@ export declare function useI18nController(initialLang?: LanguageType): {
     setLanguage: (lang?: LanguageType) => void;
     switchLanguage(): void;
     onLanguageChange: EventHookOn<LanguageType>;
-    onGlobalLanguageChange: EventHookOn<LanguageType>;
 };
 ```
 

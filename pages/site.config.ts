@@ -29,7 +29,7 @@ export const componentGroupMap: Record<ComponentCategory, string[]> = {
     Layout: ['grid', 'layout'],
     Navigation: ['anchor', 'menu'],
     'Data Entry': ['checkbox', 'input', 'switch'],
-    'Data Display': ['text link', 'tooltip'],
+    'Data Display': ['tooltip'],
     Feedback: ['drawer', 'message', 'modal', 'popconfirm', 'popover', 'popselect', 'popup', 'tabs'],
     Other: []
 };

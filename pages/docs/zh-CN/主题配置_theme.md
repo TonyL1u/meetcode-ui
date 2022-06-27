@@ -27,15 +27,14 @@ setTheme('dark');
 
 3. 其他
 
-|        名称         |             类型             |         说明         |
-| :-----------------: | :--------------------------: | :------------------: |
-|       current       |  `RemovableRef<ThemeType>`   |  当前正在使用的主题  |
-|       isDark        |    `ComputedRef<boolean>`    |    是否为暗黑模式    |
-|       isLight       |    `ComputedRef<boolean>`    |    是否为亮色模式    |
-|      setTheme       | `(theme: ThemeType) => void` |     手动设置主题     |
-|     switchTheme     |         `() => void`         |       切换主题       |
-|    onThemeChange    |   `EventHookOn<ThemeType>`   |   主题切换钩子函数   |
-| onGlobalThemeChange |   `EventHookOn<ThemeType>`   | 全局主题切换钩子函数 |
+|     名称      |             类型             |        说明        |
+| :-----------: | :--------------------------: | :----------------: |
+|    current    |  `RemovableRef<ThemeType>`   | 当前正在使用的主题 |
+|    isDark     |    `ComputedRef<boolean>`    |   是否为暗黑模式   |
+|    isLight    |    `ComputedRef<boolean>`    |   是否为亮色模式   |
+|   setTheme    | `(theme: ThemeType) => void` |    手动设置主题    |
+|  switchTheme  |         `() => void`         |      切换主题      |
+| onThemeChange |   `EventHookOn<ThemeType>`   |  主题切换钩子函数  |
 
 4. TS
 
@@ -51,7 +50,6 @@ export declare function useThemeController(initialTheme?: ThemeType): {
     setTheme: (theme: ThemeType) => void;
     switchTheme(): void;
     onThemeChange: EventHookOn<ThemeType>;
-    onGlobalThemeChange: EventHookOn<ThemeType>;
 };
 ```
 

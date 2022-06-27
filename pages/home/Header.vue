@@ -4,11 +4,7 @@
             <slot></slot>
         </div>
         <div class="mc-flex mc-items-center">
-            <!-- <McInput style="width: 200px" placeholder="搜索">
-                <template #suffix>
-                    <McIcon :icon="SearchOutline" :size="18" />
-                </template>
-            </McInput> -->
+            <AlgoliaSearch />
             <McButton render="text" @click="switchTheme">
                 <template #icon>
                     <McIcon :size="18">
@@ -44,6 +40,7 @@ import { McButton, McIcon, McInput, McPopselect, useI18nController, useThemeCont
 import { useRouter } from 'vue-router';
 import { LanguageOutline, LogoGithub, MoonOutline, SunnyOutline, SearchOutline } from '@vicons/ionicons5';
 import { repository } from '../../package.json';
+import AlgoliaSearch from './AlgoliaSearch.vue';
 
 const router = useRouter();
 const { switchTheme, isDark } = useThemeController();

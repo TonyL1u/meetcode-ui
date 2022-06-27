@@ -27,15 +27,14 @@ setTheme('dark');
 
 3. Others
 
-|        Name         |             Type             |                      Description                      |
-| :-----------------: | :--------------------------: | :---------------------------------------------------: |
-|       current       |  `RemovableRef<ThemeType>`   |                 Current theme in use                  |
-|       isDark        |    `ComputedRef<boolean>`    |                       Dark mode                       |
-|       isLight       |    `ComputedRef<boolean>`    |                      Light mode                       |
-|      setTheme       | `(theme: ThemeType) => void` |                  Set theme manually                   |
-|     switchTheme     |         `() => void`         |                     Switch theme                      |
-|    onThemeChange    |   `EventHookOn<ThemeType>`   |     The callback function when theme has changed      |
-| onGlobalThemeChange |   `EventHookOn<ThemeType>`   | The globally callback function when theme has changed |
+|     Name      |             Type             |                 Description                  |
+| :-----------: | :--------------------------: | :------------------------------------------: |
+|    current    |  `RemovableRef<ThemeType>`   |             Current theme in use             |
+|    isDark     |    `ComputedRef<boolean>`    |                  Dark mode                   |
+|    isLight    |    `ComputedRef<boolean>`    |                  Light mode                  |
+|   setTheme    | `(theme: ThemeType) => void` |              Set theme manually              |
+|  switchTheme  |         `() => void`         |                 Switch theme                 |
+| onThemeChange |   `EventHookOn<ThemeType>`   | The callback function when theme has changed |
 
 4. Type declarations
 
@@ -51,7 +50,6 @@ export declare function useThemeController(initialTheme?: ThemeType): {
     setTheme: (theme: ThemeType) => void;
     switchTheme(): void;
     onThemeChange: EventHookOn<ThemeType>;
-    onGlobalThemeChange: EventHookOn<ThemeType>;
 };
 ```
 

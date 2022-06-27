@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, reactive, createVNode } from 'vue';
+import { computed, ref, reactive, createVNode, watch } from 'vue';
 import { McTabs, McTab, McIcon, McPopup, McLayout, McLayoutContent, McLayoutHeader, McLayoutSider, McMenu, useThemeController, useI18nController } from 'meetcode-ui';
 import { MenuOutline as IconMenu } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';
@@ -63,7 +63,7 @@ import type { MenuTab, RouteMetaData } from './menu';
 import type { MenuOption, TabsExposeInstance } from 'meetcode-ui';
 
 const router = useRouter();
-const { current: siteTheme } = useThemeController();
+const { current: siteTheme, isDark } = useThemeController();
 const { current: siteLang } = useI18nController();
 const { onRouteChange } = useRouterEventHook();
 const currentTab = ref<'home' | MenuTab>();
@@ -145,6 +145,21 @@ const handleToggled = (isCollapsed: boolean) => {
     collapsed.value = isCollapsed;
 };
 
+watch(
+    isDark,
+    val => {
+        if (val) {
+            document.body.classList.remove('light');
+            document.body.classList.add('dark');
+        } else {
+            document.body.classList.remove('dark');
+            document.body.classList.add('light');
+        }
+    },
+    {
+        immediate: true
+    }
+);
 onRouteChange('meta', ({ meta }) => {
     const { title, tab, route } = meta as RouteMetaData;
     useTitle(`Meetcode UI - ${title}`);

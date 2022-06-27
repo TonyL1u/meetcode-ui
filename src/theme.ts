@@ -13,10 +13,6 @@ export const isLight = computed(() => globalTheme.value === 'light');
 export const isDark = computed(() => globalTheme.value === 'dark');
 
 /**
- * @private
- */
-const globalThemeChangeEventHook = createEventHook<ThemeType>();
-/**
  * User's integrate theme controller
  */
 export function useThemeController(options: ThemeControlOptions = {}) {
@@ -26,7 +22,6 @@ export function useThemeController(options: ThemeControlOptions = {}) {
         if (globalTheme.value !== theme) {
             globalTheme.value = theme;
             themeChangeEventHook.trigger(theme);
-            globalThemeChangeEventHook.trigger(theme);
         }
     };
 
@@ -59,7 +54,6 @@ export function useThemeController(options: ThemeControlOptions = {}) {
                 setTheme('light');
             }
         },
-        onThemeChange: themeChangeEventHook.on,
-        onGlobalThemeChange: globalThemeChangeEventHook.on
+        onThemeChange: themeChangeEventHook.on
     };
 }
