@@ -2,11 +2,22 @@
 
 ## 演示
 
-::: demo
+::: demo CodePreview=Basic
 
 ### 基础用法
 
+最简单的 `Input` 框用法。
+
 <Basic />
+:::
+
+::: demo CodePreview=Textarea
+
+### 文本域
+
+通过 `min-rows` 和 `max-rows` 来控制最小和最大高度。
+
+<Textarea />
 :::
 
 ::: demo CodePreview=Placeholder
@@ -34,6 +45,29 @@
 <Clear />
 :::
 
+::: demo CodePreview=Disabled
+
+### 禁用
+
+<Disabled />
+:::
+
+::: demo CodePreview=Loading
+
+### 加载中
+
+为 `input` 框设置加载状态。
+
+<Loading />
+:::
+
+::: demo CodePreview=WordCount
+
+### 字数限制与统计
+
+<WordCount />
+:::
+
 ::: demo CodePreview=Addon
 
 ### 前缀 & 后缀
@@ -44,11 +78,24 @@
 
 :::
 
-::: demo CodePreview=Loading
+::: demo CodePreview=AutoSize
 
-### 加载中
+### 自适应
 
-<Loading />
+根据输入内容自动调整 `Input` 框大小。
+
+<AutoSize />
+
+:::
+
+::: demo CodePreview=Event
+
+### 事件
+
+一些事件。
+
+<Event />
+
 :::
 
 ::: demo CodePreview=TypingFocus
@@ -58,13 +105,6 @@
 设置 `focus-on-typing` 属性后，可以在键入时自动聚焦。
 
 <TypingFocus />
-:::
-
-::: demo CodePreview=WordCount
-
-### 字数限制与统计
-
-<WordCount />
 :::
 
 ::: demo CodePreview=InputLimit

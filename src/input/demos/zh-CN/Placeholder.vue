@@ -15,15 +15,15 @@
 import { McSpace, McInput } from 'meetcode-ui';
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Homemade+Apple&family=Sacramento&display=swap');
 
-#placeholder {
+svg#placeholder {
     width: 100%;
     font-family: 'Bangers', cursive;
 }
 
-#placeholder text {
+svg#placeholder text {
     text-transform: uppercase;
     animation: stroke 2s infinite alternate;
     letter-spacing: 10px;

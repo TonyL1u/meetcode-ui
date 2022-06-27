@@ -2,7 +2,7 @@ import { defineComponent, onMounted, ref, computed, toRefs, watch, nextTick, ren
 import { or, and, not, isDefined, onStartTyping } from '@vueuse/core';
 import { useThemeRegister, createElementVNode, createComponentVNode, createFragment, createTextVNode, createDirectives, propsMergeSlots, PatchFlags, SlotFlags } from '../_utils_';
 import { mainCssr, lightCssr, darkCssr } from './styles';
-import { inputProps, InputEventType } from './interface';
+import { inputProps } from './interface';
 import { McIcon } from '../icon';
 import { McBaseLoading } from '../_internal_';
 import { Infinite, CloseCircle, EyeOffOutline, EyeOutline } from '@vicons/ionicons5';
@@ -12,7 +12,7 @@ import * as CSS from 'csstype';
 export default defineComponent({
     name: 'Input',
     props: inputProps,
-    emits: ['update:value', 'focus', 'blur', 'change', 'input', 'text-select', 'password-visible-change'],
+    emits: ['update:value', 'focus', 'blur', 'change', 'input', 'text-select', 'clear', 'password-visible-change'],
     setup(props, { slots, emit, expose }) {
         // theme register
         onMounted(() => {
@@ -38,7 +38,7 @@ export default defineComponent({
         const isShowPassword = ref(false);
 
         const showPlaceholder = and(not(mergedValue), or(placeholder, slots['placeholder']), not(isCompositing));
-        const showInputSuffix = and(type.value !== 'textarea', or(wordCount, loading, clearable, type.value === 'password' && passwordVisible.value !== 'none', slots['suffix']));
+        const showInputSuffix = and(type.value !== 'textarea', or(wordCount, loading, and(clearable, not(disabled)), and(type.value === 'password', passwordVisible.value !== 'none', not(disabled)), slots['suffix']));
         const showTextareaSuffix = and(type.value === 'textarea', wordCount);
 
         const textareaMinHeight = computed(() => 21 * (minRows.value || 1) + 11);
@@ -109,7 +109,7 @@ export default defineComponent({
         });
 
         onStartTyping(() => {
-            if (and(not(isFocused), focusOnTyping).value) focus();
+            if (and(not(isFocused), focusOnTyping, not(disabled)).value) focus();
         });
 
         const updateValue = (value: string) => {
@@ -255,6 +255,7 @@ export default defineComponent({
                     onClick: () => {
                         if (disabled.value) return;
                         clear();
+                        emit('clear');
                     }
                 },
                 null,
@@ -366,8 +367,8 @@ export default defineComponent({
                             : showInputSuffix.value
                             ? createElementVNode('div', { class: 'mc-input__suffix' }, [
                                   slots['suffix'] ? createElementVNode('span', { class: 'mc-input-suffix-content' }, [renderSlot(slots, 'suffix')]) : null,
-                                  clearable.value ? clearIconVNode() : null,
-                                  type.value === 'password' && passwordVisible.value !== 'none' ? passwordEyeVnode() : null,
+                                  and(clearable, not(disabled)).value ? clearIconVNode() : null,
+                                  and(type.value === 'password', passwordVisible.value !== 'none', not(disabled)).value ? passwordEyeVnode() : null,
                                   loading.value ? createComponentVNode(McBaseLoading, { size: 14, stroke: 24 }) : null,
                                   wordCount.value ? wordCountVNode() : null
                               ])

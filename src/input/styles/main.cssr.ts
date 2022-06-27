@@ -7,27 +7,18 @@ export default c([
             position: 'relative',
             cursor: 'text',
             maxWidth: '100%',
-            display: 'flex'
+            display: 'flex',
+            transition: 'background 0.2s'
         },
         [
             c('&:not(&--autosize), &--textarea', {
                 width: '100%'
             }),
-            c('&:not(&--disabled):hover, &--focused', [
-                c('.mc-input-wrapper', {
-                    borderColor: '#10b981'
-                })
-            ]),
             c(
                 '&--disabled',
-                {
-                    cursor: 'not-allowed'
-                },
+
                 [c('*', { cursor: 'not-allowed' })]
             ),
-            c('&--focused > &-wrapper', {
-                boxShadow: '0 0 0.5px 1.5px rgba(16, 185, 129, 0.4)'
-            }),
             c('&--with-prepend > &-wrapper', {
                 borderTopLeftRadius: 0,
                 borderBottomLeftRadius: 0
@@ -46,7 +37,8 @@ export default c([
                 boxSizing: 'border-box',
                 fontFamily: 'inherit',
                 width: '100%',
-                maxWidth: '100%'
+                maxWidth: '100%',
+                background: 'inherit'
             }),
             c('&--autosize input&-el', { minWidth: '100%', width: 'var(--input-autosize-width)' }),
             c('textarea&-el', {
@@ -61,8 +53,7 @@ export default c([
             c('&__prefix, &__suffix, &__inner', {
                 display: 'flex',
                 height: '100%',
-                alignItems: 'center',
-                color: '#bbb'
+                alignItems: 'center'
             }),
             c('&__prefix', {
                 marginRight: '4px'
@@ -89,24 +80,15 @@ export default c([
     c('.mc-input-suffix-content', {
         display: 'flex'
     }),
-    c(
-        '.mc-input-clear-icon, .mc-input-eye-icon',
-        {
-            cursor: 'pointer',
-            transition: 'all 0.2s'
-        },
-        [
-            c('&:hover', {
-                color: '#999'
-            })
-        ]
-    ),
+    c('.mc-input-clear-icon, .mc-input-eye-icon', {
+        cursor: 'pointer',
+        transition: 'all 0.2s'
+    }),
     c('.mc-input-wrapper', {
         display: 'flex',
         alignItems: 'center',
         padding: '0 12px',
         flex: 1,
-        border: '1px solid rgb(224, 224, 230)',
         borderRadius: '3px',
         overflow: 'hidden',
         transition: 'all 0.2s',
@@ -124,7 +106,6 @@ export default c([
         pointerEvents: 'none'
     }),
     c('.mc-input-word-count', {
-        color: '#bbb',
         fontSize: '12px',
         lineHeight: '32px',
         display: 'flex',
@@ -132,11 +113,9 @@ export default c([
         pointerEvents: 'none'
     }),
     c('.mc-input-prepend, .mc-input-append', {
-        border: '1px solid rgb(224, 224, 230)',
         padding: '0 12px',
         display: 'flex',
         alignItems: 'center',
-        background: 'rgb(250, 250, 252)',
         zIndex: 1,
         cursor: 'default'
     }),

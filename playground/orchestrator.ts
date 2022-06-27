@@ -41,6 +41,9 @@ export class OrchestratorFile {
       <template>
         ${this.template}
       </template>
+      <style scoped>
+        ${this.style}
+      </style>
       `;
     }
 }
@@ -176,9 +179,10 @@ export async function loadInitialState(fileSourceString: string = '') {
         const [templateStartIndex, templateEndIndex] = [demoFile!.indexOf('<template>'), demoFile!.lastIndexOf('</template>')];
         const template = demoFile!.slice(templateStartIndex + 10, templateEndIndex);
         const script = demoFile!.match(/<script lang="ts" setup>([\s\S]*?)<\/script>/)?.[1] ?? '';
+        const style = demoFile!.match(/<style scoped>([\s\S]*?)<\/style>/)?.[1] ?? '';
 
         orchestrator.packages = initialPackages;
-        addFile(new OrchestratorFile('App.vue', beautify.html(template).trim(), script.trim()));
+        addFile(new OrchestratorFile('App.vue', beautify.html(template).trim(), script.trim(), style.trim()));
         setActiveFile('App.vue');
         shouldUpdateContent.trigger(null);
     });

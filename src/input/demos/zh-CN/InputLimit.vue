@@ -3,9 +3,9 @@
         <McInput :input-limits="['number']" placeholder="只能输入数字" />
         <McInput :input-limits="[/[\u4E00-\u9FA5]/g]" placeholder="只能输入中文" />
         <McInput :input-limits="[canOnlyInput6]" placeholder="只能输入 6" />
-        <McInput :input-limits="[notAllowPaste]">
+        <McInput type="textarea" :input-limits="[notAllowPaste]" :min-rows="6">
             <template #placeholder>
-                <span class="mc-flex mc-items-center">禁止粘贴<McIcon :icon="Ban" style="margin-left: 4px" /></span>
+                <div class="mc-flex mc-items-center mc-justify-center mc-w-full mc-text-2xl">此处禁止粘贴<McIcon :icon="Ban" style="margin-left: 4px" /></div>
             </template>
         </McInput>
     </McSpace>
