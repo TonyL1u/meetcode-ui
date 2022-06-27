@@ -38,7 +38,10 @@
 
 ### 前缀 & 后缀
 
+设置 `type = textarea` 时，仅支持 `prepend` 和 `prefix` 插槽。
+
 <Addon />
+
 :::
 
 ::: demo CodePreview=Loading
@@ -78,7 +81,7 @@
 
 `not-space` ： 不允许输入空格。
 
-可以传入正则表达式或一个函数，返回 `true` 时表示允许输入。
+可以传入正则表达式或一个函数，返回 `true` 时表示允许输入。支持同时校验多条规则。
 
 <InputLimit />
 :::

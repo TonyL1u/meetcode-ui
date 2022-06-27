@@ -15,7 +15,7 @@
 import { McSpace, McInput, InputEventType } from 'meetcode-ui';
 import { Ban } from '@vicons/ionicons5';
 
-const canOnlyInput6 = (value: string, event: Event) => {
+const canOnlyInput6 = (value: string) => {
     if (value.replaceAll('6', '').length > 0) return false;
     return true;
 };
