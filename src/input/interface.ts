@@ -11,10 +11,11 @@ declare module 'csstype' {
 }
 
 export type InputLimitType = 'trim' | 'number' | 'not-special' | 'not-space';
+export type InputPlaceholder = string | (() => RenderFunction);
 export interface InputProps {
-    value?: string;
+    value?: string | string[];
     type?: 'text' | 'password' | 'textarea';
-    placeholder?: string | (() => RenderFunction);
+    placeholder?: InputPlaceholder | InputPlaceholder[];
     disabled?: boolean;
     focusOnTyping?: boolean;
     autosize?: boolean;
@@ -27,6 +28,9 @@ export interface InputProps {
     maxRows?: number;
     maxLength?: number;
     inputLimits?: (InputLimitType | RegExp | ((value: string, event: Event) => boolean))[];
+    composed?: boolean;
+    count?: number;
+    separator?: string | string[];
 }
 
 export interface InputExposeInstance {
@@ -45,7 +49,7 @@ export const enum InputEventType {
 
 export const inputProps = {
     value: {
-        type: String as PropType<InputProps['value']>,
+        type: [String, Array] as PropType<InputProps['value']>,
         default: undefined
     },
     type: {
@@ -53,7 +57,7 @@ export const inputProps = {
         default: 'text'
     },
     placeholder: {
-        type: [String, Function] as PropType<InputProps['placeholder']>,
+        type: [String, Function, Array] as PropType<InputProps['placeholder']>,
         default: '请输入'
     },
     disabled: {
@@ -102,6 +106,18 @@ export const inputProps = {
     },
     inputLimits: {
         type: Array as PropType<InputProps['inputLimits']>,
+        default: undefined
+    },
+    composed: {
+        type: Boolean as PropType<InputProps['composed']>,
+        default: false
+    },
+    inputCount: {
+        type: Number as PropType<InputProps['count']>,
+        default: 2
+    },
+    separator: {
+        type: [String, Array] as PropType<InputProps['separator']>,
         default: undefined
     }
 };

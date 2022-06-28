@@ -1,12 +1,13 @@
-import { defineComponent, onMounted, ref, computed, toRefs, watch, nextTick, renderSlot, getCurrentInstance } from 'vue';
+import { defineComponent, onMounted, ref, computed, toRefs, watch, nextTick, renderSlot, getCurrentInstance, toRaw } from 'vue';
 import { or, and, not, isDefined, onStartTyping } from '@vueuse/core';
-import { useThemeRegister, createElementVNode, createComponentVNode, createFragment, createTextVNode, createDirectives, propsMergeSlots, PatchFlags, SlotFlags } from '../_utils_';
+import { useThemeRegister, createElementVNode, createComponentVNode, createFragment, createTextVNode, propsMergeSlots, PatchFlags } from '../_utils_';
 import { mainCssr, lightCssr, darkCssr } from './styles';
 import { inputProps } from './interface';
 import { McIcon } from '../icon';
 import { McBaseLoading } from '../_internal_';
 import { Infinite, CloseCircle, EyeOffOutline, EyeOutline } from '@vicons/ionicons5';
-import type { InputProps } from './interface';
+import type { VNodeChild } from 'vue';
+import type { InputProps, InputPlaceholder } from './interface';
 import * as CSS from 'csstype';
 
 export default defineComponent({
@@ -24,18 +25,33 @@ export default defineComponent({
             });
         });
         const instance = getCurrentInstance();
-        const { value: valueVM, type, placeholder, disabled, focusOnTyping, autosize, resizable, clearable, wordCount, loading, passwordVisible, minRows, maxRows, maxLength, inputLimits } = toRefs(props);
-        const internalValue = ref('');
+        const { value: valueVM, type, placeholder, disabled, focusOnTyping, autosize, resizable, clearable, wordCount, loading, passwordVisible, minRows, maxRows, maxLength, inputLimits, composed, inputCount, separator } = toRefs(props);
+
+        // TODO:Error throwing utils
+        // diagnosis composed input
+        if (composed.value) {
+            if (!Array.isArray(valueVM.value)) {
+                throw new Error('[McInput]: Make sure provide an Array when using composed input.');
+            } else if (valueVM.value.length !== inputCount.value) {
+                throw new Error(`[McInput]: Make sure the length of the binding value you provide is equal to the inputCount value. value length: ${valueVM.value.length}, inputCount: ${inputCount.value}`);
+            }
+        }
+
+        const internalValue = composed.value ? ref(new Array(inputCount.value).fill('') as string[]) : ref('');
         const mergedValue = isDefined(valueVM) ? valueVM : internalValue;
+        const valueLength = computed(() => (composed.value ? (mergedValue.value as string[]).reduce((pre, cur) => pre + cur).length : mergedValue.value.toString().length));
 
         const inputElRef = ref<HTMLInputElement>();
         const textareaElRef = ref<HTMLTextAreaElement>();
         const inputInst = computed(() => (type.value === 'textarea' ? textareaElRef.value : inputElRef.value));
+        const inputElRefsList = ref<HTMLInputElement[]>();
+        const textareaElRefsList = ref<HTMLTextAreaElement[]>();
+        const inputInstsList = computed(() => (type.value === 'textarea' ? textareaElRefsList.value : inputElRefsList.value));
 
         const isHovered = ref(false);
         const isFocused = ref(false);
-        const isCompositing = ref(false);
         const isShowPassword = ref(false);
+        const isCompositing = composed.value ? ref(new Array(inputCount.value).fill(false) as boolean[]) : ref(false);
 
         const showPlaceholder = and(not(mergedValue), or(placeholder, slots['placeholder']), not(isCompositing));
         const showInputSuffix = and(type.value !== 'textarea', or(wordCount, loading, and(clearable, not(disabled)), and(type.value === 'password', passwordVisible.value !== 'none', not(disabled)), slots['suffix']));
@@ -109,7 +125,9 @@ export default defineComponent({
         });
 
         onStartTyping(() => {
-            if (and(not(isFocused), focusOnTyping, not(disabled)).value) focus();
+            if (and(not(isFocused), focusOnTyping, not(disabled)).value) {
+                focus(composed.value ? 0 : undefined);
+            }
         });
 
         const updateValue = (value: string) => {
@@ -121,53 +139,95 @@ export default defineComponent({
 
             emit('input', value);
         };
+        const updateMultipleValue = (value: string, index?: number) => {
+            if (isDefined(valueVM)) {
+                if (index !== void 0) {
+                    (valueVM.value as string[])[index] = value;
+                } else if (value === '') {
+                    (valueVM.value as string[]).fill('');
+                }
+
+                emit('update:value', toRaw(valueVM), value, index);
+                emit('input', toRaw(valueVM), value, index);
+            } else {
+                if (index !== void 0) {
+                    (mergedValue.value as string[])[index] = value;
+                } else if (value === '') {
+                    (mergedValue.value as string[]).fill('');
+                }
+
+                emit('input', value, index);
+            }
+        };
         const clear = () => {
-            updateValue('');
+            composed.value ? updateMultipleValue('') : updateValue('');
         };
-        const focus = () => {
-            inputInst.value?.focus();
+        const focus = (index?: number) => {
+            if (index === void 0) {
+                inputInst.value?.focus();
+            } else {
+                inputElRefsList.value?.[index].focus();
+            }
         };
-        const blur = () => {
-            inputInst.value?.blur();
+        const blur = (index?: number) => {
+            if (index === void 0) {
+                inputInst.value?.blur();
+            } else {
+                inputElRefsList.value?.[index].blur();
+            }
         };
-        const select = () => {
-            inputInst.value?.select();
+        const select = (index?: number) => {
+            if (index === void 0) {
+                inputInst.value?.select();
+            } else {
+                inputElRefsList.value?.[index].select();
+            }
         };
 
         // event methods
-        const handleFocus = () => {
+        const handleFocus = (payload: Event, index?: number) => {
             isFocused.value = true;
-            emit('focus');
+            emit('focus', index);
         };
-        const handleBlur = () => {
+        const handleBlur = (payload: Event, index?: number) => {
             isFocused.value = false;
-            emit('blur');
+            emit('blur', index);
         };
-        const handleChange = () => {
-            emit('change', inputInst.value?.value || '');
+        const handleChange = (payload: Event, index?: number) => {
+            const value = (composed.value ? inputInstsList.value?.[index!]?.value : inputInst.value?.value) || '';
+            emit('change', value, index);
         };
-        const handleInput = (payload: Event) => {
-            if (isCompositing.value) return;
+        const handleInput = (payload: Event, index?: number) => {
+            if (composed.value ? (isCompositing.value as boolean[])[index!] : (isCompositing.value as boolean)) return;
 
-            const value = inputInst.value?.value || '';
-            if (validInput(value, payload) || value === '') {
-                updateValue(value);
+            const value = (composed.value ? inputInstsList.value?.[index!]?.value : inputInst.value?.value) || '';
+            if (validateInput(value, payload) || value === '') {
+                composed.value ? updateMultipleValue(value, index) : updateValue(value);
             } else {
                 instance?.proxy?.$forceUpdate();
             }
         };
-        const handleSelect = () => {
-            const { selectionStart, selectionEnd, value = '' } = inputInst.value ?? {};
-            emit('text-select', value.slice(selectionStart || 0, selectionEnd || 0));
+        const handleSelect = (payload: Event, index?: number) => {
+            const { selectionStart, selectionEnd, value = '' } = (composed.value ? inputInstsList.value?.[index!] : inputInst.value) ?? {};
+            emit('text-select', value.slice(selectionStart || 0, selectionEnd || 0), index);
         };
-        const handleCompositionStart = () => {
-            isCompositing.value = true;
+        const handleCompositionStart = (payload: CompositionEvent, index?: number) => {
+            if (index !== void 0) {
+                (isCompositing.value as boolean[])[index] = true;
+            } else {
+                isCompositing.value = true;
+            }
         };
-        const handleCompositionEnd = (payload: CompositionEvent) => {
-            isCompositing.value = false;
-            handleInput(payload);
+        const handleCompositionEnd = (payload: CompositionEvent, index?: number) => {
+            if (index !== void 0) {
+                (isCompositing.value as boolean[])[index] = false;
+            } else {
+                isCompositing.value = false;
+            }
+
+            handleInput(payload, index);
         };
-        const validInput = (value: string, event: Event) => {
+        const validateInput = (value: string, event: Event) => {
             const result: boolean[] = [];
             for (const rule of inputLimits.value ?? []) {
                 switch (rule) {
@@ -197,6 +257,63 @@ export default defineComponent({
             return result.every(flag => flag === true);
         };
 
+        // vnodes
+        const inputVNode = (value: string, index?: number) => {
+            return createElementVNode(
+                'input',
+                {
+                    ref_for: composed.value,
+                    ref_key: composed.value ? 'inputElRefsList' : 'inputElRef',
+                    ref: composed.value ? inputElRefsList : inputElRef,
+                    class: 'mc-input-el',
+                    type: isShowPassword.value ? 'text' : type.value,
+                    value,
+                    maxlength: maxLength.value,
+                    disabled: disabled.value,
+                    onFocus: payload => handleFocus(payload, index),
+                    onBlur: payload => handleBlur(payload, index),
+                    onChange: payload => handleChange(payload, index),
+                    onInput: payload => handleInput(payload, index),
+                    onSelect: payload => handleSelect(payload, index),
+                    onCompositionstart: payload => handleCompositionStart(payload, index),
+                    onCompositionend: payload => handleCompositionEnd(payload, index)
+                },
+                null,
+                PatchFlags.PROPS,
+                ['type', 'maxlength', 'value', 'disabled']
+            );
+        };
+        const textareaVNode = () => {
+            return createElementVNode(
+                'textarea',
+                {
+                    ref_key: 'textareaElRef',
+                    ref: textareaElRef,
+                    class: 'mc-input-el',
+                    value: mergedValue.value,
+                    maxlength: maxLength.value,
+                    disabled: disabled.value,
+                    onFocus: handleFocus,
+                    onBlur: handleBlur,
+                    onChange: handleChange,
+                    onInput: handleInput,
+                    onSelect: handleSelect,
+                    onCompositionstart: handleCompositionStart,
+                    onCompositionend: handleCompositionEnd
+                },
+                null,
+                PatchFlags.PROPS,
+                ['maxlength', 'value', 'disabled']
+            );
+        };
+        const innerVNode = (value: string, placeholder: InputPlaceholder | VNodeChild, index?: number) => {
+            const mergedShowPlaceholder = composed.value ? and(not(mergedValue.value[index!]), !!placeholder, not((isCompositing.value as boolean[])[index!])).value : (showPlaceholder.value as boolean);
+
+            return createElementVNode('div', { class: 'mc-input__inner' }, [
+                type.value === 'textarea' ? textareaVNode() : inputVNode(value, index),
+                mergedShowPlaceholder ? createElementVNode('div', { class: 'mc-input-placeholder' }, [placeholder]) : null
+            ]);
+        };
         const passwordEyeVnode = () => {
             let visibleSwitchEvent = {};
             if (passwordVisible.value === 'click') {
@@ -240,9 +357,7 @@ export default defineComponent({
         };
         const wordCountVNode = () => {
             return createElementVNode('span', { class: 'mc-input-word-count' }, [
-                maxLength.value
-                    ? `${mergedValue.value.toString().length} / ${maxLength.value}`
-                    : createFragment([createTextVNode(`${mergedValue.value.toString().length} / `, true), createComponentVNode(McIcon, { icon: Infinite, style: 'margin-left: 3px' })])
+                maxLength.value ? `${valueLength.value} / ${maxLength.value}` : createFragment([createTextVNode(`${valueLength.value} / `, true), createComponentVNode(McIcon, { icon: Infinite, style: 'margin-left: 3px' })])
             ]);
         };
         const clearIconVNode = () => {
@@ -251,7 +366,7 @@ export default defineComponent({
                 {
                     icon: CloseCircle,
                     class: 'mc-input-clear-icon',
-                    style: { opacity: +and(mergedValue, or(isFocused, isHovered)).value },
+                    style: { opacity: +and(valueLength.value !== 0, or(isFocused, isHovered)).value },
                     onClick: () => {
                         if (disabled.value) return;
                         clear();
@@ -261,6 +376,21 @@ export default defineComponent({
                 null,
                 PatchFlags.PROPS,
                 ['style']
+            );
+        };
+        const multipleInnerVNode = () => {
+            function createCountArray<T>(value: T | T[], count: number): T[] {
+                return Array.isArray(value) ? (value.length >= count ? value.slice(0, count) : [...value, ...new Array(count - value.length).fill('')]) : new Array(count).fill(value ?? '');
+            }
+            const separators = createCountArray(separator.value, (inputCount.value || 2) - 1);
+            const placeholders = createCountArray(placeholder.value, inputCount.value || 2);
+
+            // TODO: add key
+            return createFragment(
+                new Array(2 * inputCount.value! - 1).fill(null).map((item, index) => {
+                    if (index % 2 === 0) return innerVNode(mergedValue.value[index >> 1], placeholders[index >> 1], index >> 1);
+                    return createElementVNode('div', { class: 'mc-input__separator' }, separators[(index - 1) >> 1], PatchFlags.TEXT);
+                })
             );
         };
 
@@ -287,7 +417,8 @@ export default defineComponent({
                             'mc-input--autosize': autosize.value,
                             'mc-input--resizable': and(type.value === 'textarea', resizable).value,
                             'mc-input--with-prepend': !!slots['prepend'],
-                            'mc-input--with-append': !!slots['append']
+                            'mc-input--with-append': !!slots['append'],
+                            'mc-input--composed': composed.value
                         }
                     ],
                     style: cssVars.value,
@@ -315,53 +446,7 @@ export default defineComponent({
                     slots['prepend'] ? createElementVNode('div', { class: 'mc-input-prepend' }, [renderSlot(slots, 'prepend')]) : null,
                     createElementVNode('div', { class: 'mc-input-wrapper' }, [
                         slots['prefix'] ? createElementVNode('div', { class: 'mc-input__prefix' }, [renderSlot(slots, 'prefix')]) : null,
-                        createElementVNode('div', { class: 'mc-input__inner' }, [
-                            type.value === 'textarea'
-                                ? createElementVNode(
-                                      'textarea',
-                                      {
-                                          ref_key: 'textareaElRef',
-                                          ref: textareaElRef,
-                                          class: 'mc-input-el',
-                                          value: mergedValue.value,
-                                          maxlength: maxLength.value,
-                                          disabled: disabled.value,
-                                          onFocus: handleFocus,
-                                          onBlur: handleBlur,
-                                          onChange: handleChange,
-                                          onInput: handleInput,
-                                          onSelect: handleSelect,
-                                          onCompositionstart: handleCompositionStart,
-                                          onCompositionend: handleCompositionEnd
-                                      },
-                                      null,
-                                      PatchFlags.PROPS,
-                                      ['maxlength', 'value', 'disabled']
-                                  )
-                                : createElementVNode(
-                                      'input',
-                                      {
-                                          ref_key: 'inputElRef',
-                                          ref: inputElRef,
-                                          class: 'mc-input-el',
-                                          type: isShowPassword.value ? 'text' : type.value,
-                                          value: mergedValue.value,
-                                          maxlength: maxLength.value,
-                                          disabled: disabled.value,
-                                          onFocus: handleFocus,
-                                          onBlur: handleBlur,
-                                          onChange: handleChange,
-                                          onInput: handleInput,
-                                          onSelect: handleSelect,
-                                          onCompositionstart: handleCompositionStart,
-                                          onCompositionend: handleCompositionEnd
-                                      },
-                                      null,
-                                      PatchFlags.PROPS,
-                                      ['type', 'maxlength', 'value', 'disabled']
-                                  ),
-                            showPlaceholder.value ? createElementVNode('div', { class: 'mc-input-placeholder' }, [propsMergeSlots<InputProps, 'placeholder'>(props, slots, 'placeholder')]) : null
-                        ]),
+                        composed.value ? multipleInnerVNode() : innerVNode(mergedValue.value as string, propsMergeSlots<InputProps, 'placeholder'>(props, slots, 'placeholder')),
                         showTextareaSuffix.value
                             ? createElementVNode('div', { class: 'mc-input__suffix' }, [wordCountVNode()])
                             : showInputSuffix.value

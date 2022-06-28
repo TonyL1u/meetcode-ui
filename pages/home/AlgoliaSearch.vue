@@ -44,6 +44,7 @@ onMounted(() => {
 // customize algolia docsearch style
 :root {
     --docsearch-primary-color: #10b981;
+    --docsearch-container-background: rgba(29, 33, 41, 0.6);
 }
 :root .dark {
     --docsearch-modal-background: #242424;
@@ -56,6 +57,7 @@ onMounted(() => {
     --docsearch-text-color: #fff;
     --docsearch-footer-background: #1a1a1a;
     --docsearch-icon-color: #fff;
+    --docsearch-container-background: rgba(29, 33, 41, 0.8);
 }
 
 .dark {

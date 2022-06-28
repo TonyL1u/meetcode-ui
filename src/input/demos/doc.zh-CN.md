@@ -98,6 +98,15 @@
 
 :::
 
+::: demo CodePreview=Compose
+
+### 组合输入框
+
+将多个 `Input` 框组合在一起，通过 `input-count` 属性（默认为 2）来控制组合个数。**绑定的值必须为数组且长度与组合个数一致**。
+<Compose />
+
+:::
+
 ::: demo CodePreview=TypingFocus
 
 ### 输入聚焦

@@ -27,6 +27,14 @@ export default c([
                 borderTopRightRadius: 0,
                 borderBottomRightRadius: 0
             }),
+            c('&--composed &-wrapper', [
+                c('.mc-input-el', {
+                    textAlign: 'center'
+                }),
+                c('.mc-input-placeholder', {
+                    justifyContent: 'center'
+                })
+            ]),
             c('&-el', {
                 appearance: 'none',
                 border: 'none',
@@ -38,7 +46,8 @@ export default c([
                 fontFamily: 'inherit',
                 width: '100%',
                 maxWidth: '100%',
-                background: 'inherit'
+                background: 'inherit',
+                zIndex: 2
             }),
             c('&--autosize input&-el', { minWidth: '100%', width: 'var(--input-autosize-width)' }),
             c('textarea&-el', {
@@ -65,6 +74,12 @@ export default c([
                 flex: 1,
                 position: 'relative',
                 overflow: 'hidden'
+            }),
+            c('&__separator', {
+                display: 'flex',
+                alignItems: 'center',
+                padding: '0 12px',
+                height: '100%'
             }),
             c('&--textarea &__suffix', {
                 position: 'absolute',
@@ -103,7 +118,8 @@ export default c([
         left: 0,
         lineHeight: '32px',
         display: 'flex',
-        pointerEvents: 'none'
+        pointerEvents: 'none',
+        zIndex: 1
     }),
     c('.mc-input-word-count', {
         fontSize: '12px',
