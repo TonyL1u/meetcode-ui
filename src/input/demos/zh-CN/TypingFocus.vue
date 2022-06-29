@@ -1,5 +1,5 @@
 <template>
-    <McInput focus-on-typing />
+    <McInput placeholder="输入内容时会自动聚焦" focus-on-typing />
 </template>
 
 <script lang="ts" setup>

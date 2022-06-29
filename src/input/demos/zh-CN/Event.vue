@@ -1,6 +1,6 @@
 <template>
     <McSpace vertical :gap="4">
-        <McInput v-model:value="value" placeholder="基础事件" @update:value="handleUpdateValue" @focus="handleFocus" @blur="handleBlur" @change="handleChange" @input="handleInput" @text-select="handleTextSelect" />
+        <McInput v-model:value="value" placeholder="基础事件" @update:value="handleUpdateValue" @focus="handleFocus" @blur="handleBlur" @change="handleChange" @input="handleInput" @select="handleTextSelect" />
         <McInput type="password" placeholder="其他事件" clearable @clear="handleClear" @password-visible-change="handleVisibleChange" />
     </McSpace>
 </template>
@@ -27,7 +27,7 @@ const handleInput = (value: string) => {
     McMessage.text(`[Event input]: ${value}`);
 };
 const handleTextSelect = (value: string) => {
-    McMessage.text(`[Event text-select]: ${value}`);
+    McMessage.text(`[Event select]: ${value}`);
 };
 const handleClear = () => {
     McMessage.text('[Event clear]');

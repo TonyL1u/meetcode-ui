@@ -8,7 +8,8 @@ export default c([
             cursor: 'text',
             maxWidth: '100%',
             display: 'flex',
-            transition: 'background 0.2s'
+            transition: 'background 0.2s',
+            fontSize: 'var(--input-font-size)'
         },
         [
             c('&:not(&--autosize), &--textarea', {
@@ -36,12 +37,13 @@ export default c([
                 })
             ]),
             c('&-el', {
+                fontSize: 'var(--input-font-size)',
                 appearance: 'none',
                 border: 'none',
                 outline: 'none',
-                padding: '5.5px 0px',
+                padding: 'var(--input-el-padding)',
                 margin: 0,
-                lineHeight: '21px',
+                lineHeight: 'var(--input-el-line-height)',
                 boxSizing: 'border-box',
                 fontFamily: 'inherit',
                 width: '100%',
@@ -51,13 +53,12 @@ export default c([
             }),
             c('&--autosize input&-el', { minWidth: '100%', width: 'var(--input-autosize-width)' }),
             c('textarea&-el', {
-                fontSize: '14px',
                 resize: 'var(--input-textarea-resizable)' as any,
                 overflow: 'auto',
                 height: 'var(--input-textarea-autosize-height)',
                 minHeight: 'var(--input-textarea-min-height)',
                 maxHeight: 'var(--input-textarea-max-height)',
-                paddingRight: '12px'
+                paddingRight: 'var(--input-padding)'
             }),
             c('&__prefix, &__suffix, &__inner', {
                 display: 'flex',
@@ -65,10 +66,10 @@ export default c([
                 alignItems: 'center'
             }),
             c('&__prefix', {
-                marginRight: '4px'
+                marginRight: 'var(--input-prefix-margin)'
             }),
             c('&__suffix > *', {
-                marginLeft: '4px'
+                marginLeft: 'var(--input-suffix-margin)'
             }),
             c('&__inner', {
                 flex: 1,
@@ -84,7 +85,7 @@ export default c([
             c('&--textarea &__suffix', {
                 position: 'absolute',
                 top: 0,
-                right: '12px',
+                right: 'var(--input-padding)',
                 alignItems: 'flex-end'
             }),
             c('&--textarea &-wrapper', {
@@ -95,14 +96,18 @@ export default c([
     c('.mc-input-suffix-content', {
         display: 'flex'
     }),
-    c('.mc-input-clear-icon, .mc-input-eye-icon', {
+    c('.mc-input-eye-icon', {
         cursor: 'pointer',
         transition: 'all 0.2s'
+    }),
+    c('.mc-input-clear-icon', {
+        transition: 'all 0.2s',
+        opacity: 0
     }),
     c('.mc-input-wrapper', {
         display: 'flex',
         alignItems: 'center',
-        padding: '0 12px',
+        padding: 'var(--input-wrapper-padding)',
         flex: 1,
         borderRadius: '3px',
         overflow: 'hidden',
@@ -116,20 +121,20 @@ export default c([
         right: 0,
         bottom: 0,
         left: 0,
-        lineHeight: '32px',
+        lineHeight: 'var(--input-height)',
         display: 'flex',
         pointerEvents: 'none',
         zIndex: 1
     }),
     c('.mc-input-word-count', {
-        fontSize: '12px',
-        lineHeight: '32px',
+        fontSize: 'var(--input-word-count-font-size)',
+        lineHeight: 'var(--input-height)',
         display: 'flex',
         alignItems: 'center',
         pointerEvents: 'none'
     }),
     c('.mc-input-prepend, .mc-input-append', {
-        padding: '0 12px',
+        padding: 'var(--input-wrapper-padding)',
         display: 'flex',
         alignItems: 'center',
         zIndex: 1,

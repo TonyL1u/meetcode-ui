@@ -57,7 +57,9 @@ onMounted(() => {
     --docsearch-text-color: #fff;
     --docsearch-footer-background: #1a1a1a;
     --docsearch-icon-color: #fff;
-    --docsearch-container-background: rgba(29, 33, 41, 0.8);
+    // --docsearch-container-background: rgba(29, 33, 41, 0.8);
+    --docsearch-key-gradient: #202022;
+    --docsearch-key-shadow: 0 1px #ffffff1f;
 }
 
 .dark {

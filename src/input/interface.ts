@@ -1,4 +1,5 @@
 import type { PropType, RenderFunction } from 'vue';
+import type { UISize, UnionOmit } from '../_utils_';
 import * as CSS from 'csstype';
 
 declare module 'csstype' {
@@ -7,14 +8,37 @@ declare module 'csstype' {
         '--input-textarea-min-height'?: string;
         '--input-textarea-max-height'?: string;
         '--input-autosize-width'?: string;
+        '--input-font-size'?: string;
+        '--input-el-line-height'?: string;
+        '--input-el-padding'?: string;
+        '--input-wrapper-padding'?: string;
+        '--input-padding'?: string;
+        '--input-height'?: string;
+        '--input-word-count-font-size'?: string;
+        '--input-prefix-margin'?: string;
+        '--input-suffix-margin'?: string;
     }
 }
 
-export type InputLimitType = 'trim' | 'number' | 'not-special' | 'not-space';
+export interface InputSizeSet {
+    fontSize: number;
+    wordCountFontSize: string;
+    padding: string;
+    wrapperPaddingX: number;
+    innerPaddingY: number;
+    innerLineHeight: number;
+    addonMargin: string;
+}
 export type InputPlaceholder = string | (() => RenderFunction);
+export type InputLimitType = 'trim' | 'number' | 'not-special' | 'not-space';
+export type InputLimitRule = InputLimitType | RegExp | ((value: string, event: Event) => boolean);
+export type InputSize = UnionOmit<UISize, 'mini'>;
+export type InputSizeMap = Record<InputSize, InputSizeSet>;
+
 export interface InputProps {
     value?: string | string[];
     type?: 'text' | 'password' | 'textarea';
+    size?: InputSize;
     placeholder?: InputPlaceholder | InputPlaceholder[];
     disabled?: boolean;
     focusOnTyping?: boolean;
@@ -27,7 +51,7 @@ export interface InputProps {
     minRows?: number;
     maxRows?: number;
     maxLength?: number;
-    inputLimits?: (InputLimitType | RegExp | ((value: string, event: Event) => boolean))[];
+    inputLimits?: InputLimitRule[];
     composed?: boolean;
     count?: number;
     separator?: string | string[];
@@ -38,6 +62,7 @@ export interface InputExposeInstance {
     blur: () => void;
     select: () => void;
     setPasswordVisible: (visible: boolean) => void;
+    resize: () => void;
 }
 
 export const enum InputEventType {
@@ -55,6 +80,10 @@ export const inputProps = {
     type: {
         type: String as PropType<InputProps['type']>,
         default: 'text'
+    },
+    size: {
+        type: String as PropType<InputProps['size']>,
+        default: 'medium'
     },
     placeholder: {
         type: [String, Function, Array] as PropType<InputProps['placeholder']>,

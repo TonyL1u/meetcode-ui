@@ -9,5 +9,5 @@ export default c(
         alignItems: 'center',
         flexWrap: 'wrap'
     },
-    [c('&--vertical', { alignItems: 'flex-start' }, [c('.mc-space-item', { width: '100%' })]), c('&-item', { padding: '4px 0', display: 'flex' }), c('&-item:not(:last-child)', { margin: 'var(--space-item-gap)' })]
+    [c('&--vertical', { alignItems: 'flex-start' }, [c('& > .mc-space-item', { width: '100%' })]), c('&-item', { padding: '4px 0', display: 'flex' }), c('&-item:not(:last-child)', { margin: 'var(--space-item-gap)' })]
 );

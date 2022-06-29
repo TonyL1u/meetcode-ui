@@ -102,11 +102,11 @@
 
 ## Event
 
-|       名称       |                      类型                      |          说明          |
-| :--------------: | :--------------------------------------------: | :--------------------: |
-| on-update:value  | `(value: string \| number \| boolean) => void` | 绑定值，切换开关后触发 |
-|    on-switch     |                  `() => void`                  |     切换开关后触发     |
-| on-before-switch |                  `() => void`                  |    切换开关前的回调    |
+|       名称       |                      类型                      |           说明           |
+| :--------------: | :--------------------------------------------: | :----------------------: |
+| on-update:value  | `(value: string \| number \| boolean) => void` | 有绑定值，切换开关后触发 |
+|    on-switch     |                  `() => void`                  |      切换开关后触发      |
+| on-before-switch |                  `() => void`                  |     切换开关前的回调     |
 
 ## Slot
 
@@ -117,3 +117,10 @@
 | unchecked-icon | `()` | 未选中时的 handler 图标 |
 |  checked-text  | `()` |    选中时显示的内容     |
 | unchecked-text | `()` |   未选中时显示的内容    |
+
+## Expose
+
+|  名称  |     类型      |       说明       |
+| :----: | :-----------: | :--------------: |
+|   el   | `HTMLElement` | 开关的 Dom 节点  |
+| switch | `() => void`  | 手动切换开关状态 |

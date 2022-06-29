@@ -7,13 +7,43 @@ import { McIcon } from '../icon';
 import { McBaseLoading } from '../_internal_';
 import { Infinite, CloseCircle, EyeOffOutline, EyeOutline } from '@vicons/ionicons5';
 import type { VNodeChild } from 'vue';
-import type { InputProps, InputPlaceholder } from './interface';
+import type { InputProps, InputPlaceholder, InputSizeMap } from './interface';
 import * as CSS from 'csstype';
+
+const SIZE_MAP: InputSizeMap = {
+    small: {
+        wrapperPaddingX: 10,
+        fontSize: 12,
+        innerPaddingY: 4.5,
+        innerLineHeight: 17,
+        padding: '10px',
+        wordCountFontSize: '10px',
+        addonMargin: '4px'
+    },
+    medium: {
+        wrapperPaddingX: 12,
+        fontSize: 14,
+        innerPaddingY: 5.5,
+        innerLineHeight: 21,
+        padding: '12px',
+        wordCountFontSize: '12px',
+        addonMargin: '4px'
+    },
+    large: {
+        wrapperPaddingX: 14,
+        fontSize: 16,
+        innerPaddingY: 6.5,
+        innerLineHeight: 25,
+        padding: '14px',
+        wordCountFontSize: '14px',
+        addonMargin: '6px'
+    }
+};
 
 export default defineComponent({
     name: 'Input',
     props: inputProps,
-    emits: ['update:value', 'focus', 'blur', 'change', 'input', 'text-select', 'clear', 'password-visible-change'],
+    emits: ['update:value', 'focus', 'blur', 'change', 'input', 'select', 'clear', 'password-visible-change'],
     setup(props, { slots, emit, expose }) {
         // theme register
         onMounted(() => {
@@ -25,7 +55,7 @@ export default defineComponent({
             });
         });
         const instance = getCurrentInstance();
-        const { value: valueVM, type, placeholder, disabled, focusOnTyping, autosize, resizable, clearable, wordCount, loading, passwordVisible, minRows, maxRows, maxLength, inputLimits, composed, inputCount, separator } = toRefs(props);
+        const { value: valueVM, type, size, placeholder, disabled, focusOnTyping, autosize, resizable, clearable, wordCount, loading, passwordVisible, minRows, maxRows, maxLength, inputLimits, composed, inputCount, separator } = toRefs(props);
 
         // TODO:Error throwing utils
         // diagnosis composed input
@@ -41,6 +71,7 @@ export default defineComponent({
         const mergedValue = isDefined(valueVM) ? valueVM : internalValue;
         const valueLength = computed(() => (composed.value ? (mergedValue.value as string[]).reduce((pre, cur) => pre + cur).length : mergedValue.value.toString().length));
 
+        const inputRootElRef = ref<HTMLInputElement>();
         const inputElRef = ref<HTMLInputElement>();
         const textareaElRef = ref<HTMLTextAreaElement>();
         const inputInst = computed(() => (type.value === 'textarea' ? textareaElRef.value : inputElRef.value));
@@ -57,18 +88,28 @@ export default defineComponent({
         const showInputSuffix = and(type.value !== 'textarea', or(wordCount, loading, and(clearable, not(disabled)), and(type.value === 'password', passwordVisible.value !== 'none', not(disabled)), slots['suffix']));
         const showTextareaSuffix = and(type.value === 'textarea', wordCount);
 
-        const textareaMinHeight = computed(() => 21 * (minRows.value || 1) + 11);
-        const textareaMaxHeight = computed(() => 21 * (maxRows.value || 1) + 11);
+        const textareaMinHeight = computed(() => SIZE_MAP[size.value!].innerLineHeight * (minRows.value || 1) + SIZE_MAP[size.value!].innerPaddingY * 2);
+        const textareaMaxHeight = computed(() => SIZE_MAP[size.value!].innerLineHeight * (maxRows.value || 1) + SIZE_MAP[size.value!].innerPaddingY * 2);
         const textareaAutosizeHeight = ref(textareaMinHeight.value);
         const inputAutosizeWidth = ref(0);
 
         const cssVars = computed<CSS.Properties>(() => {
+            const { fontSize, innerPaddingY, innerLineHeight, wrapperPaddingX, padding, wordCountFontSize, addonMargin } = SIZE_MAP[size.value!] ?? SIZE_MAP.medium;
             return {
                 '--input-textarea-resizable': resizable.value ? 'vertical' : 'none',
                 '--input-textarea-min-height': `${textareaMinHeight.value}px`,
                 '--input-textarea-max-height': maxRows.value ? `${textareaMaxHeight.value}px` : '',
                 '--input-textarea-autosize-height': `${textareaAutosizeHeight.value}px`,
-                '--input-autosize-width': inputAutosizeWidth.value ? `${inputAutosizeWidth.value}px` : '0px'
+                '--input-autosize-width': inputAutosizeWidth.value ? `${inputAutosizeWidth.value}px` : '0px',
+                '--input-font-size': `${fontSize}px`,
+                '--input-el-padding': `${innerPaddingY}px 0px`,
+                '--input-el-line-height': `${innerLineHeight}px`,
+                '--input-wrapper-padding': `0px ${wrapperPaddingX}px`,
+                '--input-padding': padding,
+                '--input-height': `${innerPaddingY * 2 + innerLineHeight}px`,
+                '--input-word-count-font-size': wordCountFontSize,
+                '--input-prefix-margin': addonMargin,
+                '--input-suffix-margin': addonMargin
             };
         });
 
@@ -96,6 +137,7 @@ export default defineComponent({
         const adjustInputWidth = () => {
             inputAutosizeWidth.value = 0;
 
+            // TODO:autosize when composed
             nextTick(() => {
                 if (inputInst.value) {
                     const { scrollWidth } = inputInst.value;
@@ -103,30 +145,27 @@ export default defineComponent({
                 }
             });
         };
+        const autosizeWatcher = () => {
+            if (not(autosize).value) return;
+
+            if (type.value === 'textarea') {
+                adjustTextareaHeight();
+            } else {
+                adjustInputWidth();
+            }
+        };
 
         // watchers
-        watch(
-            mergedValue,
-            () => {
-                if (not(autosize).value) return;
-
-                if (type.value === 'textarea') {
-                    adjustTextareaHeight();
-                } else {
-                    adjustInputWidth();
-                }
-            },
-            {
-                immediate: true
-            }
-        );
+        watch(mergedValue, autosizeWatcher, {
+            immediate: true
+        });
         watch(isShowPassword, flag => {
             emit('password-visible-change', flag);
         });
 
         onStartTyping(() => {
             if (and(not(isFocused), focusOnTyping, not(disabled)).value) {
-                focus(composed.value ? 0 : undefined);
+                focus(composed.value ? 0 : void 0);
             }
         });
 
@@ -147,8 +186,8 @@ export default defineComponent({
                     (valueVM.value as string[]).fill('');
                 }
 
-                emit('update:value', toRaw(valueVM), value, index);
-                emit('input', toRaw(valueVM), value, index);
+                emit('update:value', toRaw(valueVM.value), index);
+                emit('input', toRaw(valueVM.value), index);
             } else {
                 if (index !== void 0) {
                     (mergedValue.value as string[])[index] = value;
@@ -209,7 +248,7 @@ export default defineComponent({
         };
         const handleSelect = (payload: Event, index?: number) => {
             const { selectionStart, selectionEnd, value = '' } = (composed.value ? inputInstsList.value?.[index!] : inputInst.value) ?? {};
-            emit('text-select', value.slice(selectionStart || 0, selectionEnd || 0), index);
+            emit('select', value.slice(selectionStart || 0, selectionEnd || 0), index);
         };
         const handleCompositionStart = (payload: CompositionEvent, index?: number) => {
             if (index !== void 0) {
@@ -357,16 +396,18 @@ export default defineComponent({
         };
         const wordCountVNode = () => {
             return createElementVNode('span', { class: 'mc-input-word-count' }, [
-                maxLength.value ? `${valueLength.value} / ${maxLength.value}` : createFragment([createTextVNode(`${valueLength.value} / `, true), createComponentVNode(McIcon, { icon: Infinite, style: 'margin-left: 3px' })])
+                maxLength.value ? `${valueLength.value} / ${maxLength.value}` : createFragment([createTextVNode(`${valueLength.value} / `, true), createComponentVNode(McIcon, { icon: Infinite, style: 'margin-left: 3px' }, null, PatchFlags.HOISTED)])
             ]);
         };
         const clearIconVNode = () => {
+            const showIcon = and(valueLength.value > 0, or(isFocused, isHovered)).value;
+
             return createComponentVNode(
                 McIcon,
                 {
                     icon: CloseCircle,
                     class: 'mc-input-clear-icon',
-                    style: { opacity: +and(valueLength.value !== 0, or(isFocused, isHovered)).value },
+                    style: showIcon ? { opacity: 1, cursor: 'pointer' } : {},
                     onClick: () => {
                         if (disabled.value) return;
                         clear();
@@ -395,10 +436,15 @@ export default defineComponent({
         };
 
         expose({
+            el: inputRootElRef,
             focus,
             blur,
             select,
-            resize: () => {},
+            resize: () => {
+                if (composed.value) return;
+
+                autosizeWatcher();
+            },
             setPasswordVisible: (visible: boolean) => {
                 isShowPassword.value = visible;
             }
@@ -408,6 +454,8 @@ export default defineComponent({
             createElementVNode(
                 'div',
                 {
+                    ref_key: 'inputRootElRef',
+                    ref: inputRootElRef,
                     class: [
                         'mc-input',
                         `mc-input--${type.value}`,
@@ -428,7 +476,8 @@ export default defineComponent({
                         const { tagName } = payload.target as HTMLElement;
                         if (tagName !== 'INPUT' && tagName !== 'TEXTAREA') {
                             payload.preventDefault();
-                            if (not(isFocused).value) focus();
+                            // TODO:when click the composed input, show auto focus on the nearest child input
+                            if (not(isFocused).value) focus(composed.value ? 0 : void 0);
                         }
                     },
                     onMouseenter: () => {
@@ -454,7 +503,7 @@ export default defineComponent({
                                   slots['suffix'] ? createElementVNode('span', { class: 'mc-input-suffix-content' }, [renderSlot(slots, 'suffix')]) : null,
                                   and(clearable, not(disabled)).value ? clearIconVNode() : null,
                                   and(type.value === 'password', passwordVisible.value !== 'none', not(disabled)).value ? passwordEyeVnode() : null,
-                                  loading.value ? createComponentVNode(McBaseLoading, { size: 14, stroke: 24 }) : null,
+                                  loading.value ? createComponentVNode(McBaseLoading, { size: 14, stroke: 24 }, null, PatchFlags.HOISTED) : null,
                                   wordCount.value ? wordCountVNode() : null
                               ])
                             : null

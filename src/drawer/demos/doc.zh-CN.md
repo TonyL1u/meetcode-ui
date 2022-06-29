@@ -41,7 +41,7 @@
 |       名称        |                   类型                   |   默认值    |          说明          |
 | :---------------: | :--------------------------------------: | :---------: | :--------------------: |
 |   (v-model)show   |                `boolean`                 |   `false`   |    是否显示 Drawer     |
-|       size        |            `number \| string`            |    `600`    |        抽屉大小        |
+|       size        |            `number \| string`            |    `30%`    |        抽屉大小        |
 | appear-direction  | `'top' \| 'right' \| 'bottom' \| 'left'` |  `'right'`  |      抽屉打开方向      |
 | wrapper-closable  |                `boolean`                 |   `true`    |  点击遮罩是否触发事件  |
 |   shortcut-key    |                 `string`                 | `'Escape'`  |     抽屉关闭快捷键     |
