@@ -11,7 +11,7 @@ export default defineComponent({
         // theme register
         onMounted(() => {
             useThemeRegister({
-                key: 'McSpace',
+                key: 'Space',
                 main: mainCssr
             });
         });

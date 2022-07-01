@@ -1,8 +1,11 @@
 import { computed, watch } from 'vue';
 import { createGlobalState, useStorage, RemovableRef, createEventHook, usePreferredDark } from '@vueuse/core';
+import { defineTheme } from './_utils_';
+import { DefaultLight } from './_theme_/default-light';
 import type { EventHookOn } from '@vueuse/core';
+// import type { Theme } from './_theme_/cssVars';
 
-type ThemeType = 'light' | 'dark';
+type ThemeType = 'light' | 'dark' | string;
 interface ThemeControlOptions {
     initialTheme?: ThemeType;
     useOsTheme?: boolean;
@@ -54,6 +57,13 @@ export function useThemeController(options: ThemeControlOptions = {}) {
                 setTheme('light');
             }
         },
-        onThemeChange: themeChangeEventHook.on
+        onThemeChange: themeChangeEventHook.on,
+        defineTheme
     };
 }
+
+// defineTheme('my-dark', {
+//     Switch: {}
+// });
+
+// defineTheme('theme-test', DefaultLight);

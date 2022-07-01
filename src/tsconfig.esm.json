@@ -1,6 +1,6 @@
 {
     "extends": "../tsconfig.json",
-    "exclude": ["./**/__tests__", "./loading"],
+    "exclude": ["./**/__tests__", "./loading", "./grid"],
     "compilerOptions": {
         "rootDir": ".",
         "outDir": "../es",

@@ -19,7 +19,6 @@ function buildAll() {
 
 function copyExt() {
     cp dist/meetcode-ui.esm.js static
-    cp dist/meetcode-ui.esm.css static
     rimraf static/meetcode-ui.types
     node scripts/generateMonacoTypes.js
 }

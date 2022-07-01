@@ -28,7 +28,7 @@ export default defineComponent({
         // theme register
         onMounted(() => {
             useThemeRegister({
-                key: 'McPopconfirm',
+                key: 'Popconfirm',
                 main: mainCssr
             });
         });

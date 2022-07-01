@@ -44,7 +44,7 @@ export default defineComponent({
         // theme register
         onMounted(() => {
             useThemeRegister({
-                key: 'McButton',
+                key: 'Button',
                 main: mainCssr
             });
         });

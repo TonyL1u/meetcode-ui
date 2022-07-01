@@ -12,7 +12,7 @@ export default defineComponent({
         // theme register
         onMounted(() => {
             useThemeRegister({
-                key: 'McLayout',
+                key: 'Layout',
                 main: mainCssr,
                 light: lightCssr,
                 dark: darkCssr

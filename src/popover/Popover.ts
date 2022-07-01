@@ -16,7 +16,7 @@ export default defineComponent({
         // theme register
         onMounted(() => {
             useThemeRegister({
-                key: 'McPopover',
+                key: 'Popover',
                 main: mainCssr,
                 light: lightCssr,
                 dark: darkCssr

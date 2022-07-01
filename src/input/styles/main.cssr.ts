@@ -9,7 +9,8 @@ export default c([
             maxWidth: '100%',
             display: 'flex',
             transition: 'background 0.2s',
-            fontSize: 'var(--input-font-size)'
+            fontSize: 'var(--input-font-size)',
+            borderRadius: '3px'
         },
         [
             c('&:not(&--autosize), &--textarea', {

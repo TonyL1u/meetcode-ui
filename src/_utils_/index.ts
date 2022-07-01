@@ -5,6 +5,7 @@ export { createKey } from './createKey';
 export { c } from './cssr';
 export { cssUnitTransform } from './cssUnitTransform';
 export { checkParent } from './checkParent';
+export { defineTheme } from './defineTheme';
 export { flatten, flattenWithOptions, flattenTree } from './flatten';
 export { getSlotFirstVNode, getSlotVNodeIndex } from './getSlotFirstVNode';
 export { kebabCaseEscape, kebabToCamel, camelToKebab } from './kebabCaseEscape';
@@ -12,7 +13,7 @@ export { propsMergeSlots } from './propsMergeSlots';
 export { reactiveOmit } from './reactiveOmit';
 export { responsiveTarget } from './responsiveTarget';
 export { sleep } from './sleep';
-export { useThemeRegister } from './useThemeRegister';
+export { useThemeRegister, ThemeMap } from './useThemeRegister';
 export { useSharedItems } from './useSharedItems';
 export { useI18n } from './useI18n';
 

@@ -5,6 +5,13 @@
         </div>
         <div class="mc-flex mc-items-center">
             <AlgoliaSearch />
+            <McPopselect trigger="hover" :options="[{ label: 'my-theme', value: 'my-theme' }]" placement="bottom" :with-arrow="false" @select="handleSelectTheme">
+                <McButton render="text">
+                    <template #icon>
+                        <McIcon :icon="ColorPaletteOutline" :size="20" />
+                    </template>
+                </McButton>
+            </McPopselect>
             <McButton render="text" @click="switchTheme">
                 <template #icon>
                     <McIcon :size="18">
@@ -36,14 +43,14 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { McButton, McIcon, McInput, McPopselect, useI18nController, useThemeController } from 'meetcode-ui';
+import { McButton, McIcon, McPopselect, useI18nController, useThemeController } from 'meetcode-ui';
 import { useRouter } from 'vue-router';
-import { LanguageOutline, LogoGithub, MoonOutline, SunnyOutline, SearchOutline } from '@vicons/ionicons5';
+import { LanguageOutline, LogoGithub, MoonOutline, SunnyOutline, ColorPaletteOutline } from '@vicons/ionicons5';
 import { repository } from '../../package.json';
 import AlgoliaSearch from './AlgoliaSearch.vue';
 
 const router = useRouter();
-const { switchTheme, isDark } = useThemeController();
+const { switchTheme, setTheme, isDark } = useThemeController();
 const { switchLanguage, onLanguageChange } = useI18nController();
 const mainVersion = ref('0.0.20');
 const versions = [
@@ -60,6 +67,10 @@ const versions = [
         value: '0.0.18'
     }
 ];
+const handleSelectTheme = (name: string) => {
+    console.log(name);
+    setTheme(name);
+};
 const handleRouteToGithub = () => {
     window.open(repository.url);
 };

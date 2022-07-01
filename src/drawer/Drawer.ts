@@ -17,7 +17,7 @@ export default defineComponent({
         // theme register
         onMounted(() => {
             useThemeRegister({
-                key: 'McDrawer',
+                key: 'Drawer',
                 main: mainCssr,
                 light: lightCssr,
                 dark: darkCssr

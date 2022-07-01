@@ -29,7 +29,7 @@ export default defineComponent({
         // theme register
         onMounted(() => {
             useThemeRegister({
-                key: 'McPopselect',
+                key: 'Popselect',
                 main: mainCssr,
                 light: lightCssr,
                 dark: darkCssr

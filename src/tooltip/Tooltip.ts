@@ -16,7 +16,7 @@ export default defineComponent({
         // theme register
         onMounted(() => {
             useThemeRegister({
-                key: 'McTooltip',
+                key: 'Tooltip',
                 light: lightCssr,
                 dark: darkCssr
             });

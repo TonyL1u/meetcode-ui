@@ -14,7 +14,7 @@ export default defineComponent({
         // theme register
         onMounted(() => {
             useThemeRegister({
-                key: 'McTabs',
+                key: 'Tabs',
                 main: mainCssr,
                 light: lightCssr,
                 dark: darkCssr

@@ -12,7 +12,7 @@ const handleClick = () => {
     <div class="mc-flex mc-flex-col mc-h-full">
         <div class="mc-flex-1">暂无数据</div>
         <McSpace justify="flex-end">
-            <McButton @click="handleClick">取消</McButton>
+            <McButton ghost @click="handleClick">取消</McButton>
             <McButton type="success" @click="handleClick">确定</McButton>
         </McSpace>
     </div>

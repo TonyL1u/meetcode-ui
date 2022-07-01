@@ -51,7 +51,7 @@ import { computed, ref, reactive, createVNode, watch } from 'vue';
 import { McTabs, McTab, McIcon, McPopup, McLayout, McLayoutContent, McLayoutHeader, McLayoutSider, McMenu, useThemeController, useI18nController } from 'meetcode-ui';
 import { MenuOutline as IconMenu } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';
-import { useTitle } from '@vueuse/core';
+import { useTitle, useColorMode } from '@vueuse/core';
 import { useRouterEventHook } from './utils';
 import Header from './home/Header.vue';
 import Navigator from './home/Navigator.vue';
@@ -63,9 +63,10 @@ import type { MenuTab, RouteMetaData } from './menu';
 import type { MenuOption, TabsExposeInstance } from 'meetcode-ui';
 
 const router = useRouter();
-const { current: siteTheme, isDark } = useThemeController();
+const { current: siteTheme, isDark, defineTheme } = useThemeController();
 const { current: siteLang } = useI18nController();
 const { onRouteChange } = useRouterEventHook();
+const mode = useColorMode({ selector: 'body' });
 const currentTab = ref<'home' | MenuTab>();
 const currentMenuKey = ref<string>();
 const collapsed = ref(false);
@@ -149,11 +150,9 @@ watch(
     isDark,
     val => {
         if (val) {
-            document.body.classList.remove('light');
-            document.body.classList.add('dark');
+            mode.value = 'dark';
         } else {
-            document.body.classList.remove('dark');
-            document.body.classList.add('light');
+            mode.value = 'light';
         }
     },
     {
@@ -183,6 +182,21 @@ onRouteChange('hash', ({ hash }) => {
             scrollContentEl.scrollTop = scrollContentEl.scrollTop - 13;
         }
     });
+});
+
+defineTheme('my-theme', {
+    inherit: 'light',
+    theme: {
+        Switch: {
+            checkedColor: '#10b981',
+            checkedBackground: 'red',
+            uncheckedColor: '#000',
+            uncheckedBackground: 'rgba(0, 0, 0, 0.25)',
+            handlerColor: '#fff',
+            handleBoxShadow: '0 1px 4px 0 rgba(0, 0, 0, 0.3), inset 0 0 1px 0 rgba(0, 0, 0, 0.05)',
+            rippleColor: '#10b98100'
+        }
+    }
 });
 </script>
 

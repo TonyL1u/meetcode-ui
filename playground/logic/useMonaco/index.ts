@@ -2,10 +2,10 @@ import { watch, Ref, unref, ref } from 'vue';
 import { until, createEventHook, EventHookOn, tryOnUnmounted } from '@vueuse/core';
 import darktheme from 'theme-vitesse/themes/vitesse-dark.json';
 import lightTheme from 'theme-vitesse/themes/vitesse-light.json';
-import type { editor as Editor } from 'monaco-editor';
 import { editorPlugins } from '../../monaco/plugins/editor';
 import setupMonaco from '../../monaco';
 import { useThemeController } from 'meetcode-ui';
+import type { editor as Editor } from 'monaco-editor';
 
 export function useMonaco(target: Ref, options: any) {
     const { current: siteTheme, isDark } = useThemeController();

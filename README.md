@@ -26,7 +26,7 @@ npm install meetcode-ui
 </template>
 
 <script lang="ts" setup>
-import { McButton } from 'meetcode-ui'
+import { McButton } from 'meetcode-ui';
 </script>
 ```
 

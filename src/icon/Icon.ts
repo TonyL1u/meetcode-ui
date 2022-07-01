@@ -11,7 +11,7 @@ export default defineComponent({
         // theme register
         onMounted(() => {
             useThemeRegister({
-                key: 'McIcon',
+                key: 'Icon',
                 main: mainCssr
             });
         });

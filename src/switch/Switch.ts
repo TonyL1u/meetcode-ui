@@ -43,7 +43,7 @@ export default defineComponent({
         // theme register
         onMounted(() => {
             useThemeRegister({
-                key: 'McSwitch',
+                key: 'Switch',
                 main: mainCssr,
                 light: lightCssr,
                 dark: darkCssr

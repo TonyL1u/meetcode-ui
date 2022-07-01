@@ -14,7 +14,7 @@ export default defineComponent({
     setup(props, { slots, attrs, emit }) {
         onMounted(() => {
             useThemeRegister({
-                key: 'McCheckbox',
+                key: 'Checkbox',
                 main: mainCssr,
                 light: lightCssr,
                 dark: darkCssr

@@ -18,7 +18,7 @@ export default defineComponent({
         // theme register
         onMounted(() => {
             useThemeRegister({
-                key: 'McModal',
+                key: 'Modal',
                 main: mainCssr,
                 light: lightCssr,
                 dark: darkCssr

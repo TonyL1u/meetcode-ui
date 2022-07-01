@@ -15,7 +15,7 @@ export default defineComponent({
         // theme register
         onMounted(() => {
             useThemeRegister({
-                key: 'McMenu',
+                key: 'Menu',
                 main: mainCssr,
                 light: lightCssr,
                 dark: darkCssr

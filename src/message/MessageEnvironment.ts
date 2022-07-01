@@ -103,7 +103,7 @@ function getMessageEntityVNode(message: Message, index: number) {
 const MessageEnvironment: FunctionalComponent = () => {
     // theme register
     useThemeRegister({
-        key: 'McMessage',
+        key: 'Message',
         main: mainCssr,
         light: lightCssr,
         dark: darkCssr

@@ -14,7 +14,7 @@ export default defineComponent({
         // theme register
         onMounted(() => {
             useThemeRegister({
-                key: 'McAnchor',
+                key: 'Anchor',
                 main: mainCssr,
                 light: lightCssr,
                 dark: darkCssr

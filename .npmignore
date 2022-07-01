@@ -6,10 +6,10 @@ playground
 src
 .DS_Store
 .vscode
-dist
-dist-ssr
 static
 site
+scripts
+public
 *.local
 *.ts
 *.js

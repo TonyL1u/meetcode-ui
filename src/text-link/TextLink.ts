@@ -28,7 +28,7 @@ export default defineComponent({
     setup(props, { slots }) {
         onMounted(() => {
             useThemeRegister({
-                key: 'McTextLink',
+                key: 'TextLink',
                 main: mainCssr
             });
         });
