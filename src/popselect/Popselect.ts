@@ -36,7 +36,7 @@ export default defineComponent({
             });
         });
 
-        const { value: valueVM, options, multiple, maxHeight, autoClose, autoScroll, truncate, matchTrigger } = toRefs(props);
+        const { value: valueVM, options, multiple, maxHeight, autoClose, autoScroll, truncate, matchTrigger, itemHeight, itemStyle } = toRefs(props);
         const popoverRef = ref<PopoverExposeInstance>();
         const cssVars = computed<CSS.Properties>(() => {
             return {
@@ -84,6 +84,7 @@ export default defineComponent({
                 'div',
                 {
                     class: ['mc-popselect-option', { 'mc-popselect-option--selected': isSelected, 'mc-popselect-option--disabled': isDisabled }],
+                    style: itemStyle.value,
                     onClick: () => {
                         if (isDisabled) return;
                         valueVM.value && handleUpdateValue(value);
@@ -100,16 +101,16 @@ export default defineComponent({
                         [createElementVNode('div', { class: { truncate: truncate.value } }, [typeof label === 'string' ? label : label()], PatchFlags.CLASS), checkIconVNode]
                     )
                 ],
-                PatchFlags.CLASS
+                PatchFlags.CLASS | PatchFlags.STYLE
             );
         };
 
         return () => {
-            const itemHeight = 41;
-            const listHeight = options.value ? Math.min(options.value.length * itemHeight, maxHeight.value ?? 0) : 0;
+            const subHeight = itemHeight.value || 41;
+            const listHeight = options.value ? Math.min(options.value.length * subHeight, maxHeight.value ?? 0) : 0;
             const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(isReactive(options.value) ? options.value! : reactive(options.value!), {
                 // Keep `itemHeight` in sync with the item's row.
-                itemHeight
+                itemHeight: subHeight
             });
             scrollToOption = scrollTo;
 

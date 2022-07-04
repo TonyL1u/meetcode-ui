@@ -1,5 +1,6 @@
-import { PropType, RenderFunction } from 'vue';
-import { PopoverProps } from '../popover';
+import type { PropType, RenderFunction } from 'vue';
+import type { PopoverProps } from '../popover';
+import type { ElementStyleSet } from '../_utils_';
 import * as CSS from 'csstype';
 
 declare module 'csstype' {
@@ -24,6 +25,8 @@ export interface PopselectProps {
     autoClose?: boolean;
     autoScroll?: boolean;
     truncate?: boolean | number;
+    itemHeight?: number;
+    itemStyle?: ElementStyleSet;
 }
 export const popselectProps = {
     value: {
@@ -53,6 +56,15 @@ export const popselectProps = {
     truncate: {
         type: [Boolean, Number] as PropType<PopselectProps['truncate']>,
         default: 200
+    },
+    itemHeight: {
+        type: Number as PropType<PopselectProps['itemHeight']>,
+        default: 41
+    },
+    itemStyle: {
+        type: [String, Object] as PropType<PopselectProps['itemStyle']>,
+        default: undefined
     }
 };
+
 export const popselectEmits = ['update:value', 'select'];

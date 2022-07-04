@@ -1,5 +1,5 @@
 import { watch } from 'vue';
-import { globalTheme, isLight, isDark } from '../theme';
+import { globalTheme } from '../theme';
 import type { CNode } from 'css-render';
 
 export interface CSSRenderState {
@@ -113,8 +113,6 @@ ThemeMap.set('dark', { states: useDark });
 watch(
     globalTheme,
     (newTheme, oldTheme) => {
-        // console.log(ThemeMap);
-        // console.log(newTheme, oldTheme);
         unregisterTheme(oldTheme || '');
         registerTheme(newTheme);
     },
