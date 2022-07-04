@@ -210,14 +210,16 @@ export default defineComponent({
                         },
                         [lineBarVNode.value, tabsHeaderVNode.value]
                     ),
-                    createVNode(
-                        'div',
-                        {
-                            class: ['mc-tabs__content', contentClass?.value],
-                            style: contentStyle.value
-                        },
-                        slots.default ? flatten(slots.default(), tabIKey, true) : createCommentVNode('', true)
-                    )
+                    slots.default && flatten(slots.default(), tabPaneIKey).length > 0
+                        ? createVNode(
+                              'div',
+                              {
+                                  class: ['mc-tabs__content', contentClass?.value],
+                                  style: contentStyle.value
+                              },
+                              flatten(slots.default(), tabIKey, true)
+                          )
+                        : null
                 ]
             );
     }

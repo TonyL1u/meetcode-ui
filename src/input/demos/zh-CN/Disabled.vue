@@ -1,5 +1,5 @@
 <template>
-    <McSpace vertical :gap="4" item-style="flex: 1">
+    <McSpace vertical :gap="4">
         <div style="display: flex; width: 100%">
             <McInput v-model:value="value" :placeholder="disabled ? '禁止输入' : '可以输入'" :disabled="disabled" clearable />
             <McSwitch v-model:value="disabled" style="margin-left: 16px" />

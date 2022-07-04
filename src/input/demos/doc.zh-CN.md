@@ -105,6 +105,16 @@
 
 :::
 
+::: demo CodePreview=InputGroup
+
+### 输入组
+
+组合 `Input` 框和按钮。
+
+<InputGroup />
+
+:::
+
 ::: demo CodePreview=Compose
 
 ### 组合输入框

@@ -21,6 +21,7 @@ function copyExt() {
     cp dist/meetcode-ui.esm.js static
     rimraf static/meetcode-ui.types
     node scripts/generateMonacoTypes.js
+    rimraf dist/src
 }
 
 clean
