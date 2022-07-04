@@ -132,7 +132,7 @@ export default c([
                 },
                 [
                     c('&::after', {
-                        borderColor: 'var(--button-hover-border-color)'
+                        borderColor: 'var(--button-hover-border-color) !important'
                     }),
                     c('.mc-button__icon-loading', {
                         borderLeftColor: 'var(--button-hover-color)'
@@ -148,7 +148,7 @@ export default c([
                 },
                 [
                     c('&::after', {
-                        borderColor: 'var(--button-hover-border-color)'
+                        borderColor: 'var(--button-hover-border-color) !important'
                     }),
                     c('.mc-button__icon-loading', {
                         borderLeftColor: 'var(--button-hover-color)'

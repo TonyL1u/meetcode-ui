@@ -199,7 +199,7 @@ export default c([
                 borderColor: 'transparent'
             }),
             c('& > .mc-button', {
-                height: '100%'
+                minHeight: '100%'
             }),
             c('& > .mc-button::after', {
                 zIndex: 1

@@ -8,11 +8,11 @@
                     { label: '+375', value: '+375' },
                     { label: '+666', value: '+666' }
                 ]"
+                placement="bottom-start"
                 trigger="click"
-                match-trigger
                 :with-arrow="false"
             >
-                <McButton style="width: 80px">{{ code || '请选择' }}</McButton>
+                <McButton>{{ code || '请选择' }}</McButton>
             </McPopselect>
             <McInput placeholder="请输入手机号" clearable />
             <McButton style="width: 120px" type="success">发送验证码</McButton>
