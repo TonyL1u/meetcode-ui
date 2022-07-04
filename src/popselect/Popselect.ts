@@ -87,7 +87,7 @@ export default defineComponent({
                     style: itemStyle.value,
                     onClick: () => {
                         if (isDisabled) return;
-                        valueVM.value && handleUpdateValue(value);
+                        valueVM.value !== void 0 && handleUpdateValue(value);
                         emit('select', value);
                         handleHide();
                     }
