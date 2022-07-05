@@ -162,6 +162,13 @@
 <InputLimit />
 :::
 
+::: demo CodePreview=Valid
+
+### 输入验证
+
+<Valid />
+:::
+
 ## Props
 
 |       名称       |                     类型                      |   默认值    |                    说明                    |

@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, ref, computed, toRefs, watch, nextTick, renderSlot, getCurrentInstance, toRaw } from 'vue';
+import { defineComponent, onMounted, ref, computed, toRefs, watch, nextTick, renderSlot, getCurrentInstance, toRaw, toDisplayString } from 'vue';
 import { or, and, not, isDefined, onStartTyping } from '@vueuse/core';
 import { useThemeRegister, createElementVNode, createComponentVNode, createFragment, createTextVNode, propsMergeSlots, PatchFlags } from '../_utils_';
 import { mainCssr, lightCssr, darkCssr } from './styles';
@@ -55,9 +55,9 @@ export default defineComponent({
             });
         });
         const instance = getCurrentInstance();
-        const { value: valueVM, type, size, placeholder, disabled, focusOnTyping, autosize, resizable, clearable, wordCount, loading, passwordVisible, minRows, maxRows, maxLength, inputLimits, composed, inputCount, separator } = toRefs(props);
+        const { value: valueVM, type, size, placeholder, disabled, focusOnTyping, autosize, resizable, clearable, wordCount, loading, passwordVisible, minRows, maxRows, maxLength, inputLimits, composed, inputCount, separator, rules } = toRefs(props);
 
-        // TODO:Error throwing utils
+        // TODO: Error throwing utils
         // diagnosis composed input
         if (composed.value) {
             if (!Array.isArray(valueVM.value)) {
@@ -92,6 +92,13 @@ export default defineComponent({
         const textareaMaxHeight = computed(() => SIZE_MAP[size.value!].innerLineHeight * (maxRows.value || 1) + SIZE_MAP[size.value!].innerPaddingY * 2);
         const textareaAutosizeHeight = ref(textareaMinHeight.value);
         const inputAutosizeWidth = ref(0);
+
+        // valid rules
+        const focusValidRules = computed(() => rules.value?.filter(rule => rule.trigger?.includes('focus')) ?? []);
+        const blurValidHooks = computed(() => rules.value?.filter(rule => rule.trigger?.includes('blur')) ?? []);
+        const clearValidHooks = computed(() => rules.value?.filter(rule => rule.trigger?.includes('clear')) ?? []);
+        const textSelectValidHooks = computed(() => rules.value?.filter(rule => rule.trigger?.includes('text-select')) ?? []);
+        const errorMessage = ref('');
 
         const cssVars = computed<CSS.Properties>(() => {
             const { fontSize, innerPaddingY, innerLineHeight, wrapperPaddingX, padding, wordCountFontSize, addonMargin } = SIZE_MAP[size.value!] ?? SIZE_MAP.medium;
@@ -225,6 +232,22 @@ export default defineComponent({
 
         // event methods
         const handleFocus = (payload: Event, index?: number) => {
+            focusValidRules.value.forEach(async rule => {
+                const { regExp, validator, message } = rule;
+                if (validator) {
+                    const result = await validator(mergedValue.value);
+
+                    if (Object.prototype.toString.call(result) === '[object Error]') {
+                        errorMessage.value = (result as Error).message;
+                        console.log(errorMessage.value);
+                    }
+                } else if (regExp && !composed.value) {
+                    const result = regExp.test(mergedValue.value as string);
+                    if (!result) {
+                        errorMessage.value = message || '';
+                    }
+                }
+            });
             isFocused.value = true;
             emit('focus', index);
         };
@@ -240,7 +263,7 @@ export default defineComponent({
             if (composed.value ? (isCompositing.value as boolean[])[index!] : (isCompositing.value as boolean)) return;
 
             const value = (composed.value ? inputInstsList.value?.[index!]?.value : inputInst.value?.value) || '';
-            if (validateInput(value, payload) || value === '') {
+            if (checkInput(value, payload) || value === '') {
                 composed.value ? updateMultipleValue(value, index) : updateValue(value);
             } else {
                 instance?.proxy?.$forceUpdate();
@@ -266,7 +289,7 @@ export default defineComponent({
 
             handleInput(payload, index);
         };
-        const validateInput = (value: string, event: Event) => {
+        const checkInput = (value: string, event: Event) => {
             const result: boolean[] = [];
             for (const rule of inputLimits.value ?? []) {
                 switch (rule) {
@@ -447,7 +470,8 @@ export default defineComponent({
             },
             setPasswordVisible: (visible: boolean) => {
                 isShowPassword.value = visible;
-            }
+            },
+            validate: () => {}
         });
 
         return () =>
@@ -476,7 +500,7 @@ export default defineComponent({
                         const { tagName } = payload.target as HTMLElement;
                         if (tagName !== 'INPUT' && tagName !== 'TEXTAREA') {
                             payload.preventDefault();
-                            // TODO:when click the composed input, show auto focus on the nearest child input
+                            // TODO: when click the composed input, show auto focus on the nearest child input
                             if (not(isFocused).value) focus(composed.value ? 0 : void 0);
                         }
                     },
@@ -508,7 +532,8 @@ export default defineComponent({
                               ])
                             : null
                     ]),
-                    slots['append'] ? createElementVNode('div', { class: 'mc-input-append' }, [renderSlot(slots, 'append')]) : null
+                    slots['append'] ? createElementVNode('div', { class: 'mc-input-append' }, [renderSlot(slots, 'append')]) : null,
+                    errorMessage.value ? createElementVNode('div', { class: 'mc-input-valid-message' }, errorMessage.value, PatchFlags.TEXT) : null
                 ],
                 PatchFlags.CLASS | PatchFlags.STYLE
             );

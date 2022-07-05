@@ -232,5 +232,10 @@ export default c([
                 marginLeft: '-1px'
             })
         ]
-    )
+    ),
+    c('.mc-input-valid-message', {
+        position: 'absolute',
+        bottom: '-21px',
+        left: '3px'
+    })
 ]);

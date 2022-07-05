@@ -29,6 +29,12 @@ export interface InputSizeSet {
     innerLineHeight: number;
     addonMargin: string;
 }
+export interface InputValidRule {
+    message?: string;
+    regExp?: RegExp;
+    validator?: (value: string | string[]) => Error | boolean | void | Promise<Error | boolean | void>;
+    trigger?: ('input' | 'change' | 'focus' | 'blur' | 'clear' | 'text-select')[];
+}
 export type InputPlaceholder = string | (() => RenderFunction);
 export type InputLimitType = 'trim' | 'number' | 'not-special' | 'not-space';
 export type InputLimitRule = InputLimitType | RegExp | ((value: string, event: Event) => boolean);
@@ -55,6 +61,7 @@ export interface InputProps {
     composed?: boolean;
     count?: number;
     separator?: string | string[];
+    rules?: InputValidRule[];
 }
 
 export interface InputExposeInstance {
@@ -63,6 +70,7 @@ export interface InputExposeInstance {
     select: () => void;
     setPasswordVisible: (visible: boolean) => void;
     resize: () => void;
+    validate: (cb: (isValid: boolean) => void) => Promise<boolean>;
 }
 
 export const enum InputEventType {
@@ -147,6 +155,10 @@ export const inputProps = {
     },
     separator: {
         type: [String, Array] as PropType<InputProps['separator']>,
+        default: undefined
+    },
+    rules: {
+        type: Array as PropType<InputProps['rules']>,
         default: undefined
     }
 };
