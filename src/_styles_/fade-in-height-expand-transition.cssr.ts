@@ -1,4 +1,6 @@
-import { c } from '../_utils_';
+import { CssRender } from 'css-render';
+
+const { c } = CssRender();
 
 export default c([
     c(`&.fade-in-height-expand-transition-leave-from, &.fade-in-height-expand-transition-enter-to`, {

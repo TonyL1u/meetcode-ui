@@ -15,7 +15,9 @@ import {
 } from 'vue';
 import { PatchFlags, SlotFlags } from './tsutils';
 import { kebabToCamel } from './kebabCaseEscape';
-import type { Component, VNodeProps, VNode, VNodeChild, VNodeArrayChildren, HTMLAttributes, Slots } from 'vue';
+import { McBaseTransition } from '../_transition_';
+import { createKey } from './createKey';
+import type { Component, VNodeProps, VNode, VNodeChild, VNodeArrayChildren, HTMLAttributes, Slots, CSSProperties } from 'vue';
 import type { IntrinsicElementAttributes, ElementClassSet, ElementStyleSet, SpecificVNode, Merge } from './tsutils';
 
 type ComponentProps<T extends object> = (T & Record<string, unknown> & VNodeProps & Partial<{ class: ElementClassSet; style: ElementStyleSet }>) | null;
@@ -95,6 +97,25 @@ export function createTextVNode(source: string | object | unknown, patch?: boole
  */
 export function createFragment(children?: unknown[], patchFlag?: PatchFlags.STABLE_FRAGMENT | PatchFlags.KEYED_FRAGMENT | PatchFlags.UNKEYED_FRAGMENT) {
     return _createElementBlock(Fragment, null, children, patchFlag);
+}
+
+/**
+ * 创建基础过渡效果
+ * @param name
+ * @param effect
+ * @param slots
+ * @returns
+ */
+export function createTransition(name: string, effect: CSSProperties, slots: SlotChildren<'default'>) {
+    return createComponentVNode(
+        McBaseTransition,
+        {
+            name,
+            enterFrom: effect,
+            leaveTo: effect
+        },
+        slots
+    );
 }
 
 export function renderSlot(slots: Slots, name: string, props?: Record<string, unknown>, fallback?: () => VNodeArrayChildren, noSlotted?: boolean) {

@@ -3,7 +3,7 @@ import { useThemeRegister, createComponentVNode } from '../_utils_';
 import iconSwitchCssr from '../_styles_/icon-switch-transition.cssr';
 
 export default defineComponent({
-    name: 'BaseIconSwitchTransition',
+    name: 'IconSwitchTransition',
     setup(_, { slots }) {
         onMounted(() => {
             useThemeRegister({

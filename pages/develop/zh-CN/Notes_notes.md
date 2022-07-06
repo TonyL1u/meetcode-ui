@@ -240,3 +240,8 @@
 2022-06-20
 
 -   Menu 通过 options 生成时，修改 options 里的 label 字段之后视图无法更新，暂时通过添加 key 来强制重新渲染
+
+2022-07-06
+
+-   InputGroup 内的 Input 框，如果添加了验证状态，右边框会显示不出来
+-   Input clear 之后失焦无法触发 change 事件

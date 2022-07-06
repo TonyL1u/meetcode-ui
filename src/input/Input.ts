@@ -1,13 +1,13 @@
 import { defineComponent, onMounted, ref, computed, toRefs, watch, nextTick, renderSlot, getCurrentInstance, toRaw, toDisplayString } from 'vue';
-import { or, and, not, isDefined, onStartTyping } from '@vueuse/core';
-import { useThemeRegister, createElementVNode, createComponentVNode, createFragment, createTextVNode, propsMergeSlots, PatchFlags } from '../_utils_';
+import { or, and, not, isDefined, onStartTyping, createEventHook } from '@vueuse/core';
+import { useThemeRegister, createElementVNode, createComponentVNode, createFragment, createTextVNode, createTransition, createDirectives, propsMergeSlots, PatchFlags, setColorAlpha } from '../_utils_';
 import { mainCssr, lightCssr, darkCssr } from './styles';
 import { inputProps } from './interface';
 import { McIcon } from '../icon';
 import { McBaseLoading } from '../_internal_';
 import { Infinite, CloseCircle, EyeOffOutline, EyeOutline } from '@vicons/ionicons5';
 import type { VNodeChild } from 'vue';
-import type { InputProps, InputPlaceholder, InputSizeMap } from './interface';
+import type { InputProps, InputPlaceholder, InputSizeMap, InputValidTrigger, InputValidRule } from './interface';
 import * as CSS from 'csstype';
 
 const SIZE_MAP: InputSizeMap = {
@@ -93,15 +93,13 @@ export default defineComponent({
         const textareaAutosizeHeight = ref(textareaMinHeight.value);
         const inputAutosizeWidth = ref(0);
 
-        // valid rules
-        const focusValidRules = computed(() => rules.value?.filter(rule => rule.trigger?.includes('focus')) ?? []);
-        const blurValidHooks = computed(() => rules.value?.filter(rule => rule.trigger?.includes('blur')) ?? []);
-        const clearValidHooks = computed(() => rules.value?.filter(rule => rule.trigger?.includes('clear')) ?? []);
-        const textSelectValidHooks = computed(() => rules.value?.filter(rule => rule.trigger?.includes('text-select')) ?? []);
+        const validateHook = createEventHook<{ trigger: InputValidTrigger; value: string | string[]; index?: number }>();
         const errorMessage = ref('');
+        const isValid = ref(true);
 
         const cssVars = computed<CSS.Properties>(() => {
             const { fontSize, innerPaddingY, innerLineHeight, wrapperPaddingX, padding, wordCountFontSize, addonMargin } = SIZE_MAP[size.value!] ?? SIZE_MAP.medium;
+
             return {
                 '--input-textarea-resizable': resizable.value ? 'vertical' : 'none',
                 '--input-textarea-min-height': `${textareaMinHeight.value}px`,
@@ -116,10 +114,14 @@ export default defineComponent({
                 '--input-height': `${innerPaddingY * 2 + innerLineHeight}px`,
                 '--input-word-count-font-size': wordCountFontSize,
                 '--input-prefix-margin': addonMargin,
-                '--input-suffix-margin': addonMargin
+                '--input-suffix-margin': addonMargin,
+                '--input-border-color': isValid.value ? '#e0e0e6' : '#dc2626',
+                '--input-active-border-color': isValid.value ? '#10b981' : '#dc2626',
+                '--input-state-border-shadow-color': setColorAlpha(isValid.value ? '#10b981' : '#dc2626', 0.4)
             };
         });
 
+        // some helpers
         const forceSetTextareaHeight = () => {
             inputInst.value?.setAttribute('style', `height: ${textareaAutosizeHeight.value}px`);
         };
@@ -144,7 +146,7 @@ export default defineComponent({
         const adjustInputWidth = () => {
             inputAutosizeWidth.value = 0;
 
-            // TODO:autosize when composed
+            // TODO: autosize when composed
             nextTick(() => {
                 if (inputInst.value) {
                     const { scrollWidth } = inputInst.value;
@@ -161,6 +163,45 @@ export default defineComponent({
                 adjustInputWidth();
             }
         };
+        const checkInput = (value: string, event: Event) => {
+            const result: boolean[] = [];
+            for (const rule of inputLimits.value ?? []) {
+                switch (rule) {
+                    case 'number':
+                        result.push(/^\d+$/.test(value));
+                        break;
+                    case 'not-special':
+                        result.push(!/[\W]/.test(value));
+                        break;
+                    case 'trim':
+                        result.push(!value.startsWith(' ') && !value.endsWith(' '));
+                        break;
+                    case 'not-space':
+                        result.push(value.indexOf(' ') === -1);
+                        break;
+                    default:
+                        if (typeof rule === 'function') {
+                            result.push(!!rule(value, event));
+                        } else if (Object.prototype.toString.call(rule) === '[object RegExp]') {
+                            result.push(!!!value.replace(rule, ''));
+                        } else {
+                            result.push(true);
+                        }
+                }
+            }
+
+            return result.every(flag => flag === true);
+        };
+        const validateInput = async (rule: InputValidRule, value: string | string[] = '', index?: number) => {
+            const { regExp, validator, message } = rule;
+            if (validator) {
+                const result = await validator(value, index);
+                updateValidation(Object.prototype.toString.call(result) !== '[object Error]', (result as Error)?.message ?? '');
+            } else if (regExp && typeof value === 'string') {
+                const result = regExp.test(value);
+                updateValidation(result, message || '');
+            }
+        };
 
         // watchers
         watch(mergedValue, autosizeWatcher, {
@@ -169,11 +210,13 @@ export default defineComponent({
         watch(isShowPassword, flag => {
             emit('password-visible-change', flag);
         });
-
         onStartTyping(() => {
             if (and(not(isFocused), focusOnTyping, not(disabled)).value) {
                 focus(composed.value ? 0 : void 0);
             }
+        });
+        validateHook.on(({ trigger, value, index }) => {
+            (rules.value?.filter(rule => rule.trigger?.includes(trigger)) ?? []).forEach(rule => validateInput(rule, value, index));
         });
 
         const updateValue = (value: string) => {
@@ -205,8 +248,9 @@ export default defineComponent({
                 emit('input', value, index);
             }
         };
-        const clear = () => {
-            composed.value ? updateMultipleValue('') : updateValue('');
+        const updateValidation = (status: boolean, message: string) => {
+            isValid.value = status;
+            errorMessage.value = message;
         };
         const focus = (index?: number) => {
             if (index === void 0) {
@@ -232,31 +276,18 @@ export default defineComponent({
 
         // event methods
         const handleFocus = (payload: Event, index?: number) => {
-            focusValidRules.value.forEach(async rule => {
-                const { regExp, validator, message } = rule;
-                if (validator) {
-                    const result = await validator(mergedValue.value);
-
-                    if (Object.prototype.toString.call(result) === '[object Error]') {
-                        errorMessage.value = (result as Error).message;
-                        console.log(errorMessage.value);
-                    }
-                } else if (regExp && !composed.value) {
-                    const result = regExp.test(mergedValue.value as string);
-                    if (!result) {
-                        errorMessage.value = message || '';
-                    }
-                }
-            });
             isFocused.value = true;
+            validateHook.trigger({ trigger: 'focus', value: mergedValue.value, index });
             emit('focus', index);
         };
         const handleBlur = (payload: Event, index?: number) => {
             isFocused.value = false;
+            validateHook.trigger({ trigger: 'blur', value: mergedValue.value, index });
             emit('blur', index);
         };
         const handleChange = (payload: Event, index?: number) => {
             const value = (composed.value ? inputInstsList.value?.[index!]?.value : inputInst.value?.value) || '';
+            validateHook.trigger({ trigger: 'change', value, index });
             emit('change', value, index);
         };
         const handleInput = (payload: Event, index?: number) => {
@@ -264,6 +295,7 @@ export default defineComponent({
 
             const value = (composed.value ? inputInstsList.value?.[index!]?.value : inputInst.value?.value) || '';
             if (checkInput(value, payload) || value === '') {
+                validateHook.trigger({ trigger: 'input', value, index });
                 composed.value ? updateMultipleValue(value, index) : updateValue(value);
             } else {
                 instance?.proxy?.$forceUpdate();
@@ -271,7 +303,14 @@ export default defineComponent({
         };
         const handleSelect = (payload: Event, index?: number) => {
             const { selectionStart, selectionEnd, value = '' } = (composed.value ? inputInstsList.value?.[index!] : inputInst.value) ?? {};
-            emit('select', value.slice(selectionStart || 0, selectionEnd || 0), index);
+            const selectedValue = value.slice(selectionStart || 0, selectionEnd || 0);
+            validateHook.trigger({ trigger: 'select', value: selectedValue, index });
+            emit('select', selectedValue, index);
+        };
+        const handleClear = () => {
+            validateHook.trigger({ trigger: 'clear', value: '' });
+            composed.value ? updateMultipleValue('') : updateValue('');
+            emit('clear');
         };
         const handleCompositionStart = (payload: CompositionEvent, index?: number) => {
             if (index !== void 0) {
@@ -288,35 +327,6 @@ export default defineComponent({
             }
 
             handleInput(payload, index);
-        };
-        const checkInput = (value: string, event: Event) => {
-            const result: boolean[] = [];
-            for (const rule of inputLimits.value ?? []) {
-                switch (rule) {
-                    case 'number':
-                        result.push(/^\d+$/.test(value));
-                        break;
-                    case 'not-special':
-                        result.push(!/[\W]/.test(value));
-                        break;
-                    case 'trim':
-                        result.push(!value.startsWith(' ') && !value.endsWith(' '));
-                        break;
-                    case 'not-space':
-                        result.push(value.indexOf(' ') === -1);
-                        break;
-                    default:
-                        if (typeof rule === 'function') {
-                            result.push(!!rule(value, event));
-                        } else if (Object.prototype.toString.call(rule) === '[object RegExp]') {
-                            result.push(!!!value.replace(rule, ''));
-                        } else {
-                            result.push(true);
-                        }
-                }
-            }
-
-            return result.every(flag => flag === true);
         };
 
         // vnodes
@@ -431,11 +441,7 @@ export default defineComponent({
                     icon: CloseCircle,
                     class: 'mc-input-clear-icon',
                     style: showIcon ? { opacity: 1, cursor: 'pointer' } : {},
-                    onClick: () => {
-                        if (disabled.value) return;
-                        clear();
-                        emit('clear');
-                    }
+                    onClick: handleClear
                 },
                 null,
                 PatchFlags.PROPS,
@@ -471,7 +477,25 @@ export default defineComponent({
             setPasswordVisible: (visible: boolean) => {
                 isShowPassword.value = visible;
             },
-            validate: () => {}
+            // validate: (maybeRules: InputValidRule[] | ((isValid: boolean) => void), callback?: (isValid: boolean) => void) => {
+            //     // if (Array.isArray(maybeRules)) {
+            //     //     maybeRules.forEach(rule => validateInput(rule, mergedValue.value));
+            //     //     callback && callback(isValid.value);
+            //     // } else {
+            //     //     rules.value?.forEach(validateInput);
+            //     //     maybeRules && maybeRules(isValid.value);
+            //     // }
+            // },
+            reset: () => {
+                updateValidation(true, '');
+            },
+            async validate(trigger: InputValidTrigger, callback?: (isValid: boolean) => void) {
+                validateHook.trigger({ trigger, value: trigger === 'clear' ? '' : mergedValue.value });
+
+                await nextTick();
+                callback && callback(isValid.value);
+                return isValid.value;
+            }
         });
 
         return () =>
@@ -524,6 +548,7 @@ export default defineComponent({
                             ? createElementVNode('div', { class: 'mc-input__suffix' }, [wordCountVNode()])
                             : showInputSuffix.value
                             ? createElementVNode('div', { class: 'mc-input__suffix' }, [
+                                  // TODO: add slot data, e.g. isValid
                                   slots['suffix'] ? createElementVNode('span', { class: 'mc-input-suffix-content' }, [renderSlot(slots, 'suffix')]) : null,
                                   and(clearable, not(disabled)).value ? clearIconVNode() : null,
                                   and(type.value === 'password', passwordVisible.value !== 'none', not(disabled)).value ? passwordEyeVnode() : null,
@@ -533,7 +558,17 @@ export default defineComponent({
                             : null
                     ]),
                     slots['append'] ? createElementVNode('div', { class: 'mc-input-append' }, [renderSlot(slots, 'append')]) : null,
-                    errorMessage.value ? createElementVNode('div', { class: 'mc-input-valid-message' }, errorMessage.value, PatchFlags.TEXT) : null
+                    createTransition(
+                        'SlideInFromTop',
+                        { opacity: 0, transform: 'translateY(-3px)' },
+                        {
+                            default: () =>
+                                createDirectives('v-if', {
+                                    condition: not(isValid).value,
+                                    node: createElementVNode('div', { class: 'mc-input-valid-message' }, errorMessage.value, PatchFlags.TEXT)
+                                })
+                        }
+                    )
                 ],
                 PatchFlags.CLASS | PatchFlags.STYLE
             );

@@ -17,6 +17,9 @@ declare module 'csstype' {
         '--input-word-count-font-size'?: string;
         '--input-prefix-margin'?: string;
         '--input-suffix-margin'?: string;
+        '--input-border-color'?: string;
+        '--input-active-border-color'?: string;
+        '--input-state-border-shadow-color'?: string;
     }
 }
 
@@ -32,9 +35,10 @@ export interface InputSizeSet {
 export interface InputValidRule {
     message?: string;
     regExp?: RegExp;
-    validator?: (value: string | string[]) => Error | boolean | void | Promise<Error | boolean | void>;
-    trigger?: ('input' | 'change' | 'focus' | 'blur' | 'clear' | 'text-select')[];
+    validator?: (value: string | string[], index?: number) => Error | boolean | void | Promise<Error | boolean | void>;
+    trigger?: InputValidTrigger[];
 }
+export type InputValidTrigger = 'input' | 'change' | 'focus' | 'blur' | 'clear' | 'select';
 export type InputPlaceholder = string | (() => RenderFunction);
 export type InputLimitType = 'trim' | 'number' | 'not-special' | 'not-space';
 export type InputLimitRule = InputLimitType | RegExp | ((value: string, event: Event) => boolean);
@@ -70,7 +74,10 @@ export interface InputExposeInstance {
     select: () => void;
     setPasswordVisible: (visible: boolean) => void;
     resize: () => void;
-    validate: (cb: (isValid: boolean) => void) => Promise<boolean>;
+    reset: () => void;
+    validate(trigger: InputValidTrigger, callback?: (isValid: boolean) => unknown): boolean;
+    // validate(rules: InputValidRule[], callback?: (isValid: boolean) => unknown): boolean;
+    // validate(callback?: (isValid: boolean) => unknown): boolean;
 }
 
 export const enum InputEventType {

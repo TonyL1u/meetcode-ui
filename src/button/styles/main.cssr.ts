@@ -85,7 +85,8 @@ export default c([
             c('&__icon, &__content', {
                 transition: 'color 0.2s',
                 fontSize: 'inherit',
-                lineHeight: 1
+                lineHeight: 1,
+                minWidth: 'max-content'
             }),
             c('&__icon', {
                 display: 'flex',

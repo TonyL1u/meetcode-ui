@@ -1,4 +1,6 @@
-import { c } from '../_utils_';
+import { CssRender } from 'css-render';
+
+const { c } = CssRender();
 
 export default c([
     c('&.icon-switch-transition-enter-from, &.icon-switch-transition-leave-to', {

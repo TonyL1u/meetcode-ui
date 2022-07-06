@@ -15,9 +15,9 @@ export interface SwitchThemeVars extends ComponentThemeVars {
 export interface TabsThemeVars extends ComponentThemeVars {
     activeColor: string;
 }
-export interface ThemeVars extends Record<Components, ComponentThemeVars> {
-    Switch: SwitchThemeVars;
-    Tabs: TabsThemeVars;
+export interface ThemeVars extends Partial<Record<Components, ComponentThemeVars>> {
+    Switch?: SwitchThemeVars;
+    Tabs?: TabsThemeVars;
 }
 
 export const ColorSchemeTemplate = {

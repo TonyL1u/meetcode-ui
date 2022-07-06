@@ -9,7 +9,7 @@ export default c([
         [
             c('&:not(&--disabled):hover, &--focused', [
                 c('.mc-input-wrapper::before, .mc-input-wrapper::after', {
-                    borderColor: '#10b981 !important'
+                    borderColor: 'var(--input-active-border-color) !important'
                 })
             ]),
             c(
@@ -20,7 +20,7 @@ export default c([
                 [c('*', { color: '#bbb' })]
             ),
             c('&--focused > &-wrapper::after', {
-                boxShadow: '0 0 0.5px 1.5px rgba(16, 185, 129, 0.4)'
+                boxShadow: '0 0 0.5px 1.5px var(--input-state-border-shadow-color)'
             }),
             c('&__prefix, &__suffix, &__inner', {
                 color: '#bbb'
@@ -34,7 +34,7 @@ export default c([
     ]),
     c('.mc-input-wrapper', [
         c('&::before, &::after', {
-            border: '1px solid #e0e0e6'
+            border: '1px solid var(--input-border-color)'
         })
     ]),
     c('.mc-input-word-count', {

@@ -236,6 +236,9 @@ export default c([
     c('.mc-input-valid-message', {
         position: 'absolute',
         bottom: '-21px',
-        left: '3px'
+        left: '0px',
+        paddingLeft: '3px',
+        color: '#dc2626',
+        transition: '0.2s'
     })
 ]);
