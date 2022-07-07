@@ -4,11 +4,11 @@ export default c([
     c('.mc-tabs', [
         c('&-tab', [
             c('&:hover', {
-                color: 'var(--tab-active-color, #10b981)'
+                color: 'var(--tab-active-color, #16a34a)'
             })
         ]),
         c('&-tab--active', {
-            color: 'var(--tab-active-color, #10b981)'
+            color: 'var(--tab-active-color, #16a34a)'
         }),
         c(
             '&-tab--disabled',
@@ -38,11 +38,11 @@ export default c([
     c('.mc-tabs--bar .mc-tabs__header', [
         c('&--bar-scale .mc-tabs-tab', [
             c('&::after', {
-                background: 'var(--tab-active-color, #10b981)'
+                background: 'var(--tab-active-color, #16a34a)'
             })
         ]),
         c('&-bar', {
-            background: 'var(--tab-active-color, #10b981)'
+            background: 'var(--tab-active-color, #16a34a)'
         })
     ]),
     c('.mc-tabs--card .mc-tabs-tab', [
@@ -53,7 +53,7 @@ export default c([
             },
             [
                 c('&::before', {
-                    background: '#10b981'
+                    background: '#16a34a'
                 }),
                 c('&::after', {
                     background: 'inherit'

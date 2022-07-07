@@ -7,9 +7,8 @@ const containerMounted = ref(false);
 const MessageReactiveList: Message[] = reactive([]);
 
 function mountContainer() {
-    const hostElement = document.createElement('div');
-    render(createVNode(MessageEnvironment), document.body);
     containerMounted.value = true;
+    render(createVNode(MessageEnvironment), document.body);
 }
 
 function createMessage(message: Message) {

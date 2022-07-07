@@ -1,11 +1,11 @@
 <template>
     <McSpace vertical :gap="4">
-        <div style="margin-bottom: 10px; display: flex; width: 100%">
+        <div style="margin-bottom: 6px; display: flex; width: 100%">
             <McInput ref="input" :rules="rules1" clearable />
             <McButton style="margin-left: 16px" @click="handleValidate">验证</McButton>
             <McButton style="margin-left: 16px" type="primary" @click="handleReset">重置</McButton>
         </div>
-        <McInput style="margin-bottom: 8px" placeholder="请输入邮箱" :rules="rules2" :disabled="isValidating" :loading="isValidating" />
+        <McInput style="margin-bottom: 4px" placeholder="请输入邮箱" :rules="rules2" :disabled="isValidating" :loading="isValidating" />
     </McSpace>
 </template>
 
@@ -24,16 +24,15 @@ const rules1: InputValidRule[] = [
                 return new Error('请输入年龄');
             } else if (!/^\d*$/.test(value as string)) {
                 return new Error('请输入数字');
-            } else if (Number(value) < 18) {
+            } else if (Number(value) <= 18) {
                 return new Error('必须大于18岁');
             }
         }
     },
     {
         trigger: ['clear'],
-        validator: value => {
-            return new Error('请输入年龄');
-        }
+        required: true,
+        message: '请输入年龄'
     }
 ];
 const rules2: InputValidRule[] = [
@@ -53,7 +52,7 @@ const rules2: InputValidRule[] = [
     }
 ];
 const handleValidate = () => {
-    input.value?.validate('input', isValid => {
+    input.value?.validate('blur', isValid => {
         isValid ? McMessage.success('验证通过') : McMessage.error('验证失败');
     });
 };

@@ -173,7 +173,8 @@ export default c([
     c(
         '.mc-input-group',
         {
-            display: 'flex'
+            display: 'flex',
+            position: 'relative'
         },
         [
             c('& > .mc-button:not(:last-child):not(:first-child)', {
@@ -226,7 +227,8 @@ export default c([
                 })
             ]),
             c('& > .mc-input', {
-                flex: 1
+                flex: 1,
+                position: 'unset'
             }),
             c('& > .mc-button:not(.mc-button--default) + .mc-input', {
                 marginLeft: '-1px'
@@ -235,10 +237,11 @@ export default c([
     ),
     c('.mc-input-valid-message', {
         position: 'absolute',
-        bottom: '-21px',
+        bottom: 'calc(var(--input-word-count-font-size) * -1.5)',
         left: '0px',
         paddingLeft: '3px',
         color: '#dc2626',
-        transition: '0.2s'
+        transition: '0.2s',
+        fontSize: 'var(--input-word-count-font-size)'
     })
 ]);

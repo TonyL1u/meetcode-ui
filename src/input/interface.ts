@@ -37,6 +37,7 @@ export interface InputValidRule {
     regExp?: RegExp;
     validator?: (value: string | string[], index?: number) => Error | boolean | void | Promise<Error | boolean | void>;
     trigger?: InputValidTrigger[];
+    required?: boolean;
 }
 export type InputValidTrigger = 'input' | 'change' | 'focus' | 'blur' | 'clear' | 'select';
 export type InputPlaceholder = string | (() => RenderFunction);
@@ -75,9 +76,8 @@ export interface InputExposeInstance {
     setPasswordVisible: (visible: boolean) => void;
     resize: () => void;
     reset: () => void;
-    validate(trigger: InputValidTrigger, callback?: (isValid: boolean) => unknown): boolean;
-    // validate(rules: InputValidRule[], callback?: (isValid: boolean) => unknown): boolean;
-    // validate(callback?: (isValid: boolean) => unknown): boolean;
+    validate(callback?: (isValid: boolean) => unknown): Promise<boolean>;
+    validate(trigger?: InputValidTrigger, callback?: (isValid: boolean) => unknown): Promise<boolean>;
 }
 
 export const enum InputEventType {

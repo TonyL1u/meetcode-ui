@@ -1,6 +1,7 @@
 import { defineComponent, onMounted, ref, computed, toRefs, watch, nextTick, renderSlot, getCurrentInstance, toRaw, toDisplayString } from 'vue';
 import { or, and, not, isDefined, onStartTyping, createEventHook } from '@vueuse/core';
 import { useThemeRegister, createElementVNode, createComponentVNode, createFragment, createTextVNode, createTransition, createDirectives, propsMergeSlots, PatchFlags, setColorAlpha } from '../_utils_';
+import { merge } from 'lodash-es';
 import { mainCssr, lightCssr, darkCssr } from './styles';
 import { inputProps } from './interface';
 import { McIcon } from '../icon';
@@ -93,7 +94,7 @@ export default defineComponent({
         const textareaAutosizeHeight = ref(textareaMinHeight.value);
         const inputAutosizeWidth = ref(0);
 
-        const validateHook = createEventHook<{ trigger: InputValidTrigger; value: string | string[]; index?: number }>();
+        const validateHook = createEventHook<{ trigger?: InputValidTrigger; value?: string | string[]; index?: number }>();
         const errorMessage = ref('');
         const isValid = ref(true);
 
@@ -192,13 +193,16 @@ export default defineComponent({
 
             return result.every(flag => flag === true);
         };
-        const validateInput = async (rule: InputValidRule, value: string | string[] = '', index?: number) => {
-            const { regExp, validator, message } = rule;
+        const validateInput = async (rule: InputValidRule, value: string | string[] = mergedValue.value || '', index?: number) => {
+            const { regExp, validator, required, message } = rule;
             if (validator) {
                 const result = await validator(value, index);
                 updateValidation(Object.prototype.toString.call(result) !== '[object Error]', (result as Error)?.message ?? '');
             } else if (regExp && typeof value === 'string') {
                 const result = regExp.test(value);
+                updateValidation(result, message || '');
+            } else if (required) {
+                const result = !!value;
                 updateValidation(result, message || '');
             }
         };
@@ -216,7 +220,8 @@ export default defineComponent({
             }
         });
         validateHook.on(({ trigger, value, index }) => {
-            (rules.value?.filter(rule => rule.trigger?.includes(trigger)) ?? []).forEach(rule => validateInput(rule, value, index));
+            const rulesList = (trigger ? rules.value?.filter(rule => rule.trigger?.includes(trigger)) : rules.value) ?? [];
+            rulesList.forEach(rule => validateInput(rule, value, index));
         });
 
         const updateValue = (value: string) => {
@@ -477,23 +482,20 @@ export default defineComponent({
             setPasswordVisible: (visible: boolean) => {
                 isShowPassword.value = visible;
             },
-            // validate: (maybeRules: InputValidRule[] | ((isValid: boolean) => void), callback?: (isValid: boolean) => void) => {
-            //     // if (Array.isArray(maybeRules)) {
-            //     //     maybeRules.forEach(rule => validateInput(rule, mergedValue.value));
-            //     //     callback && callback(isValid.value);
-            //     // } else {
-            //     //     rules.value?.forEach(validateInput);
-            //     //     maybeRules && maybeRules(isValid.value);
-            //     // }
-            // },
             reset: () => {
                 updateValidation(true, '');
             },
-            async validate(trigger: InputValidTrigger, callback?: (isValid: boolean) => void) {
-                validateHook.trigger({ trigger, value: trigger === 'clear' ? '' : mergedValue.value });
+            async validate(trigger?: InputValidTrigger | ((isValid: boolean) => void), callback?: (isValid: boolean) => void) {
+                if (typeof trigger === 'string') {
+                    validateHook.trigger({ trigger, value: trigger === 'clear' ? '' : mergedValue.value });
+                    await nextTick();
+                    callback && callback(isValid.value);
+                } else {
+                    validateHook.trigger({});
+                    await nextTick();
+                    trigger && trigger(isValid.value);
+                }
 
-                await nextTick();
-                callback && callback(isValid.value);
                 return isValid.value;
             }
         });
