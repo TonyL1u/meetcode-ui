@@ -87,7 +87,7 @@ const show = ref(false);
 
 ### 使用插件
 
-有时候可能需要在独立的 Vue 组件中使用诸如 `vue-router` 、 `pinia` 之类的插件型工具，由于 `Popup` 创建了一个新的 App 实例，因此无法在源文件中读取到上下文使用的插件。
+有时候可能需要在独立的 Vue 组件中使用诸如 `vue-router` 、 `pinia` 之类的插件型工具，由于 `Popup` 创建了一个新的 App 实例，因此无法在源文件中获取到上下文使用的插件。
 
 ```xml
 <script lang="ts" setup>
@@ -102,7 +102,21 @@ const { path } = useRoute();
 </template>
 ```
 
-解决方法是手动传入需要用到的 `Plugins` 。
+可以通过以下两种方法解决：
+
+1. 手动传入需要用到的 `Plugins` 。
+2. 全局注册该插件。
+
+```ts
+// main.ts
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
+import { PopupProvider } from 'meetcode-ui';
+
+createApp(App).use(router).mount('#app');
+PopupProvider.use(router).use(...);
+```
 
 <Plugins />
 :::
@@ -111,6 +125,13 @@ const { path } = useRoute();
 
 ```ts
 export declare function McPopup<P extends Record<string, any>, E extends ObjectEmitsOptions>(source: Component | string, options?: PopupSourceOptions<P, E>): PopupInstance;
+export declare interface PopupSourceOptions<P extends Record<string, any>, E extends ObjectEmitsOptions> {
+    props?: {
+        [K in keyof P]: Ref<P[K]> | P[K];
+    };
+    on?: E;
+    autoDestroy?: boolean;
+}
 export declare interface PopupInstance {
     show(): void;
     show<T extends PopupType>(type: T): void;

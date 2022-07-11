@@ -9,32 +9,49 @@ import type { DrawerExposeInstance } from '../drawer';
 export class PopupProvider {
     app: App<Element> | null = null;
     rootComponent: Component | null = null;
-    static readonly plugins: Plugin[] = [];
+    hostElement: HTMLDivElement | null = null;
+    plugins: Plugin[] = [];
+    // public plugins
+    private static readonly _plugins: Plugin[] = [];
 
     constructor(rootComponent: Component) {
         this.rootComponent = rootComponent;
         this.app = createApp(rootComponent);
-        this.registerPlugins();
+        this.hostElement = document.createElement('div');
     }
 
-    registerPlugins() {}
+    registerPlugins(plugins: Plugin[] = []) {
+        this.plugins = [...this.plugins, ...plugins];
+    }
 
-    static use(plugin: Plugin) {
-        PopupProvider.plugins.push(plugin);
+    mount() {
+        if (!this.app || !this.hostElement) return;
+        // register plugins
+        [...this.plugins, ...PopupProvider._plugins].forEach(plugin => this.app!.use(plugin));
+        // mount app
+        this.app.mount(this.hostElement);
+    }
+
+    unmount() {
+        this.rootComponent = null;
+        this.app?.unmount();
+        this.app = null;
+        this.hostElement = null;
+    }
+
+    public static use(plugin: Plugin) {
+        PopupProvider._plugins.push(plugin);
 
         return PopupProvider;
     }
 }
 
 function McPopup<P extends Record<string, any> = {}, E extends ObjectEmitsOptions = {}>(source: Component | string, options: PopupSourceOptions<P, E> = {}): PopupInstance {
-    let PopupApp: App<Element> | null = null;
-    let PopupHostElement: HTMLDivElement | null = document.createElement('div');
-
+    let PopupApp: PopupProvider | null = null;
     const instance = ref<ModalExposeInstance | DrawerExposeInstance | null>();
     const visible = ref(false);
     const destroy = () => {
         instance.value = null;
-        PopupHostElement = null;
         PopupApp?.unmount();
         PopupApp = null;
     };
@@ -105,17 +122,15 @@ function McPopup<P extends Record<string, any> = {}, E extends ObjectEmitsOption
     return {
         instance,
         show<T extends PopupType = 'modal'>(maybePopupConfig?: T | PopupModalConfig, config: PopupModalConfig | PopupDrawerConfig = {}) {
-            if (instance.value === null || PopupHostElement === null) {
-                throw new Error('[McPopup]: Current instance has been destroyed.');
+            if (instance.value === null) {
+                throw new Error('[McPopup]: Current popup instance has been destroyed.');
             }
             visible.value = true;
             if (!PopupApp) {
-                PopupApp = createApp(typeof maybePopupConfig === 'string' ? createVNode(maybePopupConfig === 'modal' ? modalVNode : drawerVNode, { ...config }) : createVNode(modalVNode, { ...(maybePopupConfig ?? {}) }));
-                // register plugins
                 const { plugins } = options;
-                plugins?.forEach(plugin => PopupApp!.use(plugin));
-
-                PopupApp.mount(PopupHostElement);
+                PopupApp = new PopupProvider(typeof maybePopupConfig === 'string' ? createVNode(maybePopupConfig === 'modal' ? modalVNode : drawerVNode, { ...config }) : createVNode(modalVNode, { ...(maybePopupConfig ?? {}) }));
+                PopupApp.registerPlugins(plugins);
+                PopupApp.mount();
             }
         },
         hide() {

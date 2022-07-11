@@ -147,9 +147,9 @@ export default defineComponent({
             return slots.default ? createVNode('span', { class: 'mc-button__content' }, [renderSlot(slots, 'default')]) : null;
         });
 
-        expose({
-            el: buttonElRef
-        });
+        // expose({
+        //     el: buttonElRef
+        // });
 
         return () =>
             createVNode(

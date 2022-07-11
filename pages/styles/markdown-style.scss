@@ -24,12 +24,17 @@
         }
     }
 
+    pre {
+        padding: 1em;
+        border-radius: 4px;
+        transition: 0.2s;
+    }
+
     code {
         padding: 1px 4px;
         border-radius: 3px;
         font-family: v-mono;
         transition: 0.2s;
-        padding: 0;
     }
 
     pre code {
@@ -95,6 +100,10 @@
             border-bottom: 1px solid #e4e7ed;
         }
 
+        pre {
+            background: #fafafa;
+        }
+
         code {
             background: #f2f4f5;
             border: 1px solid #f0f0f0;
@@ -125,6 +134,10 @@
         th {
             background: rgba(38, 38, 42, 1);
             border-bottom: 1px solid rgba(45, 45, 48, 1);
+        }
+
+        pre {
+            background: #282c34;
         }
 
         code {
