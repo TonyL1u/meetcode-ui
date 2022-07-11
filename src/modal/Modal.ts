@@ -16,13 +16,11 @@ export default defineComponent({
     emits: ['update:show', 'wrapper-click', 'shortcut-stroke', 'after-enter', 'after-leave', 'before-enter', 'cancel', 'confirm'],
     setup(props, { slots, attrs, emit, expose }) {
         // theme register
-        onMounted(() => {
-            useThemeRegister({
-                key: 'Modal',
-                main: mainCssr,
-                light: lightCssr,
-                dark: darkCssr
-            });
+        useThemeRegister({
+            key: 'Modal',
+            main: mainCssr,
+            light: lightCssr,
+            dark: darkCssr
         });
 
         const {

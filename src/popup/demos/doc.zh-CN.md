@@ -83,6 +83,28 @@ const show = ref(false);
 <Drawer />
 :::
 
+::: demo CodePreview=Test3,Plugins
+
+### 使用插件
+
+有时候可能需要在独立的 Vue 组件中使用诸如 `vue-router` 、 `pinia` 之类的插件型工具，由于 `Popup` 创建了一个新的 App 实例，因此无法在源文件中读取到上下文使用的插件。
+
+```xml
+<script lang="ts" setup>
+import { useRoute } from 'vue-router';
+
+// 这里可能会报错：injection "Symbol(router)" not found.
+const { path } = useRoute();
+</script>
+
+<template>
+    {{ path }}
+</template>
+```
+
+<Plugins />
+:::
+
 ## Type Declarations
 
 ```ts

@@ -16,7 +16,6 @@ import {
 import { PatchFlags, SlotFlags } from './tsutils';
 import { kebabToCamel } from './kebabCaseEscape';
 import { McBaseTransition } from '../_transition_';
-import { createKey } from './createKey';
 import type { Component, VNodeProps, VNode, VNodeChild, VNodeArrayChildren, HTMLAttributes, Slots, CSSProperties } from 'vue';
 import type { IntrinsicElementAttributes, ElementClassSet, ElementStyleSet, SpecificVNode, Merge } from './tsutils';
 

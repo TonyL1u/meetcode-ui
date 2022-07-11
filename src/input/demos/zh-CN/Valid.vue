@@ -41,7 +41,7 @@ const rules2: InputValidRule[] = [
         validator: value => {
             isValidating.value = true;
 
-            const regExp = /^([0-9A-Za-z-_.]+)@([0-9a-z]+.[a-z]{2,3}(.[a-z]{2})?)$/g;
+            const regExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return new Promise<Error | boolean>(resolve => {
                 setTimeout(() => {
                     isValidating.value = false;

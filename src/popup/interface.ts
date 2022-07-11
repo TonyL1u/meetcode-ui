@@ -1,4 +1,4 @@
-import type { Ref, VNodeChild, ObjectEmitsOptions } from 'vue';
+import type { Ref, VNodeChild, ObjectEmitsOptions, Plugin } from 'vue';
 import type { ModalExposeInstance, ModalProps, ModalObjectEmits } from '../modal';
 import type { DrawerExposeInstance, DrawerProps, DrawerObjectEmits } from '../drawer';
 
@@ -17,6 +17,7 @@ export interface PopupSourceOptions<P extends Record<string, any>, E extends Obj
         [K in keyof P]: Ref<P[K]> | P[K];
     };
     on?: E;
+    plugins?: Plugin[];
     autoDestroy?: boolean;
 }
 export interface PopupInstance {

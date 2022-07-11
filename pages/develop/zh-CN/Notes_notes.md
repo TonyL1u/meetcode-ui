@@ -246,3 +246,7 @@
 -   InputGroup 内的 Input 框，如果添加了验证状态，右边框会显示不出来
 -   Input clear 之后失焦无法触发 change 事件
 -   Input 进行输入验证时，对同一种触发方式多次校验，出现的 message 会发生闪烁
+
+2022-07-08
+
+-   每一个涉及到 Popover 弹出框的组件，都需要提供一个 props 用于控制是否使用 teleport

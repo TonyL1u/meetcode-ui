@@ -1,18 +1,22 @@
-import { render, createVNode, ref, Component, FunctionalComponent, isRef, defineComponent } from 'vue';
+import { render, createVNode, ref, Component, FunctionalComponent, isRef, defineComponent, createApp } from 'vue';
 import { PopupSourceOptions, PopupInstance, PopupModalConfig, PopupDrawerConfig, PopupType } from './interface';
 import { McModal } from '../modal';
 import { McDrawer } from '../drawer';
-import type { ObjectEmitsOptions } from 'vue';
+import type { ObjectEmitsOptions, App } from 'vue';
 import type { ModalExposeInstance } from '../modal';
 import type { DrawerExposeInstance } from '../drawer';
 
 function McPopup<P extends Record<string, any> = {}, E extends ObjectEmitsOptions = {}>(source: Component | string, options: PopupSourceOptions<P, E> = {}): PopupInstance {
-    const PopupHostElement = ref<HTMLDivElement | null>(document.createElement('div'));
+    let PopupApp: App<Element> | null = null;
+    let PopupHostElement: HTMLDivElement | null = document.createElement('div');
+
     const instance = ref<ModalExposeInstance | DrawerExposeInstance | null>();
     const visible = ref(false);
     const destroy = () => {
         instance.value = null;
-        PopupHostElement.value = null;
+        PopupHostElement = null;
+        PopupApp?.unmount();
+        PopupApp = null;
     };
     const createDefaultVNode = () => {
         const { props: sourceProps = {}, on: sourceEmits = {} } = options;
@@ -81,14 +85,17 @@ function McPopup<P extends Record<string, any> = {}, E extends ObjectEmitsOption
     return {
         instance,
         show<T extends PopupType = 'modal'>(maybePopupConfig?: T | PopupModalConfig, config: PopupModalConfig | PopupDrawerConfig = {}) {
-            if (instance.value === null || PopupHostElement.value === null) {
+            if (instance.value === null || PopupHostElement === null) {
                 throw new Error('[McPopup]: Current instance has been destroyed.');
             }
             visible.value = true;
-            if (typeof maybePopupConfig === 'string') {
-                render(createVNode(maybePopupConfig === 'modal' ? modalVNode : drawerVNode, { ...config }), PopupHostElement.value);
-            } else {
-                render(createVNode(modalVNode, { ...(maybePopupConfig || {}) }), PopupHostElement.value);
+            if (!PopupApp) {
+                PopupApp = createApp(typeof maybePopupConfig === 'string' ? createVNode(maybePopupConfig === 'modal' ? modalVNode : drawerVNode, { ...config }) : createVNode(modalVNode, { ...(maybePopupConfig ?? {}) }));
+                // register plugins
+                const { plugins } = options;
+                plugins?.forEach(plugin => PopupApp!.use(plugin));
+
+                PopupApp.mount(PopupHostElement);
             }
         },
         hide() {
