@@ -102,6 +102,8 @@ const { path } = useRoute();
 </template>
 ```
 
+解决方法是手动传入需要用到的 `Plugins` 。
+
 <Plugins />
 :::
 

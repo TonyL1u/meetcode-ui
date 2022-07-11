@@ -1,10 +1,30 @@
-import { render, createVNode, ref, Component, FunctionalComponent, isRef, defineComponent, createApp } from 'vue';
+import { render, createVNode, ref, FunctionalComponent, isRef, defineComponent, createApp } from 'vue';
 import { PopupSourceOptions, PopupInstance, PopupModalConfig, PopupDrawerConfig, PopupType } from './interface';
 import { McModal } from '../modal';
 import { McDrawer } from '../drawer';
-import type { ObjectEmitsOptions, App } from 'vue';
+import type { ObjectEmitsOptions, App, Plugin, Component } from 'vue';
 import type { ModalExposeInstance } from '../modal';
 import type { DrawerExposeInstance } from '../drawer';
+
+export class PopupProvider {
+    app: App<Element> | null = null;
+    rootComponent: Component | null = null;
+    static readonly plugins: Plugin[] = [];
+
+    constructor(rootComponent: Component) {
+        this.rootComponent = rootComponent;
+        this.app = createApp(rootComponent);
+        this.registerPlugins();
+    }
+
+    registerPlugins() {}
+
+    static use(plugin: Plugin) {
+        PopupProvider.plugins.push(plugin);
+
+        return PopupProvider;
+    }
+}
 
 function McPopup<P extends Record<string, any> = {}, E extends ObjectEmitsOptions = {}>(source: Component | string, options: PopupSourceOptions<P, E> = {}): PopupInstance {
     let PopupApp: App<Element> | null = null;
