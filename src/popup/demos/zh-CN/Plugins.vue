@@ -1,5 +1,5 @@
 <template>
-    <McButton type="success" ghost @click="show()">打开</McButton>
+    <McButton type="success" ghost @click="show()">使用了 vue-router</McButton>
 </template>
 
 <script lang="ts" setup>
@@ -9,7 +9,7 @@ import Test from './Test3.vue';
 import router from '@pages/router';
 
 const { show } = McPopup(Test, {
-    // 传入需要使用的插件
+    // 2. 手动传入需要使用的插件
     plugins: [router],
     autoDestroy: false
 });

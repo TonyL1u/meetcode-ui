@@ -1,22 +1,22 @@
-import { render, createVNode, ref, FunctionalComponent, isRef, defineComponent, createApp } from 'vue';
-import { PopupSourceOptions, PopupInstance, PopupModalConfig, PopupDrawerConfig, PopupType } from './interface';
+import { createVNode, ref, isRef, defineComponent, createApp } from 'vue';
 import { McModal } from '../modal';
 import { McDrawer } from '../drawer';
-import type { ObjectEmitsOptions, App, Plugin, Component } from 'vue';
+import type { ObjectEmitsOptions, App, Plugin, Component, FunctionalComponent } from 'vue';
+import type { PopupSourceOptions, PopupInstance, PopupModalConfig, PopupDrawerConfig, PopupType } from './interface';
 import type { ModalExposeInstance } from '../modal';
 import type { DrawerExposeInstance } from '../drawer';
 
 export class PopupProvider {
-    app: App<Element> | null = null;
-    rootComponent: Component | null = null;
-    hostElement: HTMLDivElement | null = null;
-    plugins: Plugin[] = [];
+    private app: App<Element> | null = null;
+    private rootComponent: Component | null = null;
+    private hostElement: HTMLDivElement | null = null;
+    private plugins: Plugin[] = [];
     // public plugins
     private static readonly _plugins: Plugin[] = [];
 
     constructor(rootComponent: Component) {
         this.rootComponent = rootComponent;
-        this.app = createApp(rootComponent);
+        this.app = createApp(this.rootComponent);
         this.hostElement = document.createElement('div');
     }
 
@@ -33,10 +33,10 @@ export class PopupProvider {
     }
 
     unmount() {
-        this.rootComponent = null;
         this.app?.unmount();
         this.app = null;
         this.hostElement = null;
+        this.rootComponent = null;
     }
 
     public static use(plugin: Plugin) {
@@ -127,7 +127,7 @@ function McPopup<P extends Record<string, any> = {}, E extends ObjectEmitsOption
             }
             visible.value = true;
             if (!PopupApp) {
-                const { plugins } = options;
+                const { plugins = [] } = options;
                 PopupApp = new PopupProvider(typeof maybePopupConfig === 'string' ? createVNode(maybePopupConfig === 'modal' ? modalVNode : drawerVNode, { ...config }) : createVNode(modalVNode, { ...(maybePopupConfig ?? {}) }));
                 PopupApp.registerPlugins(plugins);
                 PopupApp.mount();

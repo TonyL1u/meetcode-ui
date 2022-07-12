@@ -20,11 +20,11 @@ const show = ref(false);
 </script>
 ```
 
-这段关于模态框的代码功能是完全独立的，因此可以将其完全抽离，更易于代码维护。
+如果想在多个场景下使用同一个模态框，可能需要在每一个使用到的地方都重新加入这段代码。而这段关于模态框的代码功能是完全独立的，因此可以将其完全抽离，更易于代码复用与维护。
 
 ## 演示
 
-::: demo CodePreview=Test1,Basic
+::: demo CodePreview=Basic,Test1
 
 ### 基础用法
 
@@ -33,7 +33,7 @@ const show = ref(false);
 <Basic />
 :::
 
-::: demo CodePreview=ModalStyle
+::: demo CodePreview=ModalStyle,Test1
 
 ### 弹窗样式
 
@@ -47,7 +47,7 @@ const show = ref(false);
 
 :::
 
-::: demo CodePreview=Test2,Communicate
+::: demo CodePreview=Communicate,Test2
 
 ### 通信
 
@@ -83,11 +83,11 @@ const show = ref(false);
 <Drawer />
 :::
 
-::: demo CodePreview=Test3,Plugins
+::: demo CodePreview=Plugins,Test3
 
-### 使用插件
+### 插件
 
-有时候可能需要在独立的 Vue 组件中使用诸如 `vue-router` 、 `pinia` 之类的插件型工具，由于 `Popup` 创建了一个新的 App 实例，因此无法在源文件中获取到上下文使用的插件。
+有时候可能需要在独立的 Vue 组件中使用诸如 `vue-router` 、 `pinia` 之类的插件型工具，由于 `Popup` 创建了一个新的 App 实例，因此源文件无法与上下文共享同一个插件实例。
 
 ```xml
 <script lang="ts" setup>
@@ -104,8 +104,8 @@ const { path } = useRoute();
 
 可以通过以下两种方法解决：
 
-1. 手动传入需要用到的 `Plugins` 。
-2. 全局注册该插件。
+1. 全局注册插件。注册后，在所有 `Popup` 实例中均可使用。
+2. 手动注册插件。注册后，仅限当前实例可以使用。
 
 ```ts
 // main.ts
@@ -115,6 +115,7 @@ import router from './router';
 import { PopupProvider } from 'meetcode-ui';
 
 createApp(App).use(router).mount('#app');
+// 1. 全局注册插件
 PopupProvider.use(router).use(...);
 ```
 
@@ -130,14 +131,16 @@ export declare interface PopupSourceOptions<P extends Record<string, any>, E ext
         [K in keyof P]: Ref<P[K]> | P[K];
     };
     on?: E;
+    plugins?: Plugin[];
     autoDestroy?: boolean;
 }
 export declare interface PopupInstance {
     show(): void;
     show<T extends PopupType>(type: T): void;
-    show(config: PopupModalConfig): void;
-    show<T extends PopupType>(type: T, config: T extends 'modal' ? PopupModalConfig : PopupDrawerConfig): void;
+    show(config: PopupModalConfig & Record<string, any>): void;
+    show<T extends PopupType>(type: T, config: (T extends 'modal' ? PopupModalConfig : PopupDrawerConfig) & Record<string, any>): void;
     hide: () => void;
-    instance: Ref<ModalExposeInstance | DrawerExposeInstance | undefined>;
+    destroy: () => void;
+    instance: Ref<ModalExposeInstance | DrawerExposeInstance | undefined | null>;
 }
 ```
