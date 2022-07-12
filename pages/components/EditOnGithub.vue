@@ -1,24 +1,27 @@
 <script lang="ts" setup>
+import { toRefs } from 'vue';
 import { McIcon, McTooltip, McPopup } from 'meetcode-ui';
 import { CreateOutline as IconEdit, ReaderOutline } from '@vicons/ionicons5';
 import UpdateRecord from './UpdateRecord.vue';
 import { repository } from '../../package.json';
 
-const props = defineProps<{ path: string }>();
+const props = defineProps<{ path: string; component: string }>();
+const { path, component } = toRefs(props);
 const handleEditOnGithub = () => {
-    window.open(`${repository.url}/blob/develop/${props.path}`);
+    window.open(`${repository.url}/blob/develop/${path.value}`);
 };
 const handleOpenDrawer = () => {
-    // return;
-
-    const { show, hide } = McPopup(UpdateRecord, {
+    const { show, hide } = McPopup<{ component: string }>(UpdateRecord, {
+        props: {
+            component: component.value
+        },
         on: {
             close() {
                 hide();
             }
         }
     });
-    show('drawer', { title: '更新记录', size: '600px' });
+    show('drawer', { title: `${component.value} 更新记录`, size: '700px', headerStyle: { textTransform: 'capitalize' } });
 };
 </script>
 

@@ -61,7 +61,9 @@ export default {
 
         md.renderer.rules['heading_open'] = function (tokens, idx, options, env: { id: string }, self) {
             if (tokens[idx].tag === 'h1') {
-                return `<EditOnGithub ${self.renderAttrs(tokens[idx])} path="${env.id.split('/meetcode-ui/')[1]}">`;
+                const path = env.id.split('/meetcode-ui/')[1];
+                const component = env.id.match(/\/src\/(.*)\/demos/)?.[1];
+                return `<EditOnGithub ${self.renderAttrs(tokens[idx])} path="${path}" component="${component}">`;
             }
 
             return self.renderToken(tokens, idx, options);
