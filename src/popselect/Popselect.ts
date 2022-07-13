@@ -106,7 +106,7 @@ export default defineComponent({
         };
 
         return () => {
-            const subHeight = itemHeight.value || 41;
+            const subHeight = itemHeight.value!;
             const listHeight = options.value ? Math.min(options.value.length * subHeight, maxHeight.value ?? 0) : 0;
             const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(isReactive(options.value) ? options.value! : reactive(options.value!), {
                 // Keep `itemHeight` in sync with the item's row.

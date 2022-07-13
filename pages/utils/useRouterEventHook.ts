@@ -1,4 +1,4 @@
-import { watchOnce, createEventHook } from '@vueuse/core';
+import { watchOnce, createEventHook, tryOnBeforeUnmount } from '@vueuse/core';
 import { useRouter, useRoute } from 'vue-router';
 import type { Router, RouteLocationNormalized, RouteLocationNormalizedLoaded } from 'vue-router';
 import type { EventHook, EventHookOn } from '@vueuse/core';
@@ -59,6 +59,12 @@ export function useRouterEventHook(): UseRouterEventHookReturn {
             if (options?.immediate) {
                 cb({ [key]: route[key], route } as HookPayload<T>);
             }
+
+            // Auto off when unmount, otherwise you need to call `off()` manually.
+            tryOnBeforeUnmount(() => {
+                createRouteChangeEventHook(key).off(cb);
+            });
+
             return createRouteChangeEventHook(key).on(cb);
         }
     };

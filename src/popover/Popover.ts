@@ -23,7 +23,7 @@ export default defineComponent({
             });
         });
 
-        const { trigger, placement, destroyWhenHide, zIndex, show, disabled, withArrow, showDelay, hideDelay, offset, wrapBoundary, matchTrigger, autoSync, title, followMode, x, y } = toRefs(props);
+        const { trigger, placement, destroyWhenHide, zIndex, show, disabled, withArrow, showDelay, hideDelay, offset, wrapBoundary, matchTrigger, autoSync, title, followMode, x, y, teleport } = toRefs(props);
         const showRef = trigger.value === 'manual' ? show : ref(!!props.show);
         const followerRef = ref(null);
         const followX = ref(0);
@@ -60,7 +60,7 @@ export default defineComponent({
             const modal = inject(modalInjectionKey, null);
             const drawer = inject(drawerInjectionKey, null);
 
-            return !!popover || !!modal || !!drawer;
+            return !teleport.value || !!popover || !!modal || !!drawer;
         });
 
         onClickOutside(contentElRef, (e: MouseEvent) => {

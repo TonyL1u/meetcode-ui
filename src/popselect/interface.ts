@@ -59,7 +59,7 @@ export const popselectProps = {
     },
     itemHeight: {
         type: Number as PropType<PopselectProps['itemHeight']>,
-        default: 41
+        default: 40
     },
     itemStyle: {
         type: [String, Object] as PropType<PopselectProps['itemStyle']>,

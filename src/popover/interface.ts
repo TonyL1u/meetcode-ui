@@ -36,6 +36,7 @@ export interface PopoverProps {
     followMode?: PopoverFollowMode;
     x?: number;
     y?: number;
+    teleport?: boolean;
 }
 export const popoverProps = {
     trigger: {
@@ -109,6 +110,10 @@ export const popoverProps = {
     y: {
         type: Number as PropType<PopoverProps['y']>,
         default: undefined
+    },
+    teleport: {
+        type: Boolean as PropType<PopoverProps['teleport']>,
+        default: true
     }
 };
 export const popoverEmits = ['show', 'hide', 'update:show', 'border-reached'];

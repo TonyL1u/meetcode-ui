@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { McButton, McSpace, McInput, McIcon } from 'meetcode-ui';
+import { McButton, McSpace, McInput, McIcon, McPopselect } from 'meetcode-ui';
 import { FlashOutline, Search, PricetagOutline } from '@vicons/ionicons5';
 
 const props = defineProps<{ component: string }>();
@@ -30,11 +30,22 @@ const handleClick = () => {
     <div class="mc-flex mc-flex-col mc-h-full">
         <div class="mc-flex-1 mc-flex mc-flex-col">
             <div class="mc-flex">
-                <McInput style="width: 200px; margin-right: 16px" placeholder="选择版本">
-                    <template #suffix>
-                        <McIcon :icon="FlashOutline" />
-                    </template>
-                </McInput>
+                <McPopselect
+                    :options="[
+                        { label: '123', value: 123 },
+                        { label: '123', value: 123 },
+                        { label: '123', value: 123 },
+                        { label: '123', value: 123 }
+                    ]"
+                    trigger="click"
+                    match-trigger
+                >
+                    <McInput style="width: 200px; margin-right: 16px" placeholder="选择版本">
+                        <template #suffix>
+                            <McIcon :icon="FlashOutline" />
+                        </template>
+                    </McInput>
+                </McPopselect>
                 <McInput placeholder="选择变更类型">
                     <template #suffix>
                         <McIcon :icon="Search" />

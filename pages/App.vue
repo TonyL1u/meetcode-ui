@@ -1,51 +1,3 @@
-<template>
-    <McLayout class="container">
-        <McLayoutHeader v-if="currentTab" bordered>
-            <Header class="header">
-                <McIcon class="nav-menu-trigger" :size="24" @click="handleShowNavMenu">
-                    <IconMenu />
-                </McIcon>
-                <div class="title">Meetcode UI</div>
-                <McTabs ref="tabsRef" :default-tab="currentTab" :show-line="false" class="header-tabs mc-absolute mc-left-[268px]" :header-style="{ height: '55px' }" :content-style="{ padding: 0 }" @tab-click="handleTabClick">
-                    <McTab name="home">{{ siteLang === 'zh-CN' ? '首页' : 'Home' }}</McTab>
-                    <McTab name="docs">{{ siteLang === 'zh-CN' ? '文档' : 'Docs' }}</McTab>
-                    <McTab name="components">{{ siteLang === 'zh-CN' ? '组件' : 'Components' }}</McTab>
-                    <McTab v-if="ENV.DEV" name="develop">{{ siteLang === 'zh-CN' ? '开发指南' : 'Develop' }}</McTab>
-                </McTabs>
-            </Header>
-        </McLayoutHeader>
-        <McLayoutContent v-if="currentTab === 'home'" style="flex: 1; overflow: hidden">
-            <router-view :class="siteTheme" />
-        </McLayoutContent>
-        <McLayout v-else-if="currentTab" style="flex: 1">
-            <McLayoutSider
-                class="menu-sider"
-                :collapsed="collapsed"
-                :width="300"
-                trigger-type="bar"
-                :collapsed-width="currentTab === 'components' ? 92 : 0"
-                :transition-mode="currentTab === 'components' ? 'width' : 'transform'"
-                bordered
-                collapsable
-                @toggled="handleToggled"
-            >
-                <MenuVNode :menu="menu" />
-            </McLayoutSider>
-            <McLayout style="position: relative">
-                <McLayoutContent ref="mainContentRef" class="main-content">
-                    <div class="mc-flex mc-flex-col mc-justify-between mc-w-full mc-min-h-full">
-                        <router-view :class="siteTheme" />
-                        <PagerNavigator v-if="currentMenuKey" :menu="menu" :menu-key="currentMenuKey" :tab="currentTab" />
-                    </div>
-                </McLayoutContent>
-                <McLayoutSider class="sider-navigator" style="width: 164px; position: absolute; right: 0; height: 100%">
-                    <Navigator />
-                </McLayoutSider>
-            </McLayout>
-        </McLayout>
-    </McLayout>
-</template>
-
 <script lang="ts" setup>
 import { computed, ref, reactive, createVNode, watch } from 'vue';
 import { McTabs, McTab, McIcon, McPopup, McLayout, McLayoutContent, McLayoutHeader, McLayoutSider, McMenu, useThemeController, useI18nController } from 'meetcode-ui';
@@ -174,7 +126,7 @@ onRouteChange('path', () => {
         scrollContentEl.scrollTop = 0;
     }
 });
-onRouteChange('hash', ({ hash }) => {
+onRouteChange('hash', () => {
     // fix anchor locate offset
     requestAnimationFrame(() => {
         const scrollContentEl = mainContentRef.value?.$el;
@@ -202,6 +154,54 @@ defineTheme('my-theme', {
     }
 });
 </script>
+
+<template>
+    <McLayout class="container">
+        <McLayoutHeader v-if="currentTab" bordered>
+            <Header class="header">
+                <McIcon class="nav-menu-trigger" :size="24" @click="handleShowNavMenu">
+                    <IconMenu />
+                </McIcon>
+                <div class="title">Meetcode UI</div>
+                <McTabs ref="tabsRef" :default-tab="currentTab" :show-line="false" class="header-tabs mc-absolute mc-left-[268px]" :header-style="{ height: '55px' }" :content-style="{ padding: 0 }" @tab-click="handleTabClick">
+                    <McTab name="home">{{ siteLang === 'zh-CN' ? '首页' : 'Home' }}</McTab>
+                    <McTab name="docs">{{ siteLang === 'zh-CN' ? '文档' : 'Docs' }}</McTab>
+                    <McTab name="components">{{ siteLang === 'zh-CN' ? '组件' : 'Components' }}</McTab>
+                    <McTab v-if="ENV.DEV" name="develop">{{ siteLang === 'zh-CN' ? '开发指南' : 'Develop' }}</McTab>
+                </McTabs>
+            </Header>
+        </McLayoutHeader>
+        <McLayoutContent v-if="currentTab === 'home'" style="flex: 1; overflow: hidden">
+            <router-view :class="siteTheme" />
+        </McLayoutContent>
+        <McLayout v-else-if="currentTab" style="flex: 1">
+            <McLayoutSider
+                class="menu-sider"
+                :collapsed="collapsed"
+                :width="300"
+                trigger-type="bar"
+                :collapsed-width="currentTab === 'components' ? 92 : 0"
+                :transition-mode="currentTab === 'components' ? 'width' : 'transform'"
+                bordered
+                collapsable
+                @toggled="handleToggled"
+            >
+                <MenuVNode :menu="menu" />
+            </McLayoutSider>
+            <McLayout style="position: relative">
+                <McLayoutContent ref="mainContentRef" class="main-content">
+                    <div class="mc-flex mc-flex-col mc-justify-between mc-w-full mc-min-h-full">
+                        <router-view :class="siteTheme" />
+                        <PagerNavigator v-if="currentMenuKey" :menu="menu" :menu-key="currentMenuKey" :tab="currentTab" />
+                    </div>
+                </McLayoutContent>
+                <McLayoutSider class="sider-navigator" style="width: 164px; position: absolute; right: 0; height: 100%">
+                    <Navigator />
+                </McLayoutSider>
+            </McLayout>
+        </McLayout>
+    </McLayout>
+</template>
 
 <style lang="scss">
 @import './styles/highlight.scss';
