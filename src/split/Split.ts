@@ -3,7 +3,7 @@ import { useElementBounding, useEventBus, EventBusKey } from '@vueuse/core';
 import { flatten, SpecificVNode } from '../_utils_';
 import McSplitter from './Splitter';
 import { splitInjectionKey, SplitIKey, SplitPaneIKey, SplitPaneProps, SplitterProps, ResizeBusArgs } from './interface';
-import * as CSS from 'csstype';
+import type { StyleValue } from 'vue';
 
 export default defineComponent({
     name: 'Split',
@@ -19,7 +19,7 @@ export default defineComponent({
         const splitElRef = ref<HTMLElement>();
         const { width } = useElementBounding(splitElRef);
         const splitPaneInitialWidth = ref<string>('0');
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             return {
                 '--split-pane-initial-width': `${splitPaneInitialWidth.value}%`
             };

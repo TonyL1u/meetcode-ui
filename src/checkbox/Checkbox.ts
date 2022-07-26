@@ -4,7 +4,7 @@ import { useThemeRegister, createKey, createElementVNode, PatchFlags } from '../
 import { mainCssr, lightCssr, darkCssr } from './styles';
 import { IconCheckMark, IconIndeterminateMark } from './icon';
 import { CheckboxValue, checkboxIKey, checkboxGroupInjectionKey, checkboxProps } from './interface';
-import * as CSS from 'csstype';
+import type { StyleValue } from 'vue';
 
 export default defineComponent({
     name: 'Checkbox',
@@ -45,7 +45,7 @@ export default defineComponent({
             return mergedValue?.value === checkedValue.value;
         });
         const mergedCheckedColor = and(groupCheckedColor, not(checkedColor)).value ? groupCheckedColor : checkedColor;
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             return {
                 '--checkbox-checked-color': mergedCheckedColor?.value ?? '#10b981',
                 '--checkbox-hover-color': (mergedCheckedColor?.value ?? '#10b981') + '0f',

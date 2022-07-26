@@ -2,7 +2,7 @@ import { defineComponent, toRefs, computed, createVNode, onMounted } from 'vue';
 import { flattenWithOptions, useThemeRegister } from '../_utils_';
 import { spaceProps } from './interface';
 import { mainCssr } from './styles';
-import * as CSS from 'csstype';
+import type { StyleValue } from 'vue';
 
 export default defineComponent({
     name: 'Space',
@@ -17,7 +17,7 @@ export default defineComponent({
         });
 
         const { vertical, gap, itemStyle, justify } = toRefs(props);
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             return {
                 '--space-direction': vertical.value ? 'column' : 'row',
                 '--space-justify': justify.value,

@@ -1,15 +1,13 @@
-import { defineComponent, onMounted, ref, computed, toRefs, watch, nextTick, renderSlot, getCurrentInstance, toRaw, toDisplayString } from 'vue';
+import { defineComponent, onMounted, ref, computed, toRefs, watch, nextTick, renderSlot, getCurrentInstance, toRaw } from 'vue';
 import { or, and, not, isDefined, onStartTyping, createEventHook } from '@vueuse/core';
 import { useThemeRegister, createElementVNode, createComponentVNode, createFragment, createTextVNode, createTransition, createDirectives, propsMergeSlots, PatchFlags, setColorAlpha } from '../_utils_';
-import { merge } from 'lodash-es';
 import { mainCssr, lightCssr, darkCssr } from './styles';
 import { inputProps } from './interface';
 import { McIcon } from '../icon';
 import { McBaseLoading } from '../_internal_';
 import { Infinite, CloseCircle, EyeOffOutline, EyeOutline } from '@vicons/ionicons5';
-import type { VNodeChild } from 'vue';
+import type { VNodeChild, StyleValue } from 'vue';
 import type { InputProps, InputPlaceholder, InputSizeMap, InputValidTrigger, InputValidRule } from './interface';
-import * as CSS from 'csstype';
 
 const SIZE_MAP: InputSizeMap = {
     small: {
@@ -98,7 +96,7 @@ export default defineComponent({
         const errorMessage = ref('');
         const isValid = ref(true);
 
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             const { fontSize, innerPaddingY, innerLineHeight, wrapperPaddingX, padding, wordCountFontSize, addonMargin } = SIZE_MAP[size.value!] ?? SIZE_MAP.medium;
 
             return {

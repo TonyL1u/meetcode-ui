@@ -1,6 +1,6 @@
 import { toRefs, computed, renderSlot, createVNode, defineComponent } from 'vue';
-import * as CSS from 'csstype';
 import { gridItemProps } from './interface';
+import type { StyleValue } from 'vue';
 
 export default defineComponent({
     name: 'GridItem',
@@ -8,7 +8,7 @@ export default defineComponent({
     setup(props, { slots }) {
         const { x, y, xSize, ySize, itemJustify, itemAlign } = toRefs(props);
 
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             return {
                 '--grid-item-column-start': x?.value || '',
                 '--grid-item-row-start': y?.value || '',

@@ -6,8 +6,8 @@ import { McButton } from '../button';
 import { Close as IconClose } from '@vicons/ionicons5';
 import { VLazyTeleport } from 'vueuc';
 import { drawerProps, DrawerCloseAction, drawerInjectionKey } from './interface';
-import * as CSS from 'csstype';
 import { mainCssr, lightCssr, darkCssr } from './styles';
+import type { StyleValue } from 'vue';
 
 export default defineComponent({
     name: 'Drawer',
@@ -110,7 +110,7 @@ export default defineComponent({
             emit('before-enter');
         };
 
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             const drawerSize = typeof size.value === 'number' ? `${size.value}px` : size.value;
             const drawerWidth = ['left', 'right'].includes(appearDirection.value!) ? drawerSize : '100vw';
             const drawerHeight = ['top', 'bottom'].includes(appearDirection.value!) ? drawerSize : '100vh';

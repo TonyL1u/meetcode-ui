@@ -3,8 +3,8 @@ import { flatten, getSlotFirstVNode, kebabCaseEscape, SpecificVNode, useThemeReg
 import { useElementBounding, throttledWatch } from '@vueuse/core';
 import { tabsInjectionKey, tabPaneIKey, tabIKey, TabPaneName, MaybeTabPaneProps, tabsProps } from './interface';
 import McTab from './src/Tab';
-import * as CSS from 'csstype';
 import { mainCssr, lightCssr, darkCssr } from './styles';
+import type { StyleValue } from 'vue';
 
 export default defineComponent({
     name: 'Tabs',
@@ -28,7 +28,7 @@ export default defineComponent({
         const headerElRef = ref<HTMLElement>();
         const barElRef = ref<HTMLElement>();
         const barUpdatedTimer = ref();
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             return {
                 // '--tab-default-color': defaultColor.value,
                 '--tab-active-color': activeColor.value,

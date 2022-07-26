@@ -1,16 +1,5 @@
 import type { ElementClassSet, ElementStyleSet } from '../_utils_';
 import type { InjectionKey, PropType, CSSProperties } from 'vue';
-import * as CSS from 'csstype';
-
-declare module 'csstype' {
-    interface Properties {
-        '--layout-sider-width'?: string;
-        '--layout-header-height'?: string;
-        '--layout-sider-collapse-button-trigger-top'?: string;
-        '--layout-sider-collapse-button-trigger-bottom'?: string;
-        '--layout-sider-scroll-area-min-width'?: string;
-    }
-}
 
 export const layoutInjectionKey: InjectionKey<unknown> = Symbol('layoutInjectionKey');
 export const layoutIKey = Symbol('layout');
@@ -57,7 +46,7 @@ export interface LayoutSiderProps {
     collapsed?: boolean;
     collapsable?: boolean;
     collapsedWidth?: string | number;
-    triggerPosition?: { top?: CSS.Properties['top']; bottom?: CSS.Properties['bottom'] };
+    triggerPosition?: { top?: CSSProperties['top']; bottom?: CSSProperties['bottom'] };
     triggerType?: 'button' | 'bar';
     transitionMode?: 'width' | 'transform';
     onBeforeToggle: (isCollapsed: boolean) => Promise<boolean | undefined | void> | boolean | undefined | void;

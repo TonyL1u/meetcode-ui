@@ -2,7 +2,7 @@ import { defineComponent, toRefs, createVNode, computed, onMounted } from 'vue';
 import { getSlotFirstVNode, useThemeRegister, createComponentVNode, createElementVNode, PatchFlags } from '../_utils_';
 import { mainCssr } from './styles';
 import { iconProps } from './interface';
-import * as CSS from 'csstype';
+import type { StyleValue } from 'vue';
 
 export default defineComponent({
     name: 'Icon',
@@ -31,7 +31,7 @@ export default defineComponent({
             }
         });
 
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             return {
                 '--icon-color': color.value ?? 'initial',
                 '--icon-font-size': size.value ? `${size.value}px` : 'initial',

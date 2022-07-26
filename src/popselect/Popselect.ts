@@ -8,7 +8,7 @@ import { popoverProps, popoverEmits } from '../popover/interface';
 import { McIcon } from '../icon';
 import { PopselectOption, popselectProps, popselectEmits } from './interface';
 import { mainCssr, lightCssr, darkCssr } from './styles';
-import * as CSS from 'csstype';
+import type { StyleValue, CSSProperties } from 'vue';
 
 const defaultPropsOverride = {
     placement: {
@@ -38,7 +38,7 @@ export default defineComponent({
 
         const { value: valueVM, options, multiple, maxHeight, autoClose, autoScroll, truncate, matchTrigger, itemHeight, itemStyle } = toRefs(props);
         const popoverRef = ref<PopoverExposeInstance>();
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             return {
                 '--popselect-inner-max-width': typeof truncate.value === 'number' ? `${truncate.value}px` : '200px'
             };
@@ -121,7 +121,7 @@ export default defineComponent({
                 style: {
                     padding: '0px',
                     minWidth: matchTrigger.value ? 'none' : '110px',
-                    ...cssVars.value
+                    ...(cssVars.value as CSSProperties)
                 }
             });
 

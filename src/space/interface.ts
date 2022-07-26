@@ -1,13 +1,4 @@
 import type { PropType, CSSProperties } from 'vue';
-import * as CSS from 'csstype';
-
-declare module 'csstype' {
-    interface Properties {
-        '--space-direction'?: string;
-        '--space-justify'?: string;
-        '--space-item-gap'?: string;
-    }
-}
 
 export interface SpaceProps {
     vertical?: boolean;

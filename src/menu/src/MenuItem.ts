@@ -1,9 +1,9 @@
 import { defineComponent, renderSlot, createVNode, inject, computed, toRefs, getCurrentInstance, mergeProps } from 'vue';
 import { checkParent, createComponentVNode, createElementVNode, PatchFlags, SlotFlags } from '../../_utils_';
-import { and, not, or } from '@vueuse/core';
+import { not, or } from '@vueuse/core';
 import { menuIKey, subMenuIKey, menuItemGroupIKey, menuItemIKey, menuItemProps, menuInjectionKey, subMenuInjectionKey, menuGroupInjectionKey } from '../interface';
 import { McTooltip } from '../../tooltip';
-import * as CSS from 'csstype';
+import type { StyleValue } from 'vue';
 
 export default defineComponent({
     name: 'MenuItem',
@@ -22,7 +22,7 @@ export default defineComponent({
         const isActive = computed(() => !!(key && key === activeKey?.value));
         const selfPadding = computed(() => (typeof indent.value === 'number' ? indent.value : isParentMenuItemGroup.value ? (menuItemGroupPadding?.value || 0) + 16 : ((isParentMenu.value ? menuPadding?.value : subMenuPadding?.value) || 0) + 32));
         const mergedDisabled = or(isMenuDisabled, isParentMenuItemGroup.value ? isMenuItemGroupDisabled?.value : isSubMenuDisabled?.value, disabled);
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             return {
                 '--menu-item-padding-left': `${selfPadding.value}px`
             };

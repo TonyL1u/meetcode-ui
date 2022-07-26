@@ -1,14 +1,6 @@
 import { PropType, VNodeChild, Ref, InjectionKey, CSSProperties } from 'vue';
 import { ElementClassSet } from '../_utils_';
-import * as CSS from 'csstype';
 
-declare module 'csstype' {
-    interface Properties {
-        '--drawer-width'?: string;
-        '--drawer-height'?: string;
-        '--drawer-size'?: string;
-    }
-}
 export type DrawerCloseAction = 'wrapper' | 'close' | 'shortcut';
 export type DrawerAppearDirection = 'top' | 'right' | 'bottom' | 'left';
 export type OnBeforeLeaveImpl = (action: DrawerCloseAction) => Promise<boolean | undefined | void> | boolean | undefined | void;
