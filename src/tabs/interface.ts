@@ -1,14 +1,5 @@
 import { InjectionKey, Ref, CSSProperties, VNodeChild, PropType } from 'vue';
-import * as CSS from 'csstype';
 import type { ElementClassSet, ElementStyleSet } from '../_utils_';
-
-declare module 'csstype' {
-    interface Properties {
-        '--tab-default-color'?: string;
-        '--tab-active-color'?: string;
-        '--tab-gap'?: string | number;
-    }
-}
 
 export const tabsInjectionKey: InjectionKey<Ref<string | number>> = Symbol();
 export const tabPaneIKey = Symbol('TabPane');

@@ -1,15 +1,5 @@
 import { PropType } from 'vue';
 import { UIColorAttrs } from '../_utils_';
-import * as CSS from 'csstype';
-
-declare module 'csstype' {
-    interface Properties {
-        '--text-link-default-color'?: string;
-        '--text-link-hover-color'?: string;
-        '--text-link-active-color'?: string;
-        '--text-link-disabled-color'?: string;
-    }
-}
 
 export type TextLinkType = 'primary' | 'success' | 'warning' | 'danger' | 'info';
 export type TextLinkColorSet = Pick<UIColorAttrs, 'color'>;

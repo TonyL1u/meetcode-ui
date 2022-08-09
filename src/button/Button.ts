@@ -1,10 +1,10 @@
-import { defineComponent, createVNode, renderSlot, ref, computed, toRefs, onMounted, normalizeClass } from 'vue';
+import { defineComponent, createVNode, renderSlot, ref, computed, toRefs, onMounted } from 'vue';
 import { ButtonColorSet, ButtonSizeSet, ButtonSizeMap, buttonProps, buttonIKey } from './interface';
 import { or, and, not } from '@vueuse/core';
 import { useColorFactory, setColorAlpha, useThemeRegister, PatchFlags } from '../_utils_';
 import { buttonColorMap, defaultButtonColorMap } from './color';
 import { mainCssr } from './styles';
-import * as CSS from 'csstype';
+import type { StyleValue } from 'vue';
 
 const SIZE_MAP: ButtonSizeMap = {
     mini: {
@@ -62,7 +62,7 @@ export default defineComponent({
         const useDefaultBorderColor = and(customWithoutColor, not(borderColor));
         const useDefaultBackgroundColor = and(customWithoutColor);
 
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             const { value: buttonColor } = buttonColorMap;
 
             const compositeInputColor: ButtonColorSet =
@@ -81,7 +81,7 @@ export default defineComponent({
             const { default: defaultButtonDefaultColorSet, hover: defaultButtonHoverColorSet, active: defaultButtonActiveColorSet, disabled: defaultButtonDisabledColorSet } = defaultButtonColorMap.value;
             const buttonSizeSet: ButtonSizeSet = SIZE_MAP[size.value!];
 
-            const sizeVars: CSS.Properties = {
+            const sizeVars: StyleValue = {
                 '--button-width': circle.value ? buttonSizeSet.height : block.value ? '100%' : 'initial',
                 '--button-height': buttonSizeSet.height,
                 '--button-padding': buttonSizeSet.padding,
@@ -91,7 +91,7 @@ export default defineComponent({
                 '--button-radius': circle.value ? '50%' : round.value ? buttonSizeSet.height : '3px'
             };
 
-            const colorVars: CSS.Properties = isCustom.value
+            const colorVars: StyleValue = isCustom.value
                 ? {
                       '--button-default-color': textColorSet.value?.default ?? (useDefaultColor.value ? '#000' : or(textColor, isTransparent).value ? defaultColorSet.color : '#fff'),
                       '--button-default-border-color': borderColorSet.value?.default ?? (isNotNormal.value ? 'transparent' : useDefaultBorderColor.value ? '#e0e0e6' : defaultColorSet.borderColor),
@@ -130,7 +130,7 @@ export default defineComponent({
             return {
                 ...colorVars,
                 ...sizeVars,
-                '--button-ripple-color': setColorAlpha(colorVars['--button-active-border-color']!, 0),
+                '--button-ripple-color': setColorAlpha(colorVars['--button-active-border-color'] as string, 0),
                 '--button-flex-direction': iconRight.value ? 'row-reverse' : 'row'
             };
         });

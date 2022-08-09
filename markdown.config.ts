@@ -3,6 +3,7 @@ import MarkdownItHljs from 'markdown-it-highlightjs';
 import MarkdownItAnchor from 'markdown-it-anchor';
 import fs from 'fs';
 import lz from 'lz-string';
+import path from 'path';
 import type MarkdownIt from 'markdown-it';
 import type Token from 'markdown-it/lib/token';
 import type Renderer from 'markdown-it/lib/renderer';
@@ -61,9 +62,9 @@ export default {
 
         md.renderer.rules['heading_open'] = function (tokens, idx, options, env: { id: string }, self) {
             if (tokens[idx].tag === 'h1') {
-                const path = env.id.split('/meetcode-ui/')[1];
+                const filepath = env.id.split(`${path.resolve(__dirname)}/`)[1];
                 const component = env.id.match(/\/src\/(.*)\/demos/)?.[1];
-                return `<EditOnGithub ${self.renderAttrs(tokens[idx])} path="${path}" component="${component}">`;
+                return `<EditOnGithub ${self.renderAttrs(tokens[idx])} path="${filepath}" component="${component}">`;
             }
 
             return self.renderToken(tokens, idx, options);
@@ -80,7 +81,7 @@ export default {
         const componentRenderRule: Renderer.RenderRule = function (tokens, idx, options, env: { id: string }, self) {
             const { content } = tokens[idx];
             const name = content.match(/<(.*)\/>/);
-            if (env.id.indexOf('/meetcode-ui/src') > -1 && name && name[1].trim().slice(0, 2) !== 'Mc') {
+            if (env.id.indexOf(path.resolve(__dirname, 'src')) > -1 && name && name[1].trim().slice(0, 2) !== 'Mc') {
                 const pathMatcher = env.id.match(/src\/(.*)\/demos\/doc.(.*).md/);
                 if (pathMatcher && name) return `<${pathMatcher[1]}-${name[1].trim()}-${pathMatcher[2].split('-')[0]} ${self.renderAttrs(tokens[idx])} />`;
             }

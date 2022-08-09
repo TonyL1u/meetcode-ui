@@ -55,7 +55,6 @@ import type {
     VideoHTMLAttributes,
     WebViewHTMLAttributes
 } from 'vue';
-import * as CSS from 'csstype';
 
 /**
  * Ts Utils
@@ -229,7 +228,7 @@ export type ElementStyleSet = CSSProperties | string;
 /**
  * Jest Utils
  */
-export type JestComputedStyle = CSSStyleDeclaration & Array<keyof (CSSStyleDeclaration & CSS.Properties)> & { _values: CSS.Properties; _importants: CSS.Properties };
+export type JestComputedStyle = CSSStyleDeclaration & Array<keyof (CSSStyleDeclaration & CSSProperties)> & { _values: CSSProperties; _importants: CSSProperties };
 
 /**
  * Native HTML Element Attributes

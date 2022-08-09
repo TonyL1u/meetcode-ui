@@ -1,10 +1,11 @@
-import { defineComponent, getCurrentInstance, createVNode, renderSlot, CustomVNodeTypes, toRefs, computed, ref } from 'vue';
+import { defineComponent, getCurrentInstance, renderSlot, CustomVNodeTypes, toRefs, computed, ref } from 'vue';
 import { cssUnitTransform } from '../../_utils_';
+import { createElementVNode, createComponentVNode } from '../../_utils_';
 import { layoutSiderIKey, layoutIKey, layoutSiderProps } from '../interface';
 import { McButton } from '../../button';
 import { McIcon } from '../../icon';
 import { ChevronBackSharp } from '@vicons/ionicons5';
-import * as CSS from 'csstype';
+import type { StyleValue } from 'vue';
 
 export default defineComponent({
     name: 'LayoutSider',
@@ -19,7 +20,7 @@ export default defineComponent({
         const { width, bordered, collapsed, collapsable, collapsedWidth, triggerPosition, triggerType, transitionMode, onBeforeToggle } = toRefs(props);
         const isCollapsed = ref(!!collapsed.value);
         const mergedWidth = computed(() => cssUnitTransform(isCollapsed.value ? collapsedWidth.value : width.value));
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             const { top, bottom } = triggerPosition.value ?? {};
 
             return {
@@ -39,20 +40,20 @@ export default defineComponent({
         };
 
         const buttonTriggerVNode = () => {
-            return createVNode(
+            return createComponentVNode(
                 McButton,
                 { circle: true, size: 'small' },
                 {
                     icon: () =>
-                        createVNode(McIcon, null, {
-                            default: () => createVNode(ChevronBackSharp)
+                        createComponentVNode(McIcon, null, {
+                            default: () => createComponentVNode(ChevronBackSharp)
                         })
                 }
             );
         };
 
         const collapseTriggerVNode = () => {
-            return createVNode('div', { class: `mc-layout-sider__collapse-${triggerType.value}-trigger`, onClick: callToggle }, [slots.trigger ? renderSlot(slots, 'trigger') : triggerType.value === 'button' ? createVNode(buttonTriggerVNode) : null]);
+            return createElementVNode('div', { class: `mc-layout-sider__collapse-${triggerType.value}-trigger`, onClick: callToggle }, [slots.trigger ? renderSlot(slots, 'trigger') : triggerType.value === 'button' ? buttonTriggerVNode() : null]);
         };
 
         expose({
@@ -63,13 +64,13 @@ export default defineComponent({
 
         // main logic...
         return () => {
-            return createVNode(
+            return createElementVNode(
                 'aside',
                 {
                     class: ['mc-layout-sider', bordered.value ? 'mc-layout-sider--bordered' : '', isCollapsed.value ? 'mc-layout-sider--collapsed' : ''],
                     style: cssVars.value
                 },
-                [createVNode('div', { class: 'mc-layout-sider__scroll-area' }, [renderSlot(slots, 'default')]), collapsable.value ? createVNode(collapseTriggerVNode) : null]
+                [createElementVNode('div', { class: 'mc-layout-sider__scroll-area' }, [renderSlot(slots, 'default')]), collapsable.value ? collapseTriggerVNode() : null]
             );
         };
     }

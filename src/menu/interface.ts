@@ -1,17 +1,5 @@
 import type { Key, ElementClassSet, ElementStyleSet } from '../_utils_';
 import type { PropType, InjectionKey, Ref, VNodeChild, ComputedRef } from 'vue';
-import * as CSS from 'csstype';
-
-declare module 'csstype' {
-    interface Properties {
-        '--menu-collapsed-width'?: string;
-        '--menu-collapsed-icon-size'?: string;
-        '--menu-collapsed-padding'?: string;
-        '--menu-submenu-padding-left'?: string;
-        '--menu-item-padding-left'?: string;
-        '--menu-item-group-padding-left'?: string;
-    }
-}
 
 interface MenuInjection {
     activeKey: Ref<Key>;

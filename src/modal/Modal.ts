@@ -1,4 +1,4 @@
-import { defineComponent, createVNode, toRefs, computed, renderSlot, ref, Transition, watch, createTextVNode, CSSProperties, mergeProps, onMounted, provide, nextTick } from 'vue';
+import { defineComponent, createVNode, toRefs, computed, renderSlot, ref, Transition, watch, createTextVNode, mergeProps, provide } from 'vue';
 import { createKey, useThemeRegister, useI18n, useSharedItems } from '../_utils_';
 import { onClickOutside, useMouse, useMagicKeys, pausableWatch } from '@vueuse/core';
 import { VLazyTeleport } from 'vueuc';
@@ -6,8 +6,8 @@ import { modalProps, ModalCloseAction, modalInjectionKey } from './interface';
 import { McIcon } from '../icon';
 import { McButton } from '../button';
 import { Close as IconClose } from '@vicons/ionicons5';
-import * as CSS from 'csstype';
 import { mainCssr, lightCssr, darkCssr } from './styles';
+import type { StyleValue, CSSProperties } from 'vue';
 
 export default defineComponent({
     name: 'Modal',
@@ -174,7 +174,7 @@ export default defineComponent({
             };
         });
 
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             return {
                 '--modal-width': typeof width.value === 'number' ? `${width.value}px` : width.value,
                 '--modal-height': typeof height.value === 'number' ? `${height.value}px` : height.value
@@ -224,7 +224,7 @@ export default defineComponent({
                 {
                     ref: modalElRef,
                     class: ['mc-modal', pure.value ? 'mc-modal--pure' : ''],
-                    style: { ...cssVars.value, ...modalPosition.value }
+                    style: { ...(cssVars.value as CSSProperties), ...modalPosition.value }
                 },
                 attrs
             );

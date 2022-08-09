@@ -12,7 +12,7 @@ export function McPopoverService(attachment: VNode) {
         });
     };
 
-    document.body.appendChild(PopoverHostElement.value);
+    document.body.appendChild(PopoverHostElement.value!);
 
     render(createVNode(popoverVNode), PopoverHostElement.value!);
 }

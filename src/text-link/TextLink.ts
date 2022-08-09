@@ -2,7 +2,7 @@ import { computed, toRefs, renderSlot, createVNode, defineComponent, onMounted }
 import { getSlotFirstVNode, useColorFactory, useThemeRegister } from '../_utils_';
 import { TextLinkType, TextLinkColorSet, textLinkProps } from './interface';
 import { mainCssr } from './styles/index';
-import * as CSS from 'csstype';
+import type { StyleValue } from 'vue';
 
 const BASE_COLOR_MAP: Record<TextLinkType, TextLinkColorSet> = {
     primary: {
@@ -45,7 +45,7 @@ export default defineComponent({
                     return '';
             }
         });
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             const compositeInputColor: TextLinkColorSet = {
                 color: color.value || BASE_COLOR_MAP[type.value!].color
             };

@@ -1,10 +1,10 @@
-import { defineComponent, onMounted, renderSlot, createVNode, createElementBlock, ref, provide, toRefs, computed, watch } from 'vue';
+import { defineComponent, onMounted, renderSlot, ref, provide, toRefs, computed, watch } from 'vue';
 import { useThemeRegister, createElementVNode, createDirectives, PatchFlags } from '../_utils_';
 import { menuIKey, menuInjectionKey, menuProps } from './interface';
 import { createKeyTree, createMenu, findPath } from './src/utils';
 import { mainCssr, lightCssr, darkCssr } from './styles';
+import type { StyleValue } from 'vue';
 import type { Key } from '../_utils_';
-import * as CSS from 'csstype';
 
 export default defineComponent({
     name: 'Menu',
@@ -29,7 +29,7 @@ export default defineComponent({
         const menuUpdateKey = ref(0);
         const menuElRef = ref<HTMLElement>();
         const selfPadding = computed(() => indent.value! - 32);
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             return {
                 '--menu-collapsed-width': collapsedWidth.value + 'px',
                 '--menu-collapsed-icon-size': collapsedIconSize.value + 'px',

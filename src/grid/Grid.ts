@@ -1,6 +1,6 @@
 import { toRefs, computed, renderSlot, createVNode, defineComponent } from 'vue';
-import * as CSS from 'csstype';
 import { GridIKey, gridProps } from './interface';
+import type { StyleValue } from 'vue';
 
 export default defineComponent({
     name: 'Grid',
@@ -36,7 +36,7 @@ export default defineComponent({
                 return '';
             }
         });
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             return {
                 '--grid-rows-template': rowsTemplate.value,
                 '--grid-columns-template': columnsTemplate.value,

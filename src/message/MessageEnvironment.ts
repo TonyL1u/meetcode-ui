@@ -70,7 +70,7 @@ function getMessageEntityVNode(message: Message, index: number) {
         {
             key,
             ref: ins => {
-                const { close, el } = (ins as MessageExposeInstance) ?? {};
+                const { close, el } = (ins as any) ?? {};
                 message.options.close = close;
                 message.options.el = el;
             },

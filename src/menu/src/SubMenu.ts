@@ -7,9 +7,9 @@ import { McIcon } from '../../icon';
 import { McPopover } from '../../popover';
 import { McFadeInExpandTransition } from '../../_transition_';
 import { ChevronUpOutline, ChevronForwardOutline } from '@vicons/ionicons5';
+import type { StyleValue } from 'vue';
 import type { PopoverExposeInstance, PopoverProps } from '../../popover';
 import type { MenuOption, KeyTree } from '../interface';
-import * as CSS from 'csstype';
 
 export default defineComponent({
     name: 'SubMenu',
@@ -46,7 +46,7 @@ export default defineComponent({
         });
         const menuPopoverDisabled = or(mergedDisabled, and(not(isMenuCollapsed), not(isMenuHorizontal)));
         const menuPopoverRef = ref<PopoverExposeInstance>();
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             return {
                 '--menu-submenu-padding-left': `${selfPadding.value}px`
             };
