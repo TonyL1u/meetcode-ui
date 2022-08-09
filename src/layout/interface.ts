@@ -1,5 +1,6 @@
 import type { ElementClassSet, ElementStyleSet } from '../_utils_';
 import type { InjectionKey, PropType, CSSProperties } from 'vue';
+import * as CSS from 'csstype';
 
 export const layoutInjectionKey: InjectionKey<unknown> = Symbol('layoutInjectionKey');
 export const layoutIKey = Symbol('layout');
