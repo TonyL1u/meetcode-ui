@@ -222,8 +222,8 @@ export interface UIColorAttrs extends Record<string, string> {
     backgroundColor: string;
 }
 
-export type ElementClassSet = string | Record<string, boolean> | ElementClassSet[];
-export type ElementStyleSet = CSSProperties | string;
+export type ElementClassSet = string | undefined | Record<string, boolean> | ElementClassSet[];
+export type ElementStyleSet = CSSProperties | string | ElementStyleSet[];
 
 /**
  * Jest Utils

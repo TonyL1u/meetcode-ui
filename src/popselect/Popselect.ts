@@ -88,7 +88,7 @@ export default defineComponent({
                     onClick: () => {
                         if (isDisabled) return;
                         valueVM.value !== void 0 && handleUpdateValue(value);
-                        emit('select', value);
+                        emit('select', value, option);
                         handleHide();
                     }
                 },

@@ -73,13 +73,6 @@
 <Delay />
 :::
 
-::: demo CodePreview=Service
-
-### 延迟
-
-<Service />
-:::
-
 ## Props
 
 |       名称        |                                                                                 类型                                                                                 |   默认值    |                     说明                     |

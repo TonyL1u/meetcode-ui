@@ -64,8 +64,8 @@ const handleClick = () => {
                     </div>
                 </McSpace>
             </div>
-            <div v-else class="mc-flex-1 mc-flex mc-items-center mc-justify-center mc-text-xl mc-text-gray-400">
-                <McIcon class="mc-mr-2" :icon="PricetagOutline" :size="20" />
+            <div v-else class="mc-flex-1 mc-flex mc-items-center mc-justify-center mc-text-base mc-text-gray-400">
+                <McIcon class="mc-mr-2" :icon="PricetagOutline" :size="16" />
                 暂无数据
             </div>
         </div>

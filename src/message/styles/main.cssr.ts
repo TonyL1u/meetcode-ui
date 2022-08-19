@@ -1,17 +1,68 @@
 import { c } from '../../_utils_';
 
 export default c([
-    c('.mc-message-global-container', {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        height: 0,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: '100vw',
-        zIndex: 6000
-    }),
+    c(
+        '.mc-message-global-container',
+        {
+            position: 'fixed',
+
+            height: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100vw',
+            zIndex: 6000
+        },
+        [
+            c(
+                '&[v-placement^="top"]',
+                {
+                    top: '0',
+                    justifyContent: 'flex-start'
+                },
+                [
+                    c('.mc-message-slide-down-enter-from, .mc-message-slide-down-leave-to', {
+                        transform: 'translateY(-30px)'
+                    })
+                ]
+            ),
+            c(
+                '&[v-placement^="middle"]',
+                {
+                    top: '50%',
+                    justifyContent: 'center'
+                },
+                [
+                    c('.mc-message:first-child', { marginTop: 0 }),
+                    c('.mc-message-slide-down-enter-from, .mc-message-slide-down-leave-to', {
+                        transform: 'translateY(0px)'
+                    })
+                ]
+            ),
+            c(
+                '&[v-placement^="bottom"]',
+                {
+                    bottom: '8px',
+                    justifyContent: 'flex-end'
+                },
+                [
+                    c('.mc-message-slide-down-enter-from, .mc-message-slide-down-leave-to', {
+                        transform: 'translateY(30px)'
+                    })
+                ]
+            ),
+            c('&[v-placement$="left"]', {
+                left: '8px',
+                alignItems: 'flex-start'
+            }),
+            c('&[v-placement$="center"]', {
+                alignItems: 'center'
+            }),
+            c('&[v-placement$="right"]', {
+                right: '8px',
+                alignItems: 'flex-end'
+            })
+        ]
+    ),
     c(
         '.mc-message',
         {
@@ -21,20 +72,13 @@ export default c([
             width: 'max-content',
             display: 'flex',
             alignItems: 'center',
-            marginTop: '8px',
+            marginTop: 'var(--message-item-gap)',
             transition: 'all 0.3s ease'
         },
         [
-            c('&--loading', [
-                c('.mc-message__icon-loading', {
-                    display: 'inline-block',
-                    marginRight: '8px',
-                    borderRadius: '50%',
-                    width: '14px',
-                    height: '14px',
-                    animation: 'mc-message-icon-loading-spin 1.2s linear infinite'
-                })
-            ]),
+            // c('&:not(:first-child)', {
+            //     marginTop: 'var(--message-item-gap)'
+            // }),
             c(
                 '&--card',
                 {
@@ -60,18 +104,9 @@ export default c([
         ]
     ),
     c('.mc-message-slide-down-enter-from, .mc-message-slide-down-leave-to', {
-        opacity: 0,
-        transform: 'translateY(-30px)'
+        opacity: 0
     }),
     c('.mc-message-slide-down-leave-active', {
         position: 'absolute'
-    }),
-    c('@keyframes mc-message-icon-loading-spin', {
-        '0%': {
-            transform: 'rotate(0deg)'
-        },
-        '100%': {
-            transform: 'rotate(360deg)'
-        }
     })
 ]);

@@ -1,5 +1,5 @@
 import { defineComponent, onMounted, toRefs, shallowReactive, ref, watch } from 'vue';
-import { useThemeRegister, flattenTree, PatchFlags, createElementVNode, createFragment, createDirectives } from '../_utils_';
+import { useThemeRegister, flattenTree, PatchFlags, createElementVNode, createDirectives } from '../_utils_';
 import { useElementBounding, throttledWatch, useTemplateRefsList } from '@vueuse/core';
 import { anchorProps } from './interface';
 import { mainCssr, lightCssr, darkCssr } from './styles';

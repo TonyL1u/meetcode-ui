@@ -10,13 +10,13 @@
 
 <script lang="ts" setup>
 import { createVNode } from 'vue';
-import { McMessage, McLoading, McTextLink, McSpace, McButton, McIcon } from 'meetcode-ui';
+import { McMessage, McTextLink, McSpace, McButton, McIcon } from 'meetcode-ui';
 import { HourglassOutline as IconHourglass } from '@vicons/ionicons5';
 
 const customIcon = () => {
     McMessage.warning({
         message: '加载中...',
-        icon: () => createVNode(McIcon, { style: 'margin-right: 6px', color: '#f59e0b' }, { default: () => createVNode(IconHourglass) })
+        icon: () => createVNode(McIcon, { style: 'margin-right: 6px', color: '#f59e0b', icon: IconHourglass })
     });
 };
 
@@ -35,7 +35,7 @@ const customStyle = () => {
 const customMessage = () => {
     McMessage({
         type: 'success',
-        message: () => createVNode('div', { class: 'mc-flex mc-items-center' }, [createVNode(McLoading, { type: 'ripple', size: 'small', style: 'margin-right: 6px' }), '内容可以传入 VNode']),
+        message: () => createVNode('div', null, ['内容可以传入 VNode']),
         icon: () => null
     });
 };

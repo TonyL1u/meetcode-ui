@@ -20,7 +20,7 @@
                     </McIcon>
                 </template>
             </McButton>
-            <McButton render="text" @click="switchLanguage">
+            <McButton v-if="false" render="text" @click="switchLanguage">
                 <template #icon>
                     <McIcon :size="18">
                         <LanguageOutline />

@@ -23,7 +23,8 @@ export default defineConfig({
             '@lib': resolve('lib'),
             '@playground': resolve('playground'),
             '@pages': resolve('pages'),
-            '@static': resolve('static')
+            '@static': resolve('static'),
+            vue: 'vue/dist/vue.esm-bundler.js'
         }
     },
     plugins: [
