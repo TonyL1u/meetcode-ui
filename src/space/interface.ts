@@ -4,7 +4,7 @@ export interface SpaceProps {
     vertical?: boolean;
     gap?: number;
     itemStyle?: string | CSSProperties;
-    justify?: 'flex-start' | 'flex-end' | 'center' | 'space-round' | 'space-between' | 'space-evenly';
+    justify?: 'flex-start' | 'flex-end' | 'center' | 'space-around' | 'space-between' | 'space-evenly';
 }
 
 export const spaceProps = {
