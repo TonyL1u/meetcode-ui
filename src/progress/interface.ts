@@ -1,6 +1,10 @@
 import type { PropType, ComputedRef } from 'vue';
 
 export interface ProgressProps {
+    /**
+     * 进度条类型
+     * @defaultValue 'line'
+     */
     type?: 'line' | 'circle';
     animation?: boolean;
     playOnVisible?: boolean;
