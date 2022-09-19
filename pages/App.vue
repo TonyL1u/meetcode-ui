@@ -36,6 +36,7 @@ const menu = computed<MenuOption[]>(() => {
 const MenuVNode: FunctionalComponent<{ menu: MenuOption[]; defaultExpandKeys?: string[] }> = props => {
     const { menu, defaultExpandKeys = [] } = props;
     const expandKeys = ref(defaultExpandKeys);
+
     return createVNode(McMenu, {
         value: currentMenuKey.value,
         expandKeys: expandKeys.value,
@@ -69,11 +70,13 @@ const handleShowNavMenu = () => {
                     label: '组件',
                     children: menusMap.components[siteLang.value]
                 },
-                {
-                    key: 'develop',
-                    label: '开发指南',
-                    children: menusMap.develop[siteLang.value]
-                }
+                ENV.DEV
+                    ? {
+                          key: 'develop',
+                          label: '开发指南',
+                          children: menusMap.develop[siteLang.value]
+                      }
+                    : {}
             ],
             defaultExpandKeys: ['docs', 'components', 'develop']
         },
