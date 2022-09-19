@@ -1,6 +1,14 @@
 import type { PropType, ComputedRef } from 'vue';
 
 export interface ProgressProps {
+    /**
+     * Determines how the warning will be displayed.
+     *
+     * @remarks
+     * See {@link WarningStyle| the WarningStyle enum} for more details.
+     *
+     * @defaultValue `WarningStyle.DialogBox`
+     */
     type?: 'line' | 'circle';
     animation?: boolean;
     playOnVisible?: boolean;

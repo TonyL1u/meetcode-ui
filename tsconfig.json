@@ -22,6 +22,7 @@
         "esModuleInterop": true,
         "lib": ["esnext", "dom"],
         "declaration": true,
+        "declarationMap": true,
         "strictNullChecks": true,
         "noImplicitAny": true,
         "noUnusedLocals": false,
