@@ -1,13 +1,5 @@
 import { InjectionKey, Ref, CSSProperties, VNodeChild, PropType } from 'vue';
-import * as CSS from 'csstype';
-
-declare module 'csstype' {
-    interface Properties {
-        '--tab-default-color'?: string;
-        '--tab-active-color'?: string;
-        '--tab-gap'?: string | number;
-    }
-}
+import type { ElementClassSet, ElementStyleSet } from '../_utils_';
 
 export const tabsInjectionKey: InjectionKey<Ref<string | number>> = Symbol();
 export const tabPaneIKey = Symbol('TabPane');
@@ -16,6 +8,10 @@ export type TabsType = 'bar' | 'empty' | 'card' | 'segment';
 export type TabPaneName = string | number;
 export type OnBeforeTabSwitchImpl = (from: TabPaneName, to: TabPaneName) => Promise<boolean | undefined | void> | boolean | undefined | void;
 export type MaybeTabPaneProps = TabPaneProps & TabProps & Record<string, unknown>;
+export interface TabsExposeInstance {
+    el: HTMLElement;
+    switchTo: (key: string | number) => void;
+}
 
 export interface TabsProps {
     value?: TabPaneName;
@@ -28,10 +24,10 @@ export interface TabsProps {
     animation?: 'slide' | 'scale' | 'fade';
     activeColor?: string;
     barPosition?: 'bottom' | 'top';
-    headerStyle?: string | CSSProperties;
-    headerClass?: string;
-    contentStyle?: string | CSSProperties;
-    contentClass?: string;
+    headerStyle?: ElementStyleSet;
+    headerClass?: ElementClassSet;
+    contentStyle?: ElementStyleSet;
+    contentClass?: ElementClassSet;
     onBeforeTabSwitch?: OnBeforeTabSwitchImpl;
 }
 export interface TabPaneProps {
@@ -83,7 +79,7 @@ export const tabsProps = {
     },
     activeColor: {
         type: String as PropType<TabsProps['activeColor']>,
-        default: '#10b981'
+        default: ''
     },
     barPosition: {
         type: String as PropType<TabsProps['barPosition']>,

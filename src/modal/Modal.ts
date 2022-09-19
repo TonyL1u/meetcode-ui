@@ -1,19 +1,29 @@
-import { defineComponent, createVNode, toRefs, computed, renderSlot, ref, Transition, watch, createTextVNode, CSSProperties, nextTick } from 'vue';
+import { defineComponent, createVNode, toRefs, computed, renderSlot, ref, Transition, watch, createTextVNode, mergeProps, provide } from 'vue';
+import { createKey } from '../_utils_';
+import { useThemeRegister, useI18n, useSharedItems } from '../_composable_';
 import { onClickOutside, useMouse, useMagicKeys, pausableWatch } from '@vueuse/core';
 import { VLazyTeleport } from 'vueuc';
-import { createKey } from '../_utils_';
-import { modalProps, ModalCloseAction } from './interface';
+import { modalProps, ModalCloseAction, modalInjectionKey } from './interface';
 import { McIcon } from '../icon';
 import { McButton } from '../button';
-import { modalStack, addModal, removeModal } from './shared';
 import { Close as IconClose } from '@vicons/ionicons5';
-import * as CSS from 'csstype';
+import { mainCssr, lightCssr, darkCssr } from './styles';
+import type { StyleValue, CSSProperties } from 'vue';
 
 export default defineComponent({
     name: 'Modal',
+    inheritAttrs: false,
     props: modalProps,
     emits: ['update:show', 'wrapper-click', 'shortcut-stroke', 'after-enter', 'after-leave', 'before-enter', 'cancel', 'confirm'],
-    setup(props, { slots, emit, expose }) {
+    setup(props, { slots, attrs, emit, expose }) {
+        // theme register
+        useThemeRegister({
+            key: 'Modal',
+            main: mainCssr,
+            light: lightCssr,
+            dark: darkCssr
+        });
+
         const {
             show,
             width,
@@ -37,17 +47,21 @@ export default defineComponent({
             pure,
             position,
             animation,
-            onBeforeLeave
+            onBeforeLeave,
+            appearX,
+            appearY
         } = toRefs(props);
         const key = createKey('modal');
-        const modalContainerElRef = ref<HTMLElement>();
         const modalElRef = ref<HTMLElement>();
         const modalAppearXRef = ref(0);
         const modalAppearYRef = ref(0);
         const modalTransformOrigin = computed(() => (appearFromCursor.value ? `${modalAppearXRef.value}px ${modalAppearYRef.value}px` : 'center center'));
         const modalTransitionName = computed(() => (appearFromCursor.value ? 'mc-modal-scale' : ['scale', 'slide'].includes(animation.value!) ? `mc-modal-${animation.value}` : 'mc-modal-scale'));
-        const isTopModal = computed(() => modalStack.length > 0 && modalStack[modalStack.length - 1] === key);
+        const isTopModal = computed(() => topItem.value === key);
+        const isMountModal = ref(true);
+        const { add, remove, topItem } = useSharedItems();
         const { x, y } = useMouse();
+        const { i18n } = useI18n('modal');
         const magicKeys = useMagicKeys({
             passive: false,
             onEventFired(event: Event) {
@@ -61,9 +75,12 @@ export default defineComponent({
             show,
             () => {
                 if (show.value) {
-                    callUpdateShow(true);
-                    modalAppearXRef.value = x.value;
-                    modalAppearYRef.value = y.value;
+                    isMountModal.value = true;
+                    modalAppearXRef.value = appearX.value || x.value;
+                    modalAppearYRef.value = appearY.value || y.value;
+                    add(key);
+                } else {
+                    remove(key);
                 }
             },
             { immediate: true }
@@ -96,12 +113,9 @@ export default defineComponent({
         });
 
         const callUpdateShow = async (val: boolean) => {
-            if (val) {
-                addModal(key);
-            } else {
+            if (!val) {
                 const callback = await onBeforeLeave.value?.(closeAction);
                 if (callback) return;
-                removeModal(key);
             }
 
             emit('update:show', val);
@@ -122,6 +136,7 @@ export default defineComponent({
         };
 
         const callAfterLeave = () => {
+            isMountModal.value = false;
             emit('after-leave');
         };
 
@@ -153,14 +168,14 @@ export default defineComponent({
             const { top, right, bottom, left } = position.value || {};
 
             return {
-                marginTop: top ? (typeof top === 'number' ? `${top}px` : top) : 'auto',
-                marginRight: right ? (typeof right === 'number' ? `${right}px` : right) : 'auto',
-                marginBottom: bottom ? (typeof bottom === 'number' ? `${bottom}px` : bottom) : 'auto',
-                marginLeft: left ? (typeof left === 'number' ? `${left}px` : left) : 'auto'
+                marginTop: top !== undefined ? (typeof top === 'number' ? `${top}px` : top) : 'auto',
+                marginRight: right !== undefined ? (typeof right === 'number' ? `${right}px` : right) : 'auto',
+                marginBottom: bottom !== undefined ? (typeof bottom === 'number' ? `${bottom}px` : bottom) : 'auto',
+                marginLeft: left !== undefined ? (typeof left === 'number' ? `${left}px` : left) : 'auto'
             };
         });
 
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             return {
                 '--modal-width': typeof width.value === 'number' ? `${width.value}px` : width.value,
                 '--modal-height': typeof height.value === 'number' ? `${height.value}px` : height.value
@@ -171,17 +186,19 @@ export default defineComponent({
             const titleVNode = createVNode('div', { class: 'mc-modal-title' }, [typeof title.value === 'string' ? createTextVNode(title.value) : title.value?.()]);
             const closeIconVNode = closable.value
                 ? createVNode(
-                      McIcon,
+                      McButton,
                       {
-                          color: '#666',
-                          size: 20,
-                          class: 'mc-modal-close-icon',
+                          render: 'text',
+                          class: 'mc-modal-close-button',
+                          style: { padding: '0 6px' },
                           onClick: () => {
                               closeAction = 'close';
                               callUpdateShow(false);
                           }
                       },
-                      { default: () => createVNode(IconClose) }
+                      {
+                          icon: () => createVNode(McIcon, { size: 20 }, { default: () => createVNode(IconClose) })
+                      }
                   )
                 : null;
 
@@ -196,54 +213,54 @@ export default defineComponent({
                       slots.footer
                           ? [renderSlot(slots, 'footer')]
                           : [
-                                cancelText.value !== null ? createVNode(McButton, { class: 'mc-modal__footer-button', onClick: handleCancel }, { default: () => cancelText.value }) : null,
-                                confirmText.value !== null ? createVNode(McButton, { class: 'mc-modal__footer-button', onClick: handleConfirm, type: 'success' }, { default: () => confirmText.value }) : null
+                                cancelText.value !== null ? createVNode(McButton, { ghost: true, onClick: handleCancel }, { default: () => cancelText.value || i18n('CancelButtonText') }) : null,
+                                confirmText.value !== null ? createVNode(McButton, { style: { marginLeft: '16px' }, type: 'success', onClick: handleConfirm }, { default: () => confirmText.value || i18n('ConfirmButtonText') }) : null
                             ]
                   )
                 : null;
         });
 
         const modalVNode = computed(() => {
+            const mergedProps = mergeProps(
+                {
+                    ref: modalElRef,
+                    class: ['mc-modal', pure.value ? 'mc-modal--pure' : ''],
+                    style: { ...(cssVars.value as CSSProperties), ...modalPosition.value }
+                },
+                attrs
+            );
+
             return createVNode('div', { class: 'mc-modal-wrapper', style: `transform-origin: ${modalTransformOrigin.value}` }, [
-                createVNode('div', { ref: modalElRef, class: ['mc-modal', pure.value ? 'mc-modal--pure' : ''], style: { ...cssVars.value, ...modalPosition.value } }, [
-                    headerVNode.value,
-                    createVNode('div', { class: ['mc-modal__body', bodyClass.value], style: bodyStyle.value }, [renderSlot(slots, 'default')]),
-                    footerVNode.value
-                ])
+                createVNode('div', mergedProps, [headerVNode.value, createVNode('div', { class: ['mc-modal__body', bodyClass.value], style: bodyStyle.value }, [renderSlot(slots, 'default')]), footerVNode.value])
             ]);
         });
 
         const modalContainerVNode = computed(() => {
-            return createVNode(
-                'div',
-                {
-                    ref: modalContainerElRef,
-                    class: 'mc-modal-container'
-                },
-                [
-                    createVNode(
-                        Transition,
-                        { name: 'mc-modal-mask-fade', appear: true },
-                        {
-                            default: () => (show.value ? createVNode('div', { class: 'mc-modal-mask' }) : null)
-                        }
-                    ),
-                    createVNode(
-                        Transition,
-                        { name: modalTransitionName.value, appear: true, onBeforeEnter: callBeforeEnter, onAfterEnter: callAfterEnter, onAfterLeave: callAfterLeave },
-                        {
-                            default: () => (show.value ? modalVNode.value : null)
-                        }
-                    )
-                ]
-            );
+            return createVNode('div', { class: 'mc-modal-container' }, [
+                createVNode(
+                    Transition,
+                    { name: 'mc-modal-mask-fade', appear: true },
+                    {
+                        default: () => (show.value ? createVNode('div', { class: 'mc-modal-mask' }) : null)
+                    }
+                ),
+                createVNode(
+                    Transition,
+                    { name: modalTransitionName.value, appear: true, onBeforeEnter: callBeforeEnter, onAfterEnter: callAfterEnter, onAfterLeave: callAfterLeave },
+                    {
+                        default: () => (show.value ? modalVNode.value : null)
+                    }
+                )
+            ]);
         });
 
+        provide(modalInjectionKey, modalElRef);
+
         expose({
-            close: callUpdateShow,
+            hide: () => callUpdateShow(false),
             el: modalElRef
         });
 
-        return () => createVNode(VLazyTeleport, { to: 'body', show: show.value }, { default: () => modalContainerVNode.value });
+        return () => (isMountModal.value ? createVNode(VLazyTeleport, { to: 'body', show: show.value }, { default: () => modalContainerVNode.value }) : null);
     }
 });

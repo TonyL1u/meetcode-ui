@@ -68,8 +68,8 @@ export default defineComponent({
 
         const SelectAllEventBusKey: EventBusKey<boolean> = Symbol();
         const MaxControlEventBusKey: EventBusKey<boolean> = Symbol();
-        const BusSelectAll = useEventBus<boolean>(SelectAllEventBusKey);
-        const BusMaxControl = useEventBus<boolean>(MaxControlEventBusKey);
+        const BusSelectAll = useEventBus(SelectAllEventBusKey);
+        const BusMaxControl = useEventBus(MaxControlEventBusKey);
 
         provide(checkboxGroupInjectionKey, {
             groupValue: mergedValue,
@@ -78,6 +78,11 @@ export default defineComponent({
             updateGroupValue,
             BusSelectAll,
             BusMaxControl
+        });
+
+        onUnmounted(() => {
+            BusMaxControl.reset();
+            BusSelectAll.reset();
         });
 
         expose({
@@ -93,11 +98,6 @@ export default defineComponent({
             },
             status,
             el: checkboxGroupElRef
-        });
-
-        onUnmounted(() => {
-            BusMaxControl.reset();
-            BusSelectAll.reset();
         });
 
         return () =>

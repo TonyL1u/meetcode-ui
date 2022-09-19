@@ -2,13 +2,13 @@ import { watch, Ref, unref, ref } from 'vue';
 import { until, createEventHook, EventHookOn, tryOnUnmounted } from '@vueuse/core';
 import darktheme from 'theme-vitesse/themes/vitesse-dark.json';
 import lightTheme from 'theme-vitesse/themes/vitesse-light.json';
-import type { editor as Editor } from 'monaco-editor';
 import { editorPlugins } from '../../monaco/plugins/editor';
 import setupMonaco from '../../monaco';
-import { isDark } from '../dark';
-import { siteTheme } from '@pages/site.config';
+import { useThemeController } from 'meetcode-ui';
+import type { editor as Editor } from 'monaco-editor';
 
 export function useMonaco(target: Ref, options: any) {
+    const { current: siteTheme, isDark } = useThemeController();
     const changeEventHook = createEventHook<string>();
     const isSetup = ref(false);
     let editor: Editor.IStandaloneCodeEditor;
@@ -52,7 +52,7 @@ export function useMonaco(target: Ref, options: any) {
                 watch(
                     siteTheme,
                     () => {
-                        if (siteTheme.value) monaco.editor.setTheme('vitesse-dark');
+                        if (isDark.value) monaco.editor.setTheme('vitesse-dark');
                         else monaco.editor.setTheme('vitesse-light');
                     },
                     { immediate: true }

@@ -1,13 +1,21 @@
-import { defineComponent, toRefs, mergeProps, createVNode, computed } from 'vue';
-import { getSlotFirstVNode } from '../_utils_';
+import { defineComponent, toRefs, computed } from 'vue';
+import { getSlotFirstVNode, createComponentVNode, createElementVNode, PatchFlags } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
+import { mainCssr } from './styles';
 import { iconProps } from './interface';
-import * as CSS from 'csstype';
+import type { StyleValue } from 'vue';
 
 export default defineComponent({
     name: 'Icon',
     props: iconProps,
-    setup(props, { slots, attrs }) {
-        const { size, color, spin, speed } = toRefs(props);
+    setup(props, { slots }) {
+        // theme register
+        useThemeRegister({
+            key: 'Icon',
+            main: mainCssr
+        });
+
+        const { size, color, spin, speed, icon } = toRefs(props);
 
         const spinningSpeed = computed(() => {
             switch (speed.value) {
@@ -22,21 +30,24 @@ export default defineComponent({
             }
         });
 
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             return {
                 '--icon-color': color.value ?? 'initial',
                 '--icon-font-size': size.value ? `${size.value}px` : 'initial',
                 '--icon-spinning-speed': spinningSpeed.value
             };
         });
-        return () => {
-            const mergedProps = mergeProps(attrs, {
-                role: 'img',
-                class: ['mc-icon', { 'mc-icon--spinning': spin.value }],
-                style: cssVars.value
-            });
 
-            return createVNode('i', mergedProps, [getSlotFirstVNode(slots.default)]);
-        };
+        return () =>
+            createElementVNode(
+                'i',
+                {
+                    role: 'img',
+                    class: ['mc-icon', { 'mc-icon--spinning': spin.value }],
+                    style: cssVars.value
+                },
+                [icon.value ? createComponentVNode(icon.value) : getSlotFirstVNode(slots.default)],
+                PatchFlags.CLASS | PatchFlags.STYLE
+            );
     }
 });

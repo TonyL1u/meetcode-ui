@@ -1,7 +1,11 @@
-import { defineComponent, toRefs, renderSlot, mergeProps, createVNode } from 'vue';
-import { propsMergeSlots } from '../_utils_';
-import { McPopover, popoverProps } from '../popover';
+import { defineComponent, renderSlot, mergeProps, onMounted } from 'vue';
+import { propsMergeSlots, createComponentVNode, PatchFlags, SlotFlags } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
+import { omit } from 'lodash-es';
+import { McPopover } from '../popover';
+import { popoverProps } from '../popover/interface';
 import { TooltipMergedProps, tooltipProps } from './interface';
+import { lightCssr, darkCssr } from './styles';
 
 export default defineComponent({
     name: 'Tooltip',
@@ -10,17 +14,28 @@ export default defineComponent({
         ...tooltipProps
     },
     setup(props, { slots }) {
-        const { effect } = toRefs(props);
+        // theme register
+        useThemeRegister({
+            key: 'Tooltip',
+            light: lightCssr,
+            dark: darkCssr
+        });
 
         return () => {
-            const mergedProps = mergeProps(props, {
-                class: ['mc-tooltip', `mc-tooltip--${effect.value}`]
+            const mergedProps = mergeProps(omit(props, Object.keys(tooltipProps)), {
+                class: 'mc-tooltip'
             });
 
-            return createVNode(McPopover, mergedProps, {
-                default: () => renderSlot(slots, 'default'),
-                content: () => propsMergeSlots<TooltipMergedProps, 'content'>(props, slots, 'content')
-            });
+            return createComponentVNode<TooltipMergedProps, 'default' | 'content'>(
+                McPopover,
+                mergedProps,
+                {
+                    default: () => renderSlot(slots, 'default'),
+                    content: () => propsMergeSlots<TooltipMergedProps, 'content'>(props, slots, 'content'),
+                    _: SlotFlags.FORWARDED
+                },
+                PatchFlags.FULL_PROPS
+            );
         };
     }
 });

@@ -1,26 +1,21 @@
-import { PropType, VNodeChild } from 'vue';
+import { PropType, VNodeChild, Ref, InjectionKey, CSSProperties } from 'vue';
 import { ElementClassSet } from '../_utils_';
-import * as CSS from 'csstype';
-
-declare module 'csstype' {
-    interface Properties {
-        '--modal-width'?: string;
-        '--modal-height'?: string;
-    }
-}
 
 export type OnBeforeLeaveImpl = (action: ModalCloseAction) => Promise<boolean | undefined | void> | boolean | undefined | void;
-export type OnBeforeEnterImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
 export type OnCancelImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
 export type OnConfirmImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
 export type ModalCloseAction = 'wrapper' | 'close' | 'shortcut' | 'cancel' | 'confirm';
+export type ModalInjection = Ref<HTMLElement | undefined> | null;
 export interface ModalPosition {
     top?: number | string;
     right?: number | string;
     bottom?: number | string;
     left?: number | string;
 }
-
+export interface ModalExposeInstance {
+    hide: () => void;
+    el: HTMLElement;
+}
 export interface ModalProps {
     show?: boolean;
     width?: number | string;
@@ -30,10 +25,10 @@ export interface ModalProps {
     shortcutKey?: string;
     closeOnShortcut?: boolean;
     closable?: boolean;
-    headerStyle?: string | Partial<CSSStyleDeclaration>;
-    bodyStyle?: string | Partial<CSSStyleDeclaration>;
-    footerStyle?: string | Partial<CSSStyleDeclaration>;
-    maskStyle?: string | Partial<CSSStyleDeclaration>;
+    headerStyle?: string | CSSProperties;
+    bodyStyle?: string | CSSProperties;
+    footerStyle?: string | CSSProperties;
+    maskStyle?: string | CSSProperties;
     headerClass?: ElementClassSet;
     bodyClass?: ElementClassSet;
     footerClass?: ElementClassSet;
@@ -46,8 +41,19 @@ export interface ModalProps {
     position?: ModalPosition;
     animation?: 'scale' | 'slide';
     onBeforeLeave?: OnBeforeLeaveImpl;
+    appearX?: number;
+    appearY?: number;
 }
-
+export interface ModalObjectEmits {
+    'onUpdate:show'?: (val: boolean) => void;
+    onWrapperClick?: (e: MouseEvent) => void;
+    onShortcutStroke?: (keys: string[]) => void;
+    onAfterEnter?: () => void;
+    onAfterLeave?: () => void;
+    onBeforeEnter?: () => void;
+    onCancel?: () => void;
+    onConfirm?: () => void;
+}
 export const modalProps = {
     show: {
         type: Boolean as PropType<ModalProps['show']>,
@@ -58,7 +64,7 @@ export const modalProps = {
         default: 600
     },
     height: {
-        type: [Number, String] as PropType<ModalProps['width']>,
+        type: [Number, String] as PropType<ModalProps['height']>,
         default: 'initial'
     },
     appearFromCursor: {
@@ -119,11 +125,11 @@ export const modalProps = {
     },
     cancelText: {
         type: [String, Object] as PropType<ModalProps['cancelText']>,
-        default: '取消'
+        default: undefined
     },
     confirmText: {
         type: [String, Object] as PropType<ModalProps['confirmText']>,
-        default: '确定'
+        default: undefined
     },
     pure: {
         type: Boolean as PropType<ModalProps['pure']>,
@@ -140,5 +146,14 @@ export const modalProps = {
     onBeforeLeave: {
         type: Function as PropType<ModalProps['onBeforeLeave']>,
         default: undefined
+    },
+    appearX: {
+        type: Number as PropType<ModalProps['appearX']>,
+        default: undefined
+    },
+    appearY: {
+        type: Number as PropType<ModalProps['appearY']>,
+        default: undefined
     }
 };
+export const modalInjectionKey: InjectionKey<ModalInjection> = Symbol('modalInjectionKey');

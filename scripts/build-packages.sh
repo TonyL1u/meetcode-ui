@@ -1,18 +1,27 @@
 function clean() {
-    rimraf lib
+    rimraf es lib dist
 }
 
 function buildESM() {
+    tsc -b --force tsconfig.esm.json
     rollup --config scripts/build/rollup.esm.config.js
 }
 
 function buildUMD() {
+    tsc -b --force tsconfig.cjs.json
     rollup --config scripts/build/rollup.umd.config.js
 }
 
 function buildAll() {
     buildESM
     buildUMD
+}
+
+function copyExt() {
+    cp dist/meetcode-ui.esm.js static
+    rimraf static/meetcode-ui.types
+    node scripts/generateMonacoTypes.js
+    rimraf dist/src
 }
 
 clean
@@ -27,3 +36,4 @@ else
     buildAll
 fi
 
+copyExt

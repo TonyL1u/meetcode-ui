@@ -1,12 +1,6 @@
 import { Ref, InjectionKey } from 'vue';
 import { UseEventBusReturn } from '@vueuse/core';
-import * as CSS from 'csstype';
 
-declare module 'csstype' {
-    interface Properties {
-        '--split-pane-initial-width'?: string;
-    }
-}
 export interface ResizeBusArgs {
     dragSize: number;
     prevPaneKey?: string;
@@ -16,7 +10,7 @@ export interface ResizeBusArgs {
 export interface SplitInjection {
     parentWidth: Ref<number>;
     splitPaneInitialWidth: Ref<string>;
-    BusResize: UseEventBusReturn<ResizeBusArgs>;
+    BusResize: UseEventBusReturn<ResizeBusArgs, any>;
 }
 export const splitInjectionKey: InjectionKey<SplitInjection> = Symbol();
 export const SplitIKey = Symbol('Split');

@@ -1,4 +1,4 @@
-import { PropType } from 'vue';
+import { PropType, CSSProperties } from 'vue';
 import { PopoverProps } from '../popover';
 
 export type OnCancelImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;
@@ -11,7 +11,7 @@ export interface PopconfirmProps {
     hideIcon: boolean;
     onCancel?: OnCancelImpl;
     onConfirm?: OnConfirmImpl;
-    contentStyle?: string | CSSStyleDeclaration;
+    contentStyle?: string | CSSProperties;
 }
 
 export const popconfirmProps = {
@@ -43,7 +43,7 @@ export const popconfirmProps = {
         type: Function as PropType<PopconfirmProps['onConfirm']>,
         default: undefined
     },
-    contentStye: {
+    contentStyle: {
         type: [String, Object] as PropType<PopconfirmProps['contentStyle']>,
         default: undefined
     }

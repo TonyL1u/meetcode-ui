@@ -1,14 +1,22 @@
-import { defineComponent, toRefs, computed, createVNode } from 'vue';
+import { defineComponent, toRefs, computed, createVNode, onMounted } from 'vue';
 import { flattenWithOptions } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { spaceProps } from './interface';
-import * as CSS from 'csstype';
+import { mainCssr } from './styles';
+import type { StyleValue } from 'vue';
 
 export default defineComponent({
     name: 'Space',
     props: spaceProps,
     setup(props, { slots }) {
+        // theme register
+        useThemeRegister({
+            key: 'Space',
+            main: mainCssr
+        });
+
         const { vertical, gap, itemStyle, justify } = toRefs(props);
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             return {
                 '--space-direction': vertical.value ? 'column' : 'row',
                 '--space-justify': justify.value,

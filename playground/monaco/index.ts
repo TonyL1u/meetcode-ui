@@ -7,22 +7,7 @@ import { orchestrator } from '../orchestrator';
 import vueuseTypes from '@vueuse/core/index.d.ts?raw';
 import vueTypes from '@vue/runtime-core/dist/runtime-core.d.ts?raw';
 import iconTypes from '@vicons/ionicons5/index.d.ts?raw';
-import McUiComponents from '@lib/components.d.ts?raw';
-
-async function getAllMeetcodeTypes() {
-    const exportDeclares = McUiComponents.split('\r\n');
-    let allTypes = '';
-
-    for (const declare of exportDeclares) {
-        const name = declare.slice(17, -2);
-        if (name) {
-            const types = (await import(`../../lib/${name}/index.d.ts?raw`)).default;
-            types && (allTypes = `${allTypes}\n${types}`);
-        }
-    }
-
-    return allTypes;
-}
+import meetcodeTypes from '@static/meetcode-ui.types?raw';
 
 const setup = createSingletonPromise(async () => {
     // validation settings
@@ -46,35 +31,15 @@ const setup = createSingletonPromise(async () => {
         typeRoots: ['node_modules/@types']
     });
 
-    const registered: string[] = ['vue', '@vueuse/core', 'meetcode-ui', '@vicons/ionicons5'];
+    const registered: string[] = ['vue', '@vueuse/core', '@vicons/ionicons5', 'meetcode-ui'];
 
-    monaco.languages.typescript.javascriptDefaults.addExtraLib(
-        `
-    declare module '@vueuse/core' { ${vueuseTypes} }
-  `,
-        'ts:vueuse'
-    );
+    monaco.languages.typescript.javascriptDefaults.addExtraLib(`declare module '@vueuse/core' { ${vueuseTypes} }`, 'ts:vueuse');
 
-    monaco.languages.typescript.javascriptDefaults.addExtraLib(
-        `
-    declare module 'vue' { ${vueTypes} }
-  `,
-        'ts:vue'
-    );
+    monaco.languages.typescript.javascriptDefaults.addExtraLib(`declare module 'vue' { ${vueTypes} }`, 'ts:vue');
 
-    monaco.languages.typescript.javascriptDefaults.addExtraLib(
-        `
-        declare module 'meetcode-ui' { ${await getAllMeetcodeTypes()} }
-      `,
-        'ts:meetcode-ui'
-    );
+    monaco.languages.typescript.javascriptDefaults.addExtraLib(`declare module '@vicons/ionicons5' { ${iconTypes} }`, 'ts:vicons');
 
-    monaco.languages.typescript.javascriptDefaults.addExtraLib(
-        `
-        declare module '@vicons/ionicons5' { ${iconTypes} }
-      `,
-        'ts:vicons'
-    );
+    monaco.languages.typescript.javascriptDefaults.addExtraLib(`declare module 'meetcode-ui' {${meetcodeTypes} }`, 'ts:meetcode-ui');
 
     watch(
         () => orchestrator.packages,

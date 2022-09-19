@@ -9,11 +9,10 @@ import { name } from '../../package.json';
 
 const extensions = ['.js', '.ts', '.tsx'];
 // 输出打包后的文件名称type 1.esm 2.umd
-const file = type => `lib/${name}.${type}.js`;
+const file = type => `dist/${name}.${type}.js`;
 const overrides = {
-    // 忽略any
-    compilerOptions: { noImplicitAny: false },
-    exclude: ['playground', 'pages', '*.config.ts', 'src/**/__tests__']
+    declaration: false,
+    exclude: ['playground', 'pages', 'scripts', '*.config.ts', 'src/**/__tests__']
 };
 export { name, file };
 export default {
@@ -34,5 +33,5 @@ export default {
             plugins: [postcssImport(), tailwindcss()]
         })
     ],
-    external: ['vue', 'lodash-es'] // 规定哪些是外部引用的模块
+    external: ['vue', 'animejs'] // 规定哪些是外部引用的模块
 };

@@ -1,29 +1,37 @@
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted, watchEffect, watch } from 'vue';
 import type { WatchStopHandle } from 'vue';
-// import { useElementSize, useCssVar } from '@vueuse/core'
+import { throttledWatch } from '@vueuse/core';
 import srcdoc from './source/template.html?raw';
+import srcdocProd from './source/template.prod.html?raw';
 import { PreviewProxy } from './logic/PreviewProxy';
 import { MAIN_FILE, vueRuntimeUrl } from './compiler/sfcCompiler';
 import { compileModulesForPreview } from './compiler/moduleCompiler';
 import { orchestrator, orchestrator as store } from './orchestrator';
-import { isDark } from './logic/dark';
+import { McMessage, useThemeController } from 'meetcode-ui';
 
+const emit = defineEmits<(e: 'renderFinished') => void>();
 const container = ref();
 const runtimeError = ref();
 const runtimeWarning = ref();
+const { isDark } = useThemeController();
 let sandbox: HTMLIFrameElement;
 let proxy: PreviewProxy;
 let stopUpdateWatcher: WatchStopHandle;
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-watch([runtimeError, runtimeWarning], () => {
-    orchestrator.runtimeErrors = [runtimeError.value, runtimeWarning.value].filter(x => x);
-});
+throttledWatch(
+    [runtimeError, runtimeWarning],
+    () => {
+        orchestrator.runtimeErrors = [runtimeError.value, runtimeWarning.value].filter(x => x);
+        runtimeError.value && McMessage.error(runtimeError.value.toString());
+    },
+    { throttle: 2000, trailing: true }
+);
 
 // create sandbox on mount
 onMounted(createSandbox);
 // reset sandbox when import map changes
-
 watch(
     () => store.importMap,
     (importMap, prev) => {
@@ -73,7 +81,7 @@ function createSandbox() {
     if (!importMap.imports) importMap.imports = {};
 
     importMap.imports.vue = vueRuntimeUrl.value;
-    const sandboxSrc = srcdoc.replace(/<!--IMPORT_MAP-->/, JSON.stringify(importMap));
+    const sandboxSrc = (import.meta.env.PROD ? srcdocProd : srcdoc).replace(/<!--IMPORT_MAP-->/, JSON.stringify(importMap));
     sandbox.srcdoc = sandboxSrc;
     container.value.appendChild(sandbox);
     proxy = new PreviewProxy(sandbox, {
@@ -132,11 +140,13 @@ async function updatePreview() {
         // eslint-disable-next-line no-console
         console.log(`successfully compiled ${modules.length} modules.`);
         // reset modules
-        await proxy.eval([
-            "window.__modules__ = {};window.__css__ = ''",
-            ...modules,
-            isDark.value ? 'document.querySelector("html").classList.add("dark")' : 'document.querySelector("html").classList.remove("dark")',
-            `
+        await Promise.all([
+            sleep(1000),
+            await proxy.eval([
+                "window.__modules__ = {};window.__css__ = ''",
+                ...modules,
+                isDark.value ? 'document.querySelector("html").classList.add("dark")' : 'document.querySelector("html").classList.remove("dark")',
+                `
       import { createApp as _createApp } from "vue"
       if (window.__app__) {
         window.__app__.unmount()
@@ -146,7 +156,9 @@ async function updatePreview() {
       const app = window.__app__ = _createApp(__modules__["${MAIN_FILE}"].default)
       app.config.errorHandler = e => console.error(e)
       app.mount('#app')`.trim()
+            ])
         ]);
+        emit('renderFinished');
     } catch (e: any) {
         runtimeError.value = e.message;
     }
@@ -157,12 +169,13 @@ async function updatePreview() {
     <div ref="container" w="full" h="full" flex="~" class="preview-container" place="items-center content-center"></div>
 </template>
 
-<style>
+<style lang="scss">
 .preview-container {
     width: 100%;
     height: 100%;
     overflow: hidden;
 }
+
 .preview-container,
 iframe {
     width: 100%;

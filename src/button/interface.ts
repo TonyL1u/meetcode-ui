@@ -1,31 +1,5 @@
 import { Prop, PropType } from 'vue';
 import { UIStatus, UISize, UIColorAttrs } from '../_utils_';
-import * as CSS from 'csstype';
-
-declare module 'csstype' {
-    interface Properties {
-        '--button-default-color'?: string;
-        '--button-default-border-color'?: string;
-        '--button-default-background-color'?: string;
-        '--button-hover-color'?: string;
-        '--button-hover-border-color'?: string;
-        '--button-hover-background-color'?: string;
-        '--button-active-color'?: string;
-        '--button-active-border-color'?: string;
-        '--button-active-background-color'?: string;
-        '--button-disabled-color'?: string;
-        '--button-disabled-border-color'?: string;
-        '--button-disabled-background-color'?: string;
-        '--button-width'?: string;
-        '--button-height'?: string;
-        '--button-padding'?: string;
-        '--button-font-size'?: string;
-        '--button-icon-size'?: string;
-        '--button-icon-margin'?: string;
-        '--button-radius'?: string;
-        '--button-ripple-color'?: string;
-    }
-}
 
 export interface ButtonSizeSet {
     height: string;
@@ -42,6 +16,10 @@ export type ButtonRender = 'normal' | 'text' | 'link';
 export type ButtonColorSet = Pick<UIColorAttrs, 'color' | 'borderColor' | 'backgroundColor'>;
 export type ButtonSizeMap = Record<ButtonSize, ButtonSizeSet>;
 
+export interface ButtonExposeInstance {
+    el: HTMLButtonElement;
+}
+
 export interface ButtonProps {
     type?: ButtonType;
     size?: ButtonSize;
@@ -53,6 +31,7 @@ export interface ButtonProps {
     circle?: boolean;
     block?: boolean;
     loading?: boolean;
+    iconRight?: boolean;
     color?: string;
     textColor?: string;
     borderColor?: string;
@@ -110,6 +89,10 @@ export const buttonProps = {
     },
     block: {
         type: Boolean as PropType<ButtonProps['block']>,
+        default: false
+    },
+    iconRight: {
+        type: Boolean as PropType<ButtonProps['iconRight']>,
         default: false
     },
     color: {

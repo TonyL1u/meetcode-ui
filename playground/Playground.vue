@@ -1,22 +1,26 @@
-<script lang="ts">
-export default {
-    inheritAttrs: false
-};
-</script>
-
 <script lang="ts" setup>
+import { ref, watch, computed } from 'vue';
 import Editor from './Editor.vue';
 import Preview from './Preview.vue';
 import { Splitpanes, Pane } from 'splitpanes';
 import { onShouldUpdateContent, orchestrator } from './orchestrator';
-import { ref } from 'vue';
+import { useThemeController } from 'meetcode-ui';
+import beautify from 'js-beautify';
+import hljs from 'highlight.js';
 
+const emit = defineEmits<(e: 'renderFinished') => void>();
 const initialScript = ref('');
 const initialTemplate = ref('');
+const compliedScript = ref('');
+const highlightedScript = computed(() => {
+    return hljs.highlight(compliedScript.value, { language: 'js' }).value;
+});
+const { current: siteTheme } = useThemeController();
 onShouldUpdateContent(() => {
     if (orchestrator.activeFile) {
         initialScript.value = orchestrator.activeFile?.script;
         initialTemplate.value = orchestrator.activeFile?.template;
+        compliedScript.value = orchestrator.activeFile?.compiled.js;
     }
 });
 
@@ -24,12 +28,15 @@ const onContentChanged = (source: string, content: string) => {
     if (orchestrator.activeFile) {
         if (source === 'script') orchestrator.activeFile.script = content;
         else if (source === 'template') orchestrator.activeFile.template = content;
+        compliedScript.value = orchestrator.activeFile?.compiled.js;
     }
 };
+
+const handleRenderFinished = () => emit('renderFinished');
 </script>
 
 <template>
-    <Splitpanes class="default-theme mc-p-4 mc-flex mc-box-border mc-h-full">
+    <Splitpanes class="default-theme mc-p-4 mc-flex mc-box-border mc-h-full" :class="siteTheme">
         <Pane class="mc-h-full">
             <Splitpanes class="default-theme mc-flex mc-flex-col mc-h-full" horizontal>
                 <Pane>
@@ -46,7 +53,8 @@ const onContentChanged = (source: string, content: string) => {
         </Pane>
         <Pane class="mc-h-full">
             <div class="container" style="background: #f2f2f2">
-                <Preview />
+                <Preview @render-finished="handleRenderFinished" />
+                <!-- <pre class="mc-overflow-auto" v-html="highlightedScript"></pre> -->
             </div>
         </Pane>
     </Splitpanes>
@@ -58,7 +66,13 @@ const onContentChanged = (source: string, content: string) => {
 
     & > .container {
         @apply mc-rounded mc-h-full mc-overflow-hidden mc-box-border mc-flex;
-        border: 1px #e5e7eb solid;
+        border: 1px solid #e5e7eb;
+    }
+}
+
+.splitpanes.default-theme.dark .splitpanes__pane {
+    & > .container {
+        border: 1px solid #9ca3af;
     }
 }
 

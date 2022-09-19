@@ -1,19 +1,10 @@
-import { PropType } from 'vue';
-import * as CSS from 'csstype';
-
-declare module 'csstype' {
-    interface Properties {
-        '--space-direction'?: string;
-        '--space-justify'?: string;
-        '--space-item-gap'?: string;
-    }
-}
+import type { PropType, CSSProperties } from 'vue';
 
 export interface SpaceProps {
     vertical?: boolean;
     gap?: number;
-    itemStyle?: string | Partial<CSSStyleDeclaration>;
-    justify?: 'flex-start' | 'flex-end' | 'center' | 'space-round' | 'space-between' | 'space-evenly';
+    itemStyle?: string | CSSProperties;
+    justify?: 'flex-start' | 'flex-end' | 'center' | 'space-around' | 'space-between' | 'space-evenly';
 }
 
 export const spaceProps = {

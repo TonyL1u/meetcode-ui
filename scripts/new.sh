@@ -6,22 +6,21 @@ function firstLetterUpper(){
 }
 
 function component() {
+    while read -p "是否需要暗黑模式？(y/n)：" confirmed 
+    do
+        if [ "$confirmed" == "y" -o "$confirmed" == "Y" ]; then  
+            cp -r ../scripts/template/dark/. $1
+        else
+            cp -r ../scripts/template/normal/. $1
+        fi
+        break
+    done
     echo "export * from './$1';" >> components.ts
     cd $1
-    mkdir demos
-    touch interface.ts
-    touch $file.ts
-    touch style.scss
-    echo "import { defineComponent } from 'vue';\n export default defineComponent({})" > $file.ts
-    echo "import './style.scss';" > index.ts
+    mv NAME.ts $file.ts
+    mv __tests__/NAME.spec.ts __tests__/$file.spec.ts
     echo "export { default as Mc$file } from './$file';" > index.ts
 }
-
-function doc() {
-    cd ../../pages/docs
-    echo "<script setup></script>" > $file.md
-}
-
 
 cd src
 
@@ -34,7 +33,7 @@ do
     else
         firstLetterUpper $NAME
         component $NAME
-        doc $NAME
+        echo "模版创建成功！"
         exit
     fi
 done

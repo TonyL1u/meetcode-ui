@@ -1,10 +1,15 @@
-import { ref, toRefs, createVNode, nextTick, renderSlot, mergeProps, defineComponent, toRaw, PropType } from 'vue';
+import { ref, reactive, toRefs, nextTick, renderSlot, mergeProps, defineComponent, toRaw, PropType, onMounted, computed, isReactive } from 'vue';
+import { PatchFlags, createComponentVNode, createElementVNode, createDirectives } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { CheckmarkSharp as IconCheck } from '@vicons/ionicons5';
 import { useVirtualList } from '@vueuse/core';
 import { omit } from 'lodash-es';
-import { McPopover, PopoverExposeInstance, PopoverPlacement, popoverProps, popoverEmits } from '../popover';
+import { McPopover, PopoverExposeInstance, PopoverPlacement } from '../popover';
+import { popoverProps, popoverEmits } from '../popover/interface';
 import { McIcon } from '../icon';
 import { PopselectOption, popselectProps, popselectEmits } from './interface';
+import { mainCssr, lightCssr, darkCssr } from './styles';
+import type { StyleValue, CSSProperties } from 'vue';
 
 const defaultPropsOverride = {
     placement: {
@@ -22,8 +27,21 @@ export default defineComponent({
     },
     emits: [...popoverEmits, ...popselectEmits],
     setup(props, { slots, attrs, emit }) {
-        const { value: valueVM, options, multiple, maxHeight, autoClose, autoScroll } = toRefs(props);
+        // theme register
+        useThemeRegister({
+            key: 'Popselect',
+            main: mainCssr,
+            light: lightCssr,
+            dark: darkCssr
+        });
+
+        const { value: valueVM, options, multiple, maxHeight, autoClose, autoScroll, truncate, matchTrigger, itemHeight, itemStyle } = toRefs(props);
         const popoverRef = ref<PopoverExposeInstance>();
+        const cssVars = computed<StyleValue>(() => {
+            return {
+                '--popselect-inner-max-width': typeof truncate.value === 'number' ? `${truncate.value}px` : '200px'
+            };
+        });
         let scrollToOption: (index: number) => void;
 
         const handleShow = () => {
@@ -41,63 +59,72 @@ export default defineComponent({
             }
         };
 
-        const getOptionVNode = (data: PopselectOption) => {
+        const createOptionVNode = (data: PopselectOption) => {
             const { label, value, disabled } = data;
             const isDisabled = !!disabled;
             const isSelected = multiple.value ? (valueVM.value as (string | number)[]).includes(value) : valueVM.value === value;
-            const checkVNode = multiple.value && isSelected ? createVNode(McIcon, { size: 16 }, { default: () => createVNode(IconCheck) }) : null;
+            const checkIconVNode = multiple.value && isSelected ? createComponentVNode(McIcon, { size: 16, style: 'margin-left: 8px' }, { default: () => createComponentVNode(IconCheck) }) : null;
             const option = toRaw(options.value?.find(e => e.value === value));
-            const handleClick = multiple.value
-                ? () => {
-                      const index = (valueVM.value as (string | number)[]).indexOf(value);
-                      if (index === -1) {
-                          (valueVM.value as (string | number)[]).push(value);
-                      } else {
-                          (valueVM.value as (string | number)[]).splice(index, 1);
-                      }
-                      emit('update:value', toRaw(valueVM.value), option);
-                  }
-                : () => {
-                      emit('update:value', value, option);
-                  };
+            const handleUpdateValue = (value: string | number) => {
+                if (multiple.value) {
+                    const index = (valueVM.value as (string | number)[]).indexOf(value);
+                    if (index === -1) {
+                        (valueVM.value as (string | number)[]).push(value);
+                    } else {
+                        (valueVM.value as (string | number)[]).splice(index, 1);
+                    }
+                    emit('update:value', toRaw(valueVM.value), option);
+                } else {
+                    emit('update:value', value, option);
+                }
+            };
 
-            return createVNode(
+            return createElementVNode(
                 'div',
                 {
                     class: ['mc-popselect-option', { 'mc-popselect-option--selected': isSelected, 'mc-popselect-option--disabled': isDisabled }],
+                    style: itemStyle.value,
                     onClick: () => {
                         if (isDisabled) return;
-                        handleClick();
+                        valueVM.value !== void 0 && handleUpdateValue(value);
+                        emit('select', value, option);
                         handleHide();
                     }
                 },
                 [
-                    createVNode(
+                    createElementVNode(
                         'div',
                         {
                             class: 'mc-popselect-option__inner'
                         },
-                        [createVNode('div', null, [typeof label === 'string' ? label : label()]), checkVNode]
+                        [createElementVNode('div', { class: { truncate: truncate.value } }, [typeof label === 'string' ? label : label()], PatchFlags.CLASS), checkIconVNode]
                     )
-                ]
+                ],
+                PatchFlags.CLASS | PatchFlags.STYLE
             );
         };
 
         return () => {
-            const itemHeight = 41;
-            const listHeight = options.value ? Math.min(options.value.length * itemHeight, maxHeight.value ?? 0) : 0;
-            const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(options.value ?? [], {
+            const subHeight = itemHeight.value!;
+            const listHeight = options.value ? Math.min(options.value.length * subHeight, maxHeight.value ?? 0) : 0;
+            const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(isReactive(options.value) ? options.value! : reactive(options.value!), {
                 // Keep `itemHeight` in sync with the item's row.
-                itemHeight
+                itemHeight: subHeight
             });
             scrollToOption = scrollTo;
 
             const mergedProps = mergeProps(omit(props, Object.keys(popselectProps)), {
+                ref_key: 'popoverRef',
                 ref: popoverRef,
-                class: 'mc-popselect'
+                class: 'mc-popselect',
+                style: {
+                    padding: '0px',
+                    minWidth: matchTrigger.value ? 'none' : '110px',
+                    ...(cssVars.value as CSSProperties)
+                }
             });
 
-            return createVNode(
+            return createComponentVNode(
                 McPopover,
                 {
                     ...mergedProps,
@@ -108,8 +135,8 @@ export default defineComponent({
                 },
                 {
                     default: () => renderSlot(slots, 'default'),
-                    content: () => {
-                        return createVNode(
+                    content: () =>
+                        createElementVNode(
                             'div',
                             {
                                 ...containerProps,
@@ -117,17 +144,17 @@ export default defineComponent({
                                 style: { height: listHeight + 'px', overflow: 'auto', padding: '4px 4px 0px 4px' }
                             },
                             [
-                                createVNode(
+                                createElementVNode(
                                     'div',
                                     wrapperProps.value,
-                                    list.value.map(({ data, index }: { data: PopselectOption; index: number }) => {
-                                        return getOptionVNode(data);
-                                    })
+                                    createDirectives('v-for', list.value, item => createOptionVNode(item.data)),
+                                    PatchFlags.STYLE
                                 )
-                            ]
-                        );
-                    }
-                }
+                            ],
+                            PatchFlags.STYLE
+                        )
+                },
+                PatchFlags.FULL_PROPS
             );
         };
     }

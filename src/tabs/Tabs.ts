@@ -1,15 +1,25 @@
-import { ref, toRefs, computed, watch, mergeProps, provide, createVNode, createTextVNode, createCommentVNode, nextTick, VNode, Slots, CustomVNodeTypes, defineComponent } from 'vue';
+import { ref, toRefs, computed, watch, mergeProps, provide, createVNode, createTextVNode, createCommentVNode, nextTick, VNode, Slots, CustomVNodeTypes, defineComponent, onMounted } from 'vue';
 import { flatten, getSlotFirstVNode, kebabCaseEscape, SpecificVNode } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { useElementBounding, throttledWatch } from '@vueuse/core';
 import { tabsInjectionKey, tabPaneIKey, tabIKey, TabPaneName, MaybeTabPaneProps, tabsProps } from './interface';
-import McTab from './Tab';
-import * as CSS from 'csstype';
+import McTab from './src/Tab';
+import { mainCssr, lightCssr, darkCssr } from './styles';
+import type { StyleValue } from 'vue';
 
 export default defineComponent({
     name: 'Tabs',
     props: tabsProps,
-    emits: ['update:value', 'tab:switch', 'tab:click'],
+    emits: ['update:value', 'tab-switch', 'tab-click'],
     setup(props, { slots, emit, expose }) {
+        // theme register
+        useThemeRegister({
+            key: 'Tabs',
+            main: mainCssr,
+            light: lightCssr,
+            dark: darkCssr
+        });
+
         const { value: valueVM, defaultTab, type, showLine, center, stretch, tabGap, animation, activeColor, barPosition, headerStyle, headerClass, contentStyle, contentClass, onBeforeTabSwitch } = toRefs(props);
         const activeTabName = ref(valueVM?.value || (defaultTab?.value ?? ''));
         const activeTabVNode = ref<VNode>();
@@ -17,7 +27,7 @@ export default defineComponent({
         const headerElRef = ref<HTMLElement>();
         const barElRef = ref<HTMLElement>();
         const barUpdatedTimer = ref();
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             return {
                 // '--tab-default-color': defaultColor.value,
                 '--tab-active-color': activeColor.value,
@@ -57,10 +67,10 @@ export default defineComponent({
         const callUpdateTab = (name: TabPaneName) => {
             activeTabName.value = name;
             valueVM && emit('update:value', name);
-            emit('tab:switch', activeTabName.value);
+            emit('tab-switch', name);
         };
         const handleTabClick = (name: TabPaneName) => {
-            emit('tab:click', name);
+            emit('tab-click', name);
             handleBeforeTabSwitch(name);
         };
         const handleBeforeTabSwitch = async (name: TabPaneName) => {
@@ -95,7 +105,7 @@ export default defineComponent({
             barEl!.style.left = `${offsetLeft}px`;
             barEl!.style.maxWidth = `${offsetWidth}px`;
             barUpdatedTimer.value = window.setTimeout(() => {
-                barEl!.style.transition = '0.3s';
+                barEl!.style.transition = '0.2s';
             }, 64);
         };
 
@@ -165,9 +175,7 @@ export default defineComponent({
                     class: ['mc-tabs__header-scroll-content', headerClass?.value],
                     style: headerStyle?.value
                 },
-                maybeTabPanes.map(maybeTabPane => {
-                    return getTabVNode(maybeTabPane);
-                })
+                maybeTabPanes.map(maybeTabPane => getTabVNode(maybeTabPane))
             );
         });
 
@@ -201,14 +209,16 @@ export default defineComponent({
                         },
                         [lineBarVNode.value, tabsHeaderVNode.value]
                     ),
-                    createVNode(
-                        'div',
-                        {
-                            class: ['mc-tabs__content', contentClass?.value],
-                            style: contentStyle?.value
-                        },
-                        slots.default ? flatten(slots.default(), tabIKey, true) : createCommentVNode('', true)
-                    )
+                    slots.default && flatten(slots.default(), tabPaneIKey).length > 0
+                        ? createVNode(
+                              'div',
+                              {
+                                  class: ['mc-tabs__content', contentClass?.value],
+                                  style: contentStyle.value
+                              },
+                              flatten(slots.default(), tabIKey, true)
+                          )
+                        : null
                 ]
             );
     }

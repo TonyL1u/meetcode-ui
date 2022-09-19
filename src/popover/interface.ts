@@ -1,15 +1,22 @@
-import { PropType, VNodeChild } from 'vue';
+import { PropType, VNodeChild, Ref, InjectionKey, CSSProperties } from 'vue';
 
 export type PopoverTrigger = 'hover' | 'click' | 'manual' | 'follow';
 export type PopoverPlacement = 'top' | 'bottom' | 'left' | 'right' | 'top-start' | 'top-end' | 'left-start' | 'left-end' | 'right-start' | 'right-end' | 'bottom-start' | 'bottom-end';
 export type PopoverTriggerBorder = 'top' | 'right' | 'bottom' | 'left';
 export type PopoverFollowMode = 'move' | 'click';
 export type PopoverOffset = {
-    top?: string;
-    right?: string;
-    bottom?: string;
-    left?: string;
+    top?: CSSProperties['top'];
+    right?: CSSProperties['right'];
+    bottom?: CSSProperties['bottom'];
+    left?: CSSProperties['left'];
 };
+export type PopoverInjection = Ref<HTMLElement | null> | null;
+export interface PopoverExposeInstance {
+    syncPosition: () => void;
+    show: () => void;
+    hide: () => void;
+    el: HTMLElement;
+}
 export interface PopoverProps {
     trigger?: PopoverTrigger;
     placement?: PopoverPlacement;
@@ -29,12 +36,7 @@ export interface PopoverProps {
     followMode?: PopoverFollowMode;
     x?: number;
     y?: number;
-}
-export interface PopoverExposeInstance {
-    syncPosition: () => void;
-    show: () => void;
-    hide: () => void;
-    el: HTMLElement;
+    teleport?: boolean;
 }
 export const popoverProps = {
     trigger: {
@@ -108,6 +110,11 @@ export const popoverProps = {
     y: {
         type: Number as PropType<PopoverProps['y']>,
         default: undefined
+    },
+    teleport: {
+        type: Boolean as PropType<PopoverProps['teleport']>,
+        default: true
     }
 };
 export const popoverEmits = ['show', 'hide', 'update:show', 'border-reached'];
+export const popoverInjectionKey: InjectionKey<PopoverInjection> = Symbol('popoverInjectionKey');

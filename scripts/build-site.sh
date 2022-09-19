@@ -1,5 +1,5 @@
 function clean() {
-    rimraf dist
+    rimraf site
 }
 
 function build() {
@@ -8,8 +8,7 @@ function build() {
 
 # copy files on build
 function copyExt() {
-    cp lib/meetcode-ui.esm.js dist/assets
-    cp node_modules/vue/dist/vue.runtime.esm-browser.js dist/assets
+    cp -r static/* site/assets
 }
 
 clean

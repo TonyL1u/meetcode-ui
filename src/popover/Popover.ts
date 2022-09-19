@@ -1,8 +1,12 @@
-import { ref, createVNode, Text, cloneVNode, computed, withDirectives, vShow, watch, toRefs, nextTick, Transition, mergeProps, defineComponent } from 'vue';
-import { getSlotFirstVNode, propsMergeSlots } from '../_utils_';
+import { ref, createVNode, Text, cloneVNode, computed, watch, toRefs, nextTick, Transition, mergeProps, defineComponent, onMounted, provide, inject } from 'vue';
+import { getSlotFirstVNode, propsMergeSlots, createComponentVNode, createElementVNode, createDirectives, PatchFlags, SlotFlags } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { VBinder, VTarget, VFollower } from 'vueuc';
-import { useElementBounding, useMouseInElement, useThrottleFn, pausableWatch } from '@vueuse/core';
-import { PopoverTriggerBorder, PopoverProps, popoverProps, popoverEmits } from './interface';
+import { useElementBounding, useMouseInElement, useThrottleFn, pausableWatch, onClickOutside } from '@vueuse/core';
+import { PopoverTriggerBorder, PopoverProps, popoverProps, popoverEmits, popoverInjectionKey } from './interface';
+import { modalInjectionKey } from '../modal/interface';
+import { drawerInjectionKey } from '../drawer/interface';
+import { mainCssr, lightCssr, darkCssr } from './styles';
 
 export default defineComponent({
     name: 'Popover',
@@ -10,7 +14,15 @@ export default defineComponent({
     props: popoverProps,
     emits: popoverEmits,
     setup(props, { slots, attrs, expose, emit }) {
-        const { trigger, placement, destroyWhenHide, zIndex, show, disabled, withArrow, showDelay, hideDelay, offset, wrapBoundary, matchTrigger, autoSync, title, followMode, x, y } = toRefs(props);
+        // theme register
+        useThemeRegister({
+            key: 'Popover',
+            main: mainCssr,
+            light: lightCssr,
+            dark: darkCssr
+        });
+
+        const { trigger, placement, destroyWhenHide, zIndex, show, disabled, withArrow, showDelay, hideDelay, offset, wrapBoundary, matchTrigger, autoSync, title, followMode, x, y, teleport } = toRefs(props);
         const showRef = trigger.value === 'manual' ? show : ref(!!props.show);
         const followerRef = ref(null);
         const followX = ref(0);
@@ -18,7 +30,7 @@ export default defineComponent({
         const mouseInFollowTrigger = ref(false);
         const contentShowTimer = ref();
         const contentHideTimer = ref();
-        const contentElRef = ref<HTMLElement>();
+        const contentElRef = ref<HTMLElement | null>(null);
         const mergedX = computed(() => {
             switch (trigger.value) {
                 case 'manual':
@@ -42,22 +54,41 @@ export default defineComponent({
         const emitThrottled = computed(() => {
             return trigger.value === 'follow' && followMode.value === 'move';
         });
+        const teleportDisabled = computed(() => {
+            const popover = inject(popoverInjectionKey, null);
+            const modal = inject(modalInjectionKey, null);
+            const drawer = inject(drawerInjectionKey, null);
+
+            return !teleport.value || !!popover || !!modal || !!drawer;
+        });
+
+        onClickOutside(contentElRef, (e: MouseEvent) => {
+            if (trigger.value === 'click' && !triggerVNode.value?.el?.contains(e.target)) {
+                handleContentHide();
+            }
+        });
 
         // call emits
         const callShow = () => {
             emit('show', true);
         };
+
         const callHide = () => {
             emit('hide', false);
         };
+
         const callUpdateShow = () => {
             emit('update:show', showRef.value);
         };
+
         const callBorderReached = (flag: boolean, dirs: Array<PopoverTriggerBorder>) => {
             emit('border-reached', flag, dirs);
         };
+
         const throttleCallShow = useThrottleFn(callShow, 100, false);
+
         const throttleCallHide = useThrottleFn(callHide, 100, false);
+
         const throttleCallUpdateShow = useThrottleFn(callUpdateShow, 100, false);
 
         // visible control
@@ -65,10 +96,12 @@ export default defineComponent({
             window.clearTimeout(contentShowTimer.value);
             contentShowTimer.value = null;
         };
+
         const clearHideTimer = () => {
             window.clearTimeout(contentHideTimer.value);
             contentHideTimer.value = null;
         };
+
         const handleContentShow = () => {
             clearHideTimer();
             if (showRef.value) return;
@@ -76,9 +109,9 @@ export default defineComponent({
                 showRef.value = true;
                 emitThrottled.value ? throttleCallShow() : callShow();
                 emitThrottled.value ? throttleCallUpdateShow() : callUpdateShow();
-                trigger.value === 'click' && window.addEventListener('click', handleClickOutside);
             }, showDelay.value);
         };
+
         const handleContentHide = () => {
             clearShowTimer();
             if (!showRef.value) return;
@@ -86,16 +119,9 @@ export default defineComponent({
                 showRef.value = false;
                 emitThrottled.value ? throttleCallHide() : callHide();
                 emitThrottled.value ? throttleCallUpdateShow() : callUpdateShow();
-                trigger.value === 'click' && window.removeEventListener('click', handleClickOutside);
             }, hideDelay.value);
         };
-        const handleClickOutside = (e: MouseEvent) => {
-            const isClickContent = contentVNode.value?.el?.contains(e.target);
-            const isClickTrigger = triggerVNode.value?.el?.contains(e.target);
-            if (!isClickContent && !isClickTrigger) {
-                handleContentHide();
-            }
-        };
+
         const syncPosition = () => {
             var _a;
             // @ts-ignore
@@ -113,7 +139,7 @@ export default defineComponent({
         });
 
         // list of events
-        const triggerEvent = computed(() => {
+        const triggerEvent = computed<Record<string, ((args?: unknown) => void) | undefined>>(() => {
             if (trigger.value === 'hover') {
                 return {
                     onMouseenter: handleContentShow,
@@ -163,46 +189,21 @@ export default defineComponent({
                 const originalHandler = tempVNode.props[name];
 
                 tempVNode.props[name] = originalHandler
-                    ? (...args: Array<unknown>) => {
+                    ? (...args: unknown[]) => {
                           originalHandler(...args);
-                          handler(...args);
+                          handler?.(...args);
                       }
                     : handler;
             }
 
             return tempVNode;
         });
-        const contentVNode = computed(() => {
-            if (disabled.value) return null;
 
-            const { top = '', right = '', bottom = '', left = '' } = offset?.value ?? {};
-            const mergedProps = mergeProps(attrs, {
-                ref: contentElRef,
-                class: ['mc-popover', { 'mc-popover--with-arrow': withArrow.value }],
-                style: {
-                    '--popover-offset-top': top,
-                    '--popover-offset-right': right,
-                    '--popover-offset-bottom': bottom,
-                    '--popover-offset-left': left
-                },
-                ...contentHoverControl.value
-            });
-            const tempVNode = createVNode('div', mergedProps, [
-                title.value ? createVNode('div', { class: 'mc-popover__title' }, [title.value]) : null,
-                propsMergeSlots<PopoverProps, 'content'>(props, slots, 'content'),
-                withArrow.value ? createVNode('div', { class: 'mc-popover__arrow' }) : null
-            ]);
-
-            if (destroyWhenHide.value) {
-                if (!showRef.value) return null;
-                return tempVNode;
-            } else {
-                return withDirectives(tempVNode, [[vShow, showRef.value]]);
-            }
-        });
         const triggerEl = computed(() => {
             return (triggerVNode.value?.el as HTMLElement) || null;
         });
+
+        provide(popoverInjectionKey, contentElRef);
 
         void nextTick(() => {
             if (disabled.value || !triggerEl.value) return;
@@ -219,7 +220,6 @@ export default defineComponent({
             if (trigger.value === 'follow') {
                 const { x, y, isOutside, elementHeight, elementWidth, elementX, elementY } = useMouseInElement(triggerEl.value);
                 const isFirstEnter = ref(true);
-                const enterDelay = () => new Promise<void>(resolve => setTimeout(resolve, 2000));
 
                 const clickCallEvent = (evt: MouseEvent) => {
                     if (showRef.value) {
@@ -321,39 +321,74 @@ export default defineComponent({
         });
 
         return () =>
-            createVNode(VBinder, null, {
-                default: () => {
-                    return [
-                        createVNode(VTarget, null, { default: () => triggerVNode.value }),
-                        createVNode(
-                            VFollower,
-                            {
-                                ref: followerRef,
-                                x: mergedX.value,
-                                y: mergedY.value,
-                                zIndex: zIndex?.value,
-                                show: showRef.value,
-                                enabled: showRef.value,
-                                placement: placement.value,
-                                width: matchTrigger.value ? 'target' : undefined
-                            },
-                            {
-                                default: () => {
-                                    return createVNode(
-                                        Transition,
-                                        {
-                                            name: 'mc-popover-fade',
-                                            appear: true
-                                        },
-                                        {
-                                            default: () => contentVNode.value
-                                        }
-                                    );
-                                }
-                            }
-                        )
-                    ];
-                }
+            createComponentVNode(VBinder, null, {
+                default: () => [
+                    createComponentVNode(VTarget, null, { default: () => triggerVNode.value }),
+                    createComponentVNode(
+                        VFollower,
+                        {
+                            ref: followerRef,
+                            x: mergedX.value,
+                            y: mergedY.value,
+                            zIndex: zIndex?.value,
+                            show: showRef.value,
+                            enabled: showRef.value,
+                            placement: placement.value,
+                            width: matchTrigger.value ? 'target' : undefined,
+                            teleportDisabled: teleportDisabled.value
+                        },
+                        {
+                            default: () =>
+                                createComponentVNode(
+                                    Transition,
+                                    {
+                                        name: 'mc-popover-fade',
+                                        appear: true
+                                    },
+                                    {
+                                        default: () =>
+                                            createDirectives('v-if', {
+                                                condition: !disabled.value,
+                                                node: () => {
+                                                    const { top = '', right = '', bottom = '', left = '' } = offset?.value ?? {};
+                                                    const mergedProps = mergeProps(attrs, {
+                                                        ref_key: 'contentElRef',
+                                                        ref: contentElRef,
+                                                        class: ['mc-popover', { 'mc-popover--with-arrow': withArrow.value }],
+                                                        style: {
+                                                            '--popover-offset-top': top,
+                                                            '--popover-offset-right': right,
+                                                            '--popover-offset-bottom': bottom,
+                                                            '--popover-offset-left': left
+                                                        },
+                                                        ...contentHoverControl.value
+                                                    });
+                                                    const tempVNode = createElementVNode(
+                                                        'div',
+                                                        mergedProps,
+                                                        [
+                                                            title.value ? createVNode('div', { class: 'mc-popover__title' }, [title.value]) : null,
+                                                            propsMergeSlots<PopoverProps, 'content'>(props, slots, 'content'),
+                                                            withArrow.value ? createVNode('div', { class: 'mc-popover__arrow' }) : null
+                                                        ],
+                                                        PatchFlags.CLASS | PatchFlags.STYLE
+                                                    );
+
+                                                    return createDirectives(destroyWhenHide.value ? 'v-if' : 'v-show', {
+                                                        condition: showRef.value,
+                                                        node: tempVNode
+                                                    });
+                                                }
+                                            }),
+                                        _: SlotFlags.DYNAMIC
+                                    }
+                                )
+                        },
+                        PatchFlags.PROPS,
+                        ['x', 'y', 'zIndex', 'show', 'enabled', 'placement', 'width', 'teleportDisabled']
+                    )
+                ],
+                _: SlotFlags.FORWARDED
             });
     }
 });

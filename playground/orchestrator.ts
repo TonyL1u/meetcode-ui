@@ -41,6 +41,9 @@ export class OrchestratorFile {
       <template>
         ${this.template}
       </template>
+      <style scoped>
+        ${this.style}
+      </style>
       `;
     }
 }
@@ -160,11 +163,15 @@ const initialPackages = [
     },
     {
         name: 'meetcode-ui',
-        url: import.meta.env.PROD ? '/assets/meetcode-ui.esm.js' : '/lib/meetcode-ui.esm.js'
+        url: import.meta.env.PROD ? '/public/meetcode-ui/assets/meetcode-ui.esm.js' : '/dist/meetcode-ui.esm.js'
     },
     {
         name: '@vicons/ionicons5',
-        url: '/playground/source/icon-dev-proxy'
+        url: import.meta.env.PROD ? '/public/meetcode-ui/assets/ionicons5.esm.js' : '/playground/source/icon-dev-proxy'
+    },
+    {
+        name: 'animejs',
+        url: import.meta.env.PROD ? '/public/meetcode-ui/assets/anime.esm.js' : '/playground/source/anime-dev-proxy'
     }
 ];
 
@@ -176,9 +183,10 @@ export async function loadInitialState(fileSourceString: string = '') {
         const [templateStartIndex, templateEndIndex] = [demoFile!.indexOf('<template>'), demoFile!.lastIndexOf('</template>')];
         const template = demoFile!.slice(templateStartIndex + 10, templateEndIndex);
         const script = demoFile!.match(/<script lang="ts" setup>([\s\S]*?)<\/script>/)?.[1] ?? '';
+        const style = demoFile!.match(/<style scoped>([\s\S]*?)<\/style>/)?.[1] ?? '';
 
         orchestrator.packages = initialPackages;
-        addFile(new OrchestratorFile('App.vue', beautify.html(template).trim(), script.trim()));
+        addFile(new OrchestratorFile('App.vue', beautify.html(template).trim(), script.trim(), style.trim()));
         setActiveFile('App.vue');
         shouldUpdateContent.trigger(null);
     });

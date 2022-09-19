@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import vueJsx from '@vitejs/plugin-vue-jsx';
 import viteCompression from 'vite-plugin-compression';
 import path from 'path';
 import Markdown from 'vite-plugin-md';
@@ -11,6 +12,9 @@ const resolve = (dir: string) => path.join(__dirname, dir);
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    build: {
+        outDir: 'site'
+    },
     base: isProduction ? '/public/meetcode-ui/' : '/',
     resolve: {
         alias: {
@@ -18,13 +22,17 @@ export default defineConfig({
             '@': resolve('src'),
             '@lib': resolve('lib'),
             '@playground': resolve('playground'),
-            '@pages': resolve('pages')
+            '@pages': resolve('pages'),
+            '@static': resolve('static'),
+            vue: 'vue/dist/vue.esm-bundler.js'
         }
     },
     plugins: [
         vue({
             include: [/\.vue$/, /\.md$/]
+            // reactivityTransform: true
         }),
+        vueJsx(),
         Markdown(MarkdownConfig),
         viteCompression()
     ],

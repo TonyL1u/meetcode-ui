@@ -1,7 +1,8 @@
-import { PropType, RenderFunction } from 'vue';
-import { PopoverProps } from '../popover';
+import type { PropType, RenderFunction } from 'vue';
+import type { PopoverProps } from '../popover';
+import type { ElementStyleSet } from '../_utils_';
 
-export type PopselectValue = string | number | Array<string | number>;
+export type PopselectValue = string | number | (string | number)[];
 export type PopselectMergedProps = PopselectProps & PopoverProps;
 export interface PopselectOption {
     value: string | number;
@@ -16,6 +17,9 @@ export interface PopselectProps {
     maxHeight?: number;
     autoClose?: boolean;
     autoScroll?: boolean;
+    truncate?: boolean | number;
+    itemHeight?: number;
+    itemStyle?: ElementStyleSet;
 }
 export const popselectProps = {
     value: {
@@ -41,7 +45,19 @@ export const popselectProps = {
     autoScroll: {
         type: Boolean as PropType<PopselectProps['autoScroll']>,
         default: true
+    },
+    truncate: {
+        type: [Boolean, Number] as PropType<PopselectProps['truncate']>,
+        default: 200
+    },
+    itemHeight: {
+        type: Number as PropType<PopselectProps['itemHeight']>,
+        default: 40
+    },
+    itemStyle: {
+        type: [String, Object] as PropType<PopselectProps['itemStyle']>,
+        default: undefined
     }
 };
-export const popselectEmits = ['update:value'];
 
+export const popselectEmits = ['update:value', 'select'];

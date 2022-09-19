@@ -1,14 +1,6 @@
-import { InjectionKey, Ref, VNodeChild, PropType } from 'vue';
-import { UseEventBusReturn } from '@vueuse/core';
-import * as CSS from 'csstype';
-
-declare module 'csstype' {
-    interface Properties {
-        '--checkbox-checked-color'?: string;
-        '--checkbox-hover-color'?: string;
-        '--checkbox-scale-size'?: string;
-    }
-}
+import type { InjectionKey, Ref, VNodeChild, PropType } from 'vue';
+import type { UseEventBusReturn } from '@vueuse/core';
+import type { UISize } from '../_utils_';
 
 export interface CheckboxGroupInjection {
     groupValue?: Ref<CheckboxValue[] | undefined>;
@@ -21,7 +13,7 @@ export interface CheckboxGroupInjection {
 export const checkboxGroupInjectionKey: InjectionKey<CheckboxGroupInjection> = Symbol();
 export const checkboxIKey = Symbol('checkbox');
 export type CheckboxValue = string | number | boolean;
-export type CheckboxSize = 'small' | 'medium' | 'large';
+export type CheckboxSize = UISize;
 export type CheckboxGroupStatus = {
     all: boolean;
     indeterminate: boolean;
@@ -34,11 +26,11 @@ export interface CheckboxGroupOptions {
 export interface CheckboxProps {
     value?: CheckboxValue;
     label?: string;
-    size: CheckboxSize;
-    checkedValue: CheckboxValue;
-    uncheckedValue: CheckboxValue;
-    disabled: boolean;
-    indeterminate: boolean;
+    size?: CheckboxSize;
+    checkedValue?: CheckboxValue;
+    uncheckedValue?: CheckboxValue;
+    disabled?: boolean;
+    indeterminate?: boolean;
     checkedColor?: string;
 }
 export interface CheckboxGroupProps {

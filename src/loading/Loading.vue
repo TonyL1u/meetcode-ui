@@ -22,6 +22,7 @@ interface Props {
     color?: string;
     maskStyle?: CSSProperties;
     description?: string;
+    contentStyle?: CSSProperties;
 }
 const props = withDefaults(defineProps<Props>(), {
     show: true,
@@ -32,7 +33,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const slots = useSlots();
-const { show, type, size, placement, color, maskStyle, description } = toRefs(props);
+const { show, type, size, placement, color, maskStyle, contentStyle, description } = toRefs(props);
 const placementMap = {
     top: 'column',
     right: 'row-reverse',
@@ -161,7 +162,7 @@ const Render = () => {
             class: 'mc-loading'
         },
         [
-            createVNode('div', { class: 'mc-loading__content' }, [renderSlot(slots, 'default')]),
+            createVNode('div', { class: 'mc-loading__content', style: contentStyle?.value }, [renderSlot(slots, 'default')]),
             show.value
                 ? createVNode('div', { class: ['mc-loading__body', { 'mc-loading-mask': hasDefaultSlot }], style: { 'flex-direction': placementMap[placement.value], ...maskStyle?.value } }, [
                       LoadingVNode.value,

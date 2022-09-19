@@ -1,11 +1,14 @@
-import { defineComponent, ref, toRefs, renderSlot, createVNode, Fragment, mergeProps, PropType } from 'vue';
+import { defineComponent, ref, toRefs, renderSlot, createVNode, Fragment, mergeProps, PropType, onMounted } from 'vue';
 import { getSlotFirstVNode, propsMergeSlots } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { omit } from 'lodash-es';
 import { AlertCircle as IconAlert } from '@vicons/ionicons5';
-import { McPopover, PopoverExposeInstance, popoverProps, popoverEmits, PopoverTrigger } from '../popover';
+import { McPopover, PopoverExposeInstance, PopoverTrigger } from '../popover';
+import { popoverProps, popoverEmits } from '../popover/interface';
 import { McButton } from '../button';
 import { McIcon } from '../icon';
 import { PopconfirmMergedProps, popconfirmProps, popconfirmEmits } from './interface';
+import { mainCssr } from './styles';
 
 const defaultPropsOverride = {
     trigger: {
@@ -23,6 +26,14 @@ export default defineComponent({
     },
     emits: [...popoverEmits, ...popconfirmEmits],
     setup(props, { slots }) {
+        // theme register
+        onMounted(() => {
+            useThemeRegister({
+                key: 'Popconfirm',
+                main: mainCssr
+            });
+        });
+
         const { cancelText, cancelDisabled, confirmText, confirmDisabled, hideIcon, onCancel, onConfirm } = toRefs(props);
         const popoverRef = ref<PopoverExposeInstance>();
 
@@ -67,8 +78,8 @@ export default defineComponent({
                           hasActionSlot
                               ? renderSlot(slots, 'action')
                               : createVNode(Fragment, null, [
-                                    showCancel ? createVNode(McButton, { size: 'small', disabled: cancelDisabled.value, onClick: handleCancel }, { default: () => cancelText.value }) : null,
-                                    showConfirm ? createVNode(McButton, { size: 'small', type: 'success', disabled: confirmDisabled.value, style: { 'margin-left': '8px' }, onClick: handleConfirm }, { default: () => confirmText.value }) : null
+                                    showCancel ? createVNode(McButton, { size: 'small', ghost: true, disabled: cancelDisabled.value, onClick: handleCancel }, { default: () => cancelText.value }) : null,
+                                    showConfirm ? createVNode(McButton, { size: 'small', type: 'success', disabled: confirmDisabled.value, style: { marginLeft: '8px' }, onClick: handleConfirm }, { default: () => confirmText.value }) : null
                                 ])
                       ]
                   )

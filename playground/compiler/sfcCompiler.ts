@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import { orchestrator as store, OrchestratorFile as File } from '../orchestrator';
 // import { generateStyles } from './windi';
 import { transform } from 'sucrase';
+import forge from 'node-forge';
 
 export const MAIN_FILE = 'App.vue';
 export const COMP_IDENTIFIER = '__sfc__';
@@ -22,7 +23,7 @@ let SFCCompiler: typeof defaultCompiler = defaultCompiler;
 
 // @ts-ignore
 const defaultVueUrl = import.meta.env.PROD
-    ? `${location.origin}/assets/vue.runtime.esm-browser.js` // to be copied on build
+    ? `${location.origin}/public/meetcode-ui/assets/vue.runtime.esm-browser.js` // to be copied on build
     : `${location.origin}/playground/source/vue-dev-proxy`;
 
 export const vueRuntimeUrl = ref(defaultVueUrl);
@@ -230,9 +231,18 @@ function doCompileTemplate(descriptor: SFCDescriptor, id: string, bindingMetadat
 }
 
 async function hashId(filename: string) {
-    const msgUint8 = new TextEncoder().encode(filename); // encode as (utf-8) Uint8Array
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8); // hash the message
-    const hashArray = Array.from(new Uint8Array(hashBuffer)); // convert buffer to byte array
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); // convert bytes to hex string
+    // hack use crypto.subtle in http
+    let hashHex: string = '';
+    if (import.meta.env.PROD) {
+        const md = forge.md.sha256.create();
+        md.update(filename);
+        hashHex = md.digest().toHex();
+    } else {
+        const msgUint8 = new TextEncoder().encode(filename); // encode as (utf-8) Uint8Array
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8); // hash the message
+        const hashArray = Array.from(new Uint8Array(hashBuffer)); // convert buffer to byte array
+        hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); // convert bytes to hex string
+    }
+
     return hashHex.slice(0, 8);
 }

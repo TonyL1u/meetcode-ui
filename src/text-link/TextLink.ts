@@ -1,7 +1,9 @@
-import { computed, toRefs, renderSlot, createVNode, defineComponent } from 'vue';
+import { computed, toRefs, renderSlot, createVNode, defineComponent, onMounted } from 'vue';
 import { getSlotFirstVNode, useColorFactory } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { TextLinkType, TextLinkColorSet, textLinkProps } from './interface';
-import * as CSS from 'csstype';
+import { mainCssr } from './styles/index';
+import type { StyleValue } from 'vue';
 
 const BASE_COLOR_MAP: Record<TextLinkType, TextLinkColorSet> = {
     primary: {
@@ -25,8 +27,13 @@ export default defineComponent({
     name: 'TextLink',
     props: textLinkProps,
     setup(props, { slots }) {
-        const { type, to, underline, trigger, color, hoverColor, block, raw } = toRefs(props);
+        // theme register
+        useThemeRegister({
+            key: 'TextLink',
+            main: mainCssr
+        });
 
+        const { type, to, underline, trigger, color, hoverColor, block, raw } = toRefs(props);
         const showUnderline = computed(() => {
             if (!underline.value) return '';
 
@@ -39,7 +46,7 @@ export default defineComponent({
                     return '';
             }
         });
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             const compositeInputColor: TextLinkColorSet = {
                 color: color.value || BASE_COLOR_MAP[type.value!].color
             };

@@ -1,16 +1,12 @@
-import type MarkdownIt from 'markdown-it';
-import type Token from 'markdown-it/lib/token';
 import MarkdownItContainer from 'markdown-it-container';
 import MarkdownItHljs from 'markdown-it-highlightjs';
 import MarkdownItAnchor from 'markdown-it-anchor';
 import fs from 'fs';
-import path from 'path';
 import lz from 'lz-string';
-
-const fileSourceMap: any = {
-    '@pages': 'pages',
-    '@': 'src'
-};
+import path from 'path';
+import type MarkdownIt from 'markdown-it';
+import type Token from 'markdown-it/lib/token';
+import type Renderer from 'markdown-it/lib/renderer';
 
 export default {
     // default options passed to markdown-it
@@ -24,48 +20,99 @@ export default {
         md.use(MarkdownItAnchor, {
             permalink: MarkdownItAnchor.permalink.headerLink()
         });
+
         md.use(MarkdownItHljs);
+
+        md.use(MarkdownItContainer, 'container', {
+            marker: '+',
+            validate: function (params: string) {
+                return params.trim().match(/^container\s*(.*)$/);
+            },
+            render: function (tokens: Token[], idx: number, options: any, env: { id: string }) {
+                const token = tokens[idx];
+                const isTokenNesting = token.nesting === 1;
+
+                if (!isTokenNesting) return '</div>';
+
+                return '<div class="code-container" style="column-count: 2; column-gap: 18px">';
+            }
+        });
+
         md.use(MarkdownItContainer, 'demo', {
             validate: function (params: string) {
                 return params.trim().match(/^demo\s*(.*)$/);
             },
-            render: function (tokens: Token[], idx: number) {
-                const m = tokens[idx].info.trim().match(/^demo\s*(.*)$/);
-                if (m && tokens[idx].nesting === 1) {
-                    const ScriptSetup = tokens[0].content.split('\n').slice(1, -2);
-                    const ComponentMap: any = {};
-                    for (const ipt of ScriptSetup) {
-                        const workTags = ipt.trim().split(' ');
-                        if (workTags[0] === 'import') {
-                            const key: string = workTags[1];
-                            const src: string = workTags[3];
-                            ComponentMap[key] = src.slice(1, -1);
-                        }
-                    }
+            render: function (tokens: Token[], idx: number, options: any, env: { id: string }) {
+                const token = tokens[idx];
+                const decodeHash = tokens[idx + 1]?.tag === 'h3' ? decodeURI(tokens[idx + 1].attrs?.[0][1] || '') : '';
+                const isTokenNesting = token.nesting === 1;
+                const demo = token.info.trim().match(/^demo\s*(.*)$/);
+                const code = token.info.trim().match(/^demo\s*(CodePreview=(.*))/);
 
-                    const components: Array<string> = m[1] ? m[1].split('codePreview=')[1].split(',') : [];
-                    const codeSources = components.map((name: string) => {
-                        const [root, ...rest] = ComponentMap[name].split('/');
-                        const rootDir = fileSourceMap[root];
-                        const importPath = path.join(__dirname, `${rootDir}/${rest.join('/')}`);
-                        const importSource = fs.readFileSync(importPath, 'utf-8').trim();
+                if (!isTokenNesting) return '</CodeDemo>';
+
+                if (code) {
+                    const pathMatcher = env.id.match(/src\/(.*)\/demos\/doc.(.*).md/);
+                    const components = code[2].split(',');
+                    const codeSources = components.map(name => {
+                        const manuallyPath = name.match(/(.*)\[(.*)\]/);
+                        const path = manuallyPath ? manuallyPath[2] : `src/${pathMatcher![1]}/demos/${pathMatcher![2]}/${name}.vue`;
+                        const importSource = fs.readFileSync(path, 'utf-8').trim();
                         const compressedSource = lz.compressToEncodedURIComponent(importSource);
 
                         return {
-                            name,
+                            name: manuallyPath ? manuallyPath[1] : name,
+                            path,
                             importSource,
                             compressedSource
                         };
                     });
 
-                    return `<CodeDemo code-sources="${md.utils.escapeHtml(JSON.stringify(codeSources))}">`;
-                } else {
-                    // closing tag
-                    return `</CodeDemo>`;
+                    return `<CodeDemo code-sources="${md.utils.escapeHtml(JSON.stringify(codeSources))}" hash="${decodeHash}">`;
+                } else if (demo) {
+                    return `<CodeDemo hash="${decodeHash}">`;
                 }
             }
         });
-    },
-    // Class names for the wrapper div
-    wrapperClasses: 'markdown-body'
+
+        md.renderer.rules['heading_open'] = function (tokens, idx, options, env: { id: string }, self) {
+            if (tokens[idx].tag === 'h1') {
+                const filepath = env.id.split(`${path.resolve(__dirname)}/`)[1];
+                const component = env.id.match(/\/src\/(.*)\/demos/)?.[1];
+                return `<EditOnGithub ${self.renderAttrs(tokens[idx])} path="${filepath}" component="${component}">`;
+            }
+
+            return self.renderToken(tokens, idx, options);
+        };
+
+        md.renderer.rules['heading_close'] = function (tokens, idx, options, env, self) {
+            if (tokens[idx].tag === 'h1') {
+                return '</EditOnGithub>';
+            }
+
+            return self.renderToken(tokens, idx, options);
+        };
+
+        const componentRenderRule: Renderer.RenderRule = function (tokens, idx, options, env: { id: string }, self) {
+            const { content } = tokens[idx];
+            const name = content.match(/<(.*)\/>/);
+            if (env.id.indexOf(path.resolve(__dirname, 'src')) > -1 && name && name[1].trim().slice(0, 2) !== 'Mc') {
+                const pathMatcher = env.id.match(/src\/(.*)\/demos\/doc.(.*).md/);
+                if (pathMatcher && name) return `<${pathMatcher[1]}-${name[1].trim()}-${pathMatcher[2].split('-')[0]} ${self.renderAttrs(tokens[idx])} />`;
+            }
+
+            return content;
+        };
+
+        md.renderer.rules['html_block'] = componentRenderRule;
+
+        md.renderer.rules['html_inline'] = componentRenderRule;
+
+        const fenceWrap = (render: Renderer.RenderRule) => (tokens: Token[], idx: number, options: MarkdownIt.Options, env: any, self: any) => {
+            const code = lz.compressToEncodedURIComponent(tokens[idx].content);
+            return `<CodeBlock lang="${tokens[idx].info}" code="${code}">${render.apply(this, [tokens, idx, options, env, self])}</CodeBlock>`;
+        };
+
+        md.renderer.rules['fence'] = fenceWrap(md.renderer.rules['fence']!);
+    }
 };
