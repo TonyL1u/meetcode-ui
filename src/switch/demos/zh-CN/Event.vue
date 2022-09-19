@@ -11,13 +11,9 @@ import { McSpace, McSwitch, McMessage } from 'meetcode-ui';
 
 const checked = ref(false);
 const handleSwitch = (value: boolean) => {
-    McMessage.text(`[on-switch]: ${value}`, {
-        card: true
-    });
+    McMessage.text(`[Event on-switch]: ${value}`);
 };
 const handleUpdateValue = (value: boolean) => {
-    McMessage.text(`[on-update:value]: ${value}`, {
-        card: true
-    });
+    McMessage.text(`[Event on-update:value]: ${value}`);
 };
 </script>

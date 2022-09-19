@@ -1,10 +1,12 @@
-import type { PropType } from 'vue';
+import type { PropType, ComputedRef } from 'vue';
 
 export interface ProgressProps {
     type?: 'line' | 'circle';
     animation?: boolean;
+    playOnVisible?: boolean;
     autoplay?: boolean;
     loop?: boolean;
+    alternate?: boolean;
     delay?: number;
     start?: number;
     end?: number;
@@ -25,6 +27,7 @@ export interface ProgressUpdatePayload {
     time: number;
 }
 export interface ProgressExposeInstance {
+    animePayload: ComputedRef<ProgressUpdatePayload>;
     play: () => void;
     pause: () => void;
     restart: () => void;
@@ -43,12 +46,20 @@ export const progressProps = {
         type: Boolean as PropType<ProgressProps['animation']>,
         default: false
     },
+    playOnVisible: {
+        type: Boolean as PropType<ProgressProps['playOnVisible']>,
+        default: false
+    },
     autoplay: {
         type: Boolean as PropType<ProgressProps['autoplay']>,
         default: true
     },
     loop: {
         type: Boolean as PropType<ProgressProps['loop']>,
+        default: false
+    },
+    alternate: {
+        type: Boolean as PropType<ProgressProps['alternate']>,
         default: false
     },
     delay: {

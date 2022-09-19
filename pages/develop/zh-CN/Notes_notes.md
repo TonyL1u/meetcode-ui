@@ -250,3 +250,11 @@
 2022-07-08
 
 -   每一个涉及到 Popover 弹出框的组件，都需要提供一个 props 用于控制是否使用 teleport
+
+2022-09-17
+
+-   在 `onThemeChange` 里使用 `McMessage` 会报错，原因未知
+
+2022-09-18
+
+-   `McPopconfirm` 如果设置了 `trigger = manual` ，点击 action 按钮无法关闭

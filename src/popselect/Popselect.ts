@@ -1,5 +1,6 @@
-import { ref, reactive, toRefs, createVNode, nextTick, renderSlot, mergeProps, defineComponent, toRaw, PropType, onMounted, computed, isReactive } from 'vue';
-import { PatchFlags, useThemeRegister, createComponentVNode, createElementVNode, createDirectives } from '../_utils_';
+import { ref, reactive, toRefs, nextTick, renderSlot, mergeProps, defineComponent, toRaw, PropType, onMounted, computed, isReactive } from 'vue';
+import { PatchFlags, createComponentVNode, createElementVNode, createDirectives } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { CheckmarkSharp as IconCheck } from '@vicons/ionicons5';
 import { useVirtualList } from '@vueuse/core';
 import { omit } from 'lodash-es';
@@ -27,13 +28,11 @@ export default defineComponent({
     emits: [...popoverEmits, ...popselectEmits],
     setup(props, { slots, attrs, emit }) {
         // theme register
-        onMounted(() => {
-            useThemeRegister({
-                key: 'Popselect',
-                main: mainCssr,
-                light: lightCssr,
-                dark: darkCssr
-            });
+        useThemeRegister({
+            key: 'Popselect',
+            main: mainCssr,
+            light: lightCssr,
+            dark: darkCssr
         });
 
         const { value: valueVM, options, multiple, maxHeight, autoClose, autoScroll, truncate, matchTrigger, itemHeight, itemStyle } = toRefs(props);

@@ -1,5 +1,6 @@
 import { defineComponent, onMounted, renderSlot, ref, provide, toRefs, computed, watch } from 'vue';
-import { useThemeRegister, createElementVNode, createDirectives, PatchFlags } from '../_utils_';
+import { createElementVNode, createDirectives, PatchFlags } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { menuIKey, menuInjectionKey, menuProps } from './interface';
 import { createKeyTree, createMenu, findPath } from './src/utils';
 import { mainCssr, lightCssr, darkCssr } from './styles';
@@ -13,13 +14,11 @@ export default defineComponent({
     emits: ['update:value', 'update:expandKeys'],
     setup(props, { slots, emit, expose }) {
         // theme register
-        onMounted(() => {
-            useThemeRegister({
-                key: 'Menu',
-                main: mainCssr,
-                light: lightCssr,
-                dark: darkCssr
-            });
+        useThemeRegister({
+            key: 'Menu',
+            main: mainCssr,
+            light: lightCssr,
+            dark: darkCssr
         });
 
         const keyTree = slots.default ? createKeyTree(slots.default()) : [];

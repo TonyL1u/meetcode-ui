@@ -1,7 +1,7 @@
 <template>
     <McSpace vertical :gap="4">
         <McInput placeholder="这是一个 placeholder" />
-        <McInput type="textarea" :min-rows="7" :resizable="false" word-count>
+        <McInput type="textarea" :min-rows="7" :resizable="false">
             <template #placeholder>
                 <svg id="placeholder" viewBox="0 0 400 200">
                     <text x="9%" y="78%">Hello</text>

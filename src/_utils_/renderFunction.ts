@@ -1,9 +1,11 @@
 import {
     createVNode as _createVNode,
+    createBlock as _createBlock,
     createElementVNode as _createElementVNode,
     createTextVNode as _createTextVNode,
     createElementBlock as _createElementBlock,
     createCommentVNode as _createCommentVNode,
+    openBlock as _openBlock,
     renderSlot as _renderSlot,
     Fragment,
     toDisplayString,
@@ -38,9 +40,17 @@ interface DirectivesConfig {
  * @param children
  * @param patchFlag PatchFlags
  * @param dynamicProps
+ * @param useBlock 使用createBlock
  * @returns VNode
  */
-export function createComponentVNode<T extends object, S extends string = 'default'>(type: Component, props?: ComponentProps<T>, children?: ComponentChildren<S>, patchFlag?: PatchFlags, dynamicProps?: (keyof (T & HTMLAttributes & VNodeProps))[] | null) {
+export function createComponentVNode<T extends object, S extends string = 'default'>(
+    type: Component,
+    props?: ComponentProps<T>,
+    children?: ComponentChildren<S>,
+    patchFlag?: PatchFlags,
+    dynamicProps?: (keyof (T & HTMLAttributes & VNodeProps))[] | null,
+    useBlock: boolean = false
+) {
     if (children && !Array.isArray(children)) {
         Object.entries(children as SlotChildren<string>).forEach(([key, child]) => {
             if (key !== '_' && child) {
@@ -54,7 +64,20 @@ export function createComponentVNode<T extends object, S extends string = 'defau
         }
     }
 
-    return _createVNode(type, normalizeProps(props as Record<string, unknown>), children, patchFlag, dynamicProps as string[]) as SpecificVNode<T>;
+    if (useBlock) {
+        return _openBlock(), _createBlock(type, normalizeProps(props as Record<string, unknown>), children, patchFlag, dynamicProps as string[]) as SpecificVNode<T>;
+    }
+    return _createVNode(type, normalizeProps(props as Record<string, unknown>), children, patchFlag, dynamicProps as string[], useBlock) as SpecificVNode<T>;
+}
+
+export function createComponentBlockVNode<T extends object, S extends string = 'default'>(
+    type: Component,
+    props?: ComponentProps<T>,
+    children?: ComponentChildren<S>,
+    patchFlag?: PatchFlags,
+    dynamicProps?: (keyof (T & HTMLAttributes & VNodeProps))[] | null
+) {
+    return createComponentVNode(type, props, children, patchFlag, dynamicProps, true);
 }
 
 /**
@@ -64,10 +87,25 @@ export function createComponentVNode<T extends object, S extends string = 'defau
  * @param children
  * @param patchFlag PatchFlags
  * @param dynamicProps
+ * @param useBlock 使用createElementBlock
  * @returns VNode
  */
-export function createElementVNode<T extends keyof IntrinsicElementAttributes>(type: T, props?: ElementProps<T>, children?: unknown, patchFlag?: PatchFlags, dynamicProps?: (keyof (IntrinsicElementAttributes[T] & VNodeProps))[] | null) {
+export function createElementVNode<T extends keyof IntrinsicElementAttributes>(
+    type: T,
+    props?: ElementProps<T>,
+    children?: unknown,
+    patchFlag?: PatchFlags,
+    dynamicProps?: (keyof (IntrinsicElementAttributes[T] & VNodeProps))[] | null,
+    useBlock: boolean = false
+) {
+    if (useBlock) {
+        return _openBlock(), _createElementBlock(type, normalizeProps(props as Record<string, unknown>), Array.isArray(children) ? children : typeof children === 'string' ? toDisplayString(children) : [children], patchFlag, dynamicProps as string[]);
+    }
     return _createElementVNode(type, normalizeProps(props as Record<string, unknown>), Array.isArray(children) ? children : typeof children === 'string' ? toDisplayString(children) : [children], patchFlag, dynamicProps as string[]);
+}
+
+export function createElementBlockVNode<T extends keyof IntrinsicElementAttributes>(type: T, props?: ElementProps<T>, children?: unknown, patchFlag?: PatchFlags, dynamicProps?: (keyof (IntrinsicElementAttributes[T] & VNodeProps))[] | null) {
+    return createElementVNode(type, props, children, patchFlag, dynamicProps, true);
 }
 
 /**
@@ -95,7 +133,7 @@ export function createTextVNode(source: string | object | unknown, patch?: boole
  * ```
  */
 export function createFragment(children?: unknown[], patchFlag?: PatchFlags.STABLE_FRAGMENT | PatchFlags.KEYED_FRAGMENT | PatchFlags.UNKEYED_FRAGMENT) {
-    return _createElementBlock(Fragment, null, children, patchFlag);
+    return _openBlock(true), _createElementBlock(Fragment, null, children, patchFlag);
 }
 
 /**

@@ -1,5 +1,6 @@
 import { defineComponent, renderSlot, mergeProps, onMounted } from 'vue';
-import { propsMergeSlots, useThemeRegister, createComponentVNode, PatchFlags, SlotFlags } from '../_utils_';
+import { propsMergeSlots, createComponentVNode, PatchFlags, SlotFlags } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { omit } from 'lodash-es';
 import { McPopover } from '../popover';
 import { popoverProps } from '../popover/interface';
@@ -14,12 +15,10 @@ export default defineComponent({
     },
     setup(props, { slots }) {
         // theme register
-        onMounted(() => {
-            useThemeRegister({
-                key: 'Tooltip',
-                light: lightCssr,
-                dark: darkCssr
-            });
+        useThemeRegister({
+            key: 'Tooltip',
+            light: lightCssr,
+            dark: darkCssr
         });
 
         return () => {

@@ -1,5 +1,6 @@
 import { ref, createVNode, Text, cloneVNode, computed, watch, toRefs, nextTick, Transition, mergeProps, defineComponent, onMounted, provide, inject } from 'vue';
-import { getSlotFirstVNode, propsMergeSlots, useThemeRegister, createComponentVNode, createElementVNode, createDirectives, PatchFlags, SlotFlags } from '../_utils_';
+import { getSlotFirstVNode, propsMergeSlots, createComponentVNode, createElementVNode, createDirectives, PatchFlags, SlotFlags } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { VBinder, VTarget, VFollower } from 'vueuc';
 import { useElementBounding, useMouseInElement, useThrottleFn, pausableWatch, onClickOutside } from '@vueuse/core';
 import { PopoverTriggerBorder, PopoverProps, popoverProps, popoverEmits, popoverInjectionKey } from './interface';
@@ -14,13 +15,11 @@ export default defineComponent({
     emits: popoverEmits,
     setup(props, { slots, attrs, expose, emit }) {
         // theme register
-        onMounted(() => {
-            useThemeRegister({
-                key: 'Popover',
-                main: mainCssr,
-                light: lightCssr,
-                dark: darkCssr
-            });
+        useThemeRegister({
+            key: 'Popover',
+            main: mainCssr,
+            light: lightCssr,
+            dark: darkCssr
         });
 
         const { trigger, placement, destroyWhenHide, zIndex, show, disabled, withArrow, showDelay, hideDelay, offset, wrapBoundary, matchTrigger, autoSync, title, followMode, x, y, teleport } = toRefs(props);
@@ -207,7 +206,6 @@ export default defineComponent({
         provide(popoverInjectionKey, contentElRef);
 
         void nextTick(() => {
-            // const { top, right, bottom, left, width, height } = useElementBounding(binderElRef);
             if (disabled.value || !triggerEl.value) return;
 
             // auto async popover position

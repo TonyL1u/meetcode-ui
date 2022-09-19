@@ -1,5 +1,6 @@
 import { defineComponent, onMounted, computed, createVNode, toRefs, ref, Transition, mergeProps, renderSlot, createTextVNode, watch, provide } from 'vue';
-import { createKey, useThemeRegister, useSharedItems } from '../_utils_';
+import { createKey } from '../_utils_';
+import { useThemeRegister, useSharedItems } from '../_composable_';
 import { onClickOutside, useMagicKeys, pausableWatch } from '@vueuse/core';
 import { McIcon } from '../icon';
 import { McButton } from '../button';

@@ -1,6 +1,6 @@
 import { defineComponent, onMounted, onUnmounted, ref, toRefs, computed, watch, shallowRef, nextTick } from 'vue';
-import { useThemeRegister, createElementVNode, renderSlot, PatchFlags } from '../_utils_';
-import { useElementVisibility, useElementBounding } from '@vueuse/core';
+import { createElementVNode, renderSlot, PatchFlags } from '../_utils_';
+import { useThemeRegister, useElementVisibility } from '../_composable_';
 import { progressProps } from './interface';
 import { mainCssr, lightCssr, darkCssr } from './styles';
 import Anime from 'animejs';
@@ -9,21 +9,19 @@ import type { AnimeInstance } from 'animejs';
 import type { ProgressUpdatePayload } from './interface';
 
 export default defineComponent({
-    name: 'NAME',
+    name: 'Progress',
     props: progressProps,
-    emits: ['update', 'begin', 'complete', 'pause', 'seek', 'reset', 'restart'],
+    emits: ['update', 'begin', 'complete', 'pause', 'seek', 'reset', 'restart', 'loop-begin', 'loop-complete'],
     setup(props, { slots, emit, expose }) {
         // theme register
-        onMounted(() => {
-            useThemeRegister({
-                key: 'NAME',
-                main: mainCssr,
-                light: lightCssr,
-                dark: darkCssr
-            });
+        useThemeRegister({
+            key: 'Progress',
+            main: mainCssr,
+            light: lightCssr,
+            dark: darkCssr
         });
 
-        const { animation, autoplay, loop, delay, start, end, duration, percentage, indicatorPlacement, color, type, height, strokeWidth, size, showIndicator, indicatorColor, trackColor } = toRefs(props);
+        const { animation, autoplay, playOnVisible, loop, alternate, delay, start, end, duration, percentage, indicatorPlacement, color, type, height, strokeWidth, size, showIndicator, indicatorColor, trackColor } = toRefs(props);
         if (start.value! > 100 || start.value! < 0) {
             throw new Error('[McProgress]: The start value should be in range of [0, 100].');
         } else if (end.value! > 100 || end.value! < 0) {
@@ -31,8 +29,6 @@ export default defineComponent({
         }
 
         const progressElRef = ref<HTMLElement>();
-        const progressIsVisible = useElementVisibility(progressElRef);
-        const { top } = useElementBounding(progressElRef);
 
         const animeInstance = shallowRef<AnimeInstance | null>(null);
         const animeAdjustCoefficient = computed(() => Math.abs(start.value! - end.value!) / 100);
@@ -66,12 +62,6 @@ export default defineComponent({
             };
         });
 
-        watch([start, end], () => {
-            handleReset();
-        });
-
-        watch(loop, () => {});
-
         const createAnimation = () => {
             animeInstance.value?.pause();
             Anime.remove(animePercentage);
@@ -83,6 +73,7 @@ export default defineComponent({
                 loop: loop.value,
                 autoplay: autoplay.value,
                 delay: delay.value,
+                direction: alternate.value ? 'alternate' : 'normal',
                 duration: duration.value! * animeAdjustCoefficient.value,
                 update(anim) {
                     updateAnimValue(anim);
@@ -104,6 +95,14 @@ export default defineComponent({
                 complete(anim) {
                     updateAnimValue(anim);
                     emit('complete');
+                },
+                loopBegin(anim) {
+                    updateAnimValue(anim);
+                    emit('loop-begin');
+                },
+                loopComplete(anim) {
+                    updateAnimValue(anim);
+                    emit('loop-complete');
                 }
             });
         };
@@ -137,20 +136,30 @@ export default defineComponent({
                 : null;
         };
 
-        watch(progressIsVisible, val => {
-            console.log(val);
-            // if (val) {
-            //     animeInstance.value?.play();
-            //     off();
-            // } else {
-            //     animeInstance.value?.pause();
-            // }
-        });
-
         onMounted(() => {
             if (animation.value) {
                 animeInstance.value = createAnimation();
-                console.log(progressElRef.value);
+
+                if (playOnVisible.value) {
+                    const visible = useElementVisibility(progressElRef);
+
+                    const stop = watch(
+                        visible,
+                        val => {
+                            if (val) {
+                                animeInstance.value?.play();
+                                stop();
+                            } else {
+                                animeInstance.value?.pause();
+                            }
+                        },
+                        { immediate: true }
+                    );
+                }
+
+                watch([start, end, autoplay, delay, duration, loop, alternate], () => {
+                    animeInstance.value = createAnimation();
+                });
             }
         });
 
@@ -159,14 +168,16 @@ export default defineComponent({
         });
 
         expose({
+            animePayload,
             play: () => {
-                const { began, paused } = animeInstance.value!;
-                if (began && paused) emit('begin');
+                const { began, paused, completed } = animeInstance.value!;
+                if (began && paused && !completed) emit('begin');
                 animeInstance.value?.play();
             },
             pause: () => {
+                const { began, paused, completed } = animeInstance.value!;
+                if (began && !paused && !completed) emit('pause');
                 animeInstance.value?.pause();
-                emit('pause');
             },
             restart: () => {
                 animeInstance.value?.restart();

@@ -1,5 +1,6 @@
 import { defineComponent, toRefs, computed, createVNode, onMounted } from 'vue';
-import { flattenWithOptions, useThemeRegister } from '../_utils_';
+import { flattenWithOptions } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { spaceProps } from './interface';
 import { mainCssr } from './styles';
 import type { StyleValue } from 'vue';
@@ -9,11 +10,9 @@ export default defineComponent({
     props: spaceProps,
     setup(props, { slots }) {
         // theme register
-        onMounted(() => {
-            useThemeRegister({
-                key: 'Space',
-                main: mainCssr
-            });
+        useThemeRegister({
+            key: 'Space',
+            main: mainCssr
         });
 
         const { vertical, gap, itemStyle, justify } = toRefs(props);

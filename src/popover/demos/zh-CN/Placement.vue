@@ -1,5 +1,5 @@
 <template>
-    <McGrid class="mc-w-3/4 mc-m-auto" :rows="5" :columns="5" :gap="12">
+    <McGrid class="mc-overflow-auto" :rows="5" :columns="5" :gap="12">
         <McGridItem :x="2" :y="1">
             <McPopover trigger="click" style="height: 80px; width: 160px" placement="top-start">
                 <McButton type="success" ghost block>top-start</McButton>

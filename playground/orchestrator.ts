@@ -168,6 +168,10 @@ const initialPackages = [
     {
         name: '@vicons/ionicons5',
         url: import.meta.env.PROD ? '/public/meetcode-ui/assets/ionicons5.esm.js' : '/playground/source/icon-dev-proxy'
+    },
+    {
+        name: 'animejs',
+        url: import.meta.env.PROD ? '/public/meetcode-ui/assets/anime.esm.js' : '/playground/source/anime-dev-proxy'
     }
 ];
 

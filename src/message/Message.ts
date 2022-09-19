@@ -1,5 +1,6 @@
 import { ref, reactive, createApp, TransitionGroup, watch } from 'vue';
-import { useThemeRegister, createComponentVNode, createDirectives, createKey, reactiveOmit, PatchFlags, responsiveTarget } from '../_utils_';
+import { createComponentVNode, createDirectives, createKey, reactiveOmit, PatchFlags, responsiveTarget } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { VLazyTeleport } from 'vueuc';
 import MessageEntity from './MessageEntity';
 import { mainCssr, lightCssr, darkCssr } from './styles';
@@ -196,7 +197,7 @@ export default function useMessage(config: MessageGlobalConfig = {}) {
         McAsyncMessage[type] = createMessageApi(type, true);
     });
 
-    watch(items, val => {
+    watch(items, () => {
         if (items.length > 0 && !isMounted.value) {
             mount();
         }

@@ -2,6 +2,8 @@
 
 ## 演示
 
++++ container
+
 ::: demo CodePreview=Basic
 
 ### 基础用法
@@ -49,6 +51,8 @@
 
 会动的进度条。
 
+设置 `play-on-visible` ，动画会在进度条**首次出现在视窗内**时才开始执行。
+
 <Animation />
 :::
 
@@ -92,8 +96,10 @@
 
 ::: demo CodePreview=AnimationControl
 
-### 动画控制
+### 控制与事件
 
 <AnimationControl />
 
 :::
+
++++

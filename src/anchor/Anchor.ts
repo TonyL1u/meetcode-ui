@@ -1,5 +1,6 @@
 import { defineComponent, onMounted, toRefs, shallowReactive, ref, watch } from 'vue';
-import { useThemeRegister, flattenTree, PatchFlags, createElementVNode, createDirectives } from '../_utils_';
+import { flattenTree, PatchFlags, createElementVNode, createDirectives } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { useElementBounding, throttledWatch, useTemplateRefsList } from '@vueuse/core';
 import { anchorProps } from './interface';
 import { mainCssr, lightCssr, darkCssr } from './styles';
@@ -12,13 +13,11 @@ export default defineComponent({
     emits: ['change'],
     setup(props, { emit, expose }) {
         // theme register
-        onMounted(() => {
-            useThemeRegister({
-                key: 'Anchor',
-                main: mainCssr,
-                light: lightCssr,
-                dark: darkCssr
-            });
+        useThemeRegister({
+            key: 'Anchor',
+            main: mainCssr,
+            light: lightCssr,
+            dark: darkCssr
         });
 
         const { options, bound, offsetTop, offsetBottom, type, showTrack, showMarker } = toRefs(props);

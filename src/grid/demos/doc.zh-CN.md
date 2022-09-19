@@ -4,6 +4,8 @@ Grid 布局是一个强大的响应式 CSS 布局系统，但其属性繁多，�
 
 ## 演示
 
++++ container
+
 ::: demo CodePreview=Basic
 
 ### 基础用法
@@ -52,6 +54,8 @@ Grid 布局是一个强大的响应式 CSS 布局系统，但其属性繁多，�
 
 <ItemControl />
 :::
+
++++
 
 ## Props
 

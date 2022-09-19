@@ -1,15 +1,14 @@
 import { Transition, defineComponent, onMounted, renderSlot } from 'vue';
-import { useThemeRegister, createComponentVNode } from '../_utils_';
+import { createComponentVNode } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import iconSwitchCssr from '../_styles_/icon-switch-transition.cssr';
 
 export default defineComponent({
     name: 'IconSwitchTransition',
     setup(_, { slots }) {
-        onMounted(() => {
-            useThemeRegister({
-                key: 'McIconSwitchTransition',
-                main: iconSwitchCssr
-            });
+        useThemeRegister({
+            key: 'McIconSwitchTransition',
+            main: iconSwitchCssr
         });
 
         return () =>

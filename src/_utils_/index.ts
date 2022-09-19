@@ -13,8 +13,5 @@ export { propsMergeSlots } from './propsMergeSlots';
 export { reactiveOmit } from './reactiveOmit';
 export { responsiveTarget } from './responsiveTarget';
 export { sleep } from './sleep';
-export { useThemeRegister, ThemeMap } from './useThemeRegister';
-export { useSharedItems } from './useSharedItems';
-export { useI18n } from './useI18n';
 
 export type { FlattenOptions } from './flatten';

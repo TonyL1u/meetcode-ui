@@ -1,6 +1,6 @@
 import { defineComponent, getCurrentInstance, renderSlot, CustomVNodeTypes, toRefs, computed, ref } from 'vue';
 import { cssUnitTransform } from '../../_utils_';
-import { createElementVNode, createComponentVNode } from '../../_utils_';
+import { createElementVNode, createElementBlockVNode, createComponentVNode, createComponentBlockVNode } from '../../_utils_';
 import { layoutSiderIKey, layoutIKey, layoutSiderProps } from '../interface';
 import { McButton } from '../../button';
 import { McIcon } from '../../icon';
@@ -40,20 +40,24 @@ export default defineComponent({
         };
 
         const buttonTriggerVNode = () => {
-            return createComponentVNode(
+            return createComponentBlockVNode(
                 McButton,
                 { circle: true, size: 'small' },
                 {
-                    icon: () =>
-                        createComponentVNode(McIcon, null, {
-                            default: () => createComponentVNode(ChevronBackSharp)
-                        })
+                    icon: () => createComponentVNode(McIcon, { icon: ChevronBackSharp })
                 }
             );
         };
 
         const collapseTriggerVNode = () => {
-            return createElementVNode('div', { class: `mc-layout-sider__collapse-${triggerType.value}-trigger`, onClick: callToggle }, [slots.trigger ? renderSlot(slots, 'trigger') : triggerType.value === 'button' ? buttonTriggerVNode() : null]);
+            return createElementBlockVNode(
+                'div',
+                {
+                    class: `mc-layout-sider__collapse-${triggerType.value}-trigger`,
+                    onClick: callToggle
+                },
+                [slots.trigger ? renderSlot(slots, 'trigger') : triggerType.value === 'button' ? buttonTriggerVNode() : null]
+            );
         };
 
         expose({

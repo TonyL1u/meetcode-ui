@@ -1,5 +1,6 @@
-import { defineComponent, toRefs, createVNode, computed, onMounted } from 'vue';
-import { getSlotFirstVNode, useThemeRegister, createComponentVNode, createElementVNode, PatchFlags } from '../_utils_';
+import { defineComponent, toRefs, computed } from 'vue';
+import { getSlotFirstVNode, createComponentVNode, createElementVNode, PatchFlags } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { mainCssr } from './styles';
 import { iconProps } from './interface';
 import type { StyleValue } from 'vue';
@@ -9,11 +10,9 @@ export default defineComponent({
     props: iconProps,
     setup(props, { slots }) {
         // theme register
-        onMounted(() => {
-            useThemeRegister({
-                key: 'Icon',
-                main: mainCssr
-            });
+        useThemeRegister({
+            key: 'Icon',
+            main: mainCssr
         });
 
         const { size, color, spin, speed, icon } = toRefs(props);

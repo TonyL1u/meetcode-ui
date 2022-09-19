@@ -243,7 +243,7 @@ body {
 
     .markdown-body {
         width: 100%;
-        max-width: 768px;
+        max-width: 75vw;
         margin: 0 auto;
         padding: 0 18px;
         box-sizing: border-box;
@@ -284,10 +284,20 @@ body {
         .header-tabs {
             display: none;
         }
+
+        .markdown-body {
+            max-width: 100%;
+        }
     }
 
     .menu-sider {
         display: none !important;
+    }
+}
+
+@media screen and (max-width: 932px) {
+    .code-container {
+        column-count: 1 !important;
     }
 }
 

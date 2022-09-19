@@ -1,7 +1,8 @@
-import { defineComponent, createVNode, renderSlot, ref, computed, toRefs, onMounted } from 'vue';
+import { defineComponent, ref, computed, toRefs, renderSlot } from 'vue';
 import { ButtonColorSet, ButtonSizeSet, ButtonSizeMap, buttonProps, buttonIKey } from './interface';
 import { or, and, not } from '@vueuse/core';
-import { useColorFactory, setColorAlpha, useThemeRegister, PatchFlags } from '../_utils_';
+import { useColorFactory, setColorAlpha, createElementVNode, PatchFlags } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { buttonColorMap, defaultButtonColorMap } from './color';
 import { mainCssr } from './styles';
 import type { StyleValue } from 'vue';
@@ -42,11 +43,9 @@ export default defineComponent({
     props: buttonProps,
     setup(props, { slots, expose }) {
         // theme register
-        onMounted(() => {
-            useThemeRegister({
-                key: 'Button',
-                main: mainCssr
-            });
+        useThemeRegister({
+            key: 'Button',
+            main: mainCssr
         });
 
         const { type, size, disabled, ghost, dashed, render, round, circle, block, loading, iconRight, color, textColor, borderColor, colorSet, textColorSet, borderColorSet } = toRefs(props);
@@ -135,24 +134,12 @@ export default defineComponent({
             };
         });
 
-        const iconVNode = computed(() => {
-            return loading.value
-                ? createVNode('span', { class: ['mc-button__icon-loading', iconRight.value ? 'right' : 'left'] }, null, PatchFlags.CLASS)
-                : slots.icon
-                ? createVNode('span', { class: ['mc-button__icon', iconRight.value ? 'right' : 'left'] }, [renderSlot(slots, 'icon')], PatchFlags.CLASS)
-                : null;
-        });
-
-        const contentVNode = computed(() => {
-            return slots.default ? createVNode('span', { class: 'mc-button__content' }, [renderSlot(slots, 'default')]) : null;
-        });
-
         // expose({
         //     el: buttonElRef
         // });
 
         return () =>
-            createVNode(
+            createElementVNode(
                 'button',
                 {
                     ref_key: 'buttonElRef',
@@ -186,7 +173,17 @@ export default defineComponent({
                         }
                     }
                 },
-                [iconVNode.value, contentVNode.value],
+                [
+                    createElementVNode(
+                        'span',
+                        {
+                            class: [loading.value ? 'mc-button__icon-loading' : 'mc-button__icon', iconRight.value ? 'right' : 'left']
+                        },
+                        [loading.value ? null : renderSlot(slots, 'icon')],
+                        PatchFlags.CLASS
+                    ),
+                    createElementVNode('span', { class: 'mc-button__content' }, [renderSlot(slots, 'default')])
+                ],
                 PatchFlags.CLASS | PatchFlags.STYLE | PatchFlags.PROPS,
                 ['disabled']
             );

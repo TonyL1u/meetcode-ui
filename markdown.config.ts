@@ -23,6 +23,21 @@ export default {
 
         md.use(MarkdownItHljs);
 
+        md.use(MarkdownItContainer, 'container', {
+            marker: '+',
+            validate: function (params: string) {
+                return params.trim().match(/^container\s*(.*)$/);
+            },
+            render: function (tokens: Token[], idx: number, options: any, env: { id: string }) {
+                const token = tokens[idx];
+                const isTokenNesting = token.nesting === 1;
+
+                if (!isTokenNesting) return '</div>';
+
+                return '<div class="code-container" style="column-count: 2; column-gap: 18px">';
+            }
+        });
+
         md.use(MarkdownItContainer, 'demo', {
             validate: function (params: string) {
                 return params.trim().match(/^demo\s*(.*)$/);
@@ -34,7 +49,7 @@ export default {
                 const demo = token.info.trim().match(/^demo\s*(.*)$/);
                 const code = token.info.trim().match(/^demo\s*(CodePreview=(.*))/);
 
-                if (!isTokenNesting) return `</CodeDemo>`;
+                if (!isTokenNesting) return '</CodeDemo>';
 
                 if (code) {
                     const pathMatcher = env.id.match(/src\/(.*)\/demos\/doc.(.*).md/);

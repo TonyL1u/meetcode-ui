@@ -2,7 +2,7 @@
     <McSpace vertical :gap="0">
         <McSpace>
             <McProgress :percentage="0" type="circle" track-color="#3b82f6" />
-            <McProgress :percentage="25" type="circle" color="#dc2626" />
+            <McProgress :percentage="25" type="circle" color="#dc2626" track-color="#dc262633" />
             <McProgress :percentage="50" type="circle" color="#fb923c" />
             <McProgress :percentage="75" type="circle" indicator-color="#16a34a" />
         </McSpace>

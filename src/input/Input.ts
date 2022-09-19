@@ -1,6 +1,7 @@
-import { defineComponent, onMounted, ref, computed, toRefs, watch, nextTick, renderSlot, getCurrentInstance, toRaw } from 'vue';
+import { defineComponent, ref, computed, toRefs, watch, nextTick, renderSlot, getCurrentInstance, toRaw } from 'vue';
 import { or, and, not, isDefined, onStartTyping, createEventHook } from '@vueuse/core';
-import { useThemeRegister, createElementVNode, createComponentVNode, createFragment, createTextVNode, createTransition, createDirectives, propsMergeSlots, PatchFlags, setColorAlpha } from '../_utils_';
+import { createElementVNode, createComponentVNode, createFragment, createTextVNode, createTransition, createDirectives, propsMergeSlots, PatchFlags, setColorAlpha } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { mainCssr, lightCssr, darkCssr } from './styles';
 import { inputProps } from './interface';
 import { McIcon } from '../icon';
@@ -45,14 +46,13 @@ export default defineComponent({
     emits: ['update:value', 'focus', 'blur', 'change', 'input', 'select', 'clear', 'password-visible-change'],
     setup(props, { slots, emit, expose }) {
         // theme register
-        onMounted(() => {
-            useThemeRegister({
-                key: 'Input',
-                main: mainCssr,
-                light: lightCssr,
-                dark: darkCssr
-            });
+        useThemeRegister({
+            key: 'Input',
+            main: mainCssr,
+            light: lightCssr,
+            dark: darkCssr
         });
+
         const instance = getCurrentInstance();
         const { value: valueVM, type, size, placeholder, disabled, focusOnTyping, autosize, resizable, clearable, wordCount, loading, passwordVisible, minRows, maxRows, maxLength, inputLimits, composed, inputCount, separator, rules } = toRefs(props);
 

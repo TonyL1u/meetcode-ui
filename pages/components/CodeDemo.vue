@@ -1,5 +1,5 @@
 <template>
-    <div class="code-demo" :style="{ paddingBottom: showToolbox ? '0px' : '12px', borderColor: isHashed ? '#16a34a' : '' }">
+    <div class="code-demo" :style="{ borderColor: isHashed ? '#16a34a' : '' }">
         <div class="demo-box">
             <slot></slot>
         </div>
@@ -120,7 +120,8 @@ onRouteChange(
     border-radius: 4px;
     position: relative;
     padding: 12px;
-    margin: 16px 0;
+    padding-bottom: 0px;
+    margin-bottom: 18px;
     overflow: auto;
     transition: background 0.2s, border-color 0.2s;
 }

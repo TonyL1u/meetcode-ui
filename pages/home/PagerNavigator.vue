@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { computed, toRefs } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { McIcon, useI18nController } from 'meetcode-ui';
 import { ChevronBackSharp as IconPrev, ChevronForwardSharp as IconNext } from '@vicons/ionicons5';
 import { componentNameMap } from '../site.config';
-import type { MenuTab, Route } from '../menu';
+import type { MenuTab } from '../menu';
 import type { MenuOption } from 'meetcode-ui';
 
 const props = defineProps<{ menu: MenuOption[]; menuKey: string; tab: MenuTab }>();
@@ -27,7 +27,7 @@ const switchTo = (type: 'prev' | 'next') => {
 </script>
 
 <template>
-    <div v-if="next || prev" class="mc-px-[18px] mc-py-7 mc-mx-auto mc-max-w-[768px] mc-flex mc-justify-between mc-w-full mc-box-border" :style="{ justifyContent: !prev ? 'flex-end' : !next ? 'flex-start' : '' }">
+    <div v-if="next || prev" class="mc-px-[18px] mc-py-7 mc-mx-auto mc-max-w-[75vw] mc-flex mc-justify-between mc-w-full mc-box-border" :style="{ justifyContent: !prev ? 'flex-end' : !next ? 'flex-start' : '' }">
         <div v-if="prev" class="switcher prev" @click="switchTo('prev')">
             <div class="mc-flex mc-items-center mc-text-xs">
                 <McIcon :size="12">

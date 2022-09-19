@@ -1,6 +1,7 @@
 import { defineComponent, onMounted, toRefs, ref, computed } from 'vue';
 import { or, and, not, isDefined } from '@vueuse/core';
-import { useThemeRegister, propsMergeSlots, setColorAlpha, createElementVNode, createComponentVNode, createKey, cssUnitTransform, renderSlot, PatchFlags } from '../_utils_';
+import { propsMergeSlots, setColorAlpha, createElementVNode, createComponentVNode, createKey, cssUnitTransform, renderSlot, PatchFlags } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { McBaseLoading } from '../_internal_';
 import { McIconSwitchTransition } from '../_transition_';
 import { mainCssr, lightCssr, darkCssr } from './styles';
@@ -41,14 +42,13 @@ export default defineComponent({
     emits: ['update:value', 'switch'],
     setup(props, { slots, emit, expose }) {
         // theme register
-        onMounted(() => {
-            useThemeRegister({
-                key: 'Switch',
-                main: mainCssr,
-                light: lightCssr,
-                dark: darkCssr
-            });
+        useThemeRegister({
+            key: 'Switch',
+            main: mainCssr,
+            light: lightCssr,
+            dark: darkCssr
         });
+
         const key = createKey('switch');
         const { value: valueVM, disabled, size, checkedValue, uncheckedValue, checkedText, uncheckedText, checkedColor, uncheckedColor, handlerColor, textPlacement, square, checked, onBeforeSwitch, loading, inelastic, width } = toRefs(props);
         const switchElRef = ref<HTMLElement>();

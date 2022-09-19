@@ -1,5 +1,6 @@
 import { ref, toRefs, computed, watch, mergeProps, provide, createVNode, createTextVNode, createCommentVNode, nextTick, VNode, Slots, CustomVNodeTypes, defineComponent, onMounted } from 'vue';
-import { flatten, getSlotFirstVNode, kebabCaseEscape, SpecificVNode, useThemeRegister } from '../_utils_';
+import { flatten, getSlotFirstVNode, kebabCaseEscape, SpecificVNode } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { useElementBounding, throttledWatch } from '@vueuse/core';
 import { tabsInjectionKey, tabPaneIKey, tabIKey, TabPaneName, MaybeTabPaneProps, tabsProps } from './interface';
 import McTab from './src/Tab';
@@ -12,13 +13,11 @@ export default defineComponent({
     emits: ['update:value', 'tab-switch', 'tab-click'],
     setup(props, { slots, emit, expose }) {
         // theme register
-        onMounted(() => {
-            useThemeRegister({
-                key: 'Tabs',
-                main: mainCssr,
-                light: lightCssr,
-                dark: darkCssr
-            });
+        useThemeRegister({
+            key: 'Tabs',
+            main: mainCssr,
+            light: lightCssr,
+            dark: darkCssr
         });
 
         const { value: valueVM, defaultTab, type, showLine, center, stretch, tabGap, animation, activeColor, barPosition, headerStyle, headerClass, contentStyle, contentClass, onBeforeTabSwitch } = toRefs(props);
