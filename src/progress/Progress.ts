@@ -140,7 +140,7 @@ export default defineComponent({
             if (animation.value) {
                 animeInstance.value = createAnimation();
 
-                if (playOnVisible.value) {
+                if (playOnVisible.value && autoplay.value) {
                     const visible = useElementVisibility(progressElRef);
 
                     const stop = watch(
@@ -164,6 +164,7 @@ export default defineComponent({
         });
 
         onUnmounted(() => {
+            Anime.remove(animePercentage);
             animeInstance.value = null;
         });
 
