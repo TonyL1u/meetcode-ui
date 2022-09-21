@@ -11,7 +11,7 @@ chokidar.watch('src/**/interface.ts').on('change', async (path, stats) => {
         console.log(`当前修改的文件: ${path}`);
         const pathMatcher = path.match(/src\/(.*)\/interface.ts/);
         const name = pathMatcher?.[1];
-        await exec(`sh scripts/api-markdown.sh ${name} ${lang} All`);
+        await exec(`pnpm run api:markdown ${name} ${lang} All`);
         console.log(`doc.${lang}.md文件已同步！`);
     }
 });
