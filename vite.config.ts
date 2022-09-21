@@ -2,6 +2,8 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import viteCompression from 'vite-plugin-compression';
+import viteProgress from 'vite-plugin-progress';
+import viteRestart from 'vite-plugin-restart';
 import path from 'path';
 import Markdown from 'vite-plugin-md';
 import MarkdownConfig from './markdown.config';
@@ -34,7 +36,9 @@ export default defineConfig({
         }),
         vueJsx(),
         Markdown(MarkdownConfig),
-        viteCompression()
+        viteCompression(),
+        viteProgress({ format: 'building [:bar] :percent | Time: :elapseds' }),
+        viteRestart({ restart: ['vite.config.ts'] })
     ],
     server: {
         port: 3001,

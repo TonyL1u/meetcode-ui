@@ -1,7 +1,7 @@
 import { defineComponent, onMounted, onUnmounted, ref, toRefs, computed, watch, shallowRef, nextTick } from 'vue';
 import { createElementVNode, renderSlot, PatchFlags } from '../_utils_';
 import { useThemeRegister, useElementVisibility } from '../_composable_';
-import { progressProps } from './interface';
+import { _progressProps } from './interface';
 import { mainCssr, lightCssr, darkCssr } from './styles';
 import Anime from 'animejs';
 import type { StyleValue } from 'vue';
@@ -10,7 +10,7 @@ import type { ProgressUpdatePayload } from './interface';
 
 export default defineComponent({
     name: 'Progress',
-    props: progressProps,
+    props: _progressProps,
     emits: ['update', 'begin', 'complete', 'pause', 'seek', 'reset', 'restart', 'loop-begin', 'loop-complete'],
     setup(props, { slots, emit, expose }) {
         // theme register

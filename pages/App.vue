@@ -285,7 +285,8 @@ body {
             display: none;
         }
 
-        .markdown-body {
+        .markdown-body,
+        .pager-navigator {
             max-width: 100%;
         }
     }

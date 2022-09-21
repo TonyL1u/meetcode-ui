@@ -41,3 +41,54 @@
 :::
 
 +++
+## Props
+
+| 名称 | 类型 | 默认值 | 说明 |
+| :---: | :---: | :---: | :---: |
+| content-class | `ElementClassSet` | `undefined` |  |
+| content-style | `ElementStyleSet` | `undefined` |  |
+| fixed-footer | `boolean` | `undefined` |  |
+| fixed-header | `boolean` | `undefined` |  |
+| fixed-left-sider | `boolean` | `undefined` |  |
+| fixed-right-sider | `boolean` | `undefined` |  |
+| fixed-sider | `boolean` | `undefined` |  |
+| footer-class | `ElementClassSet` | `undefined` |  |
+| footer-style | `ElementStyleSet` | `undefined` |  |
+| header-class | `ElementClassSet` | `undefined` |  |
+| header-style | `ElementStyleSet` | `undefined` |  |
+| left-sider-class | `ElementClassSet` | `undefined` |  |
+| left-sider-style | `ElementStyleSet` | `undefined` |  |
+| left-sider-width | `string \| number` | `undefined` |  |
+| preset | `'holy' \| 'full' \| 'two-column' \| 'three-column'` | `undefined` | 预设布局 |
+| right-sider-class | `ElementClassSet` | `undefined` |  |
+| right-sider-style | `ElementStyleSet` | `undefined` |  |
+| right-sider-width | `string \| number` | `undefined` |  |
+| show-content | `boolean` | `undefined` |  |
+| show-footer | `boolean` | `undefined` |  |
+| show-header | `boolean` | `undefined` |  |
+| show-left-sider | `boolean` | `undefined` |  |
+| show-right-sider | `boolean` | `undefined` |  |
+| show-sider | `boolean` | `undefined` |  |
+| sider-class | `ElementClassSet` | `undefined` |  |
+| sider-right | `boolean` | `false` | 侧边栏是否显示在右侧 |
+| sider-style | `ElementStyleSet` | `undefined` |  |
+| sider-width | `string \| number` | `100` | 侧边栏宽度(px) |
+
+
+## Events
+
+| 名称 | 类型 | 说明 |
+| :---: | :---: | :---: |
+
+
+## Slots
+
+| 名称 | 参数 | 说明 |
+| :---: | :---: | :---: |
+
+
+## Expose
+
+| 名称 | 类型 | 说明 |
+| :---: | :---: | :---: |
+

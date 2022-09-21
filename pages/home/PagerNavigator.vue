@@ -27,7 +27,7 @@ const switchTo = (type: 'prev' | 'next') => {
 </script>
 
 <template>
-    <div v-if="next || prev" class="mc-px-[18px] mc-py-7 mc-mx-auto mc-max-w-[75vw] mc-flex mc-justify-between mc-w-full mc-box-border" :style="{ justifyContent: !prev ? 'flex-end' : !next ? 'flex-start' : '' }">
+    <div v-if="next || prev" class="pager-navigator mc-px-[18px] mc-py-7 mc-mx-auto mc-max-w-[75vw] mc-flex mc-justify-between mc-w-full mc-box-border" :style="{ justifyContent: !prev ? 'flex-end' : !next ? 'flex-start' : '' }">
         <div v-if="prev" class="switcher prev" @click="switchTo('prev')">
             <div class="mc-flex mc-items-center mc-text-xs">
                 <McIcon :size="12">

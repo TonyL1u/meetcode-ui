@@ -10,6 +10,7 @@ lib
 lib-ssr
 static
 site
+temp
 *.local
 *.tsbuildinfo
 package-lock.json
