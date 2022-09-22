@@ -1,7 +1,5 @@
 const chokidar = require('chokidar');
-const childProcess = require('child_process');
-const util = require('util');
-const exec = util.promisify(childProcess.exec);
+const exec = require('./exec');
 
 const [lang = 'zh-CN'] = process.argv.splice(2);
 // watch interface file to auto generate api markdown
