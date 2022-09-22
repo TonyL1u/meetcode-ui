@@ -1,60 +1,52 @@
 <script lang="ts" setup>
-import { ref, watch, computed } from 'vue';
+import { ref, onUnmounted } from 'vue';
 import Editor from './Editor.vue';
 import Preview from './Preview.vue';
+// @ts-ignore
 import { Splitpanes, Pane } from 'splitpanes';
 import { onShouldUpdateContent, orchestrator } from './orchestrator';
 import { useThemeController } from 'meetcode-ui';
-import beautify from 'js-beautify';
-import hljs from 'highlight.js';
 
 const emit = defineEmits<(e: 'renderFinished') => void>();
+const initialVue = ref('');
 const initialScript = ref('');
 const initialTemplate = ref('');
 const compliedScript = ref('');
-const highlightedScript = computed(() => {
-    return hljs.highlight(compliedScript.value, { language: 'js' }).value;
-});
 const { current: siteTheme } = useThemeController();
-onShouldUpdateContent(() => {
+const { off } = onShouldUpdateContent(() => {
     if (orchestrator.activeFile) {
-        initialScript.value = orchestrator.activeFile?.script;
-        initialTemplate.value = orchestrator.activeFile?.template;
-        compliedScript.value = orchestrator.activeFile?.compiled.js;
+        const { vue, script, template, compiled } = orchestrator.activeFile;
+        initialVue.value = vue;
+        initialScript.value = script;
+        initialTemplate.value = template;
+        compliedScript.value = compiled.js;
     }
 });
-
 const onContentChanged = (source: string, content: string) => {
     if (orchestrator.activeFile) {
         if (source === 'script') orchestrator.activeFile.script = content;
         else if (source === 'template') orchestrator.activeFile.template = content;
+        else if (source === 'vue') orchestrator.activeFile.vue = content;
         compliedScript.value = orchestrator.activeFile?.compiled.js;
     }
 };
-
 const handleRenderFinished = () => emit('renderFinished');
+
+onUnmounted(() => {
+    off();
+});
 </script>
 
 <template>
     <Splitpanes class="default-theme mc-p-4 mc-flex mc-box-border mc-h-full" :class="siteTheme">
-        <Pane class="mc-h-full">
-            <Splitpanes class="default-theme mc-flex mc-flex-col mc-h-full" horizontal>
-                <Pane>
-                    <div class="container">
-                        <Editor language="javascript" :value="initialScript" @change="content => onContentChanged('script', content)" />
-                    </div>
-                </Pane>
-                <Pane>
-                    <div class="container">
-                        <Editor language="html" :value="initialTemplate" @change="content => onContentChanged('template', content)" />
-                    </div>
-                </Pane>
-            </Splitpanes>
+        <Pane class="mc-h-full" size="65%">
+            <div class="container">
+                <Editor language="html" :value="initialVue" @change="content => onContentChanged('vue', content)" />
+            </div>
         </Pane>
         <Pane class="mc-h-full">
             <div class="container" style="background: #f2f2f2">
                 <Preview @render-finished="handleRenderFinished" />
-                <!-- <pre class="mc-overflow-auto" v-html="highlightedScript"></pre> -->
             </div>
         </Pane>
     </Splitpanes>
@@ -78,8 +70,8 @@ const handleRenderFinished = () => emit('renderFinished');
 
 .splitpanes.default-theme .splitpanes__splitter {
     @apply mc-border-transparent mc-flex mc-overflow-hidden;
-    min-width: 16px;
-    min-height: 16px;
+    min-width: 20px;
+    min-height: 20px;
 }
 
 .splitpanes.default-theme.splitpanes--horizontal > .splitpanes__splitter {
@@ -95,7 +87,7 @@ const handleRenderFinished = () => emit('renderFinished');
     }
 
     &::before {
-        margin-top: 5px;
+        margin-top: 7px;
     }
 
     &::after {
@@ -116,7 +108,7 @@ const handleRenderFinished = () => emit('renderFinished');
     }
 
     &::before {
-        margin-left: 5px;
+        margin-left: 7px;
     }
 
     &::after {

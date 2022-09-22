@@ -138,9 +138,6 @@ export async function compileFile({ filename, code, compiled }: File) {
     // styles
     let css = '';
 
-    // Compile windicss styles
-    // if (descriptor.template && descriptor.template.content) css = generateStyles(descriptor.template.content);
-
     for (const style of descriptor.styles) {
         if (style.module) {
             store.errors = ['<style module> is not supported in the playground.'];

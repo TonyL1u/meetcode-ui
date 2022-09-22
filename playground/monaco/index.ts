@@ -72,7 +72,6 @@ const setup = createSingletonPromise(async () => {
                 import('monaco-editor/esm/vs/language/typescript/ts.worker?worker')
             ]);
 
-            // @ts-expect-error
             window.MonacoEnvironment = {
                 getWorker(_: any, label: string) {
                     if (label === 'html' || label === 'handlebars' || label === 'razor') return new HtmlWorker();

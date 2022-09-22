@@ -16,6 +16,7 @@ export interface OrchestratorPackage {
 
 export class OrchestratorFile {
     filename: string;
+    vue: string;
     template: string;
     script: string;
     style: string;
@@ -26,25 +27,16 @@ export class OrchestratorFile {
         ssr: ''
     };
 
-    constructor(filename: string, template: string | undefined, script: string | undefined, style?: string) {
+    constructor(filename: string, vue?: string, template?: string, script?: string, style?: string) {
         this.filename = filename;
+        this.vue = vue || '';
         this.template = template || '';
         this.script = script || '';
         this.style = style || '';
     }
 
     get code() {
-        return `
-      <script lang="ts" setup>
-        ${this.script}
-      </script>
-      <template>
-        ${this.template}
-      </template>
-      <style scoped>
-        ${this.style}
-      </style>
-      `;
+        return this.vue;
     }
 }
 
@@ -65,9 +57,7 @@ export interface Orchestrator {
  * Main app orchestrator, handles all the files, import maps, and errors
  */
 export const orchestrator: Orchestrator = reactive({
-    files: {
-        'App.vue': new OrchestratorFile('App.vue', '', '')
-    },
+    files: { 'App.vue': new OrchestratorFile('App.vue', '', '') },
     packages: [],
     activeFilename: 'App.vue',
     errors: [],
@@ -95,7 +85,9 @@ export const orchestrator: Orchestrator = reactive({
  * Setup Watchers
  */
 watchEffect(() => {
-    if (orchestrator.activeFile) compileFile(orchestrator.activeFile);
+    if (orchestrator.activeFile) {
+        compileFile(orchestrator.activeFile);
+    }
 });
 
 watch(
@@ -179,14 +171,15 @@ export async function loadInitialState(fileSourceString: string = '') {
     removeAllFiles();
     const demoFile = lz.decompressFromEncodedURIComponent(fileSourceString);
 
+    if (!demoFile) return;
     queueMicrotask(() => {
-        const [templateStartIndex, templateEndIndex] = [demoFile!.indexOf('<template>'), demoFile!.lastIndexOf('</template>')];
-        const template = demoFile!.slice(templateStartIndex + 10, templateEndIndex);
-        const script = demoFile!.match(/<script lang="ts" setup>([\s\S]*?)<\/script>/)?.[1] ?? '';
-        const style = demoFile!.match(/<style scoped>([\s\S]*?)<\/style>/)?.[1] ?? '';
+        const [templateStartIndex, templateEndIndex] = [demoFile.indexOf('<template>'), demoFile.lastIndexOf('</template>')];
+        const template = demoFile.slice(templateStartIndex + 10, templateEndIndex);
+        const script = demoFile.match(/<script lang="ts" setup>([\s\S]*?)<\/script>/)?.[1] ?? '';
+        const style = demoFile.match(/<style scoped>([\s\S]*?)<\/style>/)?.[1] ?? '';
 
         orchestrator.packages = initialPackages;
-        addFile(new OrchestratorFile('App.vue', beautify.html(template).trim(), script.trim(), style.trim()));
+        addFile(new OrchestratorFile('App.vue', demoFile, beautify.html(template).trim(), script.trim(), style.trim()));
         setActiveFile('App.vue');
         shouldUpdateContent.trigger(null);
     });
