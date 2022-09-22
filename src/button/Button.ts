@@ -174,15 +174,17 @@ export default defineComponent({
                     }
                 },
                 [
-                    createElementVNode(
-                        'span',
-                        {
-                            class: [loading.value ? 'mc-button__icon-loading' : 'mc-button__icon', iconRight.value ? 'right' : 'left']
-                        },
-                        [loading.value ? null : renderSlot(slots, 'icon')],
-                        PatchFlags.CLASS
-                    ),
-                    createElementVNode('span', { class: 'mc-button__content' }, [renderSlot(slots, 'default')])
+                    loading.value || slots.icon
+                        ? createElementVNode(
+                              'span',
+                              {
+                                  class: [loading.value ? 'mc-button__icon-loading' : 'mc-button__icon', iconRight.value ? 'right' : 'left']
+                              },
+                              [loading.value ? null : renderSlot(slots, 'icon')],
+                              PatchFlags.CLASS
+                          )
+                        : null,
+                    slots.default ? createElementVNode('span', { class: 'mc-button__content' }, [renderSlot(slots, 'default')]) : null
                 ],
                 PatchFlags.CLASS | PatchFlags.STYLE | PatchFlags.PROPS,
                 ['disabled']
