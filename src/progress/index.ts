@@ -1,2 +1,2 @@
 export { default as McProgress } from './Progress';
-export type { ProgressUpdatePayload, ProgressExposeInstance } from './interface';
+export type { ProgressUpdatePayload, ProgressExpose, ProgressProps } from './interface';

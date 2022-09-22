@@ -12,8 +12,20 @@ export const basicColumnLayoutComponentIKey = Symbol('basicColumnLayoutComponent
 export const basicRowLayoutComponentIKey = Symbol('basicRowLayoutComponent');
 
 export interface LayoutProps {
+    /**
+     * 预设布局
+     * @defaultValue undefined
+     */
     preset?: 'holy' | 'full' | 'two-column' | 'three-column';
+    /**
+     * 侧边栏是否显示在右侧
+     * @defaultValue false
+     */
     siderRight?: boolean;
+    /**
+     * 侧边栏宽度(px)
+     * @defaultValue 100
+     */
     siderWidth?: string | number;
     leftSiderWidth?: string | number;
     rightSiderWidth?: string | number;

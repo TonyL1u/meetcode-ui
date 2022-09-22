@@ -76,7 +76,7 @@ const handleRouteToGithub = () => {
 };
 
 onThemeChange(() => {
-    console.log(1);
+    // console.log(1);
     // McMessage.success('123');
 });
 onLanguageChange(lang => {

@@ -18,10 +18,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { McProgress, McButton, McSpace } from 'meetcode-ui';
-import type { ProgressUpdatePayload, ProgressExposeInstance } from 'meetcode-ui';
+import type { ProgressUpdatePayload, ProgressExpose } from 'meetcode-ui';
 
-const lineProgress = ref<ProgressExposeInstance>();
-const circleProgress = ref<ProgressExposeInstance>();
+const lineProgress = ref<ProgressExpose>();
+const circleProgress = ref<ProgressExpose>();
 const percentage = ref(0);
 const color = ref('green');
 // const gaugePercentage = ref(-1);

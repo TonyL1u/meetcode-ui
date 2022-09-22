@@ -38,9 +38,9 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { McProgress, McButton, McSpace, McSwitch, McMessage } from 'meetcode-ui';
-import type { ProgressExposeInstance, ProgressUpdatePayload } from 'meetcode-ui';
+import type { ProgressExpose, ProgressUpdatePayload } from 'meetcode-ui';
 
-const progress = ref<ProgressExposeInstance>();
+const progress = ref<ProgressExpose>();
 const color = ref('');
 const loop = ref(false);
 const alternate = ref(false);
