@@ -1,3 +1,7 @@
+<markdown>
+### 字数限制与统计
+</markdown>
+
 <template>
     <McSpace vertical :gap="4">
         <McInput placeholder="只能输入 30 个字" :max-length="30" word-count />

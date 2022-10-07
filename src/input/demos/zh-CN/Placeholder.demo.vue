@@ -1,3 +1,9 @@
+<markdown>
+### 占位符
+
+可以设置丰富的 `placeholder` 。
+</markdown>
+
 <template>
     <McSpace vertical :gap="4">
         <McInput placeholder="这是一个 placeholder" />

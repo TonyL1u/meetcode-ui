@@ -1,3 +1,9 @@
+<markdown>
+### 手动操作
+
+动手操作起来。
+</markdown>
+
 <template>
     <McSpace vertical :gap="4">
         <McInput ref="input" v-model:value="value" type="password" />

@@ -1,3 +1,9 @@
+<markdown>
+### 输入组
+
+组合 `Input` 框和按钮。
+</markdown>
+
 <template>
     <McSpace vertical :gap="4">
         <McInputGroup style="width: 100%">

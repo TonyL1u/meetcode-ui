@@ -25,7 +25,7 @@ export default c([
             c('&--focused > &-wrapper::after', {
                 boxShadow: '0 0 0.5px 1.5px #5acea700'
             }),
-            c('&__prefix, &__suffix, &__inner', {
+            c('&__prefix, &__suffix, &-placeholder', {
                 color: '#666'
             })
         ]

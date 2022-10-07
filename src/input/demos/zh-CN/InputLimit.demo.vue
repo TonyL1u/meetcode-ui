@@ -1,3 +1,19 @@
+<markdown>
+### 输入限制
+
+通过 `input-limits` 属性可以限制输入内容。内置了几种限制类型：
+
+`number` ：只允许输入数字。
+
+`not-special` ：只允许输入数字和字母。
+
+`trim` ：头尾不允许输入空格。
+
+`not-space` ： 不允许输入空格。
+
+可以传入正则表达式或一个函数，返回 `true` 时表示允许输入。支持同时校验多条规则。
+</markdown>
+
 <template>
     <McSpace vertical :gap="4">
         <McInput :input-limits="['number']" placeholder="只能输入数字" />

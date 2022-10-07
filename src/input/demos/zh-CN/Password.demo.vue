@@ -1,3 +1,9 @@
+<markdown>
+### 密码
+
+`type` 设置为 `password` 时，可以控制密码显示的触发方式。
+</markdown>
+
 <template>
     <McSpace item-style="flex: 1">
         <McInput v-model:value="value" type="password" :placeholder="visible ? '点击隐藏密码' : '点击显示密码'" @password-visible-change="handleVisibleChange" />

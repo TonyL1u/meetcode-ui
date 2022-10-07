@@ -1,3 +1,7 @@
+<markdown>
+### 禁用
+</markdown>
+
 <template>
     <McSpace vertical :gap="4">
         <div style="display: flex; width: 100%">

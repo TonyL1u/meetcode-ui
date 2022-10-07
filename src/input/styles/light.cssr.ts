@@ -22,7 +22,7 @@ export default c([
             c('&--focused > &-wrapper::after', {
                 boxShadow: '0 0 0.5px 1.5px var(--input-state-border-shadow-color)'
             }),
-            c('&__prefix, &__suffix, &__inner', {
+            c('&__prefix, &__suffix, &-placeholder', {
                 color: '#bbb'
             })
         ]

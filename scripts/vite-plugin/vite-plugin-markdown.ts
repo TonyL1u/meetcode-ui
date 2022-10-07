@@ -49,7 +49,7 @@ function getDemoFiles(docContent: string, demoDir: string) {
                 ?.split('\n') ?? [];
         const hash = markdownLineArray.find(line => line.startsWith('### '))?.split(' ')[1] ?? '';
 
-        return { name, path: demoPath, source: source.split('</markdown>')[1].trim(), decodeHash: decodeURI(hash) };
+        return { name, path: demoPath, source: source.split('</markdown>')[1]?.trim() ?? source, decodeHash: decodeURI(hash) };
     });
 }
 

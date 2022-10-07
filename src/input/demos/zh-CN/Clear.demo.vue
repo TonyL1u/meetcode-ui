@@ -1,3 +1,7 @@
+<markdown>
+### 清除
+</markdown>
+
 <template>
     <McInput clearable>
         <template #placeholder>

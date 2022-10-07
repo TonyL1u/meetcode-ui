@@ -1,3 +1,9 @@
+<markdown>
+### 前缀 & 后缀
+
+设置 `type = textarea` 时，仅支持 `prepend` 和 `prefix` 插槽。
+</markdown>
+
 <template>
     <McSpace vertical :gap="4">
         <McInput :input-limits="['number']" placeholder="9999">

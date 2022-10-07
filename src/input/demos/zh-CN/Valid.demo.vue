@@ -1,3 +1,9 @@
+<markdown>
+### 输入验证
+
+可以独立于表单之外进行输入验证。支持进行异步验证。
+</markdown>
+
 <template>
     <McSpace vertical :gap="4">
         <div style="margin-bottom: 6px; display: flex; width: 100%">

@@ -1,3 +1,7 @@
+<markdown>
+### 尺寸
+</markdown>
+
 <template>
     <McSpace vertical :gap="4">
         <McInput v-model:value="value" size="small" placeholder="小" />

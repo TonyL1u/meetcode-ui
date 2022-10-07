@@ -1,3 +1,9 @@
+<markdown>
+### 自适应
+
+根据输入内容自动调整 `Input` 框大小。 
+</markdown>
+
 <template>
     <McSpace vertical :gap="4">
         <McInput v-model:value="value" style="min-width: 250px" autosize clearable />
