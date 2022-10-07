@@ -14,6 +14,7 @@
     "jsdelivr": "dist/meetcode-ui.umd.js",
     "license": "MIT",
     "scripts": {
+        "preinstall": "npx only-allow pnpm",
         "dev": "vite",
         "serve": "vite preview",
         "build:site": "sh scripts/build-site.sh",
@@ -26,7 +27,6 @@
         "test:coverage": "NODE_OPTIONS=--experimental-vm-modules npx jest"
     },
     "dependencies": {
-        "@antfu/utils": "^0.3.0",
         "@types/lodash-es": "^4.17.6",
         "@vicons/ionicons5": "^0.11.0",
         "@vueuse/core": "7.7.1",
@@ -36,9 +36,11 @@
         "vueuc": "^0.4.15"
     },
     "devDependencies": {
+        "@antfu/utils": "^0.5.2",
         "@babel/core": "^7.16.0",
         "@babel/preset-env": "^7.16.4",
         "@babel/preset-typescript": "^7.16.0",
+        "@babel/types": "^7.17.0",
         "@docsearch/css": "^3.1.1",
         "@docsearch/js": "^3.1.0",
         "@rollup/plugin-commonjs": "^21.0.1",
@@ -65,7 +67,6 @@
         "autoprefixer": "^10.4.2",
         "babel-core": "^7.0.0-bridge.0",
         "babel-jest": "^26.6.3",
-        "chokidar": "^3.5.3",
         "csstype": "2.6.20",
         "doctrine": "^3.0.0",
         "fp-ts": "^2.12.1",
@@ -111,8 +112,7 @@
         "vue": "^3.2.33",
         "vue-jest": "^5.0.0-alpha.10",
         "vue-router": "^4.0.12",
-        "vue-tsc": "^0.3.0",
-        "windicss": "^3.2.1"
+        "vue-tsc": "^0.3.0"
     },
     "sideEffects": false,
     "repository": {

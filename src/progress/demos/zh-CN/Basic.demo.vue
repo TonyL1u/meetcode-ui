@@ -1,6 +1,10 @@
+<markdown>
+### 基础用法
+</markdown>
+
 <template>
-    <McSpace>
-        <McProgress type="circle" :percentage="percentage" />
+    <McSpace vertical :gap="0">
+        <McProgress :percentage="percentage"></McProgress>
         <McSpace>
             <McButton @click="handleIncrease">+ 10%</McButton>
             <McButton @click="handleDecrease">- 10%</McButton>

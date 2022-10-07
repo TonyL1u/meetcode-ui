@@ -34,7 +34,7 @@ export interface ProgressProps {
      */
     loop?: boolean;
     /**
-     * 动画往返
+     * 往返播放动画
      * @defaultValue false
      */
     alternate?: boolean;

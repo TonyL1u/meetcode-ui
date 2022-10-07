@@ -258,3 +258,9 @@
 2022-09-18
 
 -   `McPopconfirm` 如果设置了 `trigger = manual` ，点击 action 按钮无法关闭
+
+2022-10-06
+
+-   `McInput` 的输入框字体颜色有问题
+-   `McMessage` 的字体大小有问题，应该设为 14px
+-   `McSpace` 设置了 vertical 属性后，justify 属性失效

@@ -84,7 +84,7 @@ const replaceOriginalFile = curry(function (title, markdownArray) {
     const fileString = fs.readFileSync(docPath, 'utf-8');
     const data = fileString.split('\n');
 
-    const startIndex = data.findIndex(line => line === mdTitle);
+    const startIndex = data.indexOf(mdTitle);
     // 已经存在该title，替换内容
     if (startIndex > -1) {
         let endIndex = 0;

@@ -3,12 +3,8 @@
         <div class="demo-box">
             <slot></slot>
         </div>
-        <McTabs v-if="codePreviewVisible" v-model:value="tabIndex" :tab-gap="36" :content-style="{ 'padding-top': 0 }">
-            <McTabPane v-for="(code, index) in codes" :name="index" :tab-label="code.name + '.vue'">
-                <pre class="code-preview language-html" v-html="highlighted(code.importSource)"></pre>
-            </McTabPane>
-        </McTabs>
-        <McSpace v-if="showToolbox" :class="['tool-box', !codePreviewVisible ? 'mc-mt-3' : '']" justify="center">
+        <pre v-if="codePreviewVisible" class="code-preview language-html" v-html="highlighted(code.source)"></pre>
+        <McSpace v-if="code" :class="['tool-box', !codePreviewVisible ? 'mc-mt-3' : '']" justify="center">
             <McTooltip content="复制代码">
                 <McButton render="text" size="mini" @click="copyCode">
                     <template #icon>
@@ -49,7 +45,7 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
-import { McTooltip, McTabs, McTabPane, McButton, McIcon, McSpace, McMessage, McPopup } from 'meetcode-ui';
+import { McTooltip, McButton, McIcon, McSpace, McMessage, McPopup } from 'meetcode-ui';
 import { Code as IconCode, CodeSlash as IconCodeSlash, CopyOutline as IconCopy, CubeOutline as IconRunning, CreateOutline as IconEdit } from '@vicons/ionicons5';
 import { useClipboard } from '@vueuse/core';
 import { useRouterEventHook } from '../utils';
@@ -61,23 +57,20 @@ import { repository } from '../../package.json';
 interface CodeSource {
     name: string;
     path: string;
-    importSource: string;
+    source: string;
     compressedSource: string;
 }
 const props = defineProps<{ codeSources?: string; hash?: string }>();
-const codes: CodeSource[] = props.codeSources ? JSON.parse(props.codeSources) : [];
-const showToolbox = codes.length > 0;
+const code = computed<CodeSource>(() => (props.codeSources ? JSON.parse(props.codeSources) : null));
 const codePreviewVisible = ref(false);
-const tabIndex = ref(0);
 const isHashed = ref(false);
-const currentCode = computed(() => codes[tabIndex.value]);
 const { copy } = useClipboard();
 const { onRouteChange } = useRouterEventHook();
 const handleEditOnGithub = () => {
-    window.open(`${repository.url}/blob/develop/${currentCode.value.path}`);
+    window.open(`${repository.url}/blob/develop/${code.value.path}`);
 };
 const handleShowModal = () => {
-    loadInitialState(currentCode.value.compressedSource);
+    loadInitialState(code.value.compressedSource);
     const isLoading = ref(true);
     const { show } = McPopup(Playground, {
         props: { isLoading },
@@ -100,9 +93,9 @@ const highlighted = (content: string) => {
     return hljs.highlight(content, { language: 'html' }).value;
 };
 const copyCode = () => {
-    const { importSource, name } = currentCode.value;
-    copy(importSource);
-    McMessage.success(`${name}.vue代码已复制到剪贴板`, { card: true });
+    const { source } = code.value;
+    copy(source);
+    McMessage.success('已复制', { card: true });
 };
 
 onRouteChange(
@@ -132,15 +125,13 @@ onRouteChange(
     }
 }
 
-:deep(pre.code-preview) {
+pre.code-preview {
     position: relative;
-    padding: 0;
+    padding-top: 1em;
+    margin: 0.75rem 0;
     font-family: v-mono, SFMono-Regular, Menlo, Consolas, Courier, monospace;
-
-    code > span.token.tag:first-of-type {
-        position: absolute;
-        left: 1em;
-    }
+    border-top: 1px solid #e4e7ed;
+    overflow: auto;
 }
 
 .tool-box {

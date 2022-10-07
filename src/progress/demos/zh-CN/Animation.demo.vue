@@ -1,3 +1,11 @@
+<markdown>
+### 动画
+
+会动的进度条。
+
+设置 `play-on-visible` ，动画会在进度条**首次出现在视窗内**时才开始执行。
+</markdown>
+
 <template>
     <McSpace vertical :gap="0">
         <McSpace>

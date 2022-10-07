@@ -1,3 +1,9 @@
+<markdown>
+### 延迟
+
+可以为动画加上延迟时间。
+</markdown>
+
 <template>
     <div style="position: relative; height: 128px; width: 128px">
         <McProgress
@@ -12,6 +18,7 @@
             :delay="(duration / 4) * index"
             :show-indicator="false"
             animation
+            alternate
             loop
         />
     </div>

@@ -1,3 +1,7 @@
+<markdown>
+### 尺寸
+</markdown>
+
 <template>
     <McSpace vertical :gap="0">
         <McProgress :percentage="70" type="circle" :size="88" :stroke-width="4" />

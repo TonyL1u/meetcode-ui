@@ -23,21 +23,6 @@ export default {
 
         md.use(MarkdownItHljs);
 
-        md.use(MarkdownItContainer, 'container', {
-            marker: '+',
-            validate: function (params: string) {
-                return params.trim().match(/^container\s*(.*)$/);
-            },
-            render: function (tokens: Token[], idx: number, options: any, env: { id: string }) {
-                const token = tokens[idx];
-                const isTokenNesting = token.nesting === 1;
-
-                if (!isTokenNesting) return '</div>';
-
-                return '<div class="code-container" style="column-count: 2; column-gap: 18px">';
-            }
-        });
-
         md.use(MarkdownItContainer, 'demo', {
             validate: function (params: string) {
                 return params.trim().match(/^demo\s*(.*)$/);
@@ -56,7 +41,7 @@ export default {
                     const components = code[2].split(',');
                     const codeSources = components.map(name => {
                         const manuallyPath = name.match(/(.*)\[(.*)\]/);
-                        const path = manuallyPath ? manuallyPath[2] : `src/${pathMatcher![1]}/demos/${pathMatcher![2]}/${name}.vue`;
+                        const path = manuallyPath ? manuallyPath[2] : `src/${pathMatcher![1]}/demos/${pathMatcher![2]}/${name}.demo.vue`;
                         const importSource = fs.readFileSync(path, 'utf-8').trim();
                         const compressedSource = lz.compressToEncodedURIComponent(importSource);
 
@@ -72,6 +57,21 @@ export default {
                 } else if (demo) {
                     return `<CodeDemo hash="${decodeHash}">`;
                 }
+            }
+        });
+
+        md.use(MarkdownItContainer, 'container', {
+            marker: '+',
+            validate: function (params: string) {
+                return params.trim().match(/^container\s*(.*)$/);
+            },
+            render: function (tokens: Token[], idx: number, options: any, env: { id: string }) {
+                const token = tokens[idx];
+                const isTokenNesting = token.nesting === 1;
+
+                if (!isTokenNesting) return '</div>';
+
+                return '<div class="code-container" style="column-count: 2; column-gap: 18px">';
             }
         });
 

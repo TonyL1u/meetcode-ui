@@ -4,8 +4,9 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import viteCompression from 'vite-plugin-compression';
 import viteProgress from 'vite-plugin-progress';
 import viteRestart from 'vite-plugin-restart';
+import viteMarkdown from 'vite-plugin-md';
+import { viteApiGenerate, viteDemoTransform, viteMarkdownTransform } from './scripts/vite-plugin';
 import path from 'path';
-import Markdown from 'vite-plugin-md';
 import MarkdownConfig from './markdown.config';
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -30,15 +31,15 @@ export default defineConfig({
         }
     },
     plugins: [
-        vue({
-            include: [/\.vue$/, /\.md$/]
-            // reactivityTransform: true
-        }),
+        viteDemoTransform(),
+        viteMarkdownTransform(),
+        vue({ include: [/\.vue$/, /\.md$/] }),
         vueJsx(),
-        Markdown(MarkdownConfig),
+        viteMarkdown(MarkdownConfig),
         viteCompression(),
         viteProgress({ format: 'building [:bar] :percent | Time: :elapseds' }),
-        viteRestart({ restart: ['vite.config.ts'] })
+        viteRestart({ restart: ['vite.config.ts', 'markdown.config.ts'] }),
+        viteApiGenerate()
     ],
     server: {
         port: 3001,

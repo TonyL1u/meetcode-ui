@@ -1,12 +1,16 @@
+<markdown>
+### 环形
+
+一个圆环。
+</markdown>
+
 <template>
-    <McSpace vertical :gap="0">
+    <McSpace>
+        <McProgress type="circle" :percentage="percentage" />
         <McSpace>
-            <McProgress :percentage="0" type="circle" track-color="#3b82f6" />
-            <McProgress :percentage="25" type="circle" color="#dc2626" track-color="#dc262633" />
-            <McProgress :percentage="50" type="circle" color="#fb923c" />
-            <McProgress :percentage="75" type="circle" indicator-color="#16a34a" />
+            <McButton @click="handleIncrease">+ 10%</McButton>
+            <McButton @click="handleDecrease">- 10%</McButton>
         </McSpace>
-        <McProgress :percentage="25" color="#dc2626" track-color="#dc262633" indicator-color="#dc2626" />
     </McSpace>
 </template>
 

@@ -1,3 +1,9 @@
+<markdown>
+### 自定义指示器
+
+可以把指示器放在里面，或者自定义指示器内容，甚至不显示它。
+</markdown>
+
 <template>
     <McSpace vertical :gap="0">
         <McSpace>
