@@ -1,5 +1,6 @@
-import { ref, reactive, toRefs, createVNode, nextTick, renderSlot, mergeProps, defineComponent, toRaw, PropType, onMounted, computed, isReactive } from 'vue';
-import { PatchFlags, useThemeRegister, createComponentVNode, createElementVNode, createDirectives } from '../_utils_';
+import { ref, reactive, toRefs, nextTick, renderSlot, mergeProps, defineComponent, toRaw, PropType, onMounted, computed, isReactive } from 'vue';
+import { PatchFlags, createComponentVNode, createElementVNode, createDirectives } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { CheckmarkSharp as IconCheck } from '@vicons/ionicons5';
 import { useVirtualList } from '@vueuse/core';
 import { omit } from 'lodash-es';
@@ -8,7 +9,7 @@ import { popoverProps, popoverEmits } from '../popover/interface';
 import { McIcon } from '../icon';
 import { PopselectOption, popselectProps, popselectEmits } from './interface';
 import { mainCssr, lightCssr, darkCssr } from './styles';
-import * as CSS from 'csstype';
+import type { StyleValue, CSSProperties } from 'vue';
 
 const defaultPropsOverride = {
     placement: {
@@ -27,18 +28,16 @@ export default defineComponent({
     emits: [...popoverEmits, ...popselectEmits],
     setup(props, { slots, attrs, emit }) {
         // theme register
-        onMounted(() => {
-            useThemeRegister({
-                key: 'Popselect',
-                main: mainCssr,
-                light: lightCssr,
-                dark: darkCssr
-            });
+        useThemeRegister({
+            key: 'Popselect',
+            main: mainCssr,
+            light: lightCssr,
+            dark: darkCssr
         });
 
         const { value: valueVM, options, multiple, maxHeight, autoClose, autoScroll, truncate, matchTrigger, itemHeight, itemStyle } = toRefs(props);
         const popoverRef = ref<PopoverExposeInstance>();
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             return {
                 '--popselect-inner-max-width': typeof truncate.value === 'number' ? `${truncate.value}px` : '200px'
             };
@@ -88,7 +87,7 @@ export default defineComponent({
                     onClick: () => {
                         if (isDisabled) return;
                         valueVM.value !== void 0 && handleUpdateValue(value);
-                        emit('select', value);
+                        emit('select', value, option);
                         handleHide();
                     }
                 },
@@ -121,7 +120,7 @@ export default defineComponent({
                 style: {
                     padding: '0px',
                     minWidth: matchTrigger.value ? 'none' : '110px',
-                    ...cssVars.value
+                    ...(cssVars.value as CSSProperties)
                 }
             });
 

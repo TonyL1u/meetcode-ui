@@ -1,15 +1,6 @@
 import type { InjectionKey, Ref, VNodeChild, PropType } from 'vue';
 import type { UseEventBusReturn } from '@vueuse/core';
 import type { UISize } from '../_utils_';
-import * as CSS from 'csstype';
-
-declare module 'csstype' {
-    interface Properties {
-        '--checkbox-checked-color'?: string;
-        '--checkbox-hover-color'?: string;
-        '--checkbox-scale-size'?: string;
-    }
-}
 
 export interface CheckboxGroupInjection {
     groupValue?: Ref<CheckboxValue[] | undefined>;

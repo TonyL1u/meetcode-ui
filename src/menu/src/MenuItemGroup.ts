@@ -5,7 +5,7 @@ import { menuIKey, subMenuIKey, menuItemGroupIKey, menuItemIKey, subMenuInjectio
 import { McPopover } from '../../popover';
 import { McFadeInExpandTransition } from '../../_transition_';
 import type { PopoverExposeInstance } from '../../popover';
-import * as CSS from 'csstype';
+import type { StyleValue } from 'vue';
 
 export default defineComponent({
     name: 'MenuItemGroup',
@@ -38,7 +38,7 @@ export default defineComponent({
         });
         const menuPopoverDisabled = or(mergedDisabled, not(and(isParentMenu, or(isMenuHorizontal, isMenuCollapsed))));
         const menuPopoverRef = ref<PopoverExposeInstance>();
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             return {
                 '--menu-item-group-padding-left': `${selfPadding.value}px`
             };

@@ -2,6 +2,8 @@
 
 ## 演示
 
++++ container
+
 ::: demo CodePreview=Basic
 
 ### 基础用法
@@ -73,12 +75,7 @@
 <Delay />
 :::
 
-::: demo CodePreview=Service
-
-### 延迟
-
-<Service />
-:::
++++
 
 ## Props
 

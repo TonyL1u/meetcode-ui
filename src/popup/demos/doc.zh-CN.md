@@ -24,6 +24,8 @@ const show = ref(false);
 
 ## 演示
 
++++ container
+
 ::: demo CodePreview=Basic,Test1
 
 ### 基础用法
@@ -87,7 +89,7 @@ const show = ref(false);
 
 ### 插件
 
-有时候可能需要在独立的 Vue 组件中使用诸如 `vue-router` 、 `pinia` 之类的插件型工具，由于 `Popup` 创建了一个新的 App 实例，因此源文件无法与上下文共享同一个插件实例。
+有时候可能需要在独立的 Vue 组件中使用诸如 `vue-router` 、 `pinia` 之类的插件型工具，由于 `Popup` 创建了一个新的 App 实例，因此无法与上下文共享同一个插件实例。
 
 ```xml
 <script lang="ts" setup>
@@ -105,7 +107,7 @@ const { path } = useRoute();
 可以通过以下两种方法解决：
 
 1. 全局注册插件。注册后，在所有 `Popup` 实例中均可使用。
-2. 手动注册插件。注册后，仅限当前实例可以使用。
+2. 局部注册插件。注册后，在当前实例可以使用。
 
 ```ts
 // main.ts
@@ -121,6 +123,8 @@ PopupProvider.use(router).use(...);
 
 <Plugins />
 :::
+
++++
 
 ## Type Declarations
 
@@ -144,3 +148,23 @@ export declare interface PopupInstance {
     instance: Ref<ModalExposeInstance | DrawerExposeInstance | undefined | null>;
 }
 ```
+## Props
+
+| 名称 | 类型 | 默认值 | 说明 |
+| :---: | :---: | :---: | :---: |
+
+## Events
+
+| 名称 | 类型 | 说明 |
+| :---: | :---: | :---: |
+
+## Slots
+
+| 名称 | 参数 | 说明 |
+| :---: | :---: | :---: |
+
+## Expose
+
+| 名称 | 类型 | 说明 |
+| :---: | :---: | :---: |
+

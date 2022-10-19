@@ -1,32 +1,5 @@
 import { Prop, PropType } from 'vue';
 import { UIStatus, UISize, UIColorAttrs } from '../_utils_';
-import * as CSS from 'csstype';
-
-declare module 'csstype' {
-    interface Properties {
-        '--button-default-color'?: string;
-        '--button-default-border-color'?: string;
-        '--button-default-background-color'?: string;
-        '--button-hover-color'?: string;
-        '--button-hover-border-color'?: string;
-        '--button-hover-background-color'?: string;
-        '--button-active-color'?: string;
-        '--button-active-border-color'?: string;
-        '--button-active-background-color'?: string;
-        '--button-disabled-color'?: string;
-        '--button-disabled-border-color'?: string;
-        '--button-disabled-background-color'?: string;
-        '--button-width'?: string;
-        '--button-height'?: string;
-        '--button-padding'?: string;
-        '--button-font-size'?: string;
-        '--button-icon-size'?: string;
-        '--button-icon-margin'?: string;
-        '--button-radius'?: string;
-        '--button-ripple-color'?: string;
-        '--button-flex-direction'?: string;
-    }
-}
 
 export interface ButtonSizeSet {
     height: string;

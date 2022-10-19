@@ -1,12 +1,13 @@
 import { defineComponent, onMounted, toRefs, ref, computed } from 'vue';
 import { or, and, not, isDefined } from '@vueuse/core';
-import { useThemeRegister, propsMergeSlots, setColorAlpha, createElementVNode, createComponentVNode, createKey, cssUnitTransform, renderSlot, PatchFlags } from '../_utils_';
+import { propsMergeSlots, setColorAlpha, createElementVNode, createComponentVNode, createKey, cssUnitTransform, renderSlot, PatchFlags } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { McBaseLoading } from '../_internal_';
 import { McIconSwitchTransition } from '../_transition_';
 import { mainCssr, lightCssr, darkCssr } from './styles';
 import { switchProps } from './interface';
 import type { SwitchSizeMap, SwitchProps } from './interface';
-import * as CSS from 'csstype';
+import type { StyleValue } from 'vue';
 
 const SIZE_MAP: SwitchSizeMap = {
     small: {
@@ -41,14 +42,13 @@ export default defineComponent({
     emits: ['update:value', 'switch'],
     setup(props, { slots, emit, expose }) {
         // theme register
-        onMounted(() => {
-            useThemeRegister({
-                key: 'Switch',
-                main: mainCssr,
-                light: lightCssr,
-                dark: darkCssr
-            });
+        useThemeRegister({
+            key: 'Switch',
+            main: mainCssr,
+            light: lightCssr,
+            dark: darkCssr
         });
+
         const key = createKey('switch');
         const { value: valueVM, disabled, size, checkedValue, uncheckedValue, checkedText, uncheckedText, checkedColor, uncheckedColor, handlerColor, textPlacement, square, checked, onBeforeSwitch, loading, inelastic, width } = toRefs(props);
         const switchElRef = ref<HTMLElement>();
@@ -59,7 +59,7 @@ export default defineComponent({
         const showOuterText = computed(() => textPlacement.value === 'both' || textPlacement.value === 'out');
         const showCheckedText = computed(() => !!(checkedText.value || slots['checked-text'] || slots['checkedText']));
         const showUncheckedText = computed(() => !!(uncheckedText.value || slots['unchecked-text'] || slots['uncheckedText']));
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             const { labelHeight, labelMinWidth, handlerSize, fontSize, textUncheckedPadding, textCheckedPadding } = SIZE_MAP[size.value!] ?? SIZE_MAP.medium;
 
             return {

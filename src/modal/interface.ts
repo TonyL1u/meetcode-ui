@@ -1,13 +1,5 @@
 import { PropType, VNodeChild, Ref, InjectionKey, CSSProperties } from 'vue';
 import { ElementClassSet } from '../_utils_';
-import * as CSS from 'csstype';
-
-declare module 'csstype' {
-    interface Properties {
-        '--modal-width'?: string;
-        '--modal-height'?: string;
-    }
-}
 
 export type OnBeforeLeaveImpl = (action: ModalCloseAction) => Promise<boolean | undefined | void> | boolean | undefined | void;
 export type OnCancelImpl = () => Promise<boolean | undefined | void> | boolean | undefined | void;

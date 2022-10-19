@@ -1,22 +1,5 @@
-import { PropType } from 'vue';
-import * as CSS from 'csstype';
+import type { PropType } from 'vue';
 
-declare module 'csstype' {
-    interface Properties {
-        '--grid-rows-template'?: string;
-        '--grid-columns-template'?: string;
-        '--grid-gap'?: string;
-        '--grid-justify'?: string;
-        '--grid-align'?: string;
-
-        '--grid-item-column-start'?: number | string;
-        '--grid-item-row-start'?: number | string;
-        '--grid-item-column-end'?: number | string;
-        '--grid-item-row-end'?: number | string;
-        '--grid-item-justify'?: string;
-        '--grid-item-align'?: string;
-    }
-}
 export const GridIKey = Symbol('Grid');
 export const GridItemIKey = Symbol('GridItem');
 export interface GridProps {

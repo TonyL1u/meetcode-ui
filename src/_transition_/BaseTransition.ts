@@ -1,5 +1,6 @@
 import { Transition, defineComponent, onMounted, renderSlot, toRefs } from 'vue';
-import { useThemeRegister, createComponentVNode, c } from '../_utils_';
+import { createComponentVNode, c } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import type { PropType, CSSProperties } from 'vue';
 
 export default defineComponent({
@@ -13,11 +14,9 @@ export default defineComponent({
     setup(props, { slots }) {
         const { appear, name, enterFrom, leaveTo } = toRefs(props);
 
-        onMounted(() => {
-            useThemeRegister({
-                key: `McBaseTransition-${name.value}`,
-                main: c([c(`.${name.value}-enter-from`, { ...(enterFrom.value ?? {}) }), c(`.${name.value}-leave-to`, { ...(leaveTo.value ?? enterFrom.value ?? {}) })])
-            });
+        useThemeRegister({
+            key: `McBaseTransition-${name.value}`,
+            main: c([c(`.${name.value}-enter-from`, { ...(enterFrom.value ?? {}) }), c(`.${name.value}-leave-to`, { ...(leaveTo.value ?? enterFrom.value ?? {}) })])
         });
 
         return () =>

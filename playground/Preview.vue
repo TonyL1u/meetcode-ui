@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted, watchEffect, watch } from 'vue';
 import type { WatchStopHandle } from 'vue';
-// import { useElementSize, useCssVar } from '@vueuse/core'
+import { throttledWatch } from '@vueuse/core';
 import srcdoc from './source/template.html?raw';
 import srcdocProd from './source/template.prod.html?raw';
 import { PreviewProxy } from './logic/PreviewProxy';
@@ -20,10 +20,14 @@ let proxy: PreviewProxy;
 let stopUpdateWatcher: WatchStopHandle;
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-watch([runtimeError, runtimeWarning], () => {
-    orchestrator.runtimeErrors = [runtimeError.value, runtimeWarning.value].filter(x => x);
-    runtimeError.value && McMessage.error(runtimeError.value.toString());
-});
+throttledWatch(
+    [runtimeError, runtimeWarning],
+    () => {
+        orchestrator.runtimeErrors = [runtimeError.value, runtimeWarning.value].filter(x => x);
+        runtimeError.value && McMessage.error(runtimeError.value.toString());
+    },
+    { throttle: 2000, trailing: true }
+);
 
 // create sandbox on mount
 onMounted(createSandbox);

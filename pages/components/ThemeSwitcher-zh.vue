@@ -4,10 +4,10 @@ import { Moon, Sunny } from '@vicons/ionicons5';
 
 const { switchTheme, setTheme, current, onThemeChange, isDark } = useThemeController();
 onThemeChange(theme => {
-    McMessage.success({
-        message: `切换至 ${theme} 模式`,
-        card: true
-    });
+    // McMessage.success({
+    // message: `切换至 ${theme} 模式`
+    // card: true
+    // });
 });
 </script>
 

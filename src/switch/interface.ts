@@ -1,24 +1,5 @@
 import type { PropType, RenderFunction } from 'vue';
 import type { UISize, UnionOmit } from '../_utils_';
-import * as CSS from 'csstype';
-
-declare module 'csstype' {
-    interface Properties {
-        '--switch-font-size'?: string;
-        '--switch-checked-color'?: string;
-        '--switch-unchecked-color'?: string;
-        '--switch-handler-color'?: string;
-        '--switch-ripple-color'?: string;
-        '--switch-label-height'?: string;
-        '--switch-label-width'?: string;
-        '--switch-label-min-width'?: string;
-        '--switch-label-border-radius'?: string;
-        '--switch-text-checked-padding'?: string;
-        '--switch-text-unchecked-padding'?: string;
-        '--switch-handler-size'?: string;
-        '--switch-handler-border-radius'?: string;
-    }
-}
 
 export interface SwitchSizeSet {
     labelHeight: string;

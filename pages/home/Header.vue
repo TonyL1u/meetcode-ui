@@ -20,7 +20,7 @@
                     </McIcon>
                 </template>
             </McButton>
-            <McButton render="text" @click="switchLanguage">
+            <McButton v-if="false" render="text" @click="switchLanguage">
                 <template #icon>
                     <McIcon :size="18">
                         <LanguageOutline />
@@ -43,14 +43,14 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { McButton, McIcon, McPopselect, useI18nController, useThemeController } from 'meetcode-ui';
+import { McButton, McIcon, McPopselect, McMessage, useI18nController, useThemeController } from 'meetcode-ui';
 import { useRouter } from 'vue-router';
 import { LanguageOutline, LogoGithub, MoonOutline, SunnyOutline, ColorPaletteOutline } from '@vicons/ionicons5';
 import { repository } from '../../package.json';
 import AlgoliaSearch from './AlgoliaSearch.vue';
 
 const router = useRouter();
-const { switchTheme, setTheme, isDark } = useThemeController();
+const { switchTheme, setTheme, onThemeChange, isDark } = useThemeController();
 const { switchLanguage, onLanguageChange } = useI18nController();
 const mainVersion = ref('0.0.20');
 const versions = [
@@ -75,6 +75,10 @@ const handleRouteToGithub = () => {
     window.open(repository.url);
 };
 
+onThemeChange(() => {
+    // console.log(1);
+    // McMessage.success('123');
+});
 onLanguageChange(lang => {
     const { currentRoute } = router;
     const newPath = currentRoute.value.fullPath.replace(lang === 'en-US' ? 'zh-CN' : 'en-US', lang);

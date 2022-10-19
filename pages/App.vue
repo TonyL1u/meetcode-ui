@@ -36,6 +36,7 @@ const menu = computed<MenuOption[]>(() => {
 const MenuVNode: FunctionalComponent<{ menu: MenuOption[]; defaultExpandKeys?: string[] }> = props => {
     const { menu, defaultExpandKeys = [] } = props;
     const expandKeys = ref(defaultExpandKeys);
+
     return createVNode(McMenu, {
         value: currentMenuKey.value,
         expandKeys: expandKeys.value,
@@ -69,11 +70,13 @@ const handleShowNavMenu = () => {
                     label: '组件',
                     children: menusMap.components[siteLang.value]
                 },
-                {
-                    key: 'develop',
-                    label: '开发指南',
-                    children: menusMap.develop[siteLang.value]
-                }
+                ENV.DEV
+                    ? {
+                          key: 'develop',
+                          label: '开发指南',
+                          children: menusMap.develop[siteLang.value]
+                      }
+                    : {}
             ],
             defaultExpandKeys: ['docs', 'components', 'develop']
         },
@@ -243,7 +246,7 @@ body {
 
     .markdown-body {
         width: 100%;
-        max-width: 768px;
+        max-width: 75vw;
         margin: 0 auto;
         padding: 0 18px;
         box-sizing: border-box;
@@ -284,10 +287,21 @@ body {
         .header-tabs {
             display: none;
         }
+
+        .markdown-body,
+        .pager-navigator {
+            max-width: 100%;
+        }
     }
 
     .menu-sider {
         display: none !important;
+    }
+}
+
+@media screen and (max-width: 932px) {
+    .code-container {
+        column-count: 1 !important;
     }
 }
 

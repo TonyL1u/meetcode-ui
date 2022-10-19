@@ -1,7 +1,7 @@
-import { ThemeMap } from './useThemeRegister';
+import { ThemeMap } from '../_composable_';
 import { ColorSchemeTemplate } from '../_theme_';
 import type { ThemeVars, Components } from '../_theme_';
-import type { CSSRenderState } from './useThemeRegister';
+import type { CSSRenderState } from '../_composable_';
 
 interface ThemeConfig {
     inherit?: string;

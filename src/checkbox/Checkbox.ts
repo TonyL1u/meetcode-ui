@@ -1,10 +1,11 @@
 import { defineComponent, ref, createVNode, renderSlot, toRefs, computed, inject, mergeProps, onMounted, onUnmounted } from 'vue';
 import { or, and, not, isDefined } from '@vueuse/core';
-import { useThemeRegister, createKey, createElementVNode, PatchFlags } from '../_utils_';
+import { createKey, createElementVNode, PatchFlags } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { mainCssr, lightCssr, darkCssr } from './styles';
 import { IconCheckMark, IconIndeterminateMark } from './icon';
 import { CheckboxValue, checkboxIKey, checkboxGroupInjectionKey, checkboxProps } from './interface';
-import * as CSS from 'csstype';
+import type { StyleValue } from 'vue';
 
 export default defineComponent({
     name: 'Checkbox',
@@ -12,14 +13,14 @@ export default defineComponent({
     props: checkboxProps,
     emits: ['update:value'],
     setup(props, { slots, attrs, emit }) {
-        onMounted(() => {
-            useThemeRegister({
-                key: 'Checkbox',
-                main: mainCssr,
-                light: lightCssr,
-                dark: darkCssr
-            });
+        // theme register
+        useThemeRegister({
+            key: 'Checkbox',
+            main: mainCssr,
+            light: lightCssr,
+            dark: darkCssr
         });
+
         const key = createKey('checkbox');
         const { value: valueVM, label, size, checkedValue, uncheckedValue, disabled, indeterminate, checkedColor } = toRefs(props);
         const { groupValue, groupCheckedColor, groupDisabled, updateGroupValue, BusSelectAll, BusMaxControl } = inject(checkboxGroupInjectionKey, null) ?? {};
@@ -45,7 +46,7 @@ export default defineComponent({
             return mergedValue?.value === checkedValue.value;
         });
         const mergedCheckedColor = and(groupCheckedColor, not(checkedColor)).value ? groupCheckedColor : checkedColor;
-        const cssVars = computed<CSS.Properties>(() => {
+        const cssVars = computed<StyleValue>(() => {
             return {
                 '--checkbox-checked-color': mergedCheckedColor?.value ?? '#10b981',
                 '--checkbox-hover-color': (mergedCheckedColor?.value ?? '#10b981') + '0f',

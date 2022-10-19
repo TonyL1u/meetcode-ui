@@ -1,13 +1,4 @@
 import type { PropType, Component } from 'vue';
-import * as CSS from 'csstype';
-
-declare module 'csstype' {
-    interface Properties {
-        '--icon-color'?: string;
-        '--icon-font-size'?: string;
-        '--icon-spinning-speed'?: string;
-    }
-}
 
 export interface IconProps {
     size?: number;

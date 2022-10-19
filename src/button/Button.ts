@@ -1,12 +1,13 @@
-import { defineComponent, createVNode, renderSlot, ref, computed, toRefs, onMounted } from 'vue';
-import { ButtonColorSet, ButtonSizeMap, buttonProps, buttonIKey } from './interface';
+import { defineComponent, ref, computed, toRefs, renderSlot } from 'vue';
+import { ButtonColorSet, ButtonSizeSet, ButtonSizeMap, buttonProps, buttonIKey } from './interface';
 import { or, and, not } from '@vueuse/core';
-import { useColorFactory, setColorAlpha, useThemeRegister, PatchFlags, createComponentVNode, createElementVNode, createEmptyVNode } from '../_utils_';
 import { McBaseLoading } from '../_internal_';
 import { McIconSwitchTransition } from '../_transition_';
+import { useColorFactory, setColorAlpha, createComponentVNode, createElementVNode, PatchFlags } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { buttonColorMap, defaultButtonColorMap } from './color';
 import { mainCssr } from './styles';
-import * as CSS from 'csstype';
+import type { StyleValue } from 'vue';
 
 const SIZE_MAP: ButtonSizeMap = {
     mini: {
@@ -53,11 +54,9 @@ export default defineComponent({
     props: buttonProps,
     setup(props, { slots, expose }) {
         // theme register
-        onMounted(() => {
-            useThemeRegister({
-                key: 'Button',
-                main: mainCssr
-            });
+        useThemeRegister({
+            key: 'Button',
+            main: mainCssr
         });
 
         const { type, size, disabled, ghost, dashed, render, round, circle, block, loading, iconRight, color, textColor, borderColor, colorSet, textColorSet, borderColorSet } = toRefs(props);
@@ -73,8 +72,8 @@ export default defineComponent({
         const useDefaultBorderColor = and(customWithoutColor, not(borderColor));
         const useDefaultBackgroundColor = and(customWithoutColor);
 
-        const buttonSizeSet = computed(() => SIZE_MAP[size.value!] ?? SIZE_MAP['medium']);
-        const cssVars = computed<CSS.Properties>(() => {
+        const buttonSizeSet = computed<ButtonSizeSet>(() => SIZE_MAP[size.value!] ?? SIZE_MAP['medium']);
+        const cssVars = computed<StyleValue>(() => {
             const { value: buttonColor } = buttonColorMap;
 
             const compositeInputColor: ButtonColorSet =
@@ -93,7 +92,7 @@ export default defineComponent({
             const { default: defaultButtonDefaultColorSet, hover: defaultButtonHoverColorSet, active: defaultButtonActiveColorSet, disabled: defaultButtonDisabledColorSet } = defaultButtonColorMap.value;
             const { height, padding, fontSize, iconSize, iconMargin, loadingMargin } = buttonSizeSet.value;
 
-            const sizeVars: CSS.Properties = {
+            const sizeVars: StyleValue = {
                 '--button-width': circle.value ? height : block.value ? '100%' : 'initial',
                 '--button-height': height,
                 '--button-padding': padding,
@@ -103,7 +102,7 @@ export default defineComponent({
                 '--button-radius': circle.value ? '50%' : round.value ? height : '3px'
             };
 
-            const colorVars: CSS.Properties = isCustom.value
+            const colorVars: StyleValue = isCustom.value
                 ? {
                       '--button-default-color': textColorSet.value?.default ?? (useDefaultColor.value ? '#000' : or(textColor, isTransparent).value ? defaultColorSet.color : '#fff'),
                       '--button-default-border-color': borderColorSet.value?.default ?? (isNotNormal.value ? 'transparent' : useDefaultBorderColor.value ? '#e0e0e6' : defaultColorSet.borderColor),
@@ -147,9 +146,9 @@ export default defineComponent({
             };
         });
 
-        expose({
-            el: buttonElRef
-        });
+        // expose({
+        //     el: buttonElRef
+        // });
 
         return () =>
             createElementVNode(
@@ -207,7 +206,7 @@ export default defineComponent({
                               PatchFlags.CLASS
                           )
                         : null,
-                    slots.default ? createVNode('span', { class: 'mc-button__content' }, [renderSlot(slots, 'default')]) : null
+                    slots.default ? createElementVNode('span', { class: 'mc-button__content' }, [renderSlot(slots, 'default')]) : null
                 ],
                 PatchFlags.CLASS | PatchFlags.STYLE | PatchFlags.PROPS,
                 ['disabled']

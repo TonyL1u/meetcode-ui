@@ -1,13 +1,6 @@
 import type { PropType, RenderFunction } from 'vue';
 import type { PopoverProps } from '../popover';
 import type { ElementStyleSet } from '../_utils_';
-import * as CSS from 'csstype';
-
-declare module 'csstype' {
-    interface Properties {
-        '--popselect-inner-max-width'?: string;
-    }
-}
 
 export type PopselectValue = string | number | (string | number)[];
 export type PopselectMergedProps = PopselectProps & PopoverProps;

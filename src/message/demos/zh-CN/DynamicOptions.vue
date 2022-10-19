@@ -1,7 +1,7 @@
 <template>
     <McSpace>
         <McButton type="success" ghost @click="open">打开一个信息</McButton>
-        <McPopselect v-model:value="type" :options="types" :auto-close="false" @update:value="handleUpdateValue">
+        <McPopselect :options="types" :auto-close="false" @select="handleSelect">
             <McButton type="success" ghost>修改类型</McButton>
         </McPopselect>
     </McSpace>
@@ -9,9 +9,9 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
-import { McSpace, McMessage, McButton, MessageInstance, MessageType, MessageOptions, McPopselect, PopselectValue, PopselectOption } from 'meetcode-ui';
+import { McSpace, McMessage, McButton, McPopselect, PopselectValue } from 'meetcode-ui';
+import type { MessageType, MessageOptions, PopselectOption, ConfigurableMessage } from 'meetcode-ui';
 
-const type = ref<MessageType>('text');
 const types = ref<PopselectOption[]>([
     { label: 'Text', value: 'text' },
     { label: 'Success', value: 'success' },
@@ -19,22 +19,22 @@ const types = ref<PopselectOption[]>([
     { label: 'Info', value: 'info' },
     { label: 'Error', value: 'error' }
 ]);
-const reactiveOptions = reactive<MessageOptions>({
+const options = reactive<MessageOptions>({
     type: 'text',
     message: `这是一个 Text 信息`,
     duration: 10000,
     closable: true
 });
-let messageInstance: MessageInstance | null = null;
+let messageInstance: ConfigurableMessage | null = null;
 
 const open = () => {
-    messageInstance = McMessage(reactiveOptions);
+    messageInstance = McMessage(options);
 };
 
-const handleUpdateValue = (value: PopselectValue, option: PopselectOption) => {
-    reactiveOptions.type = value as MessageType;
+const handleSelect = (value: PopselectValue, option: PopselectOption) => {
     if (messageInstance) {
-        messageInstance.message = `这是一个 ${option.label} 信息`;
+        messageInstance.type = value as MessageType;
+        options.message = `这是一个 ${option.label} 信息`;
     }
 };
 </script>

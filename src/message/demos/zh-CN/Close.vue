@@ -6,9 +6,10 @@
 </template>
 
 <script lang="ts" setup>
-import { McMessage, MessageApiInstance, McSpace, McButton } from 'meetcode-ui';
+import { McMessage, McSpace, McButton } from 'meetcode-ui';
+import type { ConfigurableMessage } from 'meetcode-ui';
 
-let messageInstance: MessageApiInstance<'success'> | null;
+let messageInstance: ConfigurableMessage | null;
 
 const open = () => {
     messageInstance = McMessage.success({
@@ -18,7 +19,7 @@ const open = () => {
 };
 
 const close = () => {
-    messageInstance?.close();
+    messageInstance?.close?.();
     messageInstance = null;
 };
 </script>

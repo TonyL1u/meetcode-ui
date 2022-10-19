@@ -33,5 +33,5 @@ export default {
             plugins: [postcssImport(), tailwindcss()]
         })
     ],
-    external: ['vue'] // 规定哪些是外部引用的模块
+    external: ['vue', 'animejs'] // 规定哪些是外部引用的模块
 };

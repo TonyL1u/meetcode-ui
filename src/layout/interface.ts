@@ -2,16 +2,6 @@ import type { ElementClassSet, ElementStyleSet } from '../_utils_';
 import type { InjectionKey, PropType, CSSProperties } from 'vue';
 import * as CSS from 'csstype';
 
-declare module 'csstype' {
-    interface Properties {
-        '--layout-sider-width'?: string;
-        '--layout-header-height'?: string;
-        '--layout-sider-collapse-button-trigger-top'?: string;
-        '--layout-sider-collapse-button-trigger-bottom'?: string;
-        '--layout-sider-scroll-area-min-width'?: string;
-    }
-}
-
 export const layoutInjectionKey: InjectionKey<unknown> = Symbol('layoutInjectionKey');
 export const layoutIKey = Symbol('layout');
 export const layoutHeaderIKey = Symbol('layoutHeader');
@@ -22,8 +12,20 @@ export const basicColumnLayoutComponentIKey = Symbol('basicColumnLayoutComponent
 export const basicRowLayoutComponentIKey = Symbol('basicRowLayoutComponent');
 
 export interface LayoutProps {
+    /**
+     * 预设布局
+     * @defaultValue undefined
+     */
     preset?: 'holy' | 'full' | 'two-column' | 'three-column';
+    /**
+     * 侧边栏是否显示在右侧
+     * @defaultValue false
+     */
     siderRight?: boolean;
+    /**
+     * 侧边栏宽度(px)
+     * @defaultValue 100
+     */
     siderWidth?: string | number;
     leftSiderWidth?: string | number;
     rightSiderWidth?: string | number;
@@ -57,7 +59,7 @@ export interface LayoutSiderProps {
     collapsed?: boolean;
     collapsable?: boolean;
     collapsedWidth?: string | number;
-    triggerPosition?: { top?: CSS.Properties['top']; bottom?: CSS.Properties['bottom'] };
+    triggerPosition?: { top?: CSSProperties['top']; bottom?: CSSProperties['bottom'] };
     triggerType?: 'button' | 'bar';
     transitionMode?: 'width' | 'transform';
     onBeforeToggle: (isCollapsed: boolean) => Promise<boolean | undefined | void> | boolean | undefined | void;

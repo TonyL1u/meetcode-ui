@@ -1,12 +1,12 @@
-import { VNodeChild, CSSProperties, Ref, PropType } from 'vue';
+import type { VNodeChild, CSSProperties, PropType } from 'vue';
 
 export type MessageCloseImpl = () => void | Promise<void>;
 export type MessageType = 'text' | 'success' | 'warning' | 'info' | 'error' | 'loading';
 export interface MessageOptions {
-    type?: MessageType;
+    type: MessageType;
+    message?: string | (() => VNodeChild);
     className?: string;
     style?: string | CSSProperties;
-    message?: string | (() => VNodeChild);
     duration?: number;
     closable?: boolean;
     hoverAlive?: boolean;
@@ -17,40 +17,45 @@ export interface MessageOptions {
     action?: () => VNodeChild;
     onClose?: MessageCloseImpl;
 }
-export type MessageApiOptions<T extends MessageType> = Omit<MessageOptions, 'type'>;
-
-export type MessageInstance = MessageExposeInstance & MessageOptions;
-export type MessageApiInstance<T extends MessageType> = MessageExposeInstance & MessageApiOptions<T>;
-
-export type MaybeMessageApiOptions<T extends MessageType> = string | MessageApiOptions<T>;
+export type MessageApiOptions = Partial<Omit<MessageOptions, 'type'>>;
 export type Message = {
     readonly key: string;
-    type: MessageType | Ref<MessageType | undefined>;
-    options: Partial<MessageApiInstance<MessageType>>;
+    type: MessageType;
+    options: MessageApiOptions;
 };
-export type MessageApi = {
-    (options: MessageOptions): MessageInstance;
-    text: (maybeOptions?: MaybeMessageApiOptions<'text'>, options?: MessageApiOptions<'text'>) => MessageApiInstance<'text'>;
-    success: (maybeOptions?: MaybeMessageApiOptions<'success'>, options?: MessageApiOptions<'success'>) => MessageApiInstance<'success'>;
-    warning: (maybeOptions?: MaybeMessageApiOptions<'warning'>, options?: MessageApiOptions<'warning'>) => MessageApiInstance<'warning'>;
-    info: (maybeOptions?: MaybeMessageApiOptions<'info'>, options?: MessageApiOptions<'info'>) => MessageApiInstance<'info'>;
-    error: (maybeOptions?: MaybeMessageApiOptions<'error'>, options?: MessageApiOptions<'error'>) => MessageApiInstance<'error'>;
-    loading: (maybeOptions?: MaybeMessageApiOptions<'error'>, options?: MessageApiOptions<'error'>) => MessageApiInstance<'loading'>;
+export type ConfigurableMessage = Required<MessageOptions> & Readonly<MessageExposeInstance>;
+export type MessageApiReturnType<S extends boolean> = S extends true ? Promise<ConfigurableMessage> : ConfigurableMessage;
+export type CreateMessageApiReturnType<S extends boolean> = {
+    (options: MessageApiOptions): MessageApiReturnType<S>;
+    (content: string): MessageApiReturnType<S>;
+    (content: string, options: MessageApiOptions): MessageApiReturnType<S>;
 };
 
-export type MessageAsyncApi = {
-    (options: MessageOptions): Promise<MessageInstance>;
-    text: (maybeOptions?: MaybeMessageApiOptions<'text'>, options?: MessageApiOptions<'text'>) => Promise<MessageApiInstance<'text'>>;
-    success: (maybeOptions?: MaybeMessageApiOptions<'success'>, options?: MessageApiOptions<'success'>) => Promise<MessageApiInstance<'success'>>;
-    warning: (maybeOptions?: MaybeMessageApiOptions<'warning'>, options?: MessageApiOptions<'warning'>) => Promise<MessageApiInstance<'warning'>>;
-    info: (maybeOptions?: MaybeMessageApiOptions<'info'>, options?: MessageApiOptions<'info'>) => Promise<MessageApiInstance<'info'>>;
-    error: (maybeOptions?: MaybeMessageApiOptions<'error'>, options?: MessageApiOptions<'error'>) => Promise<MessageApiInstance<'error'>>;
-    loading: (maybeOptions?: MaybeMessageApiOptions<'loading'>, options?: MessageApiOptions<'loading'>) => Promise<MessageApiInstance<'loading'>>;
+export type MessageApi<S extends boolean = false> = {
+    (options: MessageOptions): MessageApiReturnType<S>;
+    text: CreateMessageApiReturnType<S>;
+    success: CreateMessageApiReturnType<S>;
+    warning: CreateMessageApiReturnType<S>;
+    info: CreateMessageApiReturnType<S>;
+    error: CreateMessageApiReturnType<S>;
+    loading: CreateMessageApiReturnType<S>;
 };
 
 export interface MessageExposeInstance {
-    close: MessageCloseImpl;
-    el: HTMLElement;
+    close?: MessageCloseImpl;
+    el?: HTMLElement;
+}
+
+export type MessagePlacement = 'top-left' | 'top-center' | 'top-right' | 'middle-left' | 'middle-center' | 'middle-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';
+export interface MessageGlobalConfig {
+    max?: number;
+    placement?: MessagePlacement;
+    duration?: number;
+    itemGap?: number;
+    card?: boolean;
+    hoverAlive?: boolean;
+    closable?: boolean;
+    containerStyle?: string | CSSProperties;
 }
 
 export interface MessageProps {

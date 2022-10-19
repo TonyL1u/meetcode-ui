@@ -1,5 +1,6 @@
 import { defineComponent, onMounted, toRefs, createVNode, resolveComponent, CustomVNodeTypes, renderSlot } from 'vue';
-import { getSlotFirstVNode, getSlotVNodeIndex, useThemeRegister } from '../_utils_';
+import { getSlotFirstVNode, getSlotVNodeIndex } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { layoutProps, layoutIKey, layoutHeaderIKey, layoutContentIKey, layoutFooterIKey, layoutSiderIKey, basicColumnLayoutComponentIKey, basicRowLayoutComponentIKey } from './interface';
 import { createColumnLayout, createRowLayout } from './preset';
 import { mainCssr, lightCssr, darkCssr } from './styles';
@@ -10,14 +11,13 @@ export default defineComponent({
     props: layoutProps,
     setup(props, { slots }) {
         // theme register
-        onMounted(() => {
-            useThemeRegister({
-                key: 'Layout',
-                main: mainCssr,
-                light: lightCssr,
-                dark: darkCssr
-            });
+        useThemeRegister({
+            key: 'Layout',
+            main: mainCssr,
+            light: lightCssr,
+            dark: darkCssr
         });
+
         const {
             preset,
             siderRight,

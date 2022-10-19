@@ -17,6 +17,7 @@ export const componentNameMap: Record<string, string> = {
     popover: '弹出框',
     popselect: '弹出选择',
     popup: '弹窗',
+    progress: '进度条',
     space: '间隔',
     switch: '开关',
     tabs: '标签页',
@@ -30,7 +31,7 @@ export const componentGroupMap: Record<ComponentCategory, string[]> = {
     Navigation: ['anchor', 'menu'],
     'Data Entry': ['checkbox', 'input', 'switch'],
     'Data Display': ['tooltip'],
-    Feedback: ['drawer', 'message', 'modal', 'popconfirm', 'popover', 'popselect', 'popup', 'tabs'],
+    Feedback: ['drawer', 'message', 'modal', 'popconfirm', 'popover', 'popselect', 'popup', 'progress', 'tabs'],
     Other: []
 };
 

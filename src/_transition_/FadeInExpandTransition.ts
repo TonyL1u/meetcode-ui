@@ -1,5 +1,5 @@
 import { createVNode, Transition, TransitionGroup, defineComponent, PropType, onMounted } from 'vue';
-import { useThemeRegister } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import widthCssr from '../_styles_/fade-in-width-expand-transition.cssr';
 import heightCssr from '../_styles_/fade-in-height-expand-transition.cssr';
 
@@ -18,12 +18,11 @@ export default defineComponent({
         reverse: Boolean
     },
     setup(props, { slots }) {
-        onMounted(() => {
-            useThemeRegister({
-                key: 'McFadeInExpandTransition',
-                main: props.width ? widthCssr : heightCssr
-            });
+        useThemeRegister({
+            key: 'McFadeInExpandTransition',
+            main: props.width ? widthCssr : heightCssr
         });
+
         function handleBeforeLeave(el: HTMLElement): void {
             if (props.width) {
                 el.style.maxWidth = `${el.offsetWidth}px`;

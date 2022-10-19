@@ -55,7 +55,6 @@ import type {
     VideoHTMLAttributes,
     WebViewHTMLAttributes
 } from 'vue';
-import * as CSS from 'csstype';
 
 /**
  * Ts Utils
@@ -223,13 +222,13 @@ export interface UIColorAttrs extends Record<string, string> {
     backgroundColor: string;
 }
 
-export type ElementClassSet = string | Record<string, boolean> | ElementClassSet[];
-export type ElementStyleSet = CSSProperties | string;
+export type ElementClassSet = string | undefined | Record<string, boolean> | ElementClassSet[];
+export type ElementStyleSet = CSSProperties | string | ElementStyleSet[];
 
 /**
  * Jest Utils
  */
-export type JestComputedStyle = CSSStyleDeclaration & Array<keyof (CSSStyleDeclaration & CSS.Properties)> & { _values: CSS.Properties; _importants: CSS.Properties };
+export type JestComputedStyle = CSSStyleDeclaration & Array<keyof (CSSStyleDeclaration & CSSProperties)> & { _values: CSSProperties; _importants: CSSProperties };
 
 /**
  * Native HTML Element Attributes

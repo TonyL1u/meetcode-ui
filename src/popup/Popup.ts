@@ -11,7 +11,6 @@ export class PopupProvider {
     private rootComponent: Component | null = null;
     private hostElement: HTMLDivElement | null = null;
     private plugins: Plugin[] = [];
-    // public plugins
     private static readonly _plugins: Plugin[] = [];
 
     constructor(rootComponent: Component) {

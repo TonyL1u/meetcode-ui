@@ -1,27 +1,5 @@
 import type { PropType, RenderFunction, InjectionKey, Ref } from 'vue';
 import type { UISize, UnionOmit } from '../_utils_';
-import * as CSS from 'csstype';
-
-declare module 'csstype' {
-    interface Properties {
-        '--input-textarea-resizable'?: string;
-        '--input-textarea-min-height'?: string;
-        '--input-textarea-max-height'?: string;
-        '--input-autosize-width'?: string;
-        '--input-font-size'?: string;
-        '--input-el-line-height'?: string;
-        '--input-el-padding'?: string;
-        '--input-wrapper-padding'?: string;
-        '--input-padding'?: string;
-        '--input-height'?: string;
-        '--input-word-count-font-size'?: string;
-        '--input-prefix-margin'?: string;
-        '--input-suffix-margin'?: string;
-        '--input-border-color'?: string;
-        '--input-active-border-color'?: string;
-        '--input-state-border-shadow-color'?: string;
-    }
-}
 
 export interface InputGroupInjection {
     validStatus: Ref<boolean>;

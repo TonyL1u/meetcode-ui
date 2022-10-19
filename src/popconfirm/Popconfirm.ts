@@ -1,5 +1,6 @@
 import { defineComponent, ref, toRefs, renderSlot, createVNode, Fragment, mergeProps, PropType, onMounted } from 'vue';
-import { getSlotFirstVNode, propsMergeSlots, useThemeRegister } from '../_utils_';
+import { getSlotFirstVNode, propsMergeSlots } from '../_utils_';
+import { useThemeRegister } from '../_composable_';
 import { omit } from 'lodash-es';
 import { AlertCircle as IconAlert } from '@vicons/ionicons5';
 import { McPopover, PopoverExposeInstance, PopoverTrigger } from '../popover';
