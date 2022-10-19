@@ -49,5 +49,10 @@ export default c([
     }),
     c('.mc-input-append', {
         borderLeft: 'none'
-    })
+    }),
+    c('.mc-input-group > .mc-button--default', [
+        c('&::before, &:focus::before, &:hover::before', {
+            borderColor: 'var(--input-border-color)'
+        })
+    ])
 ]);

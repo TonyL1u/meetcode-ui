@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-import { McSpace, McInput, InputEventType } from 'meetcode-ui';
+import { McSpace, McInput } from 'meetcode-ui';
 import { Ban } from '@vicons/ionicons5';
 
 const canOnlyInput6 = (value: string) => {
@@ -20,7 +20,7 @@ const canOnlyInput6 = (value: string) => {
     return true;
 };
 const notAllowPaste = (value: string, event: Event) => {
-    if ((event as InputEvent).inputType === InputEventType.PASTE) return false;
+    if ((event as InputEvent).inputType === 'insertFromPaste') return false;
     return true;
 };
 </script>

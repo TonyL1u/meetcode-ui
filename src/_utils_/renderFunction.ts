@@ -117,6 +117,13 @@ export function createTransition(name: string, effect: CSSProperties, slots: Slo
     );
 }
 
+/**
+ * 创建一个空的VNode，用于替代null
+ */
+export function createEmptyVNode() {
+    return _createCommentVNode('', true);
+}
+
 export function renderSlot(slots: Slots, name: string, props?: Record<string, unknown>, fallback?: () => VNodeArrayChildren, noSlotted?: boolean) {
     const camelKey = kebabToCamel(name);
     return _renderSlot(slots, slots[camelKey] ? camelKey : name, props, fallback, noSlotted);

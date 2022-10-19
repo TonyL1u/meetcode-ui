@@ -8,7 +8,6 @@ module.exports = {
                 }
             }
         ],
-        '@babel/preset-typescript',
-        '@vue/app'
+        '@babel/preset-typescript'
     ]
 };

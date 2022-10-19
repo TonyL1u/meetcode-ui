@@ -1,17 +1,17 @@
 <template>
     <McSpace vertical :gap="4">
-        <div style="margin-bottom: 6px; display: flex; width: 100%">
+        <McInputGroup style="margin-bottom: 6px; width: 100%">
             <McInput ref="input" :rules="rules1" clearable />
-            <McButton style="margin-left: 16px" @click="handleValidate">验证</McButton>
-            <McButton style="margin-left: 16px" type="primary" @click="handleReset">重置</McButton>
-        </div>
+            <McButton @click="handleValidate">验证</McButton>
+            <McButton type="primary" @click="handleReset">重置</McButton>
+        </McInputGroup>
         <McInput style="margin-bottom: 4px" placeholder="请输入邮箱" :rules="rules2" :disabled="isValidating" :loading="isValidating" />
     </McSpace>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { McSpace, McInput, McButton, McMessage } from 'meetcode-ui';
+import { McSpace, McInput, McButton, McMessage, McInputGroup } from 'meetcode-ui';
 import type { InputValidRule, InputExposeInstance } from 'meetcode-ui';
 
 const isValidating = ref(false);
