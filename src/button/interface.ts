@@ -7,6 +7,8 @@ export interface ButtonSizeSet {
     fontSize: string;
     iconSize: string;
     iconMargin: string;
+    loadingSize: number;
+    loadingMargin: string;
 }
 export const buttonIKey = Symbol('button');
 export type ButtonSize = UISize;

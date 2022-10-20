@@ -1,7 +1,7 @@
-import { defineComponent, createVNode, toRefs, computed, renderSlot, ref, Transition, watch, createTextVNode, mergeProps, provide } from 'vue';
+import { defineComponent, createVNode, toRefs, computed, renderSlot, ref, Transition, watch, createTextVNode, mergeProps, provide, onMounted } from 'vue';
 import { createKey } from '../_utils_';
 import { useThemeRegister, useI18n, useSharedItems } from '../_composable_';
-import { onClickOutside, useMouse, useMagicKeys, pausableWatch } from '@vueuse/core';
+import { onClickOutside, useMouse, useMagicKeys, pausableWatch, useScrollLock } from '@vueuse/core';
 import { VLazyTeleport } from 'vueuc';
 import { modalProps, ModalCloseAction, modalInjectionKey } from './interface';
 import { McIcon } from '../icon';
@@ -255,6 +255,11 @@ export default defineComponent({
         });
 
         provide(modalInjectionKey, modalElRef);
+
+        onMounted(() => {
+            const isLocked = useScrollLock(document.body);
+            isLocked.value = true;
+        });
 
         expose({
             hide: () => callUpdateShow(false),

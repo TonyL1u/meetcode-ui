@@ -90,17 +90,12 @@ export default c([
             }),
             c('&__icon', {
                 display: 'flex',
-                fontSize: 'var(--button-icon-size)'
-            }),
-            c('&__icon-loading', {
-                display: 'inline-block',
-                border: '2px solid rgba(0, 0, 0, 0.1)',
-                borderLeftColor: 'var(--button-default-color)',
-                borderRadius: '50%',
-                width: '14px',
-                height: '14px',
-                animation: 'mc-button-icon-loading-spin 1.2s linear infinite',
-                transition: 'background-color 0.2s'
+                fontSize: 'var(--button-icon-size)',
+                position: 'relative',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: 'var(--button-icon-size)',
+                minWidth: 'var(--button-icon-size)'
             }),
             c('& > span.left:not(:last-child)', {
                 marginRight: 'var(--button-icon-margin)'
@@ -125,21 +120,13 @@ export default c([
             c('&::after', {
                 transition: 'border-color 0.2s'
             }),
-            c(
-                '&:hover',
-                {
-                    color: 'var(--button-hover-color)',
-                    background: 'var(--button-hover-background-color)'
-                },
-                [
-                    c('&::after', {
-                        borderColor: 'var(--button-hover-border-color) !important'
-                    }),
-                    c('.mc-button__icon-loading', {
-                        borderLeftColor: 'var(--button-hover-color)'
-                    })
-                ]
-            ),
+            c('&:hover', {
+                color: 'var(--button-hover-color)',
+                background: 'var(--button-hover-background-color)'
+            }),
+            c('&:not(&--disabled):hover::after', {
+                borderColor: 'var(--button-hover-border-color) !important'
+            }),
             c(
                 '&:focus',
                 {
@@ -150,9 +137,6 @@ export default c([
                 [
                     c('&::after', {
                         borderColor: 'var(--button-hover-border-color) !important'
-                    }),
-                    c('.mc-button__icon-loading', {
-                        borderLeftColor: 'var(--button-hover-color)'
                     })
                 ]
             ),
@@ -165,9 +149,6 @@ export default c([
                 [
                     c('&::after', {
                         borderColor: 'var(--button-active-border-color)'
-                    }),
-                    c('.mc-button__icon-loading', {
-                        borderLeftColor: 'var(--button-active-color)'
                     })
                 ]
             ),
@@ -181,9 +162,6 @@ export default c([
                 [
                     c('&::after', {
                         borderColor: 'var(--button-disabled-border-color)'
-                    }),
-                    c('.mc-button__icon-loading', {
-                        borderLeftColor: 'var(--button-disabled-color)'
                     })
                 ]
             )
@@ -205,14 +183,6 @@ export default c([
         },
         to: {
             boxShadow: '0 0 0.5px 4px var(--button-ripple-color)'
-        }
-    }),
-    c('@keyframes mc-button-icon-loading-spin', {
-        '0%': {
-            transform: 'rotate(0deg)'
-        },
-        '100%': {
-            transform: 'rotate(360deg)'
         }
     })
 ]);

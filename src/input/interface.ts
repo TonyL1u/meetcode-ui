@@ -1,6 +1,10 @@
-import type { PropType, RenderFunction } from 'vue';
+import type { PropType, RenderFunction, InjectionKey, Ref } from 'vue';
 import type { UISize, UnionOmit } from '../_utils_';
 
+export interface InputGroupInjection {
+    validStatus: Ref<boolean>;
+    updateValidStatus: (status: boolean) => void;
+}
 export interface InputSizeSet {
     fontSize: number;
     wordCountFontSize: string;
@@ -17,6 +21,8 @@ export interface InputValidRule {
     trigger?: InputValidTrigger[];
     required?: boolean;
 }
+export const inputGroupInjectionKey: InjectionKey<InputGroupInjection> = Symbol();
+export const inputIKey = Symbol('input');
 export type InputValidTrigger = 'input' | 'change' | 'focus' | 'blur' | 'clear' | 'select';
 export type InputPlaceholder = string | (() => RenderFunction);
 export type InputLimitType = 'trim' | 'number' | 'not-special' | 'not-space';

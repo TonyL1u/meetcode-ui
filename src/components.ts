@@ -21,3 +21,4 @@ export * from './menu';
 export * from './anchor';
 export * from './switch';
 export * from './progress';
+export * from './select';

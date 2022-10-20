@@ -1,7 +1,9 @@
 import { defineComponent, ref, computed, toRefs, renderSlot } from 'vue';
 import { ButtonColorSet, ButtonSizeSet, ButtonSizeMap, buttonProps, buttonIKey } from './interface';
 import { or, and, not } from '@vueuse/core';
-import { useColorFactory, setColorAlpha, createElementVNode, PatchFlags } from '../_utils_';
+import { McBaseLoading } from '../_internal_';
+import { McIconSwitchTransition } from '../_transition_';
+import { useColorFactory, setColorAlpha, createComponentVNode, createElementVNode, PatchFlags } from '../_utils_';
 import { useThemeRegister } from '../_composable_';
 import { buttonColorMap, defaultButtonColorMap } from './color';
 import { mainCssr } from './styles';
@@ -13,30 +15,39 @@ const SIZE_MAP: ButtonSizeMap = {
         padding: '0 4px',
         fontSize: '12px',
         iconSize: '14px',
-        iconMargin: '2px'
+        iconMargin: '2px',
+        loadingSize: 12,
+        loadingMargin: '2px'
     },
     small: {
         height: '26px',
         padding: '0 8px',
         fontSize: '13px',
         iconSize: '16px',
-        iconMargin: '3px'
+        iconMargin: '3px',
+        loadingSize: 13,
+        loadingMargin: '4px'
     },
     medium: {
         height: '32px',
         padding: '0 12px',
         fontSize: '14px',
         iconSize: '18px',
-        iconMargin: '4px'
+        iconMargin: '4px',
+        loadingSize: 15,
+        loadingMargin: '6px'
     },
     large: {
         height: '38px',
         padding: '0 16px',
         fontSize: '16px',
         iconSize: '20px',
-        iconMargin: '5px'
+        iconMargin: '5px',
+        loadingSize: 18,
+        loadingMargin: '9px'
     }
 };
+
 export default defineComponent({
     name: 'Button',
     iKey: buttonIKey,
@@ -61,6 +72,7 @@ export default defineComponent({
         const useDefaultBorderColor = and(customWithoutColor, not(borderColor));
         const useDefaultBackgroundColor = and(customWithoutColor);
 
+        const buttonSizeSet = computed<ButtonSizeSet>(() => SIZE_MAP[size.value!] ?? SIZE_MAP['medium']);
         const cssVars = computed<StyleValue>(() => {
             const { value: buttonColor } = buttonColorMap;
 
@@ -78,16 +90,16 @@ export default defineComponent({
                       };
             const { default: defaultColorSet, hover: hoverColorSet, active: activeColorSet, disabled: disabledColorSet } = useColorFactory<ButtonColorSet>(compositeInputColor);
             const { default: defaultButtonDefaultColorSet, hover: defaultButtonHoverColorSet, active: defaultButtonActiveColorSet, disabled: defaultButtonDisabledColorSet } = defaultButtonColorMap.value;
-            const buttonSizeSet: ButtonSizeSet = SIZE_MAP[size.value!];
+            const { height, padding, fontSize, iconSize, iconMargin, loadingMargin } = buttonSizeSet.value;
 
             const sizeVars: StyleValue = {
-                '--button-width': circle.value ? buttonSizeSet.height : block.value ? '100%' : 'initial',
-                '--button-height': buttonSizeSet.height,
-                '--button-padding': buttonSizeSet.padding,
-                '--button-font-size': buttonSizeSet.fontSize,
-                '--button-icon-size': buttonSizeSet.iconSize,
-                '--button-icon-margin': buttonSizeSet.iconMargin,
-                '--button-radius': circle.value ? '50%' : round.value ? buttonSizeSet.height : '3px'
+                '--button-width': circle.value ? height : block.value ? '100%' : 'initial',
+                '--button-height': height,
+                '--button-padding': padding,
+                '--button-font-size': fontSize,
+                '--button-icon-size': iconSize,
+                '--button-icon-margin': loading.value ? loadingMargin : iconMargin,
+                '--button-radius': circle.value ? '50%' : round.value ? height : '3px'
             };
 
             const colorVars: StyleValue = isCustom.value
@@ -174,13 +186,23 @@ export default defineComponent({
                     }
                 },
                 [
-                    loading.value || slots.icon
+                    or(loading, slots.icon).value
                         ? createElementVNode(
                               'span',
-                              {
-                                  class: [loading.value ? 'mc-button__icon-loading' : 'mc-button__icon', iconRight.value ? 'right' : 'left']
-                              },
-                              [loading.value ? null : renderSlot(slots, 'icon')],
+                              { class: ['mc-button__icon', iconRight.value ? 'right' : 'left'] },
+                              [
+                                  createComponentVNode(McIconSwitchTransition, null, {
+                                      default: () => {
+                                          if (loading.value) {
+                                              const { loadingSize } = buttonSizeSet.value;
+                                              const loadingColor = cssVars.value[disabled.value ? '--button-disabled-color' : '--button-hover-color'];
+                                              return createComponentVNode(McBaseLoading, { size: loadingSize, stroke: 22, color: loadingColor });
+                                          } else {
+                                              return renderSlot(slots, 'icon');
+                                          }
+                                      }
+                                  })
+                              ],
                               PatchFlags.CLASS
                           )
                         : null,

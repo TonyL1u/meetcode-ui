@@ -1,9 +1,9 @@
-import { defineComponent, ref, computed, toRefs, watch, nextTick, renderSlot, getCurrentInstance, toRaw } from 'vue';
+import { defineComponent, ref, computed, toRefs, watch, nextTick, renderSlot, getCurrentInstance, toRaw, inject } from 'vue';
 import { or, and, not, isDefined, onStartTyping, createEventHook } from '@vueuse/core';
 import { createElementVNode, createElementBlockVNode, createComponentVNode, createComponentBlockVNode, createFragment, createTextVNode, createTransition, createDirectives, propsMergeSlots, PatchFlags, setColorAlpha } from '../_utils_';
 import { useThemeRegister } from '../_composable_';
 import { mainCssr, lightCssr, darkCssr } from './styles';
-import { inputProps } from './interface';
+import { inputProps, inputIKey, inputGroupInjectionKey } from './interface';
 import { McIcon } from '../icon';
 import { McBaseLoading } from '../_internal_';
 import { Infinite, CloseCircle, EyeOffOutline, EyeOutline } from '@vicons/ionicons5';
@@ -42,8 +42,9 @@ const SIZE_MAP: InputSizeMap = {
 
 export default defineComponent({
     name: 'Input',
+    iKey: inputIKey,
     props: inputProps,
-    emits: ['update:value', 'focus', 'blur', 'change', 'input', 'select', 'clear', 'password-visible-change'],
+    emits: ['update:value', 'focus', 'blur', 'change', 'input', 'select', 'clear', 'password-visible-change', 'validate'],
     setup(props, { slots, emit, expose }) {
         // theme register
         useThemeRegister({
@@ -87,7 +88,7 @@ export default defineComponent({
                 throw new Error(`[McInput]: Make sure the length of the binding value you provide is equal to the inputCount value. value length: ${valueVM.value.length}, inputCount: ${inputCount.value}`);
             }
         }
-
+        const { validStatus, updateValidStatus } = inject(inputGroupInjectionKey, null) ?? {};
         const internalValue = composed.value ? ref(new Array(inputCount.value).fill('') as string[]) : ref('');
         const mergedValue = isDefined(valueVM) ? valueVM : internalValue;
         const valueLength = computed(() => (composed.value ? (mergedValue.value as string[]).reduce((pre, cur) => pre + cur).length : mergedValue.value.toString().length));
@@ -116,7 +117,7 @@ export default defineComponent({
 
         const validateHook = createEventHook<{ trigger?: InputValidTrigger; value?: string | string[]; index?: number }>();
         const errorMessage = ref('');
-        const isValid = ref(true);
+        const mergedValid = isDefined(validStatus) ? validStatus : ref(true);
 
         const cssVars = computed<StyleValue>(() => {
             const { fontSize, innerPaddingY, innerLineHeight, wrapperPaddingX, padding, wordCountFontSize, addonMargin } = SIZE_MAP[size.value!] ?? SIZE_MAP.medium;
@@ -136,9 +137,9 @@ export default defineComponent({
                 '--input-word-count-font-size': wordCountFontSize,
                 '--input-prefix-margin': addonMargin,
                 '--input-suffix-margin': addonMargin,
-                '--input-border-color': isValid.value ? '#e0e0e6' : '#dc2626',
-                '--input-active-border-color': isValid.value ? '#10b981' : '#dc2626',
-                '--input-state-border-shadow-color': setColorAlpha(isValid.value ? '#10b981' : '#dc2626', 0.4)
+                '--input-border-color': mergedValid.value ? '#e0e0e6' : '#dc2626',
+                '--input-active-border-color': mergedValid.value ? '#10b981' : '#dc2626',
+                '--input-state-border-shadow-color': setColorAlpha(mergedValid.value ? '#10b981' : '#dc2626', 0.4)
             };
         });
 
@@ -274,8 +275,13 @@ export default defineComponent({
             }
         };
         const updateValidation = (status: boolean, message: string) => {
-            isValid.value = status;
+            if (isDefined(validStatus)) {
+                updateValidStatus!(status);
+            } else {
+                mergedValid.value = status;
+            }
             errorMessage.value = message;
+            emit('validate', status, message);
         };
         const focus = (index?: number) => {
             if (index === void 0) {
@@ -509,14 +515,14 @@ export default defineComponent({
                 if (typeof trigger === 'string') {
                     validateHook.trigger({ trigger, value: trigger === 'clear' ? '' : mergedValue.value });
                     await nextTick();
-                    callback && callback(isValid.value);
+                    callback && callback(mergedValid.value);
                 } else {
                     validateHook.trigger({});
                     await nextTick();
-                    trigger && trigger(isValid.value);
+                    trigger && trigger(mergedValid.value);
                 }
 
-                return isValid.value;
+                return mergedValid.value;
             }
         });
 
@@ -587,7 +593,7 @@ export default defineComponent({
                         {
                             default: () =>
                                 createDirectives('v-if', {
-                                    condition: not(isValid).value,
+                                    condition: not(mergedValid).value,
                                     node: createElementVNode('div', { class: 'mc-input-valid-message' }, errorMessage.value, PatchFlags.TEXT)
                                 })
                         }
