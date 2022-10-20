@@ -2,12 +2,12 @@ import { c } from '../../_utils_';
 
 export default c('.mc-popselect', [
     c('.mc-popselect-option', [
-        c('&:not(&--disabled):hover', {
+        c('&--pending:not(&--disabled)', {
             background: '#f2fcf8'
         }),
         c('&--selected', {
-            background: '#f2fcf8',
-            color: '#10b981'
+            color: '#10b981',
+            fontWeight: 'bold'
         }),
         c('&--disabled', {
             color: '#bbb',
