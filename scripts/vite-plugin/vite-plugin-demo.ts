@@ -16,8 +16,9 @@ export default function TransformDemo(): Plugin {
             if (fileRegex.test(id)) {
                 const [templateStartIndex, templateEndIndex] = [src.indexOf('<template>'), src.lastIndexOf('</template>')];
                 const templateText = src.slice(templateStartIndex + 10, templateEndIndex);
-                const markdownText = src.match(/<markdown>([\s\S]*?)<\/markdown>/)?.[1]?.trim();
-                const scriptText = src.match(/<script.*?>([\s\S]*?)<\/script>/)?.[1]?.trim();
+                const markdownText = src.match(/<markdown>([\s\S]*?)<\/markdown>/)?.[1]?.trim() ?? '';
+                const scriptText = src.match(/<script.*?>([\s\S]*?)<\/script>/)?.[1]?.trim() ?? '';
+                const styleText = src.match(/<style.*?>([\s\S]*?)<\/style>/)?.[1]?.trim() ?? '';
                 const renderResult = md.render(markdownText || '');
 
                 return `<template>
@@ -27,6 +28,9 @@ export default function TransformDemo(): Plugin {
                 <script lang="ts" setup>
                 ${scriptText}
                 </script>
+                <style scoped>
+                ${styleText}
+                </style>
                 `;
             }
         }

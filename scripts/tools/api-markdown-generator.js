@@ -2,10 +2,10 @@ const doctrine = require('doctrine');
 const fs = require('fs');
 const path = require('path');
 const { curry } = require('lodash');
-const root = path.resolve(__dirname, '../../');
 const { name: ProjectName } = require('../../package.json');
 const apiJson = require(`../../temp/${ProjectName}.api.json`);
 
+const root = path.resolve(__dirname, '../../');
 const [component, lang, update] = process.argv.splice(2);
 const docPath = path.resolve(root, `./src/${component}/demos/doc.${lang}.md`);
 const MdTableConfig = {
@@ -41,13 +41,13 @@ const generateTableMarkdown = curry(function (title, members) {
     const tableMarkdown = [`## ${title}\n`, `| ${fields.join(' | ')} |`, `| ${Array(fields.length).fill(':---:').join(' | ')} |`];
     members.forEach(({ docComment, name, excerptTokens, propertyTypeTokenRange }) => {
         const { startIndex = 0, endIndex = 0 } = propertyTypeTokenRange;
-        const property = name;
         const type = excerptTokens
             .slice(startIndex, endIndex)
             .map(token => token.text)
             .reduce((prev, cur) => `${prev}${cur}`)
             .replaceAll('\n', '')
             .replaceAll('|', '\\|');
+        let property = name;
         let desc = '';
         let defaultValue = 'undefined';
 
@@ -55,6 +55,7 @@ const generateTableMarkdown = curry(function (title, members) {
             const { description, tags } = doctrine.parse(docComment, { unwrap: true });
             desc = description.replaceAll('\n/', '') ?? '';
             defaultValue = tags.find(tag => tag.title === 'defaultValue')?.description.replaceAll('\n/', '') ?? defaultValue;
+            property = tags.find(tag => tag.title === 'designation')?.description.replaceAll('\n/', '') ?? property;
         }
 
         const tableLine = fields.map(item => {

@@ -1,5 +1,5 @@
 import { defineComponent, toRefs, computed } from 'vue';
-import { getSlotFirstVNode, createComponentVNode, createElementVNode, PatchFlags } from '../_utils_';
+import { getSlotFirstVNode, createComponentBlockVNode, createElementVNode, PatchFlags } from '../_utils_';
 import { useThemeRegister } from '../_composable_';
 import { mainCssr } from './styles';
 import { iconProps } from './interface';
@@ -46,7 +46,7 @@ export default defineComponent({
                     class: ['mc-icon', { 'mc-icon--spinning': spin.value }],
                     style: cssVars.value
                 },
-                [icon.value ? createComponentVNode(icon.value) : getSlotFirstVNode(slots.default)],
+                [icon.value ? createComponentBlockVNode(icon.value) : getSlotFirstVNode(slots.default)],
                 PatchFlags.CLASS | PatchFlags.STYLE
             );
     }

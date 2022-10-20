@@ -13,7 +13,6 @@ export default c([
     }),
     c('&.icon-switch-transition-enter-active, &.icon-switch-transition-leave-active', {
         transformOrigin: 'center',
-        position: 'absolute',
         transition: `all 0.2s cubic-bezier(.4, 0, .2, 1) !important`
     })
 ]);

@@ -13,24 +13,43 @@ import {
     withCtx,
     renderList,
     withDirectives,
+    createSlots,
     vShow
 } from 'vue';
+import { createKey } from './createKey';
 import { PatchFlags, SlotFlags } from './tsutils';
 import { kebabToCamel } from './kebabCaseEscape';
 import { McBaseTransition } from '../_transition_';
-import type { Component, VNodeProps, VNode, VNodeChild, VNodeArrayChildren, HTMLAttributes, Slots, CSSProperties } from 'vue';
+import type { Component, RenderFunction, VNodeProps, VNode, VNodeChild, VNodeArrayChildren, HTMLAttributes, Slot, Slots, CSSProperties } from 'vue';
 import type { IntrinsicElementAttributes, ElementClassSet, ElementStyleSet, SpecificVNode, Merge } from './tsutils';
 
 type ComponentProps<T extends object> = (T & Record<string, unknown> & VNodeProps & Partial<{ class: ElementClassSet; style: ElementStyleSet }>) | null;
 type ElementProps<T extends keyof IntrinsicElementAttributes> = (IntrinsicElementAttributes[T] & Record<string, unknown> & VNodeProps) | null;
 type ComponentChildren<S extends string> = SlotChildren<S> | ArrayChildren | null;
-type SlotChildren<S extends string> = Partial<Merge<Record<S, () => VNodeChild>, { _: SlotFlags }>>;
+type SlotChildren<S extends string> = Partial<Merge<Record<S, RenderFunction>, { _: SlotFlags }>>;
 type ArrayChildren = unknown[];
 type DirectivesType = 'v-if' | 'v-show' | 'v-for';
 interface DirectivesConfig {
     condition?: boolean;
-    node: VNodeChild | (() => VNodeChild);
+    node: VNodeChild | RenderFunction;
     commentText?: string;
+}
+interface DynamicSlotDescriptor {
+    name: string;
+    fn: RenderFunction;
+}
+
+function useWithCtx(child: RenderFunction) {
+    return withCtx(() => (Array.isArray(child()) ? child() : [child()])) as RenderFunction;
+}
+
+function ctxlizeChildren<S extends string>(children: SlotChildren<string>) {
+    Object.entries(children).forEach(([key, child]) => {
+        if (key !== '_' && child) {
+            // ！！！强制使用 withCtx
+            children[key] = useWithCtx(child);
+        }
+    });
 }
 
 /**
@@ -51,16 +70,26 @@ export function createComponentVNode<T extends object, S extends string = 'defau
     dynamicProps?: (keyof (T & HTMLAttributes & VNodeProps))[] | null,
     useBlock: boolean = false
 ) {
-    if (children && !Array.isArray(children)) {
-        Object.entries(children as SlotChildren<string>).forEach(([key, child]) => {
-            if (key !== '_' && child) {
-                // ！！！强制使用 withCtx
-                (children as SlotChildren<string>)[key] = withCtx(() => (Array.isArray(child()) ? child() : [child()])) as () => VNodeChild;
-            }
-        });
+    if (children) {
+        if (Array.isArray(children)) {
+            const [staticSlots, maybeDynamicSlots] = children as [SlotChildren<S>, object | ArrayChildren];
+            // ctx化
+            ctxlizeChildren(staticSlots);
 
-        if (!children._) {
-            children._ = SlotFlags.STABLE;
+            // 动态插槽
+            if (Array.isArray(maybeDynamicSlots)) {
+                const slotDescriptor = (maybeDynamicSlots as DynamicSlotDescriptor[]).filter(Boolean).map(({ name, fn }, index) => {
+                    return { name, fn: useWithCtx(fn) as Slot, index };
+                });
+                children = createSlots(staticSlots as Record<string, Slot>, slotDescriptor) as SlotChildren<S>;
+                children._ = SlotFlags.DYNAMIC;
+            }
+        } else {
+            ctxlizeChildren(children);
+
+            if (!children._) {
+                children._ = SlotFlags.STABLE;
+            }
         }
     }
 

@@ -264,3 +264,11 @@
 -   `McInput` 的输入框字体颜色有问题
 -   `McMessage` 的字体大小有问题，应该设为 14px
 -   `McSpace` 设置了 vertical 属性后，justify 属性失效
+
+2022-10-09
+
+-   `McPopselect` 的 `on-show` 和 `on-hide` 事件无法触发
+
+2022-10-10
+
+-   `McPopover` 在设置了 `trigger=manual` 后无法触发 `on-show` 和 `on-hide` 事件

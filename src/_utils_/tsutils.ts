@@ -87,7 +87,7 @@ export type CreateArray<L, E, A extends E[] = []> = A['length'] extends L ? A : 
 
 export type Add<X extends number, Y extends number> = [...CreateArray<X, 1>, ...CreateArray<Y, 1>]['length'];
 
-export type Merge<F, S> = { [P in keyof F | keyof S]: P extends keyof S ? S[P] : P extends keyof F ? F[P] : never };
+export type Merge<F extends object, S extends object> = { [P in keyof F | keyof S]: P extends keyof S ? S[P] : P extends keyof F ? F[P] : never };
 
 /**
  * VNode Utils

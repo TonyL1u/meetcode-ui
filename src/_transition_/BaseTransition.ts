@@ -1,5 +1,5 @@
-import { Transition, defineComponent, onMounted, renderSlot, toRefs } from 'vue';
-import { createComponentVNode, c } from '../_utils_';
+import { Transition, defineComponent, renderSlot, toRefs } from 'vue';
+import { createComponentVNode, c, SlotFlags } from '../_utils_';
 import { useThemeRegister } from '../_composable_';
 import type { PropType, CSSProperties } from 'vue';
 
@@ -24,7 +24,8 @@ export default defineComponent({
                 Transition,
                 { name: name.value, appear: appear.value },
                 {
-                    default: () => renderSlot(slots, 'default')
+                    default: () => renderSlot(slots, 'default'),
+                    _: SlotFlags.FORWARDED
                 }
             );
     }
