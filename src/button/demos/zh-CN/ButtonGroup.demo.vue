@@ -1,3 +1,9 @@
+<markdown>
+### 按钮组
+
+一组按钮。
+</markdown>
+
 <template>
     <McSpace>
         <McButtonGroup :size="size" vertical>

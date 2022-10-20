@@ -1,3 +1,7 @@
+<markdown>
+### 禁用
+</markdown>
+
 <template>
     <McSpace>
         <McButton @click="handleClick">正常</McButton>

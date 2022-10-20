@@ -1,3 +1,7 @@
+<markdown>
+### 虚线按钮
+</markdown>
+
 <template>
     <McSpace>
         <McButton dashed>Default</McButton>

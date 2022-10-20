@@ -1,3 +1,9 @@
+<markdown>
+### 图标
+
+在按钮内使用图标。
+</markdown>
+
 <template>
     <McSpace>
         <McButton type="success" ghost>

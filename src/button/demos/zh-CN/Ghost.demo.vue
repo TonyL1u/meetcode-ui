@@ -1,3 +1,7 @@
+<markdown>
+### 透明按钮 
+</markdown>
+
 <template>
     <McSpace>
         <McButton ghost>Default</McButton>

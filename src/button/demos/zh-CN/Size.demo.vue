@@ -1,3 +1,9 @@
+<markdown>
+### 尺寸
+
+按钮有 `mini` 、 `small` 、 `medium`（默认） 和 `large` 4 种大小。
+</markdown>
+
 <template>
     <McSpace>
         <McButton>默认</McButton>

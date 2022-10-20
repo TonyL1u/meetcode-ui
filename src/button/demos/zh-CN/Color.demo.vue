@@ -1,3 +1,9 @@
+<markdown>
+### 自定义颜色
+
+设置 `type = custom` 时，可以自定义按钮颜色。
+</markdown>
+
 <template>
     <McSpace>
         <McButton type="custom" color="#c026d3" text-color="#00ffff">

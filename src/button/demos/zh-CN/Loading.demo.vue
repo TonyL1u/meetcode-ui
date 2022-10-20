@@ -1,3 +1,9 @@
+<markdown>
+### 加载中
+
+设置 `loading = true` 为按钮添加加载状态。
+</markdown>
+
 <template>
     <McButton ghost :loading="loading" :disabled="loading" @click="handleClick">{{ loading ? '加载中...' : '点我加载' }}</McButton>
 </template>
