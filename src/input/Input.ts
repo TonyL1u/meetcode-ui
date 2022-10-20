@@ -1,6 +1,6 @@
 import { defineComponent, ref, computed, toRefs, watch, nextTick, renderSlot, getCurrentInstance, toRaw } from 'vue';
 import { or, and, not, isDefined, onStartTyping, createEventHook } from '@vueuse/core';
-import { createElementVNode, createComponentVNode, createFragment, createTextVNode, createTransition, createDirectives, propsMergeSlots, PatchFlags, setColorAlpha } from '../_utils_';
+import { createElementVNode, createElementBlockVNode, createComponentVNode, createComponentBlockVNode, createFragment, createTextVNode, createTransition, createDirectives, propsMergeSlots, PatchFlags, setColorAlpha } from '../_utils_';
 import { useThemeRegister } from '../_composable_';
 import { mainCssr, lightCssr, darkCssr } from './styles';
 import { inputProps } from './interface';
@@ -54,7 +54,29 @@ export default defineComponent({
         });
 
         const instance = getCurrentInstance();
-        const { value: valueVM, type, size, placeholder, disabled, focusOnTyping, autosize, resizable, clearable, wordCount, loading, passwordVisible, minRows, maxRows, maxLength, inputLimits, composed, inputCount, separator, rules } = toRefs(props);
+        const {
+            value: valueVM,
+            type,
+            size,
+            placeholder,
+            disabled,
+            focusOnTyping,
+            autosize,
+            resizable,
+            clearable,
+            wordCount,
+            loading,
+            passwordVisible,
+            minRows,
+            maxRows,
+            maxLength,
+            inputLimits,
+            composed,
+            inputCount,
+            separator,
+            rules,
+            borderless
+        } = toRefs(props);
 
         // TODO: Error throwing utils
         // diagnosis composed input
@@ -419,7 +441,7 @@ export default defineComponent({
                 };
             }
 
-            return createComponentVNode(
+            return createComponentBlockVNode(
                 McIcon,
                 {
                     icon: isShowPassword.value ? EyeOutline : EyeOffOutline,
@@ -438,7 +460,7 @@ export default defineComponent({
         const clearIconVNode = () => {
             const showIcon = and(valueLength.value > 0, or(isFocused, isHovered)).value;
 
-            return createComponentVNode(
+            return createComponentBlockVNode(
                 McIcon,
                 {
                     icon: CloseCircle,
@@ -514,7 +536,8 @@ export default defineComponent({
                             'mc-input--resizable': and(type.value === 'textarea', resizable).value,
                             'mc-input--with-prepend': !!slots['prepend'],
                             'mc-input--with-append': !!slots['append'],
-                            'mc-input--composed': composed.value
+                            'mc-input--composed': composed.value,
+                            'mc-input--borderless': borderless.value
                         }
                     ],
                     style: cssVars.value,
@@ -540,24 +563,24 @@ export default defineComponent({
                     }
                 },
                 [
-                    slots['prepend'] ? createElementVNode('div', { class: 'mc-input-prepend' }, [renderSlot(slots, 'prepend')]) : null,
+                    slots['prepend'] ? createElementBlockVNode('div', { class: 'mc-input-prepend' }, [renderSlot(slots, 'prepend')]) : null,
                     createElementVNode('div', { class: 'mc-input-wrapper' }, [
-                        slots['prefix'] ? createElementVNode('div', { class: 'mc-input__prefix' }, [renderSlot(slots, 'prefix')]) : null,
+                        slots['prefix'] ? createElementBlockVNode('div', { class: 'mc-input__prefix' }, [renderSlot(slots, 'prefix')]) : null,
                         composed.value ? multipleInnerVNode() : innerVNode(mergedValue.value as string, propsMergeSlots<InputProps, 'placeholder'>(props, slots, 'placeholder')),
                         showTextareaSuffix.value
                             ? createElementVNode('div', { class: 'mc-input__suffix' }, [wordCountVNode()])
                             : showInputSuffix.value
                             ? createElementVNode('div', { class: 'mc-input__suffix' }, [
                                   // TODO: add slot data, e.g. isValid
-                                  slots['suffix'] ? createElementVNode('span', { class: 'mc-input-suffix-content' }, [renderSlot(slots, 'suffix')]) : null,
+                                  slots['suffix'] ? createElementBlockVNode('span', { class: 'mc-input-suffix-content' }, [renderSlot(slots, 'suffix')]) : null,
                                   and(clearable, not(disabled)).value ? clearIconVNode() : null,
                                   and(type.value === 'password', passwordVisible.value !== 'none', not(disabled)).value ? passwordEyeVnode() : null,
-                                  loading.value ? createComponentVNode(McBaseLoading, { size: 14, stroke: 24 }, null, PatchFlags.HOISTED) : null,
+                                  loading.value ? createComponentBlockVNode(McBaseLoading, { size: 14, stroke: 24 }, null, PatchFlags.HOISTED) : null,
                                   wordCount.value ? wordCountVNode() : null
                               ])
                             : null
                     ]),
-                    slots['append'] ? createElementVNode('div', { class: 'mc-input-append' }, [renderSlot(slots, 'append')]) : null,
+                    slots['append'] ? createElementBlockVNode('div', { class: 'mc-input-append' }, [renderSlot(slots, 'append')]) : null,
                     createTransition(
                         'SlideInFromTop',
                         { opacity: 0, transform: 'translateY(-3px)' },

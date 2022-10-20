@@ -4,6 +4,7 @@
 
 ```demo
 Basic
+Borderless
 Textarea
 Size
 Placeholder
@@ -25,26 +26,30 @@ Valid
 
 ## Props
 
-|       名称       |                     类型                      |   默认值    |                    说明                    |
-| :--------------: | :-------------------------------------------: | :---------: | :----------------------------------------: |
-|  (v-model)value  |             `string \| string[]`              | `undefined` |               输入框绑定的值               |
-|       type       |     `'text' \| 'password' \| 'textarea'`      |   `text`    |                 输入框类型                 |
-|       size       |       `'small' \| 'medium' \| 'large'`        | `'medium'`  |                 输入框尺寸                 |
-|   placeholder    |   `InputPlaceholder \| InputPlaceholder[]`    | `undefined` |                   占位符                   |
-|     disabled     |                   `boolean`                   |   `false`   |                  是否禁用                  |
-|     autosize     |                   `boolean`                   |   `false`   |                 自适应大小                 |
-|    resizable     |                   `boolean`                   |   `false`   | `type = textarea` 时，是否允许手动调整大小 |
-|    clearable     |                   `boolean`                   |   `false`   |                 是否可清空                 |
-|    word-count    |                   `boolean`                   |   `false`   |                开启字数统计                |
-|     loading      |                   `boolean`                   |   `false`   |                 加载中状态                 |
-| password-visible | `'none' \| 'click' \| 'hover' \| 'mousedown'` |  `'click'`  |  `type = password` 时，切换密码显示的方式  |
-|     min-rows     |                   `number`                    | `undefined` |              文本域的最小行数              |
-|     max-rows     |                   `number`                    | `undefined` |              文本域的最大行数              |
-|    max-length    |                   `number`                    | `undefined` |                最大字数限制                |
-|   input-limits   |              `InputLimitRule[]`               | `undefined` |            进行输入限制时的规则            |
-|     composed     |                   `boolean`                   |   `false`   |             是否使用组合输入框             |
-|      count       |                   `number`                    |     `2`     |               组合输入框个数               |
-|    separator     |             `string \| string[]`              | `undefined` |             组合输入框的分隔符             |
+| 名称 | 类型 | 默认值 | 说明 |
+| :---: | :---: | :---: | :---: |
+| autosize | `boolean` | `false` | 自适应大小 |
+| borderless | `boolean` | `false` | 隐藏边框 |
+| clearable | `boolean` | `false` | 是否可清空 |
+| composed | `boolean` | `false` | 是否使用组合输入框 |
+| count | `number` | `2` | 组合输入框个数 |
+| disabled | `boolean` | `false` | 是否禁用 |
+| focus-on-typing | `boolean` | `false` | 是否在输入时自动聚焦 |
+| input-limits | `InputLimitRule[]` | `undefined` | 进行输入限制时的规则 |
+| loading | `boolean` | `false` | 开启加载中状态 |
+| max-length | `number` | `undefined` | 最大字数限制 |
+| max-rows | `number` | `undefined` | 文本域的最大行数 |
+| min-rows | `number` | `undefined` | 文本域的最小行数 |
+| password-visible | `'none' \| 'click' \| 'hover' \| 'mousedown'` | `'click'` | `type = password` 时，切换密码显示的方式 |
+| placeholder | `InputPlaceholder \| InputPlaceholder[]` | `undefined` | 占位符 |
+| resizable | `boolean` | `false` | `type = textarea` 时，是否允许手动调整大小 |
+| rules | `InputValidRule[]` | `undefined` | 验证规则 |
+| separator | `string \| string[]` | `undefined` | 组合输入框的分隔符 |
+| size | `InputSize` | `'medium'` | 输入框尺寸 |
+| type | `'text' \| 'password' \| 'textarea'` | `'text'` | 输入框类型 |
+| (v-model)value | `string \| string[]` | `undefined` | 选择器绑定的值 |
+| word-count | `boolean` | `false` | 开启字数统计 |
+
 
 ## Event
 
@@ -71,14 +76,9 @@ Valid
 
 ## Expose
 
-|        名称        |             类型             |                   说明                   |
-| :----------------: | :--------------------------: | :--------------------------------------: |
-|         el         |        `HTMLElement`         |          Input 组件的 Dom 节点           |
-|       focus        |  `(index?: number) => void`  |                 手动聚焦                 |
-|        blur        |  `(index?: number) => void`  |                 手动失焦                 |
-|       select       |  `(index?: number) => void`  |             手动选中文本内容             |
-| setPasswordVisible | `(visible: boolean) => void` |              设置密码可见性              |
-|       resize       |         `() => void`         | 设置 `autosize` 后，手动调整至自适应大小 |
+| 名称 | 类型 | 说明 |
+| :---: | :---: | :---: |
+
 
 ## 类型声明
 
@@ -87,3 +87,15 @@ export declare type InputPlaceholder = string | (() => RenderFunction);
 export declare type InputLimitType = 'trim' | 'number' | 'not-special' | 'not-space';
 export declare type InputLimitRule = InputLimitType | RegExp | ((value: string, event: Event) => boolean);
 ```
+
+## Events
+
+| 名称 | 类型 | 说明 |
+| :---: | :---: | :---: |
+
+
+## Slots
+
+| 名称 | 参数 | 说明 |
+| :---: | :---: | :---: |
+

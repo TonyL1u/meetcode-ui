@@ -9,7 +9,7 @@ export default c([
         [
             c('&:not(&--disabled):hover, &--focused', [
                 c('.mc-input-wrapper::before, .mc-input-wrapper::after', {
-                    borderColor: 'var(--input-active-border-color) !important'
+                    borderColor: 'var(--input-active-border-color)'
                 })
             ]),
             c(

@@ -16,11 +16,7 @@ export default c([
             c('&:not(&--autosize), &--textarea', {
                 width: '100%'
             }),
-            c(
-                '&--disabled',
-
-                [c('*', { cursor: 'not-allowed' })]
-            ),
+            c('&--disabled', [c('*', { cursor: 'not-allowed' })]),
             c('&--with-prepend > &-wrapper', {
                 borderTopLeftRadius: 0,
                 borderBottomLeftRadius: 0
@@ -92,7 +88,23 @@ export default c([
             }),
             c('&--textarea &-wrapper', {
                 paddingRight: '0px'
-            })
+            }),
+            c('&:not(&--borderless) &-wrapper', [
+                c('&::before, &::after', {
+                    content: "''",
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0,
+                    borderRadius: 'inherit',
+                    boxSizing: 'border-box',
+                    pointerEvents: 'none'
+                }),
+                c('&::after', {
+                    transition: '0.2s'
+                })
+            ])
         ]
     ),
     c('.mc-input-suffix-content', {
@@ -118,23 +130,23 @@ export default c([
             position: 'relative',
             width: '100%',
             boxSizing: 'border-box'
-        },
-        [
-            c('&::before, &::after', {
-                content: "''",
-                position: 'absolute',
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0,
-                borderRadius: 'inherit',
-                boxSizing: 'border-box',
-                pointerEvents: 'none'
-            }),
-            c('&::after', {
-                transition: '0.2s'
-            })
-        ]
+        }
+        // [
+        //     c('&::before, &::after', {
+        //         content: "''",
+        //         position: 'absolute',
+        //         top: 0,
+        //         right: 0,
+        //         bottom: 0,
+        //         left: 0,
+        //         borderRadius: 'inherit',
+        //         boxSizing: 'border-box',
+        //         pointerEvents: 'none'
+        //     }),
+        //     c('&::after', {
+        //         transition: '0.2s'
+        //     })
+        // ]
     ),
     c('.mc-input-placeholder', {
         position: 'absolute',
