@@ -1,7 +1,7 @@
 import { defineComponent, renderSlot, createVNode, inject, computed, toRefs, getCurrentInstance, mergeProps } from 'vue';
 import { checkParent, createComponentVNode, createElementVNode, PatchFlags, SlotFlags } from '../../_utils_';
 import { not, or } from '@vueuse/core';
-import { menuIKey, subMenuIKey, menuItemGroupIKey, menuItemIKey, menuItemProps, menuInjectionKey, subMenuInjectionKey, menuGroupInjectionKey } from '../interface';
+import { menuIKey, menuItemGroupIKey, menuItemIKey, menuItemProps, menuInjectionKey, subMenuInjectionKey, menuGroupInjectionKey } from '../interface';
 import { McTooltip } from '../../tooltip';
 import type { StyleValue } from 'vue';
 
