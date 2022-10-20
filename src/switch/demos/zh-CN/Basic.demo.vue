@@ -1,8 +1,11 @@
+<markdown>
+### 基础用法
+</markdown>
+
 <template>
     <McSpace>
-        <McSwitch size="small" />
-        <McSwitch size="medium" />
-        <McSwitch size="large" />
+        <McSwitch />
+        <McSwitch disabled inelastic />
     </McSpace>
 </template>
 

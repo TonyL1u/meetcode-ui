@@ -1,3 +1,7 @@
+<markdown>
+### 加载中
+</markdown>
+
 <template>
     <McSwitch v-model:value="checked" checked-color="#d03050" :loading="!checked">
         <template #checked-icon>

@@ -1,3 +1,11 @@
+<markdown>
+### 事件
+
+没有绑定值只会触发 `on-switch` 事件。
+
+绑定值会同时触发 `on-update:value` 和 `on-switch` 事件。
+</markdown>
+
 <template>
     <McSpace>
         <McSwitch @switch="handleSwitch" />

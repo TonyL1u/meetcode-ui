@@ -1,3 +1,9 @@
+<markdown>
+### 描述
+
+通过 `checked-text` 和 `unchecked-text` 来添加描述。
+</markdown>
+
 <template>
     <McSpace vertical>
         <McSwitch :width="48">

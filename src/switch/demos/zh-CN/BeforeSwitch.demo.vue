@@ -1,3 +1,9 @@
+<markdown>
+### 切换前的回调
+
+通过钩子函数 `on-before-switch` 来控制开关的切换行为。返回 `false` 或者一个被 `reject` 的 `Promise` 时会阻止切换。
+</markdown>
+
 <template>
     <McSpace>
         <McSwitch checked @before-switch="handleBeforeSwitch1" />

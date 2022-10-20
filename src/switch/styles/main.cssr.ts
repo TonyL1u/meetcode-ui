@@ -76,18 +76,26 @@ export default c([
                 alignItems: 'center',
                 justifyContent: 'flex-end'
             }),
-            c('&__handler', {
-                position: 'absolute',
-                width: 'var(--switch-handler-size)',
-                height: 'var(--switch-handler-size)',
-                borderRadius: 'var(--switch-handler-border-radius)',
-                top: '2px',
-                left: '2px',
-                transition: 'all 0.2s',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
-            })
+            c(
+                '&__handler',
+                {
+                    position: 'absolute',
+                    width: 'var(--switch-handler-size)',
+                    height: 'var(--switch-handler-size)',
+                    borderRadius: 'var(--switch-handler-border-radius)',
+                    top: '2px',
+                    left: '2px',
+                    transition: 'all 0.2s',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                },
+                [
+                    c('& > *', {
+                        position: 'absolute'
+                    })
+                ]
+            )
         ]
     ),
     c('.mc-switch-input', {

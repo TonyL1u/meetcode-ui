@@ -1,3 +1,7 @@
+<markdown>
+### 方形开关
+</markdown>
+
 <template>
     <McSwitch square />
 </template>

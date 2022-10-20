@@ -1,3 +1,7 @@
+<markdown>
+### 自定义值
+</markdown>
+
 <template>
     <McTooltip :content="checked">
         <McSwitch v-model:value="checked" checked-value="Yes" unchecked-value="No" />
