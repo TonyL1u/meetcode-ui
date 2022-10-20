@@ -79,26 +79,28 @@
 
 ## Props
 
-|       名称        |                                                                                 类型                                                                                 |   默认值    |                     说明                     |
-| :---------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------: | :------------------------------------------: |
-|      trigger      |                                                             `'hover' \| 'click' \| 'manual' \| 'follow'`                                                             |  `'hover'`  |             弹出框显示的触发方式             |
-|       title       |                                                                               `string`                                                                               | `undefined` |                  弹出框标题                  |
-|      content      |                                                                    `string \| (() => VNodeChild)`                                                                    | `undefined` |                  弹出框内容                  |
-|     placement     | `'top' \| 'bottom' \| 'left' \| 'right' \| 'top-start' \| 'top-end' \| 'left-start' \| 'left-end' \| 'right-start' \| 'right-end' \| 'bottom-start' \| 'bottom-end'` |   `'top'`   |                弹出框弹出位置                |
-|      z-index      |                                                                               `number`                                                                               | `undefined` |          弹出框弹层的 `z-index` 值           |
-| destroy-when-hide |                                                                              `boolean`                                                                               |   `true`    |    弹出框在消失之后是否直接销毁 Dom 节点     |
-|       show        |                                                                              `boolean`                                                                               |   `false`   |                是否显示弹出框                |
-|     disabled      |                                                                              `boolean`                                                                               |   `false`   |                是否禁用弹出框                |
-|    with-arrow     |                                                                              `boolean`                                                                               |   `true`    |                 是否显示箭头                 |
-|      offset       |                                                                               `object`                                                                               | `undefined` |        弹出框相对于其正常位置的偏移量        |
-|   wrap-boundary   |                                                                              `boolean`                                                                               |   `false`   |             是否进行边界溢出检测             |
-|    show-delay     |                                                                               `number`                                                                               |    `75`     |                 延迟显示(ms)                 |
-|    hide-delay     |                                                                               `number`                                                                               |    `75`     |                 延迟隐藏(ms)                 |
-|   match-trigger   |                                                                              `boolean`                                                                               |   `false`   |        将弹出框宽度设置为触发元素宽度        |
-|     auto-sync     |                                                                              `boolean`                                                                               |   `true`    | 触发元素的大小/位置改变时自动同步弹出框位置  |
-|    follow-mode    |                                                                         `'move' \| 'click'`                                                                          |  `'move'`   | `trigger` 设置为 `follow` 时，弹出框弹出方式 |
-|         x         |                                                                               `number`                                                                               | `undefined` |            弹出框在 x 方向的位置             |
-|         y         |                                                                               `number`                                                                               | `undefined` |            弹出框在 y 方向的位置             |
+| 名称 | 类型 | 默认值 | 说明 |
+| :---: | :---: | :---: | :---: |
+| auto-sync | `boolean` | `undefined` |  |
+| content | `string \| (() => VNodeChild)` | `undefined` |  |
+| destroy-when-hide | `boolean` | `undefined` |  |
+| disabled | `boolean` | `undefined` |  |
+| follow-mode | `PopoverFollowMode` | `undefined` |  |
+| hide-delay | `number` | `undefined` |  |
+| match-trigger | `boolean` | `undefined` |  |
+| offset | `PopoverOffset` | `undefined` |  |
+| placement | `PopoverPlacement` | `undefined` |  |
+| show | `boolean` | `undefined` |  |
+| show-delay | `number` | `undefined` |  |
+| teleport | `boolean` | `undefined` |  |
+| title | `string` | `undefined` |  |
+| trigger | `PopoverTrigger` | `undefined` |  |
+| with-arrow | `boolean` | `undefined` |  |
+| wrap-boundary | `boolean` | `undefined` |  |
+| x | `number` | `undefined` |  |
+| y | `number` | `undefined` |  |
+| z-index | `number` | `undefined` |  |
+
 
 ## Event
 
@@ -118,9 +120,17 @@
 
 ## Expose
 
-|     名称     |     类型      |            说明            |
-| :----------: | :-----------: | :------------------------: |
-| syncPosition | `() => void`  | 同步弹出框和触发元素的位置 |
-|     show     | `() => void`  |         显示弹出框         |
-|     hide     | `() => void`  |         隐藏弹出框         |
-|      el      | `HTMLElement` |     弹出框的 Dom 节点      |
+| 名称 | 类型 | 说明 |
+| :---: | :---: | :---: |
+
+
+## Events
+
+| 名称 | 类型 | 说明 |
+| :---: | :---: | :---: |
+
+## Slots
+
+| 名称 | 参数 | 说明 |
+| :---: | :---: | :---: |
+

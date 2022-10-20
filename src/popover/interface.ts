@@ -57,7 +57,7 @@ export const popoverProps = {
     },
     show: {
         type: Boolean as PropType<PopoverProps['show']>,
-        default: false
+        default: undefined
     },
     disabled: {
         type: Boolean as PropType<PopoverProps['disabled']>,

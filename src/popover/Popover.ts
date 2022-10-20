@@ -1,5 +1,5 @@
-import { ref, createVNode, Text, cloneVNode, computed, watch, toRefs, nextTick, Transition, mergeProps, defineComponent, onMounted, provide, inject } from 'vue';
-import { getSlotFirstVNode, propsMergeSlots, createComponentVNode, createElementVNode, createDirectives, PatchFlags, SlotFlags } from '../_utils_';
+import { ref, Text, cloneVNode, computed, watch, toRefs, nextTick, Transition, mergeProps, defineComponent, provide, inject } from 'vue';
+import { getSlotFirstVNode, propsMergeSlots, createComponentVNode, createElementBlockVNode, createDirectives, PatchFlags, SlotFlags } from '../_utils_';
 import { useThemeRegister } from '../_composable_';
 import { VBinder, VTarget, VFollower } from 'vueuc';
 import { useElementBounding, useMouseInElement, useThrottleFn, pausableWatch, onClickOutside } from '@vueuse/core';
@@ -68,6 +68,17 @@ export default defineComponent({
             }
         });
 
+        if (trigger.value === 'manual') {
+            watch(showRef, val => {
+                if (val) {
+                    emit('show', true);
+                } else {
+                    emit('hide', false);
+                }
+
+                emit('update:show', val);
+            });
+        }
         // call emits
         const callShow = () => {
             emit('show', true);
@@ -174,7 +185,7 @@ export default defineComponent({
             const firstDefaultVNode = getSlotFirstVNode(slots.default);
             if (!firstDefaultVNode) return null;
             const clonedVNode = cloneVNode(firstDefaultVNode);
-            const tempVNode = clonedVNode.type === Text ? createVNode('span', null, [clonedVNode]) : clonedVNode;
+            const tempVNode = clonedVNode.type === Text ? createElementBlockVNode('span', null, [clonedVNode]) : clonedVNode;
 
             if (disabled.value) return tempVNode;
 
@@ -363,13 +374,13 @@ export default defineComponent({
                                                         },
                                                         ...contentHoverControl.value
                                                     });
-                                                    const tempVNode = createElementVNode(
+                                                    const tempVNode = createElementBlockVNode(
                                                         'div',
                                                         mergedProps,
                                                         [
-                                                            title.value ? createVNode('div', { class: 'mc-popover__title' }, [title.value]) : null,
+                                                            title.value ? createElementBlockVNode('div', { class: 'mc-popover__title' }, [title.value]) : null,
                                                             propsMergeSlots<PopoverProps, 'content'>(props, slots, 'content'),
-                                                            withArrow.value ? createVNode('div', { class: 'mc-popover__arrow' }) : null
+                                                            withArrow.value ? createElementBlockVNode('div', { class: 'mc-popover__arrow' }) : null
                                                         ],
                                                         PatchFlags.CLASS | PatchFlags.STYLE
                                                     );
