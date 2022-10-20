@@ -4,45 +4,27 @@
 
 ## 演示
 
-+++ container
-
-::: demo CodePreview=Basic
-
-### 基础用法
-
-<Basic />
-:::
-
-::: demo CodePreview=Multiple
-
-### 多选
-
-<Multiple />
-:::
-
-::: demo CodePreview=HeightLimit
-
-### 高度限制
-
-选项过多时，可以为弹出框设置一个最大高度，列表内容超出该高度时就会滚动。
-
-<HeightLimit />
-:::
-
-+++
+```demo
+Basic
+Multiple
+HeightLimit
+```
 
 ## Props
 
-|    名称     |        类型         |   默认值    |                                   说明                                    |
-| :---------: | :-----------------: | :---------: | :-----------------------------------------------------------------------: |
-|   options   | `PopselectOption[]` |    `[]`     |                                   选项                                    |
-|  multiple   |      `boolean`      |   `false`   |                                 是否多选                                  |
-| max-height  |      `number`       |    `300`    |                           弹出框的最大高度(px)                            |
-| auto-close  |      `boolean`      | `undefined` |             选择后自动关闭弹出框。单选默认开启，多选默认关闭              |
-| auto-scroll |      `boolean`      |   `true`    | 弹出框出现后，已选择的选项滚动到最上方。多选默认滚动到第 1 个已选择的选项 |
-|  truncate   | `boolean \| number` |    `200`    |               选项文本长度是否截断省略。默认超出 200px 截断               |
+| 名称 | 类型 | 默认值 | 说明 |
+| :---: | :---: | :---: | :---: |
+| auto-close | `boolean` | `true` | 选择后自动关闭弹出框。单选默认开启，多选默认关闭 |
+| auto-scroll | `boolean` | `true` | 弹出框出现后自动定位到已选择项。多选默认滚动到第 1 个已选择项 |
+| item-height | `number` | `40` | 选项高度 |
+| item-style | `ElementStyleSet` | `undefined` | 选项样式 |
+| max-height | `number` | `300` | 弹出框的最大高度(px) |
+| multiple | `boolean` | `false` | 是否多选 |
+| options | `PopselectOption[]` | `undefined` | 弹出选择选项 |
+| truncate | `boolean \| number` | `200` | 选项文本超度长度(px)是否截断省略 |
+| use-arrow-control | `boolean` | `true` | 是否允许通过键盘上下键选择选项 |
+| (v-model)value | `PopselectValue` | `undefined` | 弹出选择绑定的值 |
 
-更多 Props 请参考 <McTextLink to="Popover#props">Popover Props</McTextLink> 。
 
 ## Event
 
@@ -70,3 +52,21 @@ export interface PopselectOption {
     disabled?: boolean;
 }
 ```
+
+## Events
+
+| 名称 | 类型 | 说明 |
+| :---: | :---: | :---: |
+
+
+## Slots
+
+| 名称 | 参数 | 说明 |
+| :---: | :---: | :---: |
+
+
+## Expose
+
+| 名称 | 类型 | 说明 |
+| :---: | :---: | :---: |
+

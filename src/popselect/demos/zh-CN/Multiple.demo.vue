@@ -1,3 +1,7 @@
+<markdown>
+### 多选
+</markdown>
+
 <template>
     <McPopselect v-model:value="value" :options="options" trigger="click" multiple>
         <McButton type="success" ghost>{{ value }}</McButton>
