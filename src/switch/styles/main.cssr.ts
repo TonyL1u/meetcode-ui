@@ -1,4 +1,5 @@
 import { c } from '../../_utils_';
+import { ThemeColor } from '../../_color_';
 
 export default c([
     c(
@@ -106,7 +107,7 @@ export default c([
     }),
     c('@keyframes mc-switch-border-ripple-out', {
         from: {
-            boxShadow: '0 0 0.5px 0 var(--switch-checked-color, #10b981)'
+            boxShadow: `0 0 0.5px 0 var(--switch-checked-color, ${ThemeColor.PRIMARY})`
         },
         to: {
             boxShadow: '0 0 0.5px 4px var(--switch-ripple-color, #10b98100)'

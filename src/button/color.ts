@@ -2,6 +2,7 @@ import { computed } from 'vue';
 import { isDark } from '../theme';
 import { UIStatus } from '../_utils_';
 import { ButtonColorSet, ButtonType } from './interface';
+import { ThemeColor } from '../_color_';
 
 const BUTTON_COLOR_MAP: Record<ButtonType, ButtonColorSet> = {
     custom: {
@@ -15,24 +16,24 @@ const BUTTON_COLOR_MAP: Record<ButtonType, ButtonColorSet> = {
         backgroundColor: '#fff'
     },
     primary: {
-        color: '#3b82f6',
-        borderColor: '#3b82f6',
-        backgroundColor: '#3b82f6'
+        color: ThemeColor.INFO,
+        borderColor: ThemeColor.INFO,
+        backgroundColor: ThemeColor.INFO
     },
     success: {
-        color: '#16a34a',
-        borderColor: '#16a34a',
-        backgroundColor: '#16a34a'
+        color: ThemeColor.SUCCESS,
+        borderColor: ThemeColor.SUCCESS,
+        backgroundColor: ThemeColor.SUCCESS
     },
     warning: {
-        color: '#fb923c',
-        borderColor: '#fb923c',
-        backgroundColor: '#fb923c'
+        color: ThemeColor.WARNING,
+        borderColor: ThemeColor.WARNING,
+        backgroundColor: ThemeColor.WARNING
     },
     danger: {
-        color: '#dc2626',
-        borderColor: '#dc2626',
-        backgroundColor: '#dc2626'
+        color: ThemeColor.DANGER,
+        borderColor: ThemeColor.DANGER,
+        backgroundColor: ThemeColor.DANGER
     }
 };
 

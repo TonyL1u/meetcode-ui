@@ -217,10 +217,10 @@ body {
     padding: 0;
     line-height: 1.5;
     font-size: 14px;
+    font-family: v-sans, Avenir, Helvetica, Arial, sans-serif;
 }
 
 #app {
-    font-family: v-sans, Avenir, Helvetica, Arial, sans-serif;
     // -webkit-font-smoothing: antialiased;
     // -moz-osx-font-smoothing: grayscale;
     height: 100vh;
@@ -250,6 +250,7 @@ body {
         margin: 0 auto;
         padding: 0 18px;
         box-sizing: border-box;
+        flex: 1;
 
         @include custom-markdown-style;
 

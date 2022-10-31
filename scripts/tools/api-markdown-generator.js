@@ -13,6 +13,9 @@ const MdTableConfig = {
         fields: ['名称', '类型', '默认值', '说明'],
         nameTransform(name) {
             return camelToKebab(name);
+        },
+        typeTransform(type, expandType) {
+            return expandType ? `<McTooltip content="${expandType.replaceAll('\n', '').replaceAll('|', '\\|')}">\`${type}\`</McTooltip>` : `\`${type}\``;
         }
     },
     Events: {
@@ -47,6 +50,7 @@ const generateTableMarkdown = curry(function (title, members) {
             .reduce((prev, cur) => `${prev}${cur}`)
             .replaceAll('\n', '')
             .replaceAll('|', '\\|');
+        let expandType = '';
         let property = name;
         let desc = '';
         let defaultValue = 'undefined';
@@ -56,6 +60,7 @@ const generateTableMarkdown = curry(function (title, members) {
             desc = description.replaceAll('\n/', '') ?? '';
             defaultValue = tags.find(tag => tag.title === 'defaultValue')?.description.replaceAll('\n/', '') ?? defaultValue;
             property = tags.find(tag => tag.title === 'designation')?.description.replaceAll('\n/', '') ?? property;
+            expandType = tags.find(tag => tag.title === 'expandType')?.description.replaceAll('\n/', '') ?? expandType;
         }
 
         const tableLine = fields.map(item => {
@@ -63,7 +68,7 @@ const generateTableMarkdown = curry(function (title, members) {
                 case '名称':
                     return nameTransform ? nameTransform(property) : property;
                 case '类型':
-                    return `\`${typeTransform ? typeTransform(type) : type}\``;
+                    return typeTransform ? typeTransform(type, expandType) : `\`${type}\``;
                 case '默认值':
                     return `\`${defaultValueTransform ? defaultValueTransform(defaultValue) : defaultValue}\``;
                 case '说明':

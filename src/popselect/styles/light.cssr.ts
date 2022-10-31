@@ -3,10 +3,10 @@ import { c } from '../../_utils_';
 export default c('.mc-popselect', [
     c('.mc-popselect-option', [
         c('&--pending:not(&--disabled)', {
-            background: '#f2fcf8'
+            background: 'var(--mc-primary-color-99)'
         }),
         c('&--selected', {
-            color: '#10b981',
+            color: 'var(--mc-primary-color)',
             fontWeight: 'bold'
         }),
         c('&--disabled', {

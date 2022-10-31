@@ -23,11 +23,21 @@ export interface ButtonExposeInstance {
 }
 
 export interface ButtonProps {
+    /**
+     * 按钮类型
+     * @expandType 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'custom'
+     * @defaultValue 'default'
+     */
     type?: ButtonType;
     size?: ButtonSize;
     disabled?: boolean;
     ghost?: boolean;
     dashed?: boolean;
+    /**
+     * 渲染模式
+     * @expandType 'normal' | 'text' | 'link'
+     * @defaultValue 'normal'
+     */
     render?: ButtonRender;
     round?: boolean;
     circle?: boolean;
@@ -38,8 +48,8 @@ export interface ButtonProps {
     textColor?: string;
     borderColor?: string;
     colorSet?: Partial<Record<ButtonStatus, string>>;
-    textColorSet: Partial<Record<ButtonStatus, string>>;
-    borderColorSet: Partial<Record<ButtonStatus, string>>;
+    textColorSet?: Partial<Record<ButtonStatus, string>>;
+    borderColorSet?: Partial<Record<ButtonStatus, string>>;
 }
 
 export interface ButtonGroupProps {

@@ -15,7 +15,8 @@ onMounted(() => {
         appId: 'RZDIT89B1I',
         apiKey: 'a3bfd90d07311cc1fe451b932e78cc8d',
         indexName: 'meetcode-ui',
-        hitComponent({ hit, children }: { hit: any; children: any }) {
+        // @ts-ignore
+        hitComponent({ hit, children }: any) {
             return {
                 __v: null,
                 type: 'a',
@@ -44,8 +45,10 @@ onMounted(() => {
 // customize algolia docsearch style
 :root {
     --docsearch-primary-color: #10b981;
-    --docsearch-container-background: rgba(29, 33, 41, 0.6);
+    --docsearch-container-background: rgba(0, 0, 0, 0.2);
+    --docsearch-searchbox-background: transparent;
 }
+
 :root .dark {
     --docsearch-modal-background: #242424;
     --docsearch-modal-shadow: none;
@@ -61,6 +64,14 @@ onMounted(() => {
     --docsearch-key-shadow: 0 1px #ffffff1f;
 }
 
+.DocSearch-Container {
+    backdrop-filter: blur(4px);
+
+    .DocSearch-Modal {
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+    }
+}
+
 .dark {
     .DocSearch-Form {
         background-color: #2f2f2f;
@@ -73,9 +84,5 @@ onMounted(() => {
 
 #docsearch {
     margin-right: 10px;
-
-    .DocSearch-Button {
-        background: none;
-    }
 }
 </style>

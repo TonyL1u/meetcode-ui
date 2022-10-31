@@ -11,12 +11,17 @@
         {
             "tagName": "@designation",
             "syntaxKind": "block"
+        },
+        {
+            "tagName": "@expandType",
+            "syntaxKind": "block"
         }
     ],
 
     "supportForTags": {
         // Indicate that the custom tag is supported by your tooling.  (Without this, warnings may
         // be reported saying that the tag is unsupported.)
-        "@designation": true
+        "@designation": true,
+        "@expandType": true
     }
 }

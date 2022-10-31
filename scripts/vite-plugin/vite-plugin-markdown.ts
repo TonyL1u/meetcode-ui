@@ -2,7 +2,7 @@ import fs from 'fs';
 import lz from 'lz-string';
 import type { Plugin } from 'vite';
 
-const fileRegex = /\.(md)$/;
+const fileRegex = /demos\/doc.(.*).md/;
 
 export default function TransformMarkdown(): Plugin {
     return {

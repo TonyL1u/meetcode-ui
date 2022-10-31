@@ -3,20 +3,21 @@ import { getSlotFirstVNode, useColorFactory } from '../_utils_';
 import { useThemeRegister } from '../_composable_';
 import { TextLinkType, TextLinkColorSet, textLinkProps } from './interface';
 import { mainCssr } from './styles/index';
+import { ThemeColor } from '../_color_';
 import type { StyleValue } from 'vue';
 
 const BASE_COLOR_MAP: Record<TextLinkType, TextLinkColorSet> = {
     primary: {
-        color: '#3b82f6'
+        color: ThemeColor.INFO
     },
     success: {
-        color: '#16a34a'
+        color: ThemeColor.SUCCESS
     },
     warning: {
-        color: '#fb923c'
+        color: ThemeColor.WARNING
     },
     danger: {
-        color: '#dc2626'
+        color: ThemeColor.DANGER
     },
     info: {
         color: '#6B7280'

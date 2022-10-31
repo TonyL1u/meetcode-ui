@@ -1,12 +1,13 @@
 import { c } from '../../_utils_';
+import { ThemeColor } from '../../_color_';
 
 export default c([
     c('.mc-switch', [
         c('&--checked .mc-switch-label-text--right, &:not(&--checked) .mc-switch-label-text--left', {
-            color: 'var(--switch-checked-color, #10b981)'
+            color: `var(--switch-checked-color, ${ThemeColor.PRIMARY})`
         }),
         c('&--checked > &-label', {
-            background: 'var(--switch-checked-color, #10b981)'
+            background: `var(--switch-checked-color, ${ThemeColor.PRIMARY})`
         })
     ]),
     c(

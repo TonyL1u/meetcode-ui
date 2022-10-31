@@ -57,7 +57,7 @@ if [ -f $INTERFACE_FILE ];then
         echo "Api 文档生成成功！"
     fi
 
-    rimraf ../temp/*
+    # rimraf ../temp/*
 else
     echo 'interface.ts file not found.'
     exit
